@@ -1,7 +1,5 @@
 (* CLASSE PROGRAMME *)
-
 (*
-open Ecrire
 open Lire
 *)
 open Ecrire
@@ -14,7 +12,8 @@ object
 	val mutable thematique = thematique
 	val mutable duree = 0
 	val mutable etat_archive = "false"
-	
+	val mutable fichier_archive = "_Archive.txt"
+		
 	method get_titre =
 	Printf.printf "%s\n" titre 
 
@@ -36,14 +35,12 @@ object
 		if etat_archive = "false" then
 			begin
 			etat_archive <- "true";
-			(*/////print_string etat_archive;
-			print_newline();*)
-			
-			(*
-			appel methode écrire pour sauver la liste du programme
-			*)
-			ecrire = new Ecrire("Archives.txt", id_prog)
-			print_string "Le programme est archivé";
+			(*Test affichage état :print_string etat_archive; print_newline();*)
+			(*Création du nom du fichier Archive:*)
+			fichier_archive <- id_prog ^ fichier_archive;
+			(*Sauvegarde de la liste des documents dans un fichier:*)
+			sauve(fichier_archive, [id_prog]);
+			Printf.printf "Le programme est archivé dans le fichier : %s\n" fichier_archive;
 			print_newline();
 			end
 		else
@@ -52,14 +49,15 @@ object
 		print_newline();
 		end
 
-	
-
+		method ajouterdocument = 0
+		
+		
+		
 	(*method endiffusion = 0
 	method ajouterprogramme = 0
 	method listerdocument = 0
 	method diffuserprogramme = 0
 	method verrouillerdocument = 0
-	method ajouterdocument = 0
 	method ajout = 0
 	method deverrouillerdocument = 0
 	method settitre = 0
