@@ -1,14 +1,14 @@
-class document (idD, titreD, dateC, sourceD, dureeD, etatD, langueD, genreD, fichierD) =
+class document ((id:string), (titre:string), (date:int), (source:string), (duree:int), (etat:string), (langue:string), (genre:string), (fichier:string)) =
   object
-	val mutable id = idD
-	val mutable titre = titreD
-	val mutable dateCreation = dateC
-	val mutable source = sourceD
-	val mutable duree = dureeD
-	val mutable etat = etatD
-	val mutable langue = langueD
-	val mutable genre = genreD
-	val mutable fichier = fichierD
+	val mutable id = id
+	val mutable titre = titre
+	val mutable dateCreation = date
+	val mutable source = source
+	val mutable duree = duree
+	val mutable etat = etat
+	val mutable langue = langue
+	val mutable genre = genre
+	val mutable fichier = fichier
 	val mutable verrou = 0
 	
 	method getId = id
@@ -21,12 +21,12 @@ class document (idD, titreD, dateC, sourceD, dureeD, etatD, langueD, genreD, fic
 	method getGenre = genre
 	method getFichier = fichier
 	
-	method enLecture = etat = 'EN_LECTURE'
-	method estProgramme = etat = 'EST_PROGRAMME'
+	method enLecture = etat = "EN_LECTURE"
+	method estProgramme = etat = "EST_PROGRAMME"
 	
 	method compterVerrouProgramme = verrou
-	method poserVerrou = verrou+1 <- verrou
-	method enleverVerrou = verrou-1 <- verrou
+	method poserVerrou = verrou+1
+	method enleverVerrou = verrou-1
 	
 	(*
 	method getProgrammesArchives =
