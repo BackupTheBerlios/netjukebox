@@ -1,4 +1,4 @@
-class document ((id:string), (titre:string), (date:int), (source:string), (duree:int), (etat:string), (langue:string), (genre:string), (fichier:string)) =
+class document ((id:string), (titre:string), (date:string), (source:string), (duree:int), (etat:string), (langue:string), (genre:string), (fichier:string)) =
   object
 	val mutable id = id
 	val mutable titre = titre
@@ -24,7 +24,7 @@ class document ((id:string), (titre:string), (date:int), (source:string), (duree
 	method enLecture = etat = "EN_LECTURE"
 	method estProgramme = etat = "EST_PROGRAMME"
 	
-	method compterVerrouProgramme = verrou
+	method compterVerrou = verrou
 	method poserVerrou = verrou+1
 	method enleverVerrou = verrou-1
 	
