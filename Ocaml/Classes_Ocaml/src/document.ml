@@ -1,15 +1,17 @@
-class document ((id:string), (titre:string), (date:string), (source:string), (duree:int), (etat:string), (langue:string), (genre:string), (fichier:string)) =
+class document ((id:string), (titre:string), (date:string), (source:string), (duree:int), (langue:string), (genre:string), (fichier:string)) =
   object
 	val mutable id = id
 	val mutable titre = titre
 	val mutable dateCreation = date
 	val mutable source = source
 	val mutable duree = duree
-	val mutable etat = etat
+	val mutable etat = "NON_DIFFUSE"
 	val mutable langue = langue
 	val mutable genre = genre
 	val mutable fichier = fichier
 	val mutable verrou = 0
+	(*val programmes = Array.create*)
+	val mutable programmes = []
 	
 	method getId = id
 	method getTitre = titre
@@ -28,12 +30,13 @@ class document ((id:string), (titre:string), (date:string), (source:string), (du
 	method poserVerrou = verrou+1
 	method enleverVerrou = verrou-1
 	
+	method ajouterProgramme(idProg) = List.concat programmes [idProg]
+	(*method enleverProgramme(idProg) = Array.append idProg*)
+	
 	(*
 	method getProgrammesArchives =
-	method ajouterProgramme(idProg) =
-	method enleverProgramme(idProg) =
 	method modifier() =
 	method supprimer =
 	method nommerFichier(fichier) =
 	*)
-  end;;
+end;;
