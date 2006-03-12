@@ -4,7 +4,6 @@ open Lire
 open RechercherDocument
 *)
 open Ecrire
-(*open Make_Liste*)
 
 class programme((id_prog:string), (titre:string), (thematique:string)) =
 object
@@ -31,6 +30,9 @@ object
 	method get_etat_archive = (*etat_archive*)
 	Printf.printf "%s\n" etat_archive;
 	
+	method get_liste = liste
+
+	(*Archivage de la liste des documents du programme*)	
 	method archiver = 
 		if etat_archive = "false" then
 			begin
@@ -48,12 +50,10 @@ object
 		print_newline();
 		end
 
-	val mutable liste = []
+	(*Initialisation liste vide*)
+	val mutable liste = [""]
+	(*Ajout d'un document dans la liste*)
 	method ajouterdocument(id_doc) = liste <- id_doc :: liste;
-
-	method get_liste = liste
-
-	
 	
 	(*method endiffusion = 0
 	method ajouterprogramme = 0
