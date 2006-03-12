@@ -8,3 +8,5 @@ p1#get_thematique;;
 p1#get_duree;;
 p1#get_etat_archive;;
 p1#archiver;;
+p1#ajouterdocument("toto");;
+List.iter print_string p1#get_liste;;
