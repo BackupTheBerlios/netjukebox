@@ -1,8 +1,10 @@
 (* CLASSE PROGRAMME *)
 (*
 open Lire
+open RechercherDocument
 *)
 open Ecrire
+(*open Make_Liste*)
 
 class programme((id_prog:string), (titre:string), (thematique:string)) =
 object
@@ -13,46 +15,46 @@ object
 	val mutable duree = 0
 	val mutable etat_archive = "false"
 	val mutable fichier_archive = "_Archive.txt"
-		
-	method get_titre =
+
+	method get_titre = (*titre*)
 	Printf.printf "%s\n" titre 
 
-	method get_id_prog =
+	method get_id_prog = (*id_prog*)
 	Printf.printf "%s\n" id_prog
 		
-	method get_thematique =
+	method get_thematique = (*thematique*)
 	Printf.printf "%s\n" thematique
 	
-	method get_duree =
-	print_int duree;
-	print_newline();
+	method get_duree = (*duree*)
+	Printf.printf "%i\n" duree;
+		
+	method get_etat_archive = (*etat_archive*)
+	Printf.printf "%s\n" etat_archive;
 	
-	method get_etat = 
-	print_string etat_archive;
-	print_newline();
-
-	method archiver = 	
+	method archiver = 
 		if etat_archive = "false" then
 			begin
 			etat_archive <- "true";
-			(*Test affichage état :print_string etat_archive; print_newline();*)
+			(*//Test affichage état :print_string etat_archive; print_newline();*)
 			(*Création du nom du fichier Archive:*)
 			fichier_archive <- id_prog ^ fichier_archive;
 			(*Sauvegarde de la liste des documents dans un fichier:*)
-			sauve(fichier_archive, [id_prog]);
+			sauve(fichier_archive, [id_prog](*id_prog est à remplacer par la liste des docs audio*));
 			Printf.printf "Le programme est archivé dans le fichier : %s\n" fichier_archive;
-			print_newline();
 			end
 		else
 		begin
-		print_string "Erreur : le programme est deja archive";
+		Printf.printf "Erreur : le programme est deja archive";
 		print_newline();
 		end
 
-		method ajouterdocument = 0
-		
-		
-		
+	val mutable liste = []
+	method ajouterdocument(id_doc) = liste <- id_doc :: liste;
+
+	method get_liste = liste
+
+	
+	
 	(*method endiffusion = 0
 	method ajouterprogramme = 0
 	method listerdocument = 0
