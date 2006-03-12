@@ -11,7 +11,7 @@ class document ((id:string), (titre:string), (date:string), (source:string), (du
 	val mutable fichier = fichier
 	val mutable verrou = 0
 	(*val programmes = Array.create*)
-	val mutable programmes = []
+	val mutable programmes = [""]
 	
 	method getId = id
 	method getTitre = titre
@@ -30,7 +30,8 @@ class document ((id:string), (titre:string), (date:string), (source:string), (du
 	method poserVerrou = verrou+1
 	method enleverVerrou = verrou-1
 	
-	method ajouterProgramme(idProg) = List.concat programmes [idProg]
+	method ajouterProgramme (idProg) = programmes <- idProg :: programmes
+	method getProgrammes = programmes
 	(*method enleverProgramme(idProg) = Array.append idProg*)
 	
 	(*
