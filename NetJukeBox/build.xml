@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<project name="NetJukeBox" default="all">
+	<description>Génération du NetJukeBox</description>
+
+	<property name="bin" location="bin" />
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+
+	<target name="all" description="Compilation">
+		<javac srcdir="${src}" destdir="${bin}">
+			<classpath>
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</javac>
+	</target>
+</project>
