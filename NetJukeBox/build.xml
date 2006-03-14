@@ -9,10 +9,10 @@
 	<property name="xmlrpc" location="xmlrpc-1.2-b1.jar" />
 
 
-	<target name="all" depends="serveur" description="Compilation" />
+	<target name="all" depends="serveur, client" description="Compilation" />
 
 	<target name="serveur" description="Serveur">
-		<javac srcdir="${src}/serveur" destdir="${bin}/serveur">
+		<javac srcdir="${src}/serveur" destdir="${bin}">
 			<classpath>
 				<pathelement path="${java.class.path}" />
 				<pathelement location="${xerces}" />
@@ -22,4 +22,16 @@
 
 		<jar basedir="${bin}/serveur" destfile="${dist}/serveur.jar" />
 	</target>
+	
+	<target name="client" description="Client">
+			<javac srcdir="${src}/client" destdir="${bin}">
+				<classpath>
+					<pathelement path="${java.class.path}" />
+					<pathelement location="${xerces}" />
+					<pathelement location="${xmlrpc}" />
+				</classpath>
+			</javac>
+
+			<jar basedir="${bin}/client" destfile="${dist}/client" />
+		</target>
 </project>

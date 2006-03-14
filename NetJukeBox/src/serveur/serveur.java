@@ -1,6 +1,5 @@
 package serveur;
 
-//import java.io.IOException;
 import org.apache.xmlrpc.*;
 
 public class serveur {
