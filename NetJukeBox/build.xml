@@ -32,6 +32,6 @@
 				</classpath>
 			</javac>
 
-			<jar basedir="${bin}/client" destfile="${dist}/client" />
+			<jar basedir="${bin}/client" destfile="${dist}/client.jar" />
 		</target>
 </project>

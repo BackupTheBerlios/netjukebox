@@ -6,11 +6,11 @@ import java.net.MalformedURLException;
 
 import org.apache.xmlrpc.*;
 
-public class client {
+public class Client {
 
 	public static void main(String args[]) {
 		if (args.length < 1) {
-			System.out.println("Usage: java Client [votre nom]");
+			System.out.println("Usage: java client [nom]");
 			System.exit(-1);
 		}
 
