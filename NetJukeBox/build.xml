@@ -5,33 +5,48 @@
 	<property name="bin" location="bin" />
 	<property name="src" location="src" />
 	<property name="dist" location="dist" />
-	<property name="xerces" location="xercesImpl.jar" />
-	<property name="xmlrpc" location="xmlrpc-1.2-b1.jar" />
+	<property name="lib" location="lib" />
+	<property name="jmf" location="${lib}/jmf" />
 
+	
+	<path id="jmf.path">
+	    <pathelement location="${jmf}/customizer.jar"/>
+		<pathelement location="${jmf}/jmf.jar"/>
+		<pathelement location="${jmf}/mediaplayer.jar"/>
+		<pathelement location="${jmf}/multiplayer.jar"/>
+	    <pathelement path="${java.class.path}/"/>
+	</path>
+	
+	<path id="xmlrpc.path">
+			<pathelement location="${lib}/xercesImpl.jar" />
+			<pathelement location="${lib}/xmlrpc-1.2-b1.jar" />
+		    <pathelement path="${java.class.path}/"/>
+	</path>
 
-	<target name="all" depends="serveur, client" description="Compilation" />
+	
+	<target name="all" depends="serveur, client, streaming" description="Compilation" />
 
-	<target name="serveur" description="Serveur">
+	<target name="serveur" description="Serveur Principal">
 		<javac srcdir="${src}/serveur" destdir="${bin}">
-			<classpath>
-				<pathelement path="${java.class.path}" />
-				<pathelement location="${xerces}" />
-				<pathelement location="${xmlrpc}" />
-			</classpath>
+			<classpath refid="xmlrpc.path"/>
 		</javac>
 
 		<jar basedir="${bin}/serveur" destfile="${dist}/serveur.jar" />
 	</target>
-	
-	<target name="client" description="Client">
-			<javac srcdir="${src}/client" destdir="${bin}">
-				<classpath>
-					<pathelement path="${java.class.path}" />
-					<pathelement location="${xerces}" />
-					<pathelement location="${xmlrpc}" />
-				</classpath>
-			</javac>
 
-			<jar basedir="${bin}/client" destfile="${dist}/client.jar" />
-		</target>
+	<target name="client" description="Client">
+		<javac srcdir="${src}/client" destdir="${bin}">
+			<classpath refid="xmlrpc.path"/>
+		</javac>
+
+		<jar basedir="${bin}/client" destfile="${dist}/client.jar" />
+	</target>
+
+	<target name="streaming" description="Serveur de Streaming">
+		<javac srcdir="${src}/streaming" destdir="${bin}">
+			<classpath refid="jmf.path"/>
+		</javac>
+
+		<jar basedir="${bin}/streaming" destfile="${dist}/streaming.jar" />
+	</target>
 </project>
