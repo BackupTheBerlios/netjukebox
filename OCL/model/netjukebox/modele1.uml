@@ -1,0 +1,21 @@
+<package> netjukebox
+
+<class> Utilisateur
+<attributes>
+login : String;
+nom : String;
+prenom : String;
+mail : String;
+pwd : String;
+pays: String;
+<endclass>
+
+<class> Permission
+<attributes>
+lib_perm: String;
+<endclass>
+
+<endpackage>
+
+
+

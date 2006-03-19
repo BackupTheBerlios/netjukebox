@@ -1,0 +1,7 @@
+package netjukebox
+
+context Utilisateur
+inv: Utilisateur.allInstances() -> forAll(u1, u2 | u1 <> u2 implies u1.login <> u2.login)
+-- and  Utilisateur -> notEmpty() implies Permission -> notEmpty())
+
+endpackage
