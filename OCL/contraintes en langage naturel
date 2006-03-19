@@ -1,0 +1,134 @@
+Document
+Invariant: ?
+		
+	AjouterDocument:(Administrateur)
+		pre : document inexistant dans la base 
+		post: document existant dans la base et etat document ='Non diffusé'
+
+	ModifierDocument:(Administrateur)
+		pre : document existant dans la base et etat document ='Non diffusé'
+		post: document existant dans la base avec infos partiellement ou totalement modifiées
+
+	RechercherDocument:(Administrateur - RespProg)
+		pre : document existant
+		post: document existant
+		
+	SupprimerDocument:(Administrateur)
+		pre : document existant dans la base et etat document ='Non diffusé' et 'Archivé'
+		post: document inexistant dans la base	
+		
+	ArchiverDocument:(Administrateur)
+		pre: document existant dans la base et etat document ='Non diffusé'	
+		post: document dans la base et etat document ='Archivé'
+		
+Programme
+Invariant: ?
+
+	CréerProgramme:(RespProg)
+		pre : -
+		post:programme créer - état programme = 'vide'
+	
+	AjouterDocumentProgramme:(RespProg)
+		pre : document selectionné existant 
+			  et programme selectionné existant ni archivé, ni en cours de diffusion
+			  OU
+			  programme archivé selectionné existant
+			  et programme selectionné existant ni archivé, ni en cours de diffusion
+			  
+		post: programme remanié ou programme archivé ou programme en diffussion
+	
+	retirerDocumentProgramme:(RespProg)
+		pre : programme selectionné existant ni archivé, ni en cours de diffusion			  
+		post: programme remanié ou programme archivé ou programme en diffussion
+	
+		
+	ModifierProgramme:(RespProg)(A FINIR)
+		pre : programme existant non archivé
+		post: 
+		
+	DiffuserProgramme: (RespProg)
+		pre : programme existant avec durée sup 6H et canal existant et plannification sur canal choisi disponible
+		post: etat programme = 'en diffussion' et etat canal ='actif'
+	
+	DéposerListe:(RespProg)
+		pre :programme existant avec durée sup 6H et canal existant et plannification sur canal choisi disponible
+		post: etat programme = 'programmé' et etat canal ='en attente de diffusion'
+		
+		
+	SupprimerProgramme: (RespPog)
+		pre : programme existant non en diffusion
+		post: programme inexistant ou en cours de diffusion
+			
+	ArchiverProgramme:(Administrateur)
+		pre : programme selectionné pas en cours de diffusion
+		post: programme archivé ou programme en diffusion
+	
+	RechercherProgramme:(RespProg)
+		pre : programme recherché existant ou non dans la base
+		post: programme recherché existant ou non dans la base
+
+Canal
+Invariant: ?
+
+	CréerCanal:(Administrateur)
+		pre : -
+		post: canal crée
+	
+	RechercherCanal: (RespProg)
+		pre : canal existant dans la base
+		post: -	
+				
+	SupprimerCanal: (RespProg)
+		pre : canal existant dans la base et non actif
+		post: canal supprimé ou canal actif
+
+	ModifierCanal: (RespProg)
+		pre : canal existant dans la base
+		post: -					
+					
+	ConnexionAuditeur:
+		pre : NbAuditeur < seuil du canal et etat canal = 'ouvert'
+		post: NbAuditeur +1 et etat canal ='ouvert'	
+	
+	RejeterNouvelAuditeur:
+		pre : NbAuditeur = seuil du canal et etat canal = 'plein'
+		post: canal dupliqué		 
+
+	DeconnexionAuditeur:
+		pre : NbAuditeur et etat canal ='ouvert' ou 'plein'
+		post: NbAuditeur - 1 et etat canal ='ouvert'
+		
+		
+Utilisateur		
+Invariant: tous utilisateur possède un login unique, ainsi que des droits par défaut de base. 
+
+	InscriptionUtilisateur:(Tous)
+		pre : utilisateur inconnu à la base
+		post: utilisateur autorisé à accéder aux fonctionnalités un système
+			  validadité du login, pwd, nom, prenom, mail, pays
+			  attribution des droits 'Usager' par défaut
+			  
+	ModifierUtilisateur:(Administrateur) 
+		pre : utilisateur existant dans la base - etat utilisateur = 'deconnecter'
+		post: utilisateur existant dans la base avec infos partiellement ou totalement modifiées
+			  etat utilisateur ='deconnecter'
+			  	
+	SupprimerUtilisateur:(Administrateur)
+		pre : utilisateur existant dans la base ET etat utilisateur = 'deconnecté'
+		post: utilisateur inexistant dans la base OU etat utilisateur = 'connecté'
+		
+	RechercherUtilisateur:(Administrateur)
+		pre : utilisateur existant ou non dans la base
+		post: utilisateur existant ou non dans la base	
+	
+	ConnecterUtilisateur:(Tous)
+		pre : utilisateur existant - etat utilisateur = 'deconnecté'
+		post: etat utilisateur = 'connecté'
+		
+	DeconnecterUtilisateur:(Tous)
+		pre : utilisateur existant - etat utilisateur = 'connecté'
+		post: etat utilisateur = 'deconnecté'		
+			  
+	
+		
+	
