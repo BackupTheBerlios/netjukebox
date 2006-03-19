@@ -10,7 +10,7 @@ public class Client {
 
 	public static void main(String args[]) {
 		if (args.length < 1) {
-			System.out.println("Usage: java client [nom]");
+			System.out.println("Usage: java client [filename]");
 			System.exit(-1);
 		}
 
@@ -26,8 +26,8 @@ public class Client {
 			params.addElement(args[0]);
 
 			// Adresse la requête et affiche les résultats
-			String result = (String) client.execute("Gestionnaire.sayHello",
-					params);
+			//String result = (String) client.execute("Gestionnaire.sayHello", params);
+			String result = (String) client.execute("Gestionnaire.startDiffusionDocument", params);
 			System.out.println("Réponse du serveur : " + result);
 
 		} catch (ClassNotFoundException e) {
