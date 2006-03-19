@@ -45,6 +45,7 @@
 	<target name="streaming" description="Serveur de Streaming">
 		<javac srcdir="${src}/streaming" destdir="${bin}">
 			<classpath refid="jmf.path"/>
+			<classpath refid="xmlrpc.path"/>
 		</javac>
 
 		<jar basedir="${bin}/streaming" destfile="${dist}/streaming.jar" />
