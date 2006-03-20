@@ -8,7 +8,7 @@ public class Gestionnaire {
 	private int portBase;
 	private Vector streams;
 
-	public Gestionnaire(/*String ipAdress,*/ int port) {
+	public Gestionnaire(/*String ipAdress,*/int port) {
 
 		//this.ipAddress = ipAddress;
 		this.portBase = port;

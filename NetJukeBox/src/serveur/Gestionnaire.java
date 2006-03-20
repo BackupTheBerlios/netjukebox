@@ -11,14 +11,16 @@ import org.apache.xmlrpc.XmlRpcException;
 public class Gestionnaire {
 
 	private XmlRpcClient streaming;
+	private int port;
 
-	public Gestionnaire() {
+	public Gestionnaire(int port) {
+		this.port = port;
 		try {
 			// Utilise lengthpilote Sax d'Apache Xerces
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
 
 			// Creation du client & identification du serveur
-			streaming = new XmlRpcClient("http://localhost:10000");
+			this.streaming = new XmlRpcClient("http://localhost:"+port);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Impossible de localiser le pilote Sax");
 		} catch (MalformedURLException e) {
@@ -36,8 +38,8 @@ public class Gestionnaire {
 		Vector params = new Vector();
 		params.addElement(filename);
 		try {
-			String result = (String) streaming.execute(
-					"Streaming.startDiffusionDocument", params);
+			String result = (String) this.streaming.execute(
+					"Gestionnaire.startDiffusionDocument", params);
 			System.out.println("Réponse du serveur : " + result);
 		} catch (MalformedURLException e) {
 			System.out.println("URL non conforme au format du serveur XML-RPC");
@@ -59,8 +61,8 @@ public class Gestionnaire {
 		Vector params = new Vector();
 		params.addElement(filename);
 		try {
-			String result = (String) streaming.execute(
-					"Streaming.stopDiffusionDocument", params);
+			String result = (String) this.streaming.execute(
+					"Gestionnaire.stopDiffusionDocument", params);
 			System.out.println("Réponse du serveur : " + result);
 		} catch (MalformedURLException e) {
 			System.out.println("URL non conforme au format du serveur XML-RPC");

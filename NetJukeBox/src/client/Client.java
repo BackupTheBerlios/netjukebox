@@ -10,7 +10,7 @@ public class Client {
 
 	public static void main(String args[]) {
 		if (args.length < 1) {
-			System.out.println("Usage: java client [filename]");
+			System.out.println("Usage: java client [port] [filename]");
 			System.exit(-1);
 		}
 
@@ -19,16 +19,16 @@ public class Client {
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
 
 			// Creation du client & identification du serveur
-			XmlRpcClient client = new XmlRpcClient("http://localhost:10000");
+			XmlRpcClient client = new XmlRpcClient("http://localhost:"+args[0]);
 
 			// Création de la requête
 			Vector params = new Vector();
-			params.addElement(args[0]);
+			params.addElement(args[1]);
 
 			// Adresse la requête et affiche les résultats
 			//String result = (String) client.execute("Gestionnaire.sayHello", params);
-			String result = (String) client.execute("Gestionnaire.startDiffusionDocument", params);
-			System.out.println("Réponse du serveur : " + result);
+			client.execute("Gestionnaire.startDiffusionDocument", params);
+			System.out.println("Réponse du serveur : ");
 
 		} catch (ClassNotFoundException e) {
 			System.out.println("Impossible de localiser le pilote Sax");

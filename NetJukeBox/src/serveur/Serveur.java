@@ -6,7 +6,7 @@ public class Serveur {
 
 	public static void main(String[] args) {
 		if (args.length < 1) {
-			System.out.println("Usage: java serveur [port]");
+			System.out.println("Usage: java serveur [portClient] [portStreaming]");
 			System.exit(-1);
 		}
 
@@ -20,7 +20,8 @@ public class Serveur {
 			WebServer server = new WebServer(Integer.parseInt(args[0]));
 
 			// Enregistre la classe du gestionnaire
-			server.addHandler("Gestionnaire", new Gestionnaire());
+			server.addHandler("Gestionnaire", new Gestionnaire(Integer.parseInt(args[1])));
+			//server.addHandler("Systeme", new Systeme());
 			System.out.println("En attente de requête ...");
 
 			server.start();
