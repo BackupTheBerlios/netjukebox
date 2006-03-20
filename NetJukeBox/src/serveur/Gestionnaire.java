@@ -34,9 +34,11 @@ public class Gestionnaire {
 	 * @param filename
 	 * @return
 	 */
-	public boolean startDiffusionDocument(String filename) {
+	public void startDiffusionDocument(String filename) {
 		Vector params = new Vector();
 		params.addElement(filename);
+		params.addElement("127.0.0.1");
+		System.out.println("Demande de diffusion du document "+filename);
 		try {
 			String result = (String) this.streaming.execute(
 					"Gestionnaire.startDiffusionDocument", params);
@@ -49,7 +51,7 @@ public class Gestionnaire {
 			System.out.println("Exception E/S : " + e.getMessage());
 		}
 
-		return true;
+		//return true;
 	}
 
 	/**
