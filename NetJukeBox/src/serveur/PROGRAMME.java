@@ -1,268 +1,132 @@
 package serveur;
+import java.util.Vector;
 
-
-/**
- * <p></p>
- * 
- */
 public class PROGRAMME {
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String Id_Prog;
+	public String Id_Prog;
+	public String Titre;
+	public String Thematique;
+	public boolean Etat = false;
+	Vector v = new Vector();
+	
+	//A quoi ça sert ???
+	public DIFFUSION dIFFUSION;
+	public java.util.Collection dOCUMENT = new java.util.TreeSet();
+	public PROGRAMME PROGRAMME;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String Titre;
+	//Initialisation du proramme à vide
+	public void Creer(String Id_Prog, String Titre, String Thematique) {        
+    	this.Id_Prog = Id_Prog;
+    	this.Titre = Titre;
+    	this.Thematique = Thematique;
+    } 
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public boolean Etat;
-
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String Thematique;
-/**
- * <p></p>
- * 
- */
-    public DIFFUSION dIFFUSION;
-/**
- * <p></p>
- * 
- * 
- * @poseidon-type DOCUMENT
- */
-    public java.util.Collection dOCUMENT = new java.util.TreeSet();
-/**
- * <p></p>
- * 
- */
-    public PROGRAMME pROGRAMME;
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Prog 
- * @param Titre 
- * @param Thematique 
- */
-    public void Creer(String Id_Prog, String Titre, String Thematique) {        
+	public void GetId_Prog(){
+		//return Id_Prog;
+		System.out.println(Id_Prog);
+	}
+	
+	public void GetTitre(){
+		//return Titre;
+		System.out.println(Titre);
+	}
+	
+	public void GetThematique(){
+		//return Thematique;
+		System.out.println(Thematique);
+	}
+	
+	public void GetEtat() {
+		//return Etat;
+		System.out.println(Etat);
+	}
+	
+	public void AjouterDocument(String Id_Doc) {        
+		v.addElement(Id_Doc);
+		//Affichage du vecteur de document
+        int i;
+		for(i = 0; i < v.size(); i++)
+		{
+			System.out.println(v.elementAt(i));
+		}
+	} 
+	
+	
+	
+	public boolean enDiffusion() {        
+        return false;
+    }
+	
+	public void AjouterProgramme(String Id_Prog) {        
         // your code here
     } 
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Prog 
- */
-    public void AjouterProgramme(String Id_Prog) {        
+	 
+
+	public void ListerDocuments(String Id_Doc) {        
         // your code here
     } 
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @return 
- */
-    public boolean enDiffusion() {        
+	public void archiver() {        
+        // your de here
+    } 
+
+	public void DiffuserProgramme(String Id_Prog) {        
+        // your code here
+    } 
+
+	public void VerrouillerDocument(String Id_Doc) {        
+        // your code here
+    } 
+
+	public void Ajout(String Id) {        
+        // your code here
+    } 
+
+	public void DeverouillerDocuments() {        
+        // your code here
+    } 
+
+	public void SetTitre(String Titre) {        
+        // your code here
+    } 
+
+	public void RetraitDocument(String Id_Doc) {        
+        // your code here
+    } 
+
+	public void RetraitProgramme(String Id_Prog) {        
+        // your code here
+    } 
+
+	public void InsertionInfos(String Id_Prog, String Titre, String Thematique) {        
+        // your code here
+    } 
+
+	public void Planifier(java.util.Date Jour, int Heure, String IdeCanal) {        
+        // your code here
+    } 
+
+	public boolean SetDiffusion() {        
         // your code here
         return false;
     } 
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Doc 
- */
-    public void ListerDocuments(String Id_Doc) {        
+	public void ArreterDiffusionProgramme(String Id_Prog) {        
         // your code here
     } 
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void archiver() {        
+	public void RelancerDiffusionProgramme(String Id_Prog) {        
         // your code here
     } 
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Prog 
- */
-    public void DiffuserProgramme(String Id_Prog) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Doc 
- */
-    public void VerrouillerDocument(String Id_Doc) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Doc 
- */
-    public void AjouterDocument(String Id_Doc) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id 
- */
-    public void Ajout(String Id) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- */
-    public void DeverouillerDocuments() {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Titre 
- */
-    public void GetTitre(String Titre) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Titre 
- */
-    public void SetTitre(String Titre) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Doc 
- */
-    public void RetraitDocument(String Id_Doc) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Prog 
- */
-    public void RetraitProgramme(String Id_Prog) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Prog 
- * @param Titre 
- * @param Thematique 
- */
-    public void InsertionInfos(String Id_Prog, String Titre, String Thematique) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Jour 
- * @param Heure 
- * @param IdeCanal 
- */
-    public void Planifier(java.util.Date Jour, int Heure, String IdeCanal) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @return 
- */
-    public boolean SetDiffusion() {        
+	public boolean retirerDocument(String Id) {        
         // your code here
         return false;
     } 
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Prog 
- */
-    public void ArreterDiffusionProgramme(String Id_Prog) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Prog 
- */
-    public void RelancerDiffusionProgramme(String Id_Prog) {        
-        // your code here
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id 
- * @return 
- */
-    public boolean retirerDocument(String Id) {        
+	public boolean retraitDoc(String Id) {        
         // your code here
         return false;
-    } 
-
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id 
- * @return 
- */
-    public boolean retraitDoc(String Id) {        
-        // your code here
-        return false;
-    } 
- }
+	} 
+}
