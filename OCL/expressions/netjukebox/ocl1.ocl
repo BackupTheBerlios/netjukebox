@@ -1,7 +1,35 @@
 package netjukebox
 
+--chaque entite (classe) possede un identifiant unique (clé primaire)
+--context Class
+--self.typedFeature-> select(extensionStereotype.Name=Identifiant).size()>=1
+
 context Utilisateur
-inv: Utilisateur.allInstances() -> forAll(u1, u2 | u1 <> u2 implies u1.login <> u2.login)
--- and  Utilisateur -> notEmpty() implies Permission -> notEmpty())
+inv : id_utilisateur->notEmpty()
+and Utilisateur.allInstances() -> forAll(u1, u2 | u1 <> u2 implies u1.login <> u2.login)
+--and  Utilisateur implies (exists(u | u.droit))
+
+context Systeme::creerUtilisateur(u:Utilisateur)
+pre : Utilisateur->excludes(u)
+post : Utilisateur->exists(u1 | u1.oclIsNew() 
+	   and u1.id_utilisateur = id_utilisateur 
+	   and Utilisateur = Utilisateur@pre->including(u1))
+
+context Systeme::supprimerUtilisateur(u:Utilisateur)
+pre : Utilisateur->includes(u) 
+      and Utilisateur->exists(u1 | u1.id_utilisateur=id_utilisateur)
+--post : Utilisateur = Utilisateur@pre->excluding(u)
+
+context Utilisateur::connecter(login : String, pwd : String)
+--pre : Utilisateur->exists(u1|u1.login = login)
+post: Utilisateur::connection->true
+
+
+context Document
+inv : id_doc->notEmpty()
+
+
+context Canal
+inv : id_canal->notEmpty()
 
 endpackage

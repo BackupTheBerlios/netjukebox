@@ -2,19 +2,109 @@
 
 <class> Utilisateur
 <attributes>
+id_utilisateur : String;
 login : String;
 nom : String;
 prenom : String;
 mail : String;
 pwd : String;
-pays: String;
+pays : String;
+droit : Permission;
+<operations>
+connecter(login : String , pwd : String);
+deconnecter (login : String , pwd : String);
+connection (u : Utilisateur) : Boolean;
+deconnection (u : Utilisateur) : Boolean;
 <endclass>
 
 <class> Permission
 <attributes>
-lib_perm: String;
+id_perm : Integer;
+lib_perm : String;
 <endclass>
 
+<class> Document
+<attributes>
+id_doc : String;
+titre : String;
+date_creation : String;
+duree_source : String;
+compositeur: String;
+interprete : String;
+contrat : Contrat;
+langue : Langue;
+genre : Genre;
+etat : Etat;
+<endclass>
+
+<class> Contrat
+<attributes>
+id_contrat : Integer;
+nom_contrat : String;
+adr_contrat : String;
+date_contrat : String;
+duree_contrat : Integer; --exprimé en mois
+<endclass>
+
+<class> Langue
+<attributes>
+id_langue : Integer;
+lib_langue : String;
+<endclass>
+
+<class> Genre
+<attributes>
+id_genre : Integer;
+lib_genre : String;
+<endclass>
+
+<class> Etat
+<attributes>
+id_etat : String;
+lib_etat : String;
+<endclass>
+
+<class> Journal
+<attributes>
+id_journal : Integer;
+date_journal : String;
+<endclass>
+
+<class> Protocole
+<attributes>
+id_proto : Integer;
+lib_proto : String;
+detail_proto : String;
+<endclass>
+
+<class> Canal
+<attributes>
+id_canal : String;
+nom_canal : String;
+flux_max :Integer;
+protocole : Protocole;
+journal : Journal;
+etat : Etat;
+<endclass>
+
+<class> Programme
+<attributes>
+id_prog : String;
+titre_prog : String;
+etat : Etat;
+responsable : Utilisateur;
+<endclass>
+
+<class> Systeme
+<operations>
+supprimerUtilisateur(u : Utilisateur);
+creerUtilisateur(u : Utilisateur);
+<endclass>
+
+<associations>
+Utilisateur.possede[1]<->Permission.attribuer[0..*];
+Canal.diffuse[0..*]<->Programme.diffuser[1];
+Utilisateur.gere[0..*]<->Canal.gerer[1];
 <endpackage>
 
 
