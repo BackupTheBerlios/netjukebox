@@ -7,7 +7,13 @@ public class PROGRAMME {
 	public String Titre;
 	public String Thematique;
 	public boolean Etat = false;
+	
+	//Création du vecteur d'Id de Document
 	Vector v = new Vector();
+	//Initialisation du fichier archive
+	String fichier_archive = "_Archive.txt";
+	// Initialisation de l'état du programme non archivé
+	String etat_archive = "false";
 	
 	//A quoi ça sert ???
 	public DIFFUSION dIFFUSION;
@@ -43,13 +49,34 @@ public class PROGRAMME {
 	
 	public void AjouterDocument(String Id_Doc) {        
 		v.addElement(Id_Doc);
-		//Affichage du vecteur de document
-        int i;
-		for(i = 0; i < v.size(); i++)
-		{
-			System.out.println(v.elementAt(i));
-		}
-	} 
+	}
+
+	public void archiver() {        
+		int i;
+		String donnee;
+		if (etat_archive == "false") {
+			etat_archive = "true";
+			System.out.println(etat_archive);
+			//Création du nom complet du fichier Archive de tous les documents composant le programme
+			fichier_archive = Id_Prog + fichier_archive;
+			//Sauvegarde de la liste des documents du programme dans le fichier Archive
+			for(i = 0; i < v.size(); i++) {
+				donnee = (String)v.elementAt(i);
+				new EcrireFichier(fichier_archive, donnee);
+			}
+			System.out.println("Le programme est archivé dans le fichier : " + fichier_archive);
+		} else {
+			System.out.println("Erreur : le programme est deja archive");}	
+	}	
+		
+	
+	
+	
+	//Modification des informations d'un programme
+	public void InsertionInfos(String Id_Prog, String Titre, String Thematique) {        
+        // your code here
+    } 
+	
 	
 	
 	
@@ -61,14 +88,8 @@ public class PROGRAMME {
         // your code here
     } 
 
-	 
-
 	public void ListerDocuments(String Id_Doc) {        
         // your code here
-    } 
-
-	public void archiver() {        
-        // your de here
     } 
 
 	public void DiffuserProgramme(String Id_Prog) {        
@@ -96,10 +117,6 @@ public class PROGRAMME {
     } 
 
 	public void RetraitProgramme(String Id_Prog) {        
-        // your code here
-    } 
-
-	public void InsertionInfos(String Id_Prog, String Titre, String Thematique) {        
         // your code here
     } 
 
