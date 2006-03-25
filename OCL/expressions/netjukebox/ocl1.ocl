@@ -17,19 +17,38 @@ post : Utilisateur->exists(u1 | u1.oclIsNew()
 
 context Systeme::supprimerUtilisateur(u:Utilisateur)
 pre : Utilisateur->includes(u) 
-      and Utilisateur->exists(u1 | u1.id_utilisateur=id_utilisateur)
---post : Utilisateur = Utilisateur@pre->excluding(u)
+      and Utilisateur->exists(u1 | u1.id_utilisateur = id_utilisateur)
+--post : Utilisateur = Utilisateur@pre->excluding(u1)
 
-context Utilisateur::connecter(login : String, pwd : String)
+--context Utilisateur::connecter(login : String, pwd : String)
 --pre : Utilisateur->exists(u1|u1.login = login)
-post: Utilisateur::connection->true
-
+--post: Utilisateur::connection->true
 
 context Document
 inv : id_doc->notEmpty()
 
+--context Document::ajouterDocument(d:Document)
+--pre : Document->excludes(d)                              --document inexistant dans la base 
+--post: Document->exists(d1 | d1.oclIsNew()                --document existant dans la base
+--	  and Document->exists(d1 | d1.etat = "Non diffusé")   --et etat document ='Non diffusé'
 
 context Canal
 inv : id_canal->notEmpty()
+
+context Programme
+inv : id_prog->notEmpty()
+
+
+context Protocole
+inv : id_proto->notEmpty()
+
+context Genre
+inv : id_genre->notEmpty()
+
+context Journal
+inv : id_journal->notEmpty()
+
+context Contractant
+inv : id_contrat->notEmpty()
 
 endpackage
