@@ -1,5 +1,5 @@
 Document
-Invariant: ?
+Invariant: l'identifiant ne doit pas être nul.
 		
 	AjouterDocument:(Administrateur)
 		pre : document inexistant dans la base 
@@ -10,8 +10,8 @@ Invariant: ?
 		post: document existant dans la base avec infos partiellement ou totalement modifiées
 
 	RechercherDocument:(Administrateur - RespProg)
-		pre : document existant
-		post: document existant
+		pre : le document recherché peut être existant ou inextant dans la base
+		post: l'état du document recherché ne sera en rien modifié à la suite de cette recherche
 		
 	SupprimerDocument:(Administrateur)
 		pre : document existant dans la base et etat document ='Non diffusé' et 'Archivé'
@@ -22,7 +22,7 @@ Invariant: ?
 		post: document dans la base et etat document ='Archivé'
 		
 Programme
-Invariant: ?
+Invariant: l'identifiant ne doit pas être nul.
 
 	CréerProgramme:(RespProg)
 		pre : -
@@ -68,7 +68,7 @@ Invariant: ?
 		post: programme recherché existant ou non dans la base
 
 Canal
-Invariant: ?
+Invariant: l'identifiant ne doit pas être nul.
 
 	CréerCanal:(Administrateur)
 		pre : -
