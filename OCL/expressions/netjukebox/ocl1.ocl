@@ -26,6 +26,7 @@ pre : Utilisateur->includes(u)
 
 context Document
 inv : id_doc->notEmpty()
+and Document.allInstances() -> forAll(d1, d2 | d1 <> d2 implies d1.id_doc <> d2.id_doc)
 
 --context Document::ajouterDocument(d:Document)
 --pre : Document->excludes(d)                              --document inexistant dans la base 
@@ -34,21 +35,35 @@ inv : id_doc->notEmpty()
 
 context Canal
 inv : id_canal->notEmpty()
+and Canal.allInstances() -> forAll(c1, c2 | c1 <> c2 implies c1.id_canal <> c2.id_canal)
 
 context Programme
 inv : id_prog->notEmpty()
+and Programme.allInstances() -> forAll(p1, p2 | p1 <> p2 implies p1.id_prog <> p2.id_prog)
+
+--and Programme.etat ='estPlanifié' implies 
+--diffusion.qualage_temporel->notEmpty() )
+--and diffusion.journal->notEmpty())
+
 
 
 context Protocole
 inv : id_proto->notEmpty()
+and Protocole.allInstances() -> forAll(p1, p2 | p1 <> p2 implies p1.id_proto <>p2.id_proto)
 
 context Genre
 inv : id_genre->notEmpty()
+and Genre.allInstances() -> forAll(g1, g2 | g1 <> g2 implies g1.id_genre <> g2.id_genre)
 
 context Journal
 inv : id_journal->notEmpty()
+and Journal.allInstances() -> forAll(j1, j2 | j1 <> j2 implies j1.id_journal<> j2.id_journal)
 
 context Contractant
 inv : id_contrat->notEmpty()
+and Contractant.allInstances() -> forAll(c1, c2 | c1 <> c2 implies c1.id_contrat <> c2.id_contrat)
+
+
+
 
 endpackage
