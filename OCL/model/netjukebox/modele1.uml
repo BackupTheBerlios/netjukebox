@@ -35,6 +35,9 @@ contrat : Contrat;
 langue : Langue;
 genre : Genre;
 etat : Etat;
+<operations>
+ajouterDocument (d : Document);
+supprimerDocument (d : Document);
 <endclass>
 
 <class> Contrat
@@ -95,16 +98,42 @@ etat : Etat;
 responsable : Utilisateur;
 <endclass>
 
+<class> Contractant
+<attributes>
+id_contrat : Integer;
+nom_contrat : String;
+adr_contrat :String;
+date_contrat : String;
+duree_contrat : Integer; -- exprimé en moisS
+document : Document;
+<endclass>
+
 <class> Systeme
 <operations>
 supprimerUtilisateur(u : Utilisateur);
 creerUtilisateur(u : Utilisateur);
 <endclass>
 
+<associationclass> Diffusion
+Programme.estdiffuse[0..*]<->Canal.diffuse[0..*]
+<attributes>
+calage_temporel : Integer ;
+journal : Journal;
+<endassociationclass>
+
 <associations>
-Utilisateur.possede[1]<->Permission.attribuer[0..*];
-Canal.diffuse[0..*]<->Programme.diffuser[1];
-Utilisateur.gere[0..*]<->Canal.gerer[1];
+Utilisateur.possede[1]<->Permission.estattribue[0..*];
+Utilisateur.gere[0..*]<->Canal.estgere[1];
+Utilisateur.estresponsable[0..*]<->Programme.sousreponsabilite[1];
+Document.estqualifie[1]<->Etat.qualifie[0..*];
+Document.estqualifie[1]<->Genre.qualifie[0..*];
+Document.estqualifie[1]<->Langue.qualifie[0..*];
+Document.estsouscontrat[1]<->Contractant.contracte[0..*];
+Programme.estqualifie[1]<->Etat.qualifie[0..*];
+Canal.utilise[1]<->Protocole.estutilise[0..*];
+Canal.estjournalise[1]<->Journal.journalise[0..*];
+Canal.estqualifie[1]<->Etat.qualifie[0..*];
+
 <endpackage>
 
 
