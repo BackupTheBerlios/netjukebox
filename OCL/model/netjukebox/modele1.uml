@@ -10,11 +10,10 @@ mail : String;
 pwd : String;
 pays : String;
 droit : Permission;
+etat : Boolean; --à revoir..
 <operations>
 connecter(login : String , pwd : String);
-deconnecter (login : String , pwd : String);
-connection (u : Utilisateur) : Boolean;
-deconnection (u : Utilisateur) : Boolean;
+estconnecte(etat : Etat) : Boolean;
 <endclass>
 
 <class> Permission
@@ -34,10 +33,13 @@ interprete : String;
 contrat : Contrat;
 langue : Langue;
 genre : Genre;
-etat : Etat;
+etat : Boolean; --à revoir ...
 <operations>
 ajouterDocument (d : Document);
 supprimerDocument (d : Document);
+modifierDocument(d : Document);
+enlecture(etat : Etat): Boolean;
+estprogramme (etat : Etat) : Boolean;
 <endclass>
 
 <class> Contrat
@@ -94,8 +96,14 @@ etat : Etat;
 <attributes>
 id_prog : String;
 titre_prog : String;
-etat : Etat;
+thematique : String;
+etat : Boolean;--a revoir..
+duree :Integer;--à revoir..
 responsable : Utilisateur;
+document : Document;
+programme : Programme;
+<operations>
+diffuserProgramme(p : Programme);
 <endclass>
 
 <class> Contractant
@@ -104,12 +112,13 @@ id_contrat : Integer;
 nom_contrat : String;
 adr_contrat :String;
 date_contrat : String;
-duree_contrat : Integer; -- exprimé en moisS
+duree_contrat : Integer; -- exprimé en mois
 document : Document;
 <endclass>
 
 <class> Systeme
 <operations>
+deconnecter(u : Utilisateur);
 supprimerUtilisateur(u : Utilisateur);
 creerUtilisateur(u : Utilisateur);
 <endclass>
@@ -129,6 +138,8 @@ Document.estqualifie[1]<->Etat.qualifie[0..*];
 Document.estqualifie[1]<->Genre.qualifie[0..*];
 Document.estqualifie[1]<->Langue.qualifie[0..*];
 Document.estsouscontrat[1]<->Contractant.contracte[0..*];
+Programme.estcompose[0..*]<->Document.compose[0..*];
+Programme.estcompose[0..*]<->Programme.compose[0..*];
 Programme.estqualifie[1]<->Etat.qualifie[0..*];
 Canal.utilise[1]<->Protocole.estutilise[0..*];
 Canal.estjournalise[1]<->Journal.journalise[0..*];
