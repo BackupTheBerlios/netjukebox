@@ -69,7 +69,12 @@ public class DOCUMENT {
 		System.out.println("Le compteur de verrou = " + compteur_verrou);
 	}
 	
-	
+	public void DeverouillerDocument(String Id_Prog) {        
+		vecteur_verrou.remove(Id_Prog);
+		compteur_verrou = compteur_verrou - 1;
+		System.out.println("Document déverrouillé : " + Id_Doc);
+		System.out.println("Le compteur de verrou = " + compteur_verrou);
+    }
 	
 	
 	
@@ -140,12 +145,6 @@ public class DOCUMENT {
     } 
 
 	
-	public void DeverouillerDocument(String Id_Doc) {        
-        // your code here
-    } 
-	
-	
-
 	public void CompterVerrouProgramme(int Verrou) {        
         // your code here
     } 
