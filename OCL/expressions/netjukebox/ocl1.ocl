@@ -1,59 +1,85 @@
 package netjukebox
 
 --chaque entite (classe) possede un identifiant unique (clé primaire)
---context Class
---self.typedFeature-> select(extensionStereotype.Name=Identifiant).size()>=1
+
+context Class
+self.typedFeature-> select(extensionStereotype.Name=Identifiant).size()>=1
 
 context Utilisateur
 inv : id_utilisateur->notEmpty()
+and Utilisateur.allInstances() -> forAll(u1, u2 | u1 <> u2 implies u1.id_utilisateur <> u2.id_utilisateur)
 and Utilisateur.allInstances() -> forAll(u1, u2 | u1 <> u2 implies u1.login <> u2.login)
---and  Utilisateur implies (exists(u | u.droit))
+and self.droit->notEmpty()       --par défaut le droit est celui d'un "Usager"
+
 
 context Systeme::creerUtilisateur(u:Utilisateur)
-pre : Utilisateur->excludes(u)
-post : Utilisateur->exists(u1 | u1.oclIsNew() 
-	   and u1.id_utilisateur = id_utilisateur 
-	   and Utilisateur = Utilisateur@pre->including(u1))
+pre : Utilisateur->excludes(u)                          --L'utilisateur n'existe pas dans la base
+post: Utilisateur->exists(u1 | u1.oclIsNew()            --L'utilisateur est crée 
+	  and u1.id_utilisateur = id_utilisateur            --..et possède un identifiant
+	  and Utilisateur = Utilisateur@pre->including(u1)) --..et desormais il existe dans la base
 
 context Systeme::supprimerUtilisateur(u:Utilisateur)
-pre : Utilisateur->includes(u) 
-      and Utilisateur->exists(u1 | u1.id_utilisateur = id_utilisateur)
---post : Utilisateur = Utilisateur@pre->excluding(u1)
+pre : Utilisateur->includes(u)      --L'utilisateur existe
+      and self.etat = false         --.. et il n'est pas connecté
+post: Utilisateur@pre->excludes(u)  --.. désormas il n'existe plus
 
---context Utilisateur::connecter(login : String, pwd : String)
---pre : Utilisateur->exists(u1|u1.login = login)
---post: Utilisateur::connection->true
+context Utilisateur::connecter(login : String, pwd : String)
+pre : Utilisateur->exists(u1|u1.id_utilisateur = id_utilisateur) --L'utilisateur doit avoir un identifiant 
+	  and Utilisateur->exists(u1|u1.login =login)                --.. un login 
+	  and Utilisateur->exists(u1|u1.pwd = pwd)                   -- .. un mot de pass valides
+post: Utilisateur->exists(u1|u1.etat = true)                     -- Il ne doit pas déjà être connecté
+
+context Systeme::deconnecter(u:Utilisateur)
+pre : u.etat = true   --L'etat de l'utilisateur passe de connecté
+post: u.etat = false  --.. à non connecté
 
 context Document
 inv : id_doc->notEmpty()
 and Document.allInstances() -> forAll(d1, d2 | d1 <> d2 implies d1.id_doc <> d2.id_doc)
+and Document.allInstances() -> forAll(d1, d2 | d1 <> d2 implies d1.titre <> d2.titre)
 
---context Document::ajouterDocument(d:Document)
---pre : Document->excludes(d)                              --document inexistant dans la base 
---post: Document->exists(d1 | d1.oclIsNew()                --document existant dans la base
---	  and Document->exists(d1 | d1.etat = "Non diffusé")   --et etat document ='Non diffusé'
+context Document::ajouterDocument(d:Document)
+pre : Document->excludes(d)                              --document inexistant dans la base 
+post: Document->exists(d1 | d1.oclIsNew())               --document existant dans la base
+	  and self.etat = false                              --et l'état par défaut est "non diffusion"
+	  
+context Document::supprimerDocument(d:Document)
+pre : Document->includes(d)       -- le document à supprimer est existant dans la base
+      and self.etat = false       -- et il n'est pas en cours de diffussion
+post: Document@pre->excludes(d)   -- le docuement n'existe plus dans la base
+
+context Document::modifierDocument(d:Document)
+pre : Document->includes(d)       --le document à modifier existe dans la base
+      and self.etat = false       -- et il n'est pas en cours de diffussion
+post : Document@pre->includes(d)  --le document existe toujours dans la base
 
 context Canal
 inv : id_canal->notEmpty()
 and Canal.allInstances() -> forAll(c1, c2 | c1 <> c2 implies c1.id_canal <> c2.id_canal)
+and Canal.allInstances() -> forAll(c1, c2 | c1 <> c2 implies c1.nom_canal <> c2.nom_canal)
 
 context Programme
 inv : id_prog->notEmpty()
 and Programme.allInstances() -> forAll(p1, p2 | p1 <> p2 implies p1.id_prog <> p2.id_prog)
+and Programme.allInstances() -> forAll(p1, p2 | p1 <> p2 implies p1.titre_prog <> p2.titre_prog)
 
---and Programme.etat ='estPlanifié' implies 
---diffusion.qualage_temporel->notEmpty() )
---and diffusion.journal->notEmpty())
-
+context Programme::diffuserProgramme(p : Programme)
+pre : Programme->includes(p)
+      and self.etat = false 
+      and self.duree > 3600
+post: --qualage_temporel->notEmpty() )
+      --and journal->notEmpty())
 
 
 context Protocole
 inv : id_proto->notEmpty()
 and Protocole.allInstances() -> forAll(p1, p2 | p1 <> p2 implies p1.id_proto <>p2.id_proto)
+and Protocole.allInstances() -> forAll(p1, p2 | p1 <> p2 implies p1.lib_proto <>p2.lib_proto)
 
 context Genre
 inv : id_genre->notEmpty()
 and Genre.allInstances() -> forAll(g1, g2 | g1 <> g2 implies g1.id_genre <> g2.id_genre)
+and Genre.allInstances() -> forAll(g1, g2 | g1 <> g2 implies g1.lib_genre <> g2.lib_genre)
 
 context Journal
 inv : id_journal->notEmpty()
@@ -63,7 +89,15 @@ context Contractant
 inv : id_contrat->notEmpty()
 and Contractant.allInstances() -> forAll(c1, c2 | c1 <> c2 implies c1.id_contrat <> c2.id_contrat)
 
+context Etat
+inv : id_etat->notEmpty()
+and Etat.allInstances() -> forAll(e1, e2 | e1 <> e2 implies e1.id_etat <> e2.id_etat)
+and Etat.allInstances() -> forAll(e1, e2 | e1 <> e2 implies e1.lib_etat <> e2.lib_etat)
 
+context Langue
+inv : id_langue->notEmpty()
+and Langue.allInstances() -> forAll(l1, l2 | l1 <> l2 implies l1.id_langue <> l2.id_langue)
+and Langue.allInstances() -> forAll(l1, l2 | l1 <> l2 implies l1.lib_langue <> l2.lib_langue)
 
 
 endpackage
