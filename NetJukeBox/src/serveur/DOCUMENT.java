@@ -1,5 +1,7 @@
 package serveur;
 
+import java.util.Vector;
+
 public class DOCUMENT {
 
 	public String Id_Doc;
@@ -12,6 +14,10 @@ public class DOCUMENT {
 	public String Fichier;
 	public String Etat;
 
+	//	Création du vecteur d'Id de Document
+	Vector vecteur_verrou = new Vector();
+	int compteur_verrou = 0;
+	
 	public java.util.Collection pROGRAMME = new java.util.TreeSet();
 	public Contrat contrat;
     
@@ -69,9 +75,9 @@ public class DOCUMENT {
         // your code here
     } 
 
-	public String GetId_doc() {        
+	public String GetId_Doc() {        
         // your code here
-        return null;
+        return Id_Doc;
     } 
 
 	public String GetTitre() {        
@@ -112,14 +118,19 @@ public class DOCUMENT {
 	public void DeverouillerDocument(String Id_Doc) {        
         // your code here
     } 
+	
+	public void PoserVerrou(String Id_Prog) {        
+		vecteur_verrou.addElement(Id_Prog);
+		compteur_verrou = compteur_verrou + 1;
+		System.out.println("Document verrouillé : " + Id_Doc);
+		System.out.println("Le compteur de verrou = " + compteur_verrou);
+    }
 
 	public void CompterVerrouProgramme(int Verrou) {        
         // your code here
     } 
 
-	public void PoserVerrou(int Verrou, String Id_Prog) {        
-        // your code here
-    } 
+	 
 
 	public void AjouterProgramme(String Id_Prog) {        
         // your code here
