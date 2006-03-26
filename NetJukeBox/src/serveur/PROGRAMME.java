@@ -21,46 +21,43 @@ public class PROGRAMME {
     	this.Thematique = Thematique;
     } 
 
-	public void GetId_Prog(){
-		//return Id_Prog;
-		System.out.println(Id_Prog);
+	public String GetId_Prog(){
+		return this.Id_Prog;
+		//System.out.println(Id_Prog);
 	}
 	
-	public void GetTitre(){
-		//return Titre;
-		System.out.println(Titre);
+	public String GetTitre(){
+		return this.Titre;
+		//System.out.println(Titre);
 	}
 	
-	public void GetThematique(){
-		//return Thematique;
-		System.out.println(Thematique);
+	public String GetThematique(){
+		return this.Thematique;
+		//System.out.println(Thematique);
 	}
 	
-	public void GetEtat() {
-		//return Etat;
-		System.out.println(Etat);
+	public boolean GetEtat() {
+		return this.Etat;
+		//System.out.println(Etat);
 	}
 	
 	//Ajout d'un document dans le programme
-	public void AjouterDocument(String Id_Doc) {        
-		v.addElement(Id_Doc);
-		VerrouillerDocument(Id_Doc);
+	public void AjouterDocument(DOCUMENT Doc) {        
+		v.addElement(Doc.GetId_Doc());
+		Doc.PoserVerrou(Id_Prog);
 	}
 
-	public void VerrouillerDocument(String Id_Doc) {        
-        System.out.println("Document verrouillé " + Id_Doc);
-    }
-	
 	//Retrait d'un document du programme
-	public void RetraitDocument(String Id_Doc) {        
-        v.remove(Id_Doc);
+	public void RetraitDocument(DOCUMENT Doc) {        
+        v.remove(Doc.GetId_Doc());
+       
     }
 	
-	public void DeverouillerDocuments() {        
-		System.out.println("Document déverrouillé " + Id_Doc);
+	public void DeverouillerDocuments(String Id_Doc) {        
+		
+		System.out.println("Document déverrouillé : " + Id_Doc);
     } 
-	
-	
+		
 	//Sauvegarde du vecteur de document si cela n'a pas déjà été fait
 	public void archiver() {        
 		int i;
