@@ -15,12 +15,12 @@ public class Gestionnaire {
 		this.streams = new Vector();
 	}
 
-	public void startDiffusionDocument(String filename, String ipAdress) {
+	public String startDiffusionDocument(String filename, String ipAdress) {
 		System.out.println("Diffusion du document "+filename);
 		Stream stream = new Stream(filename, ipAdress, this.portBase);
 		stream.start();
 		this.streams.add(stream);
-		//return true;
+		return "[Streaming] Diffusion";
 	}
 	
 	public boolean stopDiffusionDocument(String filename, String ipAdress) {

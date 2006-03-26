@@ -28,8 +28,8 @@ public class Client {
 			// Adresse la requête et affiche les résultats
 			//String result = (String) client.execute("Gestionnaire.sayHello", params);
 			System.out.println("Peut-on diffuser le document "+args[1]+" ?");
-			client.execute("Gestionnaire.startDiffusionDocument", params);
-			//System.out.println("Réponse du serveur : ");
+			String result = (String)client.execute("Gestionnaire.startDiffusionDocument", params);
+			System.out.println("Réponse du serveur : "+result);
 
 		} catch (ClassNotFoundException e) {
 			System.out.println("Impossible de localiser le pilote Sax");

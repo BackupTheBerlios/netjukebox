@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<title>UI-Based Application for Transmission of Media over RTP</title>
+<meta name="collection" content="reference">
+<meta name="description" content="JMF 2.1.1 Solutions" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<meta name="archive" content="false"/>
+<meta name="date" content="2003-04-12" />
+<link rel="stylesheet" href="/css/default_developer.css" />
+<script type='text/JavaScript' src='/js/popUp.js'></script>
+</head>
+<!--stopindex-->
+<body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0" rightmargin="0" bgcolor="#ffffff">
+
+<a name="top"></a>
+<!-- BEGIN GENERIC MASTHEAD -->
+<!-- BEGIN VNV1 COMPONENT V0  -->
+<script type='text/JavaScript' src='/js/showHide.js'></script>
+<div class="vnv1sunlogo"><a href="http://www.sun.com"><img src="/im/vnv1_sunlogo.gif" alt="sun.com" width="55" height="24" border="0"></a></div>
+<div class="vnv1" id="vnv1v0">
+<div class="cornerTL"><div class="cornerTR"><div class="cornerBL"><div class="cornerBR">
+
+<div class="vnv1search">
+	<table border="0" cellpadding="0" cellspacing="0" class="topnavlight">
+	<form action="http://developers.sun.com/search/onesearch/index.jsp" accept-charset="utf-8" method="GET">
+	<input type="hidden" name="charset" value="utf-8">
+	<input type="hidden" name="col" value="dev-reference">
+	<tr>
+	<td nowrap="nowrap"><span class="rightarrowwhite">&raquo;</span>&nbsp;<a href="http://developers.sun.com/global/search_tips.html">search tips</a>&nbsp;</td>
+	<td><input class="searchfield" name="qt" class="medium" size="7" onFocus="if( this.value==this.defaultValue ) this.value='';" value="Search"></td>
+	<td valign="middle" align="left"><input type="image" border="0" src="/im/vnv1_bttn_search.gif" alt="Submit Search"></td>
+
+	</tr></form>
+	</table>
+</div>
+
+<div class="vnv1topiclinks">
+<table cellpadding="1" cellspacing="0" border="0">
+<tr>
+<td rowspan="2"><a href="http://java.sun.com" title="java.sun.com"><img src="/im/a.gif" alt="Home Page" width="96" height="58" border="0" class="sunlogo"></a></td>
+<td colspan="4"><a href="http://developers.sun.com" title="developers.sun.com"><img src="/im/a.gif" alt="" width="250" height="32" border="0"></a></td>
+</tr>
+<tr>
+<td><img src="/im/a.gif" alt="" width="1" height="1" border="0" id="ip1"></td>
+<td class="navlinks" id="navlink1"><a href="http://developers.sun.com/global/products_technologies.html">Products and Technologies</a></td>
+<td><img src="/im/a.gif" alt="" width="1" height="1" border="0" id="ip2"></td>
+<td class="navlinks" id="navlink2"><a href="http://developers.sun.com/global/technical_topics.html">Technical Topics</a></td>
+</tr>
+
+</table>
+</div>
+
+</div></div></div></div>
+</div>
+<!-- END VNV1 COMPONENT V0  -->
+
+
+
+
+
+
+<!-- END GENERIC MASTHEAD -->
+<!-- BEGIN BREADCRUMB -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="vatop">
+<tr>
+<td>      
+<div class="breadcrumb">
+<a href="http://developers.sun.com/index.html">Developers Home</a> &gt; <a href="http://developers.sun.com/prodtech/index.html">Products & Technologies</a> &gt; <a href="http://java.sun.com/index.jsp">Java Technology</a> &gt; <a href="http://java.sun.com/j2se/index.jsp">J2SE</a> &gt; <a href="http://java.sun.com/j2se/desktopjava/index.jsp">Desktop Java</a> &gt; <a href="http://java.sun.com/products/java-media/jmf/index.jsp">JMF</a> &gt; <a href="http://java.sun.com/products/java-media/jmf/reference/index.html">Reference</a> &gt; <a href="http://java.sun.com/products/java-media/jmf/reference/codesamples/index.html">Code Samples and Apps</a> &gt; <a href="http://java.sun.com/products/java-media/jmf/2.1.1/solutions/index.html">JMF 2.1.1 Solutions</a> &gt;
+</div>
+</td>
+<td align="right" nowrap="nowrap"><div class="breadcrumb">
+<a href="http://developers.sun.com/global/join_sdn.html"><img src="/im/sdn_join_sdn.gif" width="74" height="18" border="0" alt="Join SDN" align="bottom" /></a><a href="http://developers.sun.com/global/why_join.html"><img src="/im/sdn_why_join.gif" width="73" height="18" border="0" alt="Why Join" valign="bottom" /></a><a href="http://developers.sun.com/global/my_profile.html"><img src="/im/sdn_my_profile.gif" width="73" height="18" border="0" alt="My Profile" align="bottom" /></a>
+</div></td></tr>
+<tr><td colspan="2"><img src="/im/a.gif" width="770" height="1" border="0" alt=" " /></td></tr>
+</table>
+<span class="sp5">&nbsp;</span><br />     
+<!-- END BREADCRUMB -->
+<!-- BEGIN PAGETITLE -->
+<div class="pagetitle2">Code sample</div>
+<div class="pagetitle">UI-Based Application for Transmission of Media over RTP</div>
+<!-- END PAGETITLE -->
+<!-- BEGIN WRAPPER TABLE, 1 COLUMN, MAIN -->
+<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<tr><td width="100%" valign="top">
+<!-- BEGIN CENTRAL COLUMN COMPONENTS -->
+<!--startindex-->
+<!-- ============ -->
+<!-- MAIN CONTENT -->
+<!-- ============ -->
+<a name="skip2content"></a>
+<!--  BEGIN VCD4 PFV  -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td class="smaller" valign="top"><em></em></td>
+<td width="10">&nbsp;</td>
+<td align="right" valign="bottom"><div class="sitelinks" style="padding:0px;">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="bottom" align="right">&nbsp;</td>
+<td valign="bottom" class="smaller" nowrap="nowrap"><a href="/jsp_utils/PrintPage.jsp" target="printFriendlyView" onclick="openPopup('','printFriendlyView',710,650,'no',1,1,0,0,0,0); return true;"><img src="/im/ic_print.gif" width="14" height="12" alt="Print-friendly Version" border="0" hspace="4" />Print-friendly Version</a><br></td>
+</tr></table></div>
+</td></tr>
+</table>
+<!--  END VCD4 PFV -->
+<TABLE BORDER=0 WIDTH="100%">
+<TR>
+<TD ALIGN=RIGHT WIDTH="100%">
+<H4>
+<A HREF="/products/java-media/jmf/2.1.1/solutions/index.html">JMF Solutions</A>
+<!-- BEGIN FRAGMENT | HR TAG -->
+<div class="contentdivider"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="grey4"><tr><td><img src="/im/a.gif" width="1" height="4" border="0" alt=" " /></td></tr></table></div>
+<!-- END FRAGMENT | HR TAG -->
+</H4>
+</TD>
+</TR>
+<TR>
+<TD>
+<TABLE CELLSPACING=0 CELLPADDING=0 COLS=1 WIDTH="100%" NOSAVE >
+<TR ALIGN=RIGHT NOSAVE ID="CellBC">
+<TD NOSAVE>
+<H3>
+UI-Based Application for Transmission of Media over RTP</H3>
+</TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR>
+<TD><B>Problem</B>
+<BR>Setting up RTP sessions with several distributed clients and
+streams can be a tedious and complicated task. We developed a small
+application with a convenient graphical user interface that
+demonstrates how to do this.
+<br><br><B>Solution</B>
+<BR>The core piece of the transmitter (Tx) is located in AVTransmitter.java. It
+allows to stream media containing any number of tracks to a number of different hosts/clients on the network simultaneously.
+<br><br>The other classes contain the graphical user interface, a configuration manager that saves and restores your last settings as well a a utility called RTCP Monitor. The RTCP Monitor allows you to trace RTCP packets such as Sender Reports, Receiver Reports and Bye Packets. <br><br>The main class of this test tool is located in Tx.java.
+<br><br>
+A complimentary rtp tool called <A HREF="/products/java-media/jmf/2.1.1/solutions/ToolsRx.html">Rx</A>, designed to receive and playback streams that are being sent by Tx, is also available from the solutions page.
+<BR>&nbsp;
+<UL>
+<LI>
+<A HREF="#requirements">Requirements</A></LI>
+<LI>
+<A HREF="#relatedclasses">Related Classes</A></LI>
+<LI>
+<A HREF="#howto">How to run this sample</A></LI>
+<LI>
+<A HREF="#source">Source Code</A></LI>
+<LI>
+<A HREF="#seealso">See Also</A></LI>
+</UL>
+</TD>
+</TR>
+<TR>
+<TD HEIGHT="50"></TD>
+</TR>
+<TR ID="CellBC">
+<TD><A NAME="requirements"></A><B>Requirements</B></TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR>
+<TD>
+<TABLE BORDER=0 CELLSPACING=4 CELLPADDING=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>Platform:</TD>
+<TD>JDK 1.2 or later</TD>
+</TR>
+<TR>
+<TD>JMF API:</TD>
+<TD>2.1.1</TD>
+</TR>
+<TR>
+<TD>Implementation:</TD>
+<TD>AJ, WPP, SPP *</TD>
+</TR>
+<TR>
+<TD>Hardware: [optional]</TD>
+<TD>Capture card required for live capture.</TD>
+</TR>
+</TABLE>
+<br><br><FONT SIZE=-1>* AJ = All Java, WPP = Windows Performance Pack, SPP =
+Solaris Performance Pack</FONT></TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR ID="CellBC">
+<TD><A NAME="relatedclasses"></A><B>Related Classes</B></TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR>
+<TD>
+<UL>
+<LI>
+<A HREF="/products/java-media/jmf/2.1.1/apidocs/javax/media/rtp/RTPManager.html">javax.media.rtp.RTPManager</A></LI>
+</UL>
+</TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR ID="CellBC">
+<TD><A NAME="howto"></A><B>How to run this sample</B></TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR>
+<TD>
+<OL>
+<LI>
+Download and compile the source files.</LI>
+<LI>
+Start Tx, for example: java Tx</LI>
+<BR>&nbsp;
+</OL>
+</TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR ID="CellBC">
+<TD><A NAME="source"></A><B>Source Code</B></TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR>
+<TD>
+<UL>
+<LI><A HREF="/products/java-media/jmf/2.1.1/solutions/tx/AVTransmitter.java">AVTransmitter.java</A></LI>
+<LI><A HREF="/products/java-media/jmf/2.1.1/solutions/tx/Config.java">Config.java</A></LI>
+<LI><A HREF="/products/java-media/jmf/2.1.1/solutions/tx/RTCPViewer.java">RTCPViewer.java</A></LI>
+<LI><A HREF="/products/java-media/jmf/2.1.1/solutions/tx/Target.java">Target.java</A></LI>
+<LI><A HREF="/products/java-media/jmf/2.1.1/solutions/tx/Tx.java">Tx.java</A></LI>
+</UL>
+</TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR ID="CellBC">
+<TD><A NAME="seealso"></A><B>See Also</B></TD>
+</TR>
+<TR>
+<TD HEIGHT="16"></TD>
+</TR>
+<TR>
+<TD>
+<UL>
+<LI>
+JMF 2.0 Programmer's Guide</LI>
+</UL>
+</TD>
+</TR>
+</TABLE>
+<!-- =================== -->
+<!-- END OF MAIN CONTENT -->
+<!-- =================== -->
+<!--stopindex-->
+<!-- END CENTRAL COLUMN COMPONENTS -->
+</td></tr>
+<!-- BEGIN SPACER ROW -->
+<tr><td><img src="/im/a.gif" width="750" height="1" border="0" alt=" " /></td></tr>
+<!-- END SPACER ROW -->
+</table>
+<!-- END WRAPPER TABLE, 1 COLUMN, MAIN -->
+<!-- BEGIN VNV5 FOOTER  -->
+<table border="0" cellpadding="0" cellspacing="10" width="100%">
+<tr>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="vatop">
+<tr>
+<td colspan="4" valign="top" class="grey3"><img src="/im/a.gif" width="1" height="2" border="0" alt="" /></td></tr>
+<tr>
+<td><img src="/im/a.gif" width="190" height="1" border="0" alt="" /><br />
+<a href="http://www.sun.com"><img src="/im/logo_sun_small_sdn.gif" width="61" height="29" border="0" alt="" vspace="5"/></a></td>
+<td width="100%" valign="top"><img src="/im/a.gif" width="350" height="1" border="0" alt="" /><br />
+<div class="footer">
+<a href="http://developers.sun.com/global/aboutsun.html">About Sun</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/aboutsdn.html">About This Site</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/newsletters.html">Newsletters</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/contact.html">Contact Us</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/employment.html">Employment</a><br />
+<a href="http://developers.sun.com/global/howtobuy.html">How to Buy</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/licensing.html">Licensing</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/termsofuse.html">Terms of Use</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/privacy.html">Privacy</a> &nbsp;|&nbsp;
+<a href="http://developers.sun.com/global/trademarks.html">Trademarks</a>
+<br /><span class="sp10">&nbsp;</span><br />
+<br /><span class="sp10">&nbsp;</span><br />
+Copyright 1994-2006 Sun Microsystems, Inc.
+</div></td>
+<td><img src="/im/a.gif" width="40" height="1" border="0" alt="" /></td>
+<td valign="top"><div class="footer"><b><a href="http://developers.sun.com/global/aboutsdn.html">A Sun Developer Network Site</a></b></div>
+<div class="footer">
+<img src="/im/a.gif" width="170" height="1" border="0" alt="" /><br />
+Unless otherwise licensed, code in all technical manuals herein (including articles, FAQs, samples) is provided under this <a href="http://developers.sun.com/global/berkeley_license.html">License</a>.
+<br /><span class="sp5">&nbsp;</span><br />
+<a href="http://developers.sun.com/global/rss_sdn.html"><img src="/im/button_xml.gif" width="36" height="14" align="top" border="0" alt="XML" /></a>&nbsp;<a href="http://developers.sun.com/global/content_feeds.html">Content Feeds</a>
+</div></td></tr>
+<tr><td colspan="4" valign="top" class="grey3"><img src="/im/a.gif" width="1" height="2" border="0" alt="" /></td></tr>
+</table>
+</td></tr>
+</table>
+<!-- END VNV5 FOOTER -->
+</body>
+<script language="JavaScript" src="/js/omi/jsc/s_code_remote.js"></script></html>
+
+
+

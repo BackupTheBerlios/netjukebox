@@ -1,48 +1,21 @@
-package streaming;
-/*
- * @(#)AVTransmit2.java	1.4 01/03/13
- *
- * Copyright (c) 1999-2001 Sun Microsystems, Inc. All Rights Reserved.
- *
- * Sun grants you ("Licensee") a non-exclusive, royalty free, license to use,
- * modify and redistribute this software in source and binary code form,
- * provided that i) this copyright notice and license appear on all copies of
- * the software; and ii) Licensee does not utilize the software in a manner
- * which is disparaging to Sun.
- *
- * This software is provided "AS IS," without a warranty of any kind. ALL
- * EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
- * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
- * NON-INFRINGEMENT, ARE HEREBY EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING
- * OR DISTRIBUTING THE SOFTWARE OR ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS
- * LICENSORS BE LIABLE FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT,
- * INDIRECT, SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
- * CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF
- * OR INABILITY TO USE SOFTWARE, EVEN IF SUN HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- *
- * This software is not designed or intended for use in on-line control of
- * aircraft, air traffic, aircraft navigation or aircraft communications; or in
- * the design, construction, operation or maintenance of any nuclear
- * facility. Licensee represents and warrants that it will not use or
- * redistribute the Software for such purposes.
- */
+package ToolsTx;
 
 import java.awt.*;
 import java.io.*;
 import java.net.InetAddress;
+import java.util.*;
 import javax.media.*;
 import javax.media.protocol.*;
-import javax.media.protocol.DataSource;
 import javax.media.format.*;
 import javax.media.control.TrackControl;
 import javax.media.control.QualityControl;
 import javax.media.rtp.*;
+import javax.media.rtp.event.*;
 import javax.media.rtp.rtcp.*;
-import com.sun.media.rtp.*;
 
-public class AVTransmit2 {
+
+public class AVTransmitter implements ReceiveStreamListener, RemoteListener,
+    ControllerListener {
 
     // Input MediaLocator
     // Can be a file or http or capture source
@@ -52,48 +25,236 @@ public class AVTransmit2 {
 
     private Processor processor = null;
     private RTPManager rtpMgrs[];
+    private int localPorts[];
     private DataSource dataOutput = null;
+    private int local_data_port;
     
-    public AVTransmit2(MediaLocator locator,
-			 String ipAddress,
-			 String pb,
-			 Format format) {
+    private Tx tx;
+    
+    public AVTransmitter( Tx tx, int data_port) {
+	this.tx= tx;
 	
-	this.locator = locator;
-	this.ipAddress = ipAddress;
-	Integer integer = Integer.valueOf(pb);
-	if (integer != null)
-	    this.portBase = integer.intValue();
+	local_data_port= data_port;
     }
 
     /**
      * Starts the transmission. Returns null if transmission started ok.
      * Otherwise it returns a string with the reason why the setup failed.
      */
-    public synchronized String start() {
+    public synchronized String start( String filename, Vector targets) {
 	String result;
 
+	locator= new MediaLocator( filename);
+	
 	// Create a processor for the specified media locator
 	// and program it to output JPEG/RTP
 	result = createProcessor();
-	if (result != null)
+	if (result != null) {
 	    return result;
-
+	}
+	
 	// Create an RTP session to transmit the output of the
 	// processor to the specified IP address and port no.
-	result = createTransmitter();
+	result = createTransmitter( targets);
+	
 	if (result != null) {
 	    processor.close();
 	    processor = null;
+
 	    return result;
 	}
-
+	
 	// Start the transmission
 	processor.start();
 	
 	return null;
     }
 
+    /**
+     * Use the RTPManager API to create sessions for each media 
+     * track of the processor.
+     */
+    private String createTransmitter( Vector targets) {
+	// Cheated.  Should have checked the type.
+	PushBufferDataSource pbds = (PushBufferDataSource)dataOutput;
+	PushBufferStream pbss[] = pbds.getStreams();
+
+	rtpMgrs = new RTPManager[pbss.length];
+	localPorts = new int[ pbss.length];
+	SessionAddress localAddr, destAddr;
+	InetAddress ipAddr;
+	SendStream sendStream;
+	int port;
+	SourceDescription srcDesList[];
+
+	for (int i = 0; i < pbss.length; i++) {
+	// for (int i = 0; i < 1; i++) {
+	    try {
+		rtpMgrs[i] = RTPManager.newInstance();	    
+
+		port = local_data_port + 2*i;
+
+		localPorts[ i]= port;
+		
+		localAddr = new SessionAddress( InetAddress.getLocalHost(),
+						port);
+
+		rtpMgrs[i].initialize( localAddr);		
+		rtpMgrs[i].addReceiveStreamListener(this);
+		rtpMgrs[i].addRemoteListener(this);
+
+	        for( int k= 0; k < targets.size(); k++) {
+		    Target target= (Target) targets.elementAt( k);
+
+		    int targetPort= new Integer( target.port).intValue();
+
+		    addTarget( localPorts[ i], rtpMgrs[ i], target.ip, targetPort + 2*i);
+	        }
+		
+		sendStream = rtpMgrs[i].createSendStream(dataOutput, i);		
+		sendStream.start();
+	    } catch (Exception e) {
+		e.printStackTrace();
+		
+		return e.getMessage();
+	    }
+	}
+
+	return null;
+    }
+    
+    public void addTarget( String ip, String port) {
+	for (int i= 0; i < rtpMgrs.length; i++) {
+	    int targetPort= new Integer( port).intValue();
+
+	    addTarget( localPorts[ i], rtpMgrs[ i], ip, targetPort + 2*i);
+	}
+    }
+
+    public void addTarget( int localPort, RTPManager mgr, String ip, int port) {
+	try {
+	    SessionAddress addr= new SessionAddress( InetAddress.getByName( ip),
+	       					     new Integer( port).intValue());
+	    
+	    mgr.addTarget( addr);
+	    
+	    tx.addTargetToList( localPort + "", ip, port + "");
+	} catch( Exception e) {
+	    e.printStackTrace();
+	}
+    }
+    
+    public void removeTarget( String ip, String port) {
+	try {	
+	    SessionAddress addr= new SessionAddress( InetAddress.getByName( ip),
+	       					     new Integer( port).intValue());
+
+	    for (int i= 0; i < rtpMgrs.length; i++) {
+	        rtpMgrs[ i].removeTarget( addr, "target removed from transmitter.");
+	    }
+	} catch( Exception e) {
+	    e.printStackTrace();
+	}
+    }
+
+    boolean looping= true;
+    
+    public void controllerUpdate( ControllerEvent ce) {
+	System.out.println( ce);
+	if( ce instanceof DurationUpdateEvent) {
+	    Time duration= ((DurationUpdateEvent) ce).getDuration();
+	    	    
+	    System.out.println( "duration: " + duration.getSeconds());
+	} else if(  ce instanceof EndOfMediaEvent) {
+	    System.out.println( "END OF MEDIA - looping=" + looping);
+	    if( looping) {
+	        processor.setMediaTime( new Time( 0));
+		processor.start();
+	    }
+	}
+    }
+    
+    public void setLooping( boolean flag) {
+	looping= flag;
+    }
+    
+    public void update( ReceiveStreamEvent event) {
+	String timestamp= getTimestamp();
+
+	StringBuffer sb= new StringBuffer();
+	
+	if( event instanceof InactiveReceiveStreamEvent) {
+	    sb.append( timestamp + " Inactive Receive Stream");
+	} else if( event instanceof ByeEvent) {
+	    sb.append( timestamp + " Bye");
+	} else {
+	    System.out.println( "ReceiveStreamEvent: "+ event);
+	}
+
+	tx.rtcpReport( sb.toString());	
+    }    
+
+    public void update( RemoteEvent event) {	
+	String timestamp= getTimestamp();       
+ 
+	if( event instanceof ReceiverReportEvent) {
+	    ReceiverReport rr= ((ReceiverReportEvent) event).getReport();
+
+	    StringBuffer sb= new StringBuffer();
+
+	    sb.append( timestamp + " RR");
+
+	    if( rr != null) {
+		Participant participant= rr.getParticipant();
+
+		if( participant != null) {
+		    sb.append( " from " + participant.getCNAME());
+		    sb.append( " ssrc=" + rr.getSSRC());
+		} else {
+		    sb.append( " ssrc=" + rr.getSSRC());
+		}
+
+		tx.rtcpReport( sb.toString());
+	    }	    	    
+	} else {
+	    System.out.println( "RemoteEvent: " + event);
+	}
+    }
+
+    private String getTimestamp() {
+	String timestamp;
+
+	Calendar calendar= Calendar.getInstance();
+
+	int hour= calendar.get( Calendar.HOUR_OF_DAY);
+
+	String hourStr= formatTime( hour);
+
+	int minute= calendar.get( Calendar.MINUTE);
+
+	String minuteStr= formatTime( minute);
+
+	int second= calendar.get( Calendar.SECOND);
+	
+	String secondStr= formatTime( second);
+		
+	timestamp= hourStr + ":" + minuteStr + ":" + secondStr;	
+
+	return timestamp;
+    }
+
+    private String formatTime( int time) {	
+	String timeStr;
+	
+	if( time < 10) {
+	    timeStr= "0" + time;
+	} else {
+	    timeStr= "" + time;
+	}
+
+	return timeStr;
+    }
+	
     /**
      * Stops the transmission if already started
      */
@@ -103,17 +264,20 @@ public class AVTransmit2 {
 		processor.stop();
 		processor.close();
 		processor = null;
-		for (int i = 0; i < rtpMgrs.length; i++) {
-		    rtpMgrs[i].removeTargets( "Session ended.");
-		    rtpMgrs[i].dispose();
+
+	        for (int i= 0; i < rtpMgrs.length; i++) {
+	            rtpMgrs[ i].removeTargets( "Session ended.");
+		    rtpMgrs[ i].dispose();
 		}
 	    }
 	}
     }
+   
 
-    private String createProcessor() {
-	if (locator == null)
+    public String createProcessor() {
+	if (locator == null) {
 	    return "Locator is null";
+	}
 
 	DataSource ds;
 	DataSource clone;
@@ -127,6 +291,7 @@ public class AVTransmit2 {
 	// Try to create a processor to handle the input media locator
 	try {
 	    processor = javax.media.Manager.createProcessor(ds);
+	    processor.addControllerListener( this);	    
 	} catch (NoProcessorException npe) {
 	    return "Couldn't create processor";
 	} catch (IOException ioe) {
@@ -203,61 +368,8 @@ public class AVTransmit2 {
 	return null;
     }
 
-
-    /**
-     * Use the RTPManager API to create sessions for each media 
-     * track of the processor.
-     */
-    private String createTransmitter() {
-
-	// Cheated.  Should have checked the type.
-	PushBufferDataSource pbds = (PushBufferDataSource)dataOutput;
-	PushBufferStream pbss[] = pbds.getStreams();
-
-	rtpMgrs = new RTPManager[pbss.length];
-	SessionAddress localAddr, destAddr;
-	InetAddress ipAddr;
-	SendStream sendStream;
-	int port;
-	SourceDescription srcDesList[];
-
-	for (int i = 0; i < pbss.length; i++) {
-	    try {
-		rtpMgrs[i] = RTPManager.newInstance();	    
-
-		// The local session address will be created on the
-		// same port as the the target port. This is necessary
-		// if you use AVTransmit2 in conjunction with JMStudio.
-		// JMStudio assumes -  in a unicast session - that the
-		// transmitter transmits from the same port it is receiving
-		// on and sends RTCP Receiver Reports back to this port of
-		// the transmitting host.
-		
-		port = portBase + 2*i;
-		ipAddr = InetAddress.getByName(ipAddress);
-
-		localAddr = new SessionAddress( InetAddress.getLocalHost(),
-						port);
-		
-		destAddr = new SessionAddress( ipAddr, port);
-
-		rtpMgrs[i].initialize( localAddr);
-		
-		rtpMgrs[i].addTarget( destAddr);
-		
-		System.err.println( "Created RTP session: " + ipAddress + " " + port);
-		
-		sendStream = rtpMgrs[i].createSendStream(dataOutput, i);		
-		sendStream.start();
-	    } catch (Exception  e) {
-		return e.getMessage();
-	    }
-	}
-
-	return null;
-    }
-
-
+    static SessionAddress destAddr1, destAddr2;
+    
     /**
      * For JPEG and H263, we know that they only work for particular
      * sizes.  So we'll perform extra checking here to make sure they
@@ -393,7 +505,6 @@ public class AVTransmit2 {
     class StateListener implements ControllerListener {
 
 	public void controllerUpdate(ControllerEvent ce) {
-
 	    // If there was an error during configure or
 	    // realize, the processor will be closed
 	    if (ce instanceof ControllerClosedEvent)
@@ -407,68 +518,6 @@ public class AVTransmit2 {
 		}
 	    }
 	}
-    }
-
-
-    /****************************************************************
-     * Sample Usage for AVTransmit2 class
-     ****************************************************************/
-    
-    public static void main(String [] args) {
-	// We need three parameters to do the transmission
-	// For example,
-	//   java AVTransmit2 file:/C:/media/test.mov  129.130.131.132 42050
-	
-	if (args.length < 3) {
-	    prUsage();
-	}
-
-	Format fmt = null;
-	int i = 0;
-
-	// Create a audio transmit object with the specified params.
-	AVTransmit2 at = new AVTransmit2(new MediaLocator(args[i]),
-					     args[i+1], args[i+2], fmt);
-	// Start the transmission
-	String result = at.start();
-
-	// result will be non-null if there was an error. The return
-	// value is a String describing the possible error. Print it.
-	if (result != null) {
-	    System.err.println("Error : " + result);
-	    System.exit(0);
-	}
-	
-	System.err.println("Start transmission for 60 seconds...");
-
-	// Transmit for 60 seconds and then close the processor
-	// This is a safeguard when using a capture data source
-	// so that the capture device will be properly released
-	// before quitting.
-	// The right thing to do would be to have a GUI with a
-	// "Stop" button that would call stop on AVTransmit2
-	try {
-	    Thread.currentThread().sleep(60000);
-	} catch (InterruptedException ie) {
-	}
-
-	// Stop the transmission
-	at.stop();
-	
-	System.err.println("...transmission ended.");
-
-	System.exit(0);
-    }
-
-
-    static void prUsage() {
-	System.err.println("Usage: AVTransmit2 <sourceURL> <destIP> <destPortBase>");
-	System.err.println("     <sourceURL>: input URL or file name");
-	System.err.println("     <destIP>: multicast, broadcast or unicast IP address for the transmission");
-	System.err.println("     <destPortBase>: network port numbers for the transmission.");
-	System.err.println("                     The first track will use the destPortBase.");
-	System.err.println("                     The next track will use destPortBase + 2 and so on.\n");
-	System.exit(0);
-    }
+    }   
 }
 

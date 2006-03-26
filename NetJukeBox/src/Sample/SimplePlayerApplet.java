@@ -1,4 +1,4 @@
-package streaming;
+package Sample;
 /*
  * @(#)SimplePlayerApplet.java	1.2 01/03/13 
  *
