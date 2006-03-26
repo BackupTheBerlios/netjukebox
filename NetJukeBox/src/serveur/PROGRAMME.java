@@ -7,7 +7,6 @@ public class PROGRAMME {
 	public String Titre;
 	public String Thematique;
 	public boolean Etat = false;
-	
 	//Création du vecteur d'Id de Document
 	Vector v = new Vector();
 	//Initialisation du fichier archive
@@ -15,11 +14,6 @@ public class PROGRAMME {
 	// Initialisation de l'état du programme non archivé
 	String etat_archive = "false";
 	
-	//A quoi ça sert ???
-	public DIFFUSION dIFFUSION;
-	public java.util.Collection dOCUMENT = new java.util.TreeSet();
-	public PROGRAMME PROGRAMME;
-
 	//Initialisation du proramme à vide
 	public void Creer(String Id_Prog, String Titre, String Thematique) {        
     	this.Id_Prog = Id_Prog;
@@ -47,10 +41,27 @@ public class PROGRAMME {
 		System.out.println(Etat);
 	}
 	
+	//Ajout d'un document dans le programme
 	public void AjouterDocument(String Id_Doc) {        
 		v.addElement(Id_Doc);
+		VerrouillerDocument(Id_Doc);
 	}
 
+	public void VerrouillerDocument(String Id_Doc) {        
+        System.out.println("Document verrouillé " + Id_Doc);
+    }
+	
+	//Retrait d'un document du programme
+	public void RetraitDocument(String Id_Doc) {        
+        v.remove(Id_Doc);
+    }
+	
+	public void DeverouillerDocuments() {        
+		System.out.println("Document déverrouillé " + Id_Doc);
+    } 
+	
+	
+	//Sauvegarde du vecteur de document si cela n'a pas déjà été fait
 	public void archiver() {        
 		int i;
 		String donnee;
@@ -68,8 +79,14 @@ public class PROGRAMME {
 		} else {
 			System.out.println("Erreur : le programme est deja archive");}	
 	}	
-		
+
 	
+	
+	
+	
+	public void ListerDocuments(String Id_Doc) {        
+        // your code here
+	}
 	
 	
 	//Modification des informations d'un programme
@@ -77,7 +94,10 @@ public class PROGRAMME {
         // your code here
     } 
 	
-	
+//	A quoi ça sert ???
+	public DIFFUSION dIFFUSION;
+	public java.util.Collection dOCUMENT = new java.util.TreeSet();
+	public PROGRAMME PROGRAMME;
 	
 	
 	public boolean enDiffusion() {        
@@ -88,15 +108,7 @@ public class PROGRAMME {
         // your code here
     } 
 
-	public void ListerDocuments(String Id_Doc) {        
-        // your code here
-    } 
-
 	public void DiffuserProgramme(String Id_Prog) {        
-        // your code here
-    } 
-
-	public void VerrouillerDocument(String Id_Doc) {        
         // your code here
     } 
 
@@ -104,17 +116,11 @@ public class PROGRAMME {
         // your code here
     } 
 
-	public void DeverouillerDocuments() {        
-        // your code here
-    } 
-
 	public void SetTitre(String Titre) {        
         // your code here
     } 
 
-	public void RetraitDocument(String Id_Doc) {        
-        // your code here
-    } 
+	 
 
 	public void RetraitProgramme(String Id_Prog) {        
         // your code here
