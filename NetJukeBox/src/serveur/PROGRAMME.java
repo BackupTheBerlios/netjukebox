@@ -49,14 +49,25 @@ public class PROGRAMME {
 
 	//Retrait d'un document du programme
 	public void RetraitDocument(DOCUMENT Doc) {        
-        v.remove(Doc.GetId_Doc());
-       
+		v.remove(Doc.GetId_Doc());
+		Doc.DeverouillerDocument(Id_Prog);
     }
 	
-	public void DeverouillerDocuments(String Id_Doc) {        
-		
-		System.out.println("Document déverrouillé : " + Id_Doc);
-    } 
+	public Vector ListerDocuments() {        
+		return v;
+	}
+	
+	public void AjouterProgramme(PROGRAMME Prog) {        
+		Prog.ListerDocuments();
+		//System.out.println(Prog.v);
+		int i;
+		String donnee;
+		for(i = 0; i < Prog.v.size(); i++) {
+			donnee = (String)Prog.v.elementAt(i);
+			v.addElement(donnee);
+			System.out.println("Le document : " + donnee + " du programme : " + Prog.Id_Prog + " a été inséré dans le programme : " + Id_Prog);
+		}
+    }
 		
 	//Sauvegarde du vecteur de document si cela n'a pas déjà été fait
 	public void archiver() {        
@@ -64,7 +75,6 @@ public class PROGRAMME {
 		String donnee;
 		if (etat_archive == "false") {
 			etat_archive = "true";
-			System.out.println(etat_archive);
 			//Création du nom complet du fichier Archive de tous les documents composant le programme
 			fichier_archive = Id_Prog + fichier_archive;
 			//Sauvegarde de la liste des documents du programme dans le fichier Archive
@@ -81,9 +91,25 @@ public class PROGRAMME {
 	
 	
 	
-	public void ListerDocuments(String Id_Doc) {        
-        // your code here
-	}
+	
+	
+	
+	
+	
+	
+	
+	////////////////////// INUTILE ????? ///////////////////////////////////
+	public void VerouillerDocuments(String Id_Doc) {        
+		System.out.println("Document verrouillé : " + Id_Doc);
+    } 
+	public void DeverouillerDocuments(String Id_Doc) {        
+		System.out.println("Document déverrouillé : " + Id_Doc);
+    } 
+	//////////////////////INUTILE ????? ///////////////////////////////////
+	
+	
+	
+	
 	
 	
 	//Modification des informations d'un programme
@@ -101,9 +127,7 @@ public class PROGRAMME {
         return false;
     }
 	
-	public void AjouterProgramme(String Id_Prog) {        
-        // your code here
-    } 
+	 
 
 	public void DiffuserProgramme(String Id_Prog) {        
         // your code here
@@ -116,8 +140,6 @@ public class PROGRAMME {
 	public void SetTitre(String Titre) {        
         // your code here
     } 
-
-	 
 
 	public void RetraitProgramme(String Id_Prog) {        
         // your code here
