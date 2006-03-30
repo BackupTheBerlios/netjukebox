@@ -11,7 +11,7 @@ public class Client {
 
 	public static void main(String args[]) {
 		if (args.length < 1) {
-			System.out.println("Usage: java client [adresse] [port] [filename]");
+			System.out.println("Usage: java client [adresseServeur] [portServeur] [filename]");
 			System.exit(-1);
 		}
 
