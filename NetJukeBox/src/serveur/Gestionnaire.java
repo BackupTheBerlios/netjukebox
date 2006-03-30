@@ -40,7 +40,8 @@ public class Gestionnaire {
 		Vector params = new Vector();
 		params.addElement(filename);
 		params.addElement(adresse);
-		System.out.println("Demande de diffusion du document "+filename);
+		System.out.println("[Client] Nouveau client "+adresse);
+		System.out.println("[Client] Demande de diffusion du document "+filename);
 		try {
 			String result = (String) this.streaming.execute(
 					"Gestionnaire.startDiffusionDocument", params);

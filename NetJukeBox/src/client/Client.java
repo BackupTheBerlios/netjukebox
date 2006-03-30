@@ -25,7 +25,7 @@ public class Client {
 			// Création de la requête
 			Vector params = new Vector();
 			params.addElement(args[2]);
-			params.addElement(InetAddress.getLocalHost().toString());
+			params.addElement(InetAddress.getLocalHost().getHostAddress());
 
 			// Adresse la requête et affiche les résultats
 			//String result = (String) client.execute("Gestionnaire.sayHello", params);

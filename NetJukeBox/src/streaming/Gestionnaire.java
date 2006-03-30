@@ -16,7 +16,8 @@ public class Gestionnaire {
 	}
 
 	public String startDiffusionDocument(String filename, String ipAdress) {
-		System.out.println("Diffusion du document "+filename);
+		System.out.println("[Serveur] Nouveau client : "+ipAdress);
+		System.out.println("[Serveur] Diffusion du document "+filename);
 		Stream stream = new Stream(filename, ipAdress, this.portBase);
 		stream.start();
 		this.streams.add(stream);
