@@ -22,7 +22,15 @@ public class Gestionnaire {
 		this.streams.add(stream);
 		return "[Streaming] Diffusion";
 	}
-	
+	/*
+	public String startDiffusionDocument2(String filename, String ipAdress) {
+		System.out.println("Diffusion du document "+filename);
+		Stream2 stream = new Stream2(filename, ipAdress, this.portBase);
+		//stream.start();
+		this.streams.add(stream);
+		return "[Streaming] Diffusion";
+	}
+	*/
 	public boolean stopDiffusionDocument(String filename, String ipAdress) {
 		int i =0;
 		Stream stream;

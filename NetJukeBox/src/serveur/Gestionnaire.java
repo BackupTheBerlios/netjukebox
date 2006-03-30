@@ -12,15 +12,17 @@ public class Gestionnaire {
 
 	private XmlRpcClient streaming;
 	private int port;
+	private String adresse;
 
-	public Gestionnaire(int port) {
+	public Gestionnaire(String adresse, int port) {
+		this.adresse = adresse;
 		this.port = port;
 		try {
 			// Utilise lengthpilote Sax d'Apache Xerces
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
 
 			// Creation du client & identification du serveur
-			this.streaming = new XmlRpcClient("http://localhost:"+port);
+			this.streaming = new XmlRpcClient("http://"+adresse+":"+port);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Impossible de localiser le pilote Sax");
 		} catch (MalformedURLException e) {
@@ -34,10 +36,10 @@ public class Gestionnaire {
 	 * @param filename
 	 * @return
 	 */
-	public void startDiffusionDocument(String filename) {
+	public String startDiffusionDocument(String filename, String adresse) {
 		Vector params = new Vector();
 		params.addElement(filename);
-		params.addElement("127.0.0.1");
+		params.addElement(adresse);
 		System.out.println("Demande de diffusion du document "+filename);
 		try {
 			String result = (String) this.streaming.execute(
@@ -51,7 +53,7 @@ public class Gestionnaire {
 			System.out.println("Exception E/S : " + e.getMessage());
 		}
 
-		//return true;
+		return "[Serveur] Diffusion";
 	}
 
 	/**
@@ -59,9 +61,10 @@ public class Gestionnaire {
 	 * @param filename
 	 * @return
 	 */
-	public boolean stopDiffusionDocument(String filename) {
+	public boolean stopDiffusionDocument(String filename, String adresse) {
 		Vector params = new Vector();
 		params.addElement(filename);
+		params.addElement(adresse);
 		try {
 			String result = (String) this.streaming.execute(
 					"Gestionnaire.stopDiffusionDocument", params);

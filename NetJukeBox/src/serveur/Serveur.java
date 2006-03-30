@@ -6,7 +6,7 @@ public class Serveur {
 
 	public static void main(String[] args) {
 		if (args.length < 1) {
-			System.out.println("Usage: java serveur [portClient] [portStreaming]");
+			System.out.println("Usage: java serveur [adresse] [portClient] [portStreaming]");
 			System.exit(-1);
 		}
 
@@ -17,10 +17,10 @@ public class Serveur {
 
 			// Démarre le serveur
 			System.out.println("Démarrage du serveur XML-RPC...");
-			WebServer server = new WebServer(Integer.parseInt(args[0]));
+			WebServer server = new WebServer(Integer.parseInt(args[1]));
 
 			// Enregistre la classe du gestionnaire
-			server.addHandler("Gestionnaire", new Gestionnaire(Integer.parseInt(args[1])));
+			server.addHandler("Gestionnaire", new Gestionnaire(args[0], Integer.parseInt(args[2])));
 			//server.addHandler("Systeme", new Systeme());
 			System.out.println("En attente de requête ...");
 

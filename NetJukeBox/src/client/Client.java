@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import java.util.Vector;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 
 import org.apache.xmlrpc.*;
@@ -10,7 +11,7 @@ public class Client {
 
 	public static void main(String args[]) {
 		if (args.length < 1) {
-			System.out.println("Usage: java client [port] [filename]");
+			System.out.println("Usage: java client [adresse] [port] [filename]");
 			System.exit(-1);
 		}
 
@@ -19,15 +20,16 @@ public class Client {
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
 
 			// Creation du client & identification du serveur
-			XmlRpcClient client = new XmlRpcClient("http://localhost:"+args[0]);
+			XmlRpcClient client = new XmlRpcClient("http://"+args[0]+":"+args[1]);
 
 			// Création de la requête
 			Vector params = new Vector();
-			params.addElement(args[1]);
+			params.addElement(args[2]);
+			params.addElement(InetAddress.getLocalHost().toString());
 
 			// Adresse la requête et affiche les résultats
 			//String result = (String) client.execute("Gestionnaire.sayHello", params);
-			System.out.println("Peut-on diffuser le document "+args[1]+" ?");
+			System.out.println("Peut-on diffuser le document "+args[2]+" ?");
 			String result = (String)client.execute("Gestionnaire.startDiffusionDocument", params);
 			System.out.println("Réponse du serveur : "+result);
 

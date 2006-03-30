@@ -6,7 +6,7 @@ public class Streaming {
 
 	public static void main(String[] args) {
 		if (args.length < 1) {
-			System.out.println("Usage: java streaming [port]");
+			System.out.println("Usage: java streaming [portXMLRPC] [portDiffusion]");
 			System.exit(-1);
 		}
 
@@ -20,7 +20,7 @@ public class Streaming {
 			WebServer server = new WebServer(Integer.parseInt(args[0]));
 
 			// Enregistre la classe du gestionnaire
-			server.addHandler("Gestionnaire", new Gestionnaire(Integer.parseInt(args[0])));
+			server.addHandler("Gestionnaire", new Gestionnaire(Integer.parseInt(args[1])));
 			System.out.println("En attente de requête ...");
 
 			server.start();
