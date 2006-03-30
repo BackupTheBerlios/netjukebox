@@ -12,17 +12,17 @@ public class Gestionnaire {
 
 	private XmlRpcClient streaming;
 	private int port;
-	private String adresse;
+	private String adresseStreaming;
 
-	public Gestionnaire(String adresse, int port) {
-		this.adresse = adresse;
+	public Gestionnaire(String adresseStreaming, int port) {
+		this.adresseStreaming = adresseStreaming;
 		this.port = port;
 		try {
 			// Utilise lengthpilote Sax d'Apache Xerces
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
 
 			// Creation du client & identification du serveur
-			this.streaming = new XmlRpcClient("http://"+adresse+":"+port);
+			this.streaming = new XmlRpcClient("http://"+adresseStreaming+":"+port);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Impossible de localiser le pilote Sax");
 		} catch (MalformedURLException e) {
