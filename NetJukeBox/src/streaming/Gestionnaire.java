@@ -21,7 +21,7 @@ public class Gestionnaire {
 		Stream stream = new Stream(filename, ipAdress, this.portBase);
 		stream.start();
 		this.streams.add(stream);
-		return "[Streaming] Diffusion";
+		return "[Streaming] Diffusion sur le port "+(portBase+2);
 	}
 	/*
 	public String startDiffusionDocument2(String filename, String ipAdress) {

@@ -46,6 +46,7 @@ public class Gestionnaire {
 			String result = (String) this.streaming.execute(
 					"Gestionnaire.startDiffusionDocument", params);
 			System.out.println("Réponse du serveur : " + result);
+			return result;
 		} catch (MalformedURLException e) {
 			System.out.println("URL non conforme au format du serveur XML-RPC");
 		} catch (IOException e) {

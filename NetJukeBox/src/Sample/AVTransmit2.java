@@ -236,10 +236,10 @@ public class AVTransmit2 {
 				// on and sends RTCP Receiver Reports back to this port of
 				// the transmitting host.
 
-				port = portBase + 2 * i;
+				port = portBase + 2 * ((i+1)%2);
 				ipAddr = InetAddress.getByName(ipAddress);
 
-				localAddr = new SessionAddress(InetAddress.getLocalHost(), port);
+				localAddr = new SessionAddress(InetAddress.getLocalHost(), portBase);
 
 				destAddr = new SessionAddress(ipAddr, port);
 
