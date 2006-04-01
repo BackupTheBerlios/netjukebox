@@ -58,7 +58,7 @@ public class Stream {
 		this.portBase = portBase;
 		
 		//on ajoute un premier auditeur local
-		auditeurs.addElement("127.0.0.1");
+		this.ajouterAuditeur("127.0.0.1");
 	}
 	
 	/**
@@ -110,6 +110,8 @@ public class Stream {
 	 */
 	public void diffuser(String filename) {
 		MediaLocator locator = new MediaLocator(filename);
+		
+		/* A COMPLETER AVEC LE CODE DE SUPINFO*/
 	}
 
 	/**
