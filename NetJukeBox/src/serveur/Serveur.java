@@ -6,7 +6,7 @@ public class Serveur {
 
 	public static void main(String[] args) {
 		if (args.length < 1) {
-			System.out.println("Usage: java serveur [adresse] [portClient] [portStreaming]");
+			System.out.println("Usage: java serveur [adresseStreaming] [portClient] [portStreaming]");
 			System.exit(-1);
 		}
 
