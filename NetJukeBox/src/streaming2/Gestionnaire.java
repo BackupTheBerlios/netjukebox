@@ -17,8 +17,9 @@ public class Gestionnaire {
 	public String startDiffusionDocument(String nomFlux, String filename, String ipAdress) {
 		System.out.println("[Serveur] Nouveau client : "+ipAdress);
 		System.out.println("[Serveur] Diffusion du document "+filename);
-		Stream stream = new Stream(filename, ipAdress, this.portBase);
-		stream.start();
+		Stream stream = new Stream(nomFlux, this.portBase);
+		stream.ajouterAuditeur(ipAdress);
+		stream.diffuser(filename);
 		this.streams.add(stream);
 		return "[Streaming] Diffusion sur le port "+(portBase+2);
 	}
@@ -32,14 +33,6 @@ public class Gestionnaire {
 	}
 	*/
 	public boolean stopDiffusionDocument(String filename, String ipAdress) {
-		int i =0;
-		Stream stream;
-		
-		do {
-			stream = (Stream)this.streams.get(i++);
-		} while (stream.getFilename()!=filename || stream.getIpAdress()!=ipAdress);
-		stream.stop();
-		this.streams.remove(stream);
 		return true;
 	}
 	
