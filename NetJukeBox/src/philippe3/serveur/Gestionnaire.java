@@ -1,12 +1,6 @@
 package philippe3.serveur;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Vector;
-
-import org.apache.xmlrpc.XmlRpc;
-import org.apache.xmlrpc.XmlRpcClient;
-import org.apache.xmlrpc.XmlRpcException;
 
 public class Gestionnaire {
 
@@ -22,12 +16,12 @@ public class Gestionnaire {
 		this.adresse = ipclient;
 		this.port = portclient;
 		this.canaux = new Vector();
-		this.publicite = "file://home/philippe/njb/pub.mp3";
+		this.publicite = "file://home/philippe/njb/pub.wav";
 	}
 
 	public String ajouterCanal(String nom) {
 		System.out.println("Création d'un canal : " + nom);
-		RTPServer rtp = new RTPServer(adresse, port, nom, publicite);
+		RTPServer rtp = new RTPServer(adresse, port/*++*/, /*Integer.toString(canaux.size())*/ nom, publicite);
 		this.canaux.addElement(rtp);
 		System.out.println("Canal créé, id : "+canaux.size());
 		return Integer.toString(canaux.size()-1);

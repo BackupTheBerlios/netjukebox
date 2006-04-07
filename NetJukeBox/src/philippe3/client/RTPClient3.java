@@ -1,9 +1,12 @@
 package philippe3.client;
 
-import java.io.*;
-import javax.media.*;
-import javax.media.format.*;
-import javax.media.protocol.*;
+import javax.media.ControllerEvent;
+import javax.media.ControllerListener;
+import javax.media.DataSink;
+import javax.media.EndOfMediaEvent;
+import javax.media.Manager;
+import javax.media.MediaLocator;
+import javax.media.Player;
 
 public class RTPClient3 implements ControllerListener {
 	public static void main(String [] args) {
@@ -12,9 +15,9 @@ public class RTPClient3 implements ControllerListener {
 
 	public RTPClient3(String ip, String port, String piste) {
 		Player p;
-		String srcUrl = "rtp://"+ip+":"+port+"/"+piste;
+		String srcUrl = "rtp://"+ip+":"+port+"/audio/"+piste;
 		System.out.println(srcUrl);
-		DataSink sink;
+		//DataSink sink;
 		MediaLocator src = new MediaLocator(srcUrl);
 		try {
 			p = Manager.createPlayer(src);

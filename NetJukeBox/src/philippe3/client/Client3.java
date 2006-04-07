@@ -1,11 +1,12 @@
 package philippe3.client;
 
 import java.io.IOException;
-import java.util.Vector;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.util.Vector;
 
-import org.apache.xmlrpc.*;
+import org.apache.xmlrpc.XmlRpc;
+import org.apache.xmlrpc.XmlRpcClient;
+import org.apache.xmlrpc.XmlRpcException;
 
 public class Client3 {
 

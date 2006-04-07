@@ -1,6 +1,5 @@
 package philippe3.serveur;
 
-import java.io.IOException;
 import java.util.Vector;
 
 import javax.media.ConfigureCompleteEvent;
@@ -11,13 +10,15 @@ import javax.media.EndOfMediaEvent;
 import javax.media.Format;
 import javax.media.Manager;
 import javax.media.MediaLocator;
-import javax.media.NoDataSinkException;
 import javax.media.Processor;
 import javax.media.RealizeCompleteEvent;
 import javax.media.control.TrackControl;
+import javax.media.datasink.DataSinkEvent;
+import javax.media.datasink.DataSinkListener;
+import javax.media.datasink.EndOfStreamEvent;
 import javax.media.protocol.ContentDescriptor;
 
-public class RTPServer implements ControllerListener {
+public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 	private boolean pRealized = false;
 	private boolean pConfigured = false;
 	private boolean cDiffuse = false;
@@ -43,7 +44,7 @@ public class RTPServer implements ControllerListener {
 		this.medias = new Vector();
 		
 		// Creation du MediaLocator pour l'Adresse de destination
-		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/"+piste);
+		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
 		System.out.println("Serveur RTP créé");
 
 	}
@@ -112,24 +113,27 @@ public class RTPServer implements ControllerListener {
 	 * streams
 	 */
 	private void transmit(Processor p) {
-
+		System.out.println("Transmission");
+		p.start();
 		try {
 			// Creation du DataSink
 			OutputSink = Manager.createDataSink(p.getDataOutput(), OutputLocator);
 
+			//Ajout d'un Listener
+			//OutputSink.addDataSinkListener(this);
+			
 			// Ouverture du DataSink
 			OutputSink.open();
 
 			// Demarrage du DataSink
 			OutputSink.start();
+			
 
 			System.out.println("Started");
 		}
 
-		catch (IOException e) {
-		}
-
-		catch (NoDataSinkException e) {
+		catch (Exception e) {
+			System.out.println(e);
 		}
 	}
 
@@ -182,13 +186,14 @@ public class RTPServer implements ControllerListener {
 		}
 	}
 
-	public synchronized void controllerUpdate(ControllerEvent evt) {
+	public void controllerUpdate(ControllerEvent evt) {
 		if (evt instanceof RealizeCompleteEvent) {
 			pRealized = true;
 		} else if (evt instanceof ConfigureCompleteEvent) {
 			pConfigured = true;
 		} else if (evt instanceof EndOfMediaEvent) {
 			if (cDiffuse) {
+				System.out.println("EVT: EndOfMedia");
 				OutputSink.close();
 				OutputSink = null;
 				diffuser();
@@ -200,4 +205,17 @@ public class RTPServer implements ControllerListener {
 			System.out.println(evt.toString());
 		}
 	}
+	
+	/*public void dataSinkUpdate(DataSinkEvent evt) {
+		if (evt instanceof EndOfStreamEvent) {
+			if (cDiffuse) {
+				System.out.println("EVT: EndOfStream");
+				OutputSink.close();
+				OutputSink = null;
+				diffuser();
+			}
+		} else {
+			System.out.println(evt.toString());
+		}
+	}*/
 }
