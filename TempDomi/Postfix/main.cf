@@ -1,0 +1,37 @@
+# Répertoires d'installation de Postfix:
+command_directory = /usr/sbin
+daemon_directory = /usr/lib/postfix
+program_directory = /usr/lib/postfix
+queue_directory = /var/spool/postfix
+
+# Mise en place des permissions:
+setgid_group = postdrop
+mail_owner = postfix
+
+# Nom de la machine, du domaine et gestion du réseau:
+myhostname = localhost
+#mydomain = trustonme.net
+#masquerade_domains = trustonme.net
+mynetworks = 192.168.0.0/24, 127.0.0.0/8
+
+# Gestion des alias:
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+
+# Paramètre d'envoi du courriel:
+myorigin = $mydomain
+default_transport = smtp
+
+# Serveur d'envoi de votre Fournisseur d'accès à Internet:
+relayhost = smtp.aliceadsl.fr
+
+# Paramètre de reception du courriel:
+mydestination = $myhostname, localhost.$mydomain, $mydomain, localhost
+inet_interfaces = all
+
+# Utilisation de Maildir pour recevoir et gérer les mails via courier-imap:
+home_mailbox = Maildir/
+mailbox_command = /usr/bin/procmail
+
+# Prise en charge de l'Antivirus:
+#content_filter = smtp:127.0.0.1:10024
