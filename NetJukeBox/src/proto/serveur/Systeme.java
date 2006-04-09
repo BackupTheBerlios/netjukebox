@@ -64,13 +64,14 @@ public class Systeme {
 			
 			//On recherche l'utilisateur en question parmi cette liste
 			int indice=0 ;
-			while (indice<utilisateurs.size() && ((Utilisateur)utilisateurs.elementAt(indice)).GetLogin()!=login) {
+			Utilisateur util = (Utilisateur)utilisateurs.elementAt(indice);
+			
+			while (indice<utilisateurs.size() && util.GetLogin()!=login) {
 				indice++;
 			}
 			
 			//Si on a trouvé l'utilisateur connecté
 			if (indice<utilisateurs.size()) {
-				Utilisateur util = (Utilisateur)utilisateurs.elementAt(indice);
 				
 				//On le déconnecte
 				util.Deconnexion();

@@ -58,6 +58,19 @@ public class Utilisateur {
 		return (pwd=="toto" && login=="toto");
 	}
 	
+	/**
+	 * Vérifie l'existence du Login
+	 * @param pwd
+	 * @param login
+	 */
+	public static boolean VérifierLogin(String login) {
+		//*************
+		// => LDAP <=
+		//*************
+		
+		return (login=="toto");
+	}
+	
 // METHODES DYNAMIQUES
 //*************************************************
 	
@@ -118,7 +131,7 @@ public class Utilisateur {
 	 */
 	public boolean Connexion() {
 		// your code here
-		return false;
+		return true;
 	}
 
 	/**
