@@ -39,8 +39,15 @@ public class Systeme {
 		
 		//On vérifie que le couple login/pwd existe
 		if (Utilisateur.VérifierPwd(pwd, login)) {
-
-			utilisateurs.addElement(new Utilisateur(login));
+			
+			Utilisateur util = new Utilisateur(login);
+			
+			//On connecte l'utilisateur
+			util.Connexion();
+			
+			//On l'ajoute à la liste des utilisateurs connectés au système
+			utilisateurs.addElement(util);
+			
 			return "Connexion établie";
 		}
 		
@@ -50,16 +57,44 @@ public class Systeme {
 	/**
 	 * Deconnexion d'un utilisateur
 	 */
-	public void deconnexion() {
-		// your code here
+	public String deconnexion(String login) {
+		
+		//S'il y a des utilisateurs connectés
+		if (utilisateurs.size()>0) {
+			
+			//On recherche l'utilisateur en question parmi cette liste
+			int indice=0 ;
+			while (indice<utilisateurs.size() && ((Utilisateur)utilisateurs.elementAt(indice)).GetLogin()!=login) {
+				indice++;
+			}
+			
+			//Si on a trouvé l'utilisateur connecté
+			if (indice<utilisateurs.size()) {
+				Utilisateur util = (Utilisateur)utilisateurs.elementAt(indice);
+				
+				//On le déconnecte
+				util.Deconnexion();
+				
+				//On le supprime de la liste des utilisateurs connectés au système
+				utilisateurs.removeElementAt(indice);
+				
+				return "Utilisateur deconnecté";
+			}
+			return "Utilisateur introuvable";
+		}
+		return "Aucun utilisateur n'est connecté";
 	}
 
 	/**
-	 * 
+	 * Recherche un utilisateur à partir de son login
 	 * @param Login
 	 */
-	public void chercherUtilisateur(String Login) {
-		// your code here
+	public Utilisateur chercherUtilisateur(String login) {
+		
+		//On vérifie que le couple login existe
+		if (Utilisateur.VérifierLogin(login)) return new Utilisateur(login);
+
+		return null;
 	}
 
 	/**
