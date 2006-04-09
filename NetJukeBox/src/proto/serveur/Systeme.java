@@ -9,11 +9,18 @@ public class Systeme {
 
 // ATTRIBUTS DU SYSTEME
 //************************************************************
+	
+	/**
+	 * Utilisateurs connectés aux système
+	 */
 	private Vector utilisateurs;
 
 // CONSTRUCTEUR
 //************************************************************
 	
+	/**
+	 * Constructeur
+	 */
 	public Systeme() {
 		
 		utilisateurs = new Vector();
