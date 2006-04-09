@@ -50,7 +50,7 @@ public class Utilisateur {
 	 * @param pwd
 	 * @param login
 	 */
-	public static boolean VérifierPwd(String pwd, String login) {
+	public static boolean verifierPwd(String pwd, String login) {
 		//*************
 		// => LDAP <=
 		//*************
@@ -63,7 +63,7 @@ public class Utilisateur {
 	 * @param pwd
 	 * @param login
 	 */
-	public static boolean VérifierLogin(String login) {
+	public static boolean verifierLogin(String login) {
 		//*************
 		// => LDAP <=
 		//*************
@@ -102,15 +102,15 @@ public class Utilisateur {
 	 * Deconnecterl'utilisateur
 	 * @return
 	 */
-	public Boolean Deconnecter() {
+	public boolean deconnecter() {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
 	 * Deconnexion de l'utilisateur
 	 */
-	public void Deconnexion() {
+	public void deconnexion() {
 		// your code here
 	}
 
@@ -120,7 +120,7 @@ public class Utilisateur {
 	 * @param Pwd
 	 * @return
 	 */
-	public boolean Connecter(String Login, String Pwd) {
+	public boolean connecter(String Login, String Pwd) {
 		// your code here
 		return false;
 	}
@@ -129,7 +129,7 @@ public class Utilisateur {
 	 * Connexion de l'utilisateurs
 	 * @return
 	 */
-	public boolean Connexion() {
+	public boolean connexion() {
 		// your code here
 		return true;
 	}
@@ -141,12 +141,12 @@ public class Utilisateur {
 	 * @param Mail
 	 * @param Pwd
 	 * @param Pays
-	 * @return
+	 * @return boolean
 	 */
-	public Boolean Inscrire(String Nom, String Prenom, String Mail, String Pwd,
+	public boolean inscrire(String Nom, String Prenom, String Mail, String Pwd,
 			String Pays) {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
@@ -156,26 +156,26 @@ public class Utilisateur {
 	 * @param Mail
 	 * @param Pwd
 	 * @param Pays
-	 * @return
+	 * @return boolean
 	 */
-	public Boolean Inscription(String Nom, String Prenom, String Mail,
+	public boolean inscription(String Nom, String Prenom, String Mail,
 			String Pwd, java.util.List Pays) {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
 	 * Supprimer l'utilisateur
 	 * @param Login
 	 */
-	public void SupprimerUtilisateur(String Login) {
+	public void supprimerUtilisateur(String Login) {
 		// your code here
 	}
 	
 	/**
 	 * Supprimer les informations relatives à l'utilisateur
 	 */
-	public void SupprimerInfos() {
+	public void supprimerInfos() {
 		// your code here
 	}
 
@@ -184,7 +184,7 @@ public class Utilisateur {
 	/**
 	 * Modifier les informations de l'utilisateur
 	 */
-	public void ModifierInfos() {
+	public void modifierInfos() {
 		// your code here
 	}
 
@@ -194,20 +194,20 @@ public class Utilisateur {
 	 * Attribuer une permission à l'utilisateur
 	 * @param Id_Perm
 	 * @param Lib_Perm
-	 * @return
+	 * @return boolean
 	 */
-	public Boolean SetPermission(int Id_Perm, String Lib_Perm) {
+	public boolean setPermission(int Id_Perm, String Lib_Perm) {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
 	 * Vérification de l'état de connexion de l'utilisateur
 	 * @return
 	 */
-	public Boolean VérifConnecté() {
+	public boolean verifConnecte() {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
@@ -219,71 +219,64 @@ public class Utilisateur {
 
 	/**
 	 * Retourne le login de l'utilisateur
-	 * @return
+	 * @return String
 	 */
-	public String GetLogin() {
-		// your code here
-		return null;
+	public String getLogin() {
+		return login;
 	}
 
 	/**
 	 * Retourne le nom de l'utilisateur
-	 * @return
+	 * @return String
 	 */
-	public String GetNom() {
-		// your code here
-		return null;
+	public String getNom() {
+		return nom;
 	}
 
 	/**
 	 * Retourne le prénom de l'utilisateur
-	 * @return
+	 * @return String
 	 */
-	public String GetPrenom() {
-		// your code here
-		return null;
+	public String getPrenom() {
+		return prenom;
 	}
 
 	/**
 	 * Retourne l'adresse email de l'utilisateur
-	 * @return
+	 * @return String
 	 */
-	public String GetMail() {
-		// your code here
-		return null;
+	public String getMail() {
+		return mail;
 	}
 
 	/**
 	 * Retourne le mot de passe de l'utilisateur
-	 * @return
+	 * @return String
 	 */
-	public String GetPwd() {
-		// your code here
-		return null;
+	public String getPwd() {
+		return pwd;
 	}
 
 	/**
 	 * Retourne le pays de l'utilisateur
-	 * @return
+	 * @return String
 	 */
-	public String GetPays() {
-		// your code here
-		return null;
+	public String getPays() {
+		return pays;
 	}
 
 	/**
 	 * Vérification de l'état de connexion de l'utilisateur
 	 * @return
 	 */
-	public Boolean EstConnecté() {
-		// your code here
-		return null;
+	public boolean estConnecte() {
+		return false;
 	}
 
 	/**
 	 * Sélectionne l'utilisateur
 	 */
-	public void Selectionner() {
+	public void selectionner() {
 		// your code here
 	}
 
@@ -294,12 +287,12 @@ public class Utilisateur {
 	 * @param Mail
 	 * @param Pwd
 	 * @param Pays
-	 * @return
+	 * @return boolean
 	 */
-	public Boolean Modifier(String Nom, String Prenom, String Mail, String Pwd,
+	public boolean modifier(String Nom, String Prenom, String Mail, String Pwd,
 			String Pays) {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
@@ -309,29 +302,29 @@ public class Utilisateur {
 	 * @param Mail
 	 * @param Pwd
 	 * @param Pays
-	 * @return
+	 * @return boolean
 	 */
-	public Boolean MajInfos(String Nom, String Prenom, String Mail, String Pwd,
+	public boolean majInfos(String Nom, String Prenom, String Mail, String Pwd,
 			String Pays) {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
 	 * Retourne les permissions attribuées à l'utilisateur
 	 */
-	public void GetPermissions() {
+	public void getPermissions() {
 		// your code here
 	}
 
 	/**
 	 * Ajouter une permision à l'utilisateur
 	 * @param Id_Perm
-	 * @return
+	 * @return boolean
 	 */
-	public Boolean ajouterPermission(int Id_Perm) {
+	public boolean ajouterPermission(int Id_Perm) {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
@@ -339,9 +332,9 @@ public class Utilisateur {
 	 * @param Id_Perm
 	 * @return
 	 */
-	public Boolean RetirerPermission(int Id_Perm) {
+	public boolean retirerPermission(int Id_Perm) {
 		// your code here
-		return null;
+		return false;
 	}
 
 	/**
@@ -350,8 +343,8 @@ public class Utilisateur {
 	 * @param Lib_Perm
 	 * @return
 	 */
-	public Boolean DefinirPermission(int Id_Perm, String Lib_Perm) {
+	public boolean definirPermission(int Id_Perm, String Lib_Perm) {
 		// your code here
-		return null;
+		return false;
 	}
 }

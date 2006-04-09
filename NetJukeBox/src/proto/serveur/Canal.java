@@ -135,7 +135,7 @@ public class Canal {
 	 * @param idCanal
 	 * @return
 	 */
-	public boolean VerifierPlanification(java.util.Date Jour, int heure,
+	public boolean verifierPlanification(java.util.Date Jour, int heure,
 			String idCanal) {
 		// your code here
 		return false;
@@ -147,7 +147,7 @@ public class Canal {
 	 * @param jour
 	 * @param heure
 	 */
-	public void BloquerPlage(String IdeProgramme, java.util.Date jour, int heure) {
+	public void bloquerPlage(String IdeProgramme, java.util.Date jour, int heure) {
 		// your code here
 	}
 
@@ -155,7 +155,7 @@ public class Canal {
 	 * Diffuser un programme
 	 * @param idProgramme
 	 */
-	public void DiffuserProgramme(String idProgramme) {
+	public void diffuserProgramme(String idProgramme) {
 		// your code here
 	}
 
@@ -170,7 +170,7 @@ public class Canal {
 	 * Arrête la diffusion du canal
 	 * @param idCanal
 	 */
-	public void ArreterDiffusionCanal(int idCanal) {
+	public void arreterDiffusionCanal(int idCanal) {
 		// your code here
 	}
 
@@ -178,7 +178,7 @@ public class Canal {
 	 * Déconnecter un auditeur du canal
 	 * @param idAuditeur
 	 */
-	public void DeconnecterAuditeur(String idAuditeur) {
+	public void deconnecterAuditeur(String idAuditeur) {
 		// your code here
 	}
 
@@ -186,7 +186,7 @@ public class Canal {
 	 * Relance la diffusion d'un canal
 	 * @param idCanal
 	 */
-	public void RelanceDiffusionCanal(String idCanal) {
+	public void relanceDiffusionCanal(String idCanal) {
 		// your code here
 	}
 }

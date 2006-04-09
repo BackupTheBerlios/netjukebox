@@ -29,6 +29,9 @@ public class Systeme {
 // METHODES DU SYSTEME
 //************************************************************
 	
+	// UTILISATEUR
+	//*******************************************************
+	
 	/**
 	 * Connexion d'un utilisateur
 	 * @param login
@@ -38,12 +41,12 @@ public class Systeme {
 	public String Connexion(String login, String pwd) {
 		
 		//On vérifie que le couple login/pwd existe
-		if (Utilisateur.VérifierPwd(pwd, login)) {
+		if (Utilisateur.verifierPwd(pwd, login)) {
 			
 			Utilisateur util = new Utilisateur(login);
 			
 			//On connecte l'utilisateur
-			util.Connexion();
+			util.connexion();
 			
 			//On l'ajoute à la liste des utilisateurs connectés au système
 			utilisateurs.addElement(util);
@@ -56,6 +59,8 @@ public class Systeme {
 	}
 	/**
 	 * Deconnexion d'un utilisateur
+	 * @param login
+	 * @return String
 	 */
 	public String deconnexion(String login) {
 		
@@ -66,7 +71,7 @@ public class Systeme {
 			int indice=0 ;
 			Utilisateur util = (Utilisateur)utilisateurs.elementAt(indice);
 			
-			while (indice<utilisateurs.size() && util.GetLogin()!=login) {
+			while (indice<utilisateurs.size() && util.getLogin()!=login) {
 
 				util = (Utilisateur)utilisateurs.elementAt(++indice);
 			}
@@ -75,7 +80,7 @@ public class Systeme {
 			if (indice<utilisateurs.size()) {
 				
 				//On le déconnecte
-				util.Deconnexion();
+				util.deconnexion();
 				
 				//On le supprime de la liste des utilisateurs connectés au système
 				utilisateurs.removeElementAt(indice);
@@ -89,38 +94,15 @@ public class Systeme {
 
 	/**
 	 * Recherche un utilisateur à partir de son login
-	 * @param Login
+	 * @param login
+	 * @return Utilisateur
 	 */
 	public Utilisateur chercherUtilisateur(String login) {
 		
 		//On vérifie que le couple login existe
-		if (Utilisateur.VérifierLogin(login)) return new Utilisateur(login);
+		if (Utilisateur.verifierLogin(login)) return new Utilisateur(login);
 
 		return null;
-	}
-
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param u
-	 */
-	public void connecterUtilisateur(Utilisateur u) {
-		// your code here
-	}
-
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Login
-	 */
-	public void deconnecterUtilisateur(String Login) {
-		// your code here
 	}
 
 	/**
@@ -189,6 +171,9 @@ public class Systeme {
 		// your code here
 	}
 
+	// DOCUMENT
+	//*******************************************************
+	
 	/**
 	 * <p>
 	 * Does ...
@@ -335,6 +320,9 @@ public class Systeme {
 	public void getListePermissions() {
 		// your code here
 	}
+	
+	// PROGRAMME
+	//*******************************************************
 
 	/**
 	 * <p>
@@ -423,6 +411,9 @@ public class Systeme {
 	public void AjouterProgrammeArchive(String Id_Prog) {
 		// your code here
 	}
+	
+	// CANAL
+	//*******************************************************
 
 	/**
 	 * <p>

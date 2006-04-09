@@ -124,7 +124,7 @@ public class Programme {
 	 */
 	public void ajouterDocument(Document Doc) {
 		documents.addElement(Doc.getId());
-		Doc.PoserVerrou(id);
+		Doc.poserVerrou(id);
 	}
 
 	/**
@@ -132,8 +132,8 @@ public class Programme {
 	 * @param Doc
 	 */
 	public void retraitDocument(Document Doc) {
-		documents.remove(Doc.GetId_Doc());
-		Doc.DeverouillerDocument(this.id);
+		documents.remove(Doc.getId());
+		Doc.deverouillerDocument(this.id);
 	}
 
 	/**
