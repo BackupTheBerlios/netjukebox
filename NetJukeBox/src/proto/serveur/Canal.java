@@ -1,199 +1,192 @@
 package proto.serveur;
 
-
-
 /**
- * <p></p>
- * 
+ * Canal de diffusion
  */
 public class Canal {
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String Id_Canal;
+// ATTRIBUTS DU CANAL
+// *************************************************
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String nom_canal;
+	/**
+	 * Identifiant
+	 */
+	public String id;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public Integer Flux_Max;
+	/**
+	 * Nom du canal
+	 */
+	public String nom;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public Boolean Etat;
-/**
- * <p></p>
- * 
- */
-    public Diffusion dIFFUSION;
-/**
- * <p></p>
- * 
- */
-    public Journal_Canal jOURNAL_CANAL;
+	/**
+	 * Nombre maximal d'auditeurs
+	 */
+	public int fluxMax;
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Canal 
- * @param Nom_Canal 
- * @param Flux_Max 
- */
-    public void Creer(String Id_Canal, String Nom_Canal, int Flux_Max) {        
-        // your code here
-    } 
+	/**
+	 * Etat du canal
+	 */
+	public String etat;
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Canal 
- */
-    public void Detruire(String Id_Canal) {        
-        // your code here
-    } 
+	/**
+	 * #DEFINITION#
+	 */
+	public Diffusion diffusion;
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @return 
- */
-    public boolean EstActif() {        
-        // your code here
-        return false;
-    } 
+	/**
+	 * Historisation
+	 */
+	public Journal_Canal journal;
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @return 
- */
-    public String GetId_Canal() {        
-        // your code here
-        return null;
-    } 
+// CONSTRUCTEUR
+// *************************************************
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @return 
- */
-    public String GetId_Nom_Canal() {        
-        // your code here
-        return null;
-    } 
+	/**
+	 * Constructeur
+	 */
+	public Canal() {
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @return 
- */
-    public int GetId_Flux_Maxl() {        
-        // your code here
-        return 0;
-    } 
+	}
+	
+	/**
+	 * Constructeur
+	 * @param id
+	 * @param nom
+	 * @param fluxMax
+	 */
+	public Canal(String id, String nom, int fluxMax) {
+		super();
+		
+		this.id = id;
+		this.nom = nom;
+		this.fluxMax = fluxMax;
+	}
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Id_Canal 
- * @param Nom_Canal 
- * @param Flux_Max 
- */
-    public void InsertionInfos(String Id_Canal, String Nom_Canal, int Flux_Max) {        
-        // your code here
-    } 
+// METHODES STATIQUES
+// *************************************************
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param Jour 
- * @param Heure 
- * @param IdeCanal 
- * @return 
- */
-    public boolean VerifierPlanification(java.util.Date Jour, int Heure, String IdeCanal) {        
-        // your code here
-        return false;
-    } 
+// METHODES DYNAMIQUES
+// *************************************************
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param IdeProgramme 
- * @param Jour 
- * @param Heure 
- */
-    public void BloquerPlage(String IdeProgramme, java.util.Date Jour, int Heure) {        
-        // your code here
-    } 
+	/**
+	 * Création du canal ==> CONSTRUCTEUR ???
+	 * @param id
+	 * @param nom
+	 * @param fluxMax
+	 */
+	public void creer(String id, String nom, int fluxMax) {
+		// your code here
+	}
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param IdeProgramme 
- */
-    public void DiffuserProgramme(String IdeProgramme) {        
-        // your code here
-    } 
+	/**
+	 * Détruit le canal
+	 * @param Id_Canal
+	 */
+	public void detruire(String Id_Canal) {
+		// your code here
+	}
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @return 
- */
-    public boolean SetActif() {        
-        // your code here
-        return false;
-    } 
+	/**
+	 * Vérifie si le canal est actif
+	 * @return boolean
+	 */
+	public boolean estActif() {
+		return etat == "ACTIF";
+	}
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param IdeCanal 
- */
-    public void ArreterDiffusionCanal(int IdeCanal) {        
-        // your code here
-    } 
+	/**
+	 * Retourne l'identifiant du canal
+	 * @return String
+	 */
+	public String getId() {
+		return id;
+	}
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param IdeAuditeur 
- */
-    public void DeconnecterAuditeurs(String IdeAuditeur) {        
-        // your code here
-    } 
+	/**
+	 * Retourne le nom du canal
+	 * @return String
+	 */
+	public String getNom() {
+		return nom;
+	}
 
-/**
- * <p>Does ...</p>
- * 
- * 
- * @param IdeCanal 
- */
-    public void RelanceDiffusionCanal(String IdeCanal) {        
-        // your code here
-    } 
- }
+	/**
+	 * Retourne le nombre maximal d'auditeurs supporté par le canal
+	 * @return int
+	 */
+	public int getFluxMax() {
+		return fluxMax;
+	}
+
+	/**
+	 * Insertion d'informations
+	 * @param id
+	 * @param nom
+	 * @param fluxMax
+	 */
+	public void insertionInfos(String id, String nom, int fluxMax) {
+		// your code here
+	}
+
+	/**
+	 * Vérifie si la tranche horaire est libre pour une planification
+	 * @param jour
+	 * @param heure
+	 * @param idCanal
+	 * @return
+	 */
+	public boolean VerifierPlanification(java.util.Date Jour, int heure,
+			String idCanal) {
+		// your code here
+		return false;
+	}
+
+	/**
+	 * Bloquer (réserver) une plage horaire pour une planification
+	 * @param idProgramme
+	 * @param jour
+	 * @param heure
+	 */
+	public void BloquerPlage(String IdeProgramme, java.util.Date jour, int heure) {
+		// your code here
+	}
+
+	/**
+	 * Diffuser un programme
+	 * @param idProgramme
+	 */
+	public void DiffuserProgramme(String idProgramme) {
+		// your code here
+	}
+
+	/**
+	 * Rend le canal actif
+	 */
+	public void setActif() {
+		etat = "ACTIF";
+	}
+
+	/**
+	 * Arrête la diffusion du canal
+	 * @param idCanal
+	 */
+	public void ArreterDiffusionCanal(int idCanal) {
+		// your code here
+	}
+
+	/**
+	 * Déconnecter un auditeur du canal
+	 * @param idAuditeur
+	 */
+	public void DeconnecterAuditeur(String idAuditeur) {
+		// your code here
+	}
+
+	/**
+	 * Relance la diffusion d'un canal
+	 * @param idCanal
+	 */
+	public void RelanceDiffusionCanal(String idCanal) {
+		// your code here
+	}
+}
