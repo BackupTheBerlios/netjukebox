@@ -41,6 +41,21 @@ public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 	
 	private Vector medias;
 	private int mediaEnCours=0;
+	
+	public RTPServer(String ip, int port) {
+
+		System.out.println("Création d'un serveur RTP");
+		this.ip = ip;
+		this.port = port;
+		this.piste = "1";
+		this.publicite = "file://home/philippe/njb/pub.mp3";
+		this.medias = new Vector();
+		
+		// Creation du MediaLocator pour l'Adresse de destination
+		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
+		System.out.println("Serveur RTP créé");
+
+	}
 
 	public RTPServer(String ip, int port, String piste, String publicite) {
 
