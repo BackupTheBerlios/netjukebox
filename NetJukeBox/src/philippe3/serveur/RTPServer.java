@@ -1,5 +1,6 @@
 package philippe3.serveur;
 
+import java.net.InetAddress;
 import java.util.Vector;
 
 import javax.media.ConfigureCompleteEvent;
@@ -17,6 +18,12 @@ import javax.media.datasink.DataSinkEvent;
 import javax.media.datasink.DataSinkListener;
 import javax.media.datasink.EndOfStreamEvent;
 import javax.media.protocol.ContentDescriptor;
+import javax.media.protocol.DataSource;
+import javax.media.protocol.PushBufferDataSource;
+import javax.media.rtp.RTPManager;
+import javax.media.rtp.SendStream;
+import javax.media.rtp.SessionAddress;
+import javax.media.rtp.rtcp.SourceDescription;
 
 public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 	private boolean pRealized = false;
@@ -30,6 +37,7 @@ public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 	
 	private MediaLocator OutputLocator;
 	private DataSink OutputSink = null;
+	private SendStream OutputStream = null;
 	
 	private Vector medias;
 	private int mediaEnCours=0;
@@ -100,7 +108,8 @@ public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 					System.out.println("erreur : " + e);
 				}
 			}
-			transmit(p);
+			transmitSink(p);
+			//transmitManager(p);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -108,11 +117,9 @@ public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 	}
 
 	/**
-	 * This code uses the RTP Manager to handle a session stream. It is more
-	 * complex than the simpler version below, but can also handle more complex
-	 * streams
+	 * Transmet un flux audio avec un DataSink
 	 */
-	private void transmit(Processor p) {
+	private void transmitSink(Processor p) {
 		System.out.println("Transmission");
 		p.start();
 		try {
@@ -134,6 +141,36 @@ public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 
 		catch (Exception e) {
 			System.out.println(e);
+		}
+	}
+	
+	/**
+	 * Transmet un flux audio avec un RTPManager
+	 * @param p
+	 * @param port
+	 */
+	private void transmitManager(Processor p) {
+		try {
+
+			DataSource output = p.getDataOutput();
+			
+			PushBufferDataSource pbds = (PushBufferDataSource) output;
+			RTPManager rtpMgr = RTPManager.newInstance();
+
+			SessionAddress Canal = new SessionAddress(InetAddress.getLocalHost(), port);
+			SessionAddress destAddr = new SessionAddress(InetAddress.getByName(ip), port);
+			
+			rtpMgr.initialize(Canal);
+			rtpMgr.addTarget(destAddr);
+			
+			System.err.println("Created RTP session: " + ip + " " + port);
+			
+			OutputStream = rtpMgr.createSendStream(output, 0);		
+			OutputStream.start();
+			p.start();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -196,6 +233,10 @@ public class RTPServer implements ControllerListener/*, DataSinkListener*/ {
 				System.out.println("EVT: EndOfMedia");
 				OutputSink.close();
 				OutputSink = null;
+				/*
+				OutputStream.close();
+				OutputStream = null;
+				 */
 				diffuser();
 			}
 			else {
