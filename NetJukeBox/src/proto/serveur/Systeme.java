@@ -67,7 +67,8 @@ public class Systeme {
 			Utilisateur util = (Utilisateur)utilisateurs.elementAt(indice);
 			
 			while (indice<utilisateurs.size() && util.GetLogin()!=login) {
-				indice++;
+
+				util = (Utilisateur)utilisateurs.elementAt(++indice);
 			}
 			
 			//Si on a trouvé l'utilisateur connecté
