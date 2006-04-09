@@ -7,10 +7,26 @@ import java.util.Vector;
  */
 public class Systeme {
 
-	Vector utilisateurs;
+// ATTRIBUTS DU SYSTEME
+//************************************************************
+	private Vector utilisateurs;
 
+// CONSTRUCTEUR
+//************************************************************
+	
+	public Systeme() {
+		
+		utilisateurs = new Vector();
+	}
+	
+// METHODES DU SYSTEME
+//************************************************************
+	
 	/**
 	 * Connexion d'un utilisateur
+	 * @param login
+	 * @param pwd
+	 * @return String
 	 */
 	public String Connexion(String login, String pwd) {
 		
