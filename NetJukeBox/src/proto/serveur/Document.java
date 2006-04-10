@@ -86,8 +86,7 @@ public class Document {
 	public Document(String id, String titre, int duree, int jour,
 			int mois, int annee, String source, String langue, String genre,
 			String fichier) {
-		
-		super();
+
 		this.id = id;
 		this.titre = titre;
 		this.jour = jour;

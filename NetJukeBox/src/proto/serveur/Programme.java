@@ -59,7 +59,6 @@ public class Programme {
 	 * @param thematique
 	 */
 	public Programme (String id, String titre, String thematique) {
-		super();
 		this.id = id;
 		this.titre = titre;
 		this.thematique = thematique;

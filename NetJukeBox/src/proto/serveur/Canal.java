@@ -59,8 +59,7 @@ public class Canal {
 	 * @param fluxMax
 	 */
 	public Canal(String id, String nom, int fluxMax) {
-		super();
-		
+		this.auditeurs = new Vector();
 		this.id = id;
 		this.nom = nom;
 		this.fluxMax = fluxMax;

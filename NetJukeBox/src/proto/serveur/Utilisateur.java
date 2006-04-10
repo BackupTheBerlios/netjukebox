@@ -84,7 +84,6 @@ public class Utilisateur {
 	 * Constructeur
 	 */
 	public Utilisateur(String login) {
-		super();
 		
 		//************
 		// => LDAP <=
