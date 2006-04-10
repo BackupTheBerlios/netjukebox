@@ -13,22 +13,22 @@ public class Programme {
 	/**
 	 * Identifiant du programme
 	 */
-	public String id;
+	private String id;
 
 	/**
 	 * Titre du programme
 	 */
-	public String titre;
+	private String titre;
 
 	/**
 	 * Thématique du programme
 	 */
-	public String thematique;
+	private String thematique;
 
 	/**
 	 * Etat du programme
 	 */
-	public boolean etat = false;
+	private boolean etat = false;
 
 	/**
 	 * Liste des documents associés au programme

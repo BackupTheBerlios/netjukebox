@@ -1,5 +1,7 @@
 package proto.serveur;
 
+import java.util.Vector;
+
 /**
  * Canal de diffusion
  */
@@ -11,32 +13,34 @@ public class Canal {
 	/**
 	 * Identifiant
 	 */
-	public String id;
+	private String id;
 
 	/**
 	 * Nom du canal
 	 */
-	public String nom;
+	private String nom;
 
 	/**
 	 * Nombre maximal d'auditeurs
 	 */
-	public int fluxMax;
+	private int fluxMax;
 
 	/**
 	 * Etat du canal
 	 */
-	public String etat;
+	private String etat;
 
 	/**
 	 * #DEFINITION#
 	 */
-	public Diffusion diffusion;
+	private Diffusion diffusion;
 
 	/**
 	 * Historisation
 	 */
-	public Journal_Canal journal;
+	private Journal_Canal journal;
+	
+	private Vector auditeurs;
 
 // CONSTRUCTEUR
 // *************************************************
@@ -45,7 +49,7 @@ public class Canal {
 	 * Constructeur
 	 */
 	public Canal() {
-
+		this.auditeurs = new Vector();
 	}
 	
 	/**
@@ -135,8 +139,7 @@ public class Canal {
 	 * @param idCanal
 	 * @return
 	 */
-	public boolean verifierPlanification(java.util.Date Jour, int heure,
-			String idCanal) {
+	public boolean verifierPlanification(java.util.Date Jour, int heure, String idCanal) {
 		// your code here
 		return false;
 	}
@@ -179,7 +182,15 @@ public class Canal {
 	 * @param idAuditeur
 	 */
 	public void deconnecterAuditeur(String idAuditeur) {
-		// your code here
+		if (auditeurs.contains(idAuditeur)) auditeurs.removeElement(idAuditeur);
+	}
+	
+	/**
+	 * Connecter un auditeur au canal
+	 * @param idAuditeur
+	 */
+	public void connecterAuditeur(String idAuditeur) {
+		if (!auditeurs.contains(idAuditeur)) auditeurs.addElement(idAuditeur);
 	}
 
 	/**

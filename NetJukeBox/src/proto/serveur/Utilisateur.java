@@ -10,37 +10,37 @@ public class Utilisateur {
 	/**
 	 * Login : nom du compte utilisateur
 	 */
-	public String login;
+	private String login;
 
 	/**
 	 * Mot de passe du compte utilisateur
 	 */
-	public String pwd;
+	private String pwd;
 
 	/**
 	 * Nom de l'utilisateur
 	 */
-	public String nom;
+	private String nom;
 
 	/**
 	 * Prénom de l'utilisateur
 	 */
-	public String prenom;
+	private String prenom;
 
 	/**
 	 * Adresse email de l'utilisateur
 	 */
-	public String mail;
+	private String mail;
 
 	/**
 	 * Pays de l'utilisateur
 	 */
-	public String pays;
+	private String pays;
 
 	/**
 	 * #DEFINITION#
 	 */
-	public Attribuer attribuer;
+	private Attribuer attribuer;
 
 // METHODES STATIQUES
 //*************************************************

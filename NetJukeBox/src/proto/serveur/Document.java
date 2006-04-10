@@ -86,6 +86,7 @@ public class Document {
 	public Document(String id, String titre, int duree, int jour,
 			int mois, int annee, String source, String langue, String genre,
 			String fichier) {
+		
 		super();
 		this.id = id;
 		this.titre = titre;
@@ -108,6 +109,7 @@ public class Document {
 	public void Creer(String Id_Doc, String Titre, int Duree, int Jour,
 			int Mois, int Annee, String Source, String Langue, String Genre,
 			String Fichier) {
+		
 		this.id = Id_Doc;
 		this.titre = Titre;
 		this.jour = Jour;
@@ -227,6 +229,7 @@ public class Document {
 	public void insertionInfos(String id, String Ttitre,
 			java.util.Date dateCreation, String source, String langue,
 			String genre) {
+		
 		// your code here
 	}
 
@@ -257,6 +260,7 @@ public class Document {
 	public boolean modifier(String Id_Doc, String Titre,
 			java.util.Date Date_Creation, String Source, String Langue,
 			String Genre) {
+		
 		// your code here
 		return false;
 	}
@@ -264,6 +268,7 @@ public class Document {
 	public boolean majInfos(String Id_Doc, String Titre,
 			java.util.Date Date_Creation, String Source, String Langue,
 			String Genre) {
+		
 		// your code here
 		return false;
 	}
