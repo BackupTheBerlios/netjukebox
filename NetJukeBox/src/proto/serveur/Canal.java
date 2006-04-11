@@ -79,6 +79,26 @@ public class Canal {
 
 // METHODES DYNAMIQUES
 // *************************************************
+	
+	/**
+	 * Création du RTPServer
+	 * @param ip
+	 * @param port
+	 */
+	public void createRTPServer(String ip, int port) {
+		
+		//Si le RTPServer n'existe pas, on le crée
+		if (this.RTP == null) this.RTP = new RTPServer(ip, port);
+	}
+	
+	/**
+	 * Arrête la diffusion
+	 */
+	public void stopDiffusion() {
+		
+		//Si le RTPServer existe, on le stoppe
+		if (this.RTP != null) this.RTP.stop();
+	}
 
 	/**
 	 * Création du canal ==> CONSTRUCTEUR ???

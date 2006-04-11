@@ -58,7 +58,7 @@ public class RTPServer implements ControllerListener {
 	private int port;
 	
 	/**
-	 * Nom/Numéro de la piste
+	 * Nom/Numéro de la piste RTP
 	 */
 	private String piste;
 	
@@ -117,7 +117,7 @@ public class RTPServer implements ControllerListener {
 	}
 
 	/**
-	 * Constructeur avec publicité
+	 * Constructeur étendu (avec publicité)
 	 * @param ip
 	 * @param port
 	 * @param piste
