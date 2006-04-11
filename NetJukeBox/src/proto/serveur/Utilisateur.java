@@ -45,6 +45,7 @@ public class Utilisateur {
 // METHODES STATIQUES
 //*************************************************
 
+	/* INUTILE => REMPLACEE EN JAVA PAR LE CONSTRUCTEUR
 	public void Creer(String Login, String Nom, String Prenom, String Mail, String Pwd, String Pays){
 		this.login = Login;
 		this.nom = Nom;
@@ -53,6 +54,22 @@ public class Utilisateur {
 		this.pwd = Pwd;
 		this.pays = Pays;
 	}
+	*/
+	 
+	/**
+	 * Insancie un objet utilisateur après avoir récupéré ces infos depuis LDAP
+	 * @param login
+	 */
+	public Utilisateur getUtilisateur(String login) {
+
+		  //On récupère les infos depuis l'annuaire
+		  //***********
+		  // => LDAP <=
+		  //***********
+
+		  //On retourne une nouvelle instance d'Utilisateur avec ces infos
+		  return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France");
+		}
 
 	/**
 	 * Vérifie l'existence du couple Login/Pwd
@@ -80,31 +97,31 @@ public class Utilisateur {
 		return (login=="toto");
 	}
 	
+	
+// CONSTRUCTEURS
+//************************************************	
+		
+		/**
+		 * Constructeur simple
+		 */
+		public Utilisateur() {
+		}
+		
+		/**
+		 * Constructeur complet
+		 */
+		public Utilisateur(String login, String pwd, String nom, String prenom, String mail, String pays) {
+			
+			this.login = login;
+			this.pwd = pwd;
+			this.nom=nom;
+			this.prenom=prenom;
+			this.mail=mail;
+			this.pays=pays;
+		}
+	
 // METHODES DYNAMIQUES
 //*************************************************
-	
-	/**
-	 * Constructeur
-	 */
-	public Utilisateur() {
-	}
-	
-	/**
-	 * Constructeur
-	 */
-	public Utilisateur(String login) {
-		
-		//************
-		// => LDAP <=
-		//************
-		
-		this.login = login;
-		this.pwd = "toto";
-		this.nom="toto";
-		this.prenom="toto";
-		this.mail="toto@netjukebox.net";
-		this.pays="France";
-	}
 	
 	/**
 	 * Deconnecterl'utilisateur
