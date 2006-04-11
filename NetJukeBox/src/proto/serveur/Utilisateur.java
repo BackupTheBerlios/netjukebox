@@ -45,6 +45,15 @@ public class Utilisateur {
 // METHODES STATIQUES
 //*************************************************
 
+	public void Creer(String Login, String Nom, String Prenom, String Mail, String Pwd, String Pays){
+		this.login = Login;
+		this.nom = Nom;
+		this.prenom = Prenom;
+		this.mail = Mail;
+		this.pwd = Pwd;
+		this.pays = Pays;
+	}
+
 	/**
 	 * Vérifie l'existence du couple Login/Pwd
 	 * @param pwd

@@ -191,6 +191,10 @@ public class Document {
 		System.out.println("Le compteur de verrou = " + compteur_verrou);
 	}
 
+	public void compterVerrouProgramme(int Verrou) {
+		System.out.println();// your code here
+	}
+	
 	/**
 	 * Retourne l'état du document
 	 * @return String
@@ -280,9 +284,7 @@ public class Document {
 		// your code here
 	}
 
-	public void compterVerrouProgramme(int Verrou) {
-		// your code here
-	}
+	
 
 	public void ajouterProgramme(String idProg) {
 		// your code here
