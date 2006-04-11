@@ -40,7 +40,16 @@ public class Canal {
 	 */
 	private Journal_Canal journal;
 	
+	
+	/**
+	 * Auditeurs du canal
+	 */
 	private Vector auditeurs;
+	
+	/**
+	 * RTP Server
+	 */
+	private RTPServer RTP = null;
 
 // CONSTRUCTEUR
 // *************************************************

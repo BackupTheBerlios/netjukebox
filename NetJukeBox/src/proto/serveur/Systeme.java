@@ -11,9 +11,31 @@ public class Systeme {
 //************************************************************
 	
 	/**
+	 * Adresse IP de diffusion (streaming) :  broadcast
+	 */
+	private String ipStreaming;
+	
+	/**
+	 * Port de diffusion (streaming)
+	 */
+	private String portStreaming;
+	
+	/**
+	 * Port du serveur XML
+	 */
+	private int portXML;
+	
+	
+	/**
 	 * Utilisateurs connectés aux système
 	 */
 	private Vector utilisateurs;
+	
+	
+	/**
+	 * Canaux de diffusion
+	 */
+	private Vector canaux;
 
 // CONSTRUCTEUR
 //************************************************************
@@ -21,8 +43,9 @@ public class Systeme {
 	/**
 	 * Constructeur
 	 */
-	public Systeme() {
-		
+	public Systeme(String ipStreaming, String portStreaming) {
+		this.ipStreaming = ipStreaming;
+		this.portStreaming = portStreaming;
 		utilisateurs = new Vector();
 	}
 	
