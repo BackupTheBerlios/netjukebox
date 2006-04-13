@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -69,20 +70,40 @@ public class Document {
 	 * Liste de verrous sur le document
 	 */
 	private Vector verrous = new Vector();
-	private int compteur_verrou = 0;
+	
 
-	// A quoi ça sert ???
-	private java.util.Collection programmes = new java.util.TreeSet();
+	/**
+	 * Liste des programmes associés au document
+	 */
+	private Vector programmes = new Vector();
 
+	/**
+	 * Contrat relatif au document
+	 */
 	private Contrat contrat;
 	
 // CONSTRUCTEUR
 //********************************************
 	
-	public Document() {
-		
+	/**
+	 * Constructeur simple
+	 */
+	public Document() {	
 	}
 	
+	/**
+	 * Constructeur complet
+	 * @param id
+	 * @param titre
+	 * @param duree
+	 * @param jour
+	 * @param mois
+	 * @param annee
+	 * @param source
+	 * @param langue
+	 * @param genre
+	 * @param fichier
+	 */
 	public Document(String id, String titre, int duree, String jour,
 			String mois, String annee, String source, String langue, String genre,
 			String fichier) {
@@ -101,25 +122,63 @@ public class Document {
 
 // METHODES STATIQUES
 //********************************************
+	
+	/**
+	 * Création du programme en base
+	 * @param String titre
+	 * @param int duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return Document
+	 */
+	public static Document create(String titre, int duree, String jour,
+			String mois, String annee, String source, String langue, String genre,
+			String fichier) {
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		return Document.getByTitre(titre);
+	}
+	
+	/**
+	 * Instancie un objet document après avoir récupéré ces infos depuis la base à partir de son titre
+	 * @param String titre
+	 * @return Document
+	 */
+	public static Document getByTitre(String titre) {
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+	}
+	
+	/**
+	 * Instancie un objet document après avoir récupéré ces infos depuis la base à partir de son id
+	 * @param String id
+	 * @return Document
+	 */
+	public static Document getById(String id) {
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+	}
 
 // METHODES DYNAMIQUES
 //********************************************
 
-	public void Creer(String Id_Doc, String Titre, int Duree, String Jour,
-			String Mois, String Annee, String Source, String Langue, String Genre,
-			String Fichier) {
-		
-		this.id = Id_Doc;
-		this.titre = Titre;
-		this.jour = Jour;
-		this.mois = Mois;
-		this.annee = Annee;
-		this.source = Source;
-		this.langue = Langue;
-		this.genre = Genre;
-		this.fichier = Fichier;
-		this.duree = Duree;
-	}
+
 
 	/**
 	 * Retourne l'identifiant du document
@@ -186,27 +245,11 @@ public class Document {
 	}
 	
 	/**
-	 * Pose un verrou sur le document
-	 */
-	public void poserVerrou() {
-		compteur_verrou = compteur_verrou + 1;
-		System.out.println("Le compteur de verrou = " + compteur_verrou);
-	}
-
-	/**
-	 * Enlève un verrou sur le document
-	 */
-	public void deverouillerDocument() {
-		compteur_verrou = compteur_verrou - 1;
-		System.out.println("Le compteur de verrou = " + compteur_verrou);
-	}
-	
-	/**
 	 * Affiche le nombre de verrous sur le document
 	 * Affiche les programmes vérrouillant le document
 	 */
 	public void compterVerrouProgramme() {
-		System.out.println("Le document : " + id + " est verrouillé : " + compteur_verrou + " fois");
+		System.out.println("Le document : " + id + " est verrouillé : " + verrous.size() + " fois");
 	}
 	
 	/**
@@ -216,8 +259,8 @@ public class Document {
 		int i;
 		if (verrous.size() != 0) {
 			for (i = 0; i < verrous.size(); i++) {
-				String prog = (String) verrous.elementAt(i);
-				System.out.println("Le document : " + id + " est verrouillé par le programme : " + prog);
+				String idProg = (String) verrous.elementAt(i);
+				System.out.println("Le document : " + id + " est verrouillé par le programme : " + idProg);
 			}
 		} else {
 			System.out.println("Le document : " + id + " est verrouillé par aucun programme");
@@ -232,7 +275,7 @@ public class Document {
 	public void ajouterProgramme(String idProg) {
 		verrous.addElement(idProg);
 		System.out.println("Document verrouillé : " + this.id);
-		poserVerrou();
+		System.out.println("Le compteur de verrou = " + verrous.size());
 	}
 
 	/**
@@ -243,30 +286,19 @@ public class Document {
 	public void enleverProgramme(String idProg) {
 		verrous.remove(idProg);
 		System.out.println("Document déverrouillé : " + this.id);
-		deverouillerDocument();
+		System.out.println("Le compteur de verrou = " + verrous.size());
 	}
 	
 	/**
 	 * Retourne la date de création du document
 	 * @return Date
 	 */
-	public java.util.Date GetDate_Creation() {
+	public Date GetDate_Creation() {
 		String Date = jour + "-"+ mois + "-" + annee;
 		TransformeDate TD = new TransformeDate(Date);
 		System.out.println(TD.d);
 		return TD.d;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

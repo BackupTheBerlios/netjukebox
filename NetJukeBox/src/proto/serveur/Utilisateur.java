@@ -45,22 +45,32 @@ public class Utilisateur {
 // METHODES STATIQUES
 //*************************************************
 
-	/* INUTILE => REMPLACEE EN JAVA PAR LE CONSTRUCTEUR
-	public void Creer(String Login, String Nom, String Prenom, String Mail, String Pwd, String Pays){
-		this.login = Login;
-		this.nom = Nom;
-		this.prenom = Prenom;
-		this.mail = Mail;
-		this.pwd = Pwd;
-		this.pays = Pays;
+	/**
+	 * Création de l'utilisateur en base (= inscription)
+	 * @param String login
+	 * @param String pwd
+	 * @param String nom
+	 * @param String prenom
+	 * @param String mail
+	 * @param String pays
+	 * @return Utilisateur
+	 */
+	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays){
+		
+		//On insère les infos dans l'annuaire
+		//***********
+		// => LDAP <=
+		//***********
+		
+		//On retourne un objet configuré avec les infos issues de LDAP
+		return Utilisateur.getByLogin(login);
 	}
-	*/
 	 
 	/**
-	 * Insancie un objet utilisateur après avoir récupéré ces infos depuis LDAP
+	 * Insancie un objet utilisateur après avoir récupéré ces infos depuis LDAP à partir de son login
 	 * @param login
 	 */
-	public Utilisateur getUtilisateur(String login) {
+	public static Utilisateur getByLogin(String login) {
 
 		  //On récupère les infos depuis l'annuaire
 		  //***********
@@ -69,7 +79,7 @@ public class Utilisateur {
 
 		  //On retourne une nouvelle instance d'Utilisateur avec ces infos
 		  return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France");
-		}
+	}
 
 	/**
 	 * Vérifie l'existence du couple Login/Pwd
@@ -157,36 +167,6 @@ public class Utilisateur {
 	public boolean connexion() {
 		// your code here
 		return true;
-	}
-
-	/**
-	 * Inscrire l'utilisateur
-	 * @param Nom
-	 * @param Prenom
-	 * @param Mail
-	 * @param Pwd
-	 * @param Pays
-	 * @return boolean
-	 */
-	public boolean inscrire(String Nom, String Prenom, String Mail, String Pwd,
-			String Pays) {
-		// your code here
-		return false;
-	}
-
-	/**
-	 * Inscription de l'utilisateur
-	 * @param Nom
-	 * @param Prenom
-	 * @param Mail
-	 * @param Pwd
-	 * @param Pays
-	 * @return boolean
-	 */
-	public boolean inscription(String Nom, String Prenom, String Mail,
-			String Pwd, java.util.List Pays) {
-		// your code here
-		return false;
 	}
 
 	/**
@@ -314,8 +294,7 @@ public class Utilisateur {
 	 * @param Pays
 	 * @return boolean
 	 */
-	public boolean modifier(String Nom, String Prenom, String Mail, String Pwd,
-			String Pays) {
+	public boolean modifier(String Nom, String Prenom, String Mail, String Pwd, String Pays) {
 		// your code here
 		return false;
 	}
@@ -329,8 +308,7 @@ public class Utilisateur {
 	 * @param Pays
 	 * @return boolean
 	 */
-	public boolean majInfos(String Nom, String Prenom, String Mail, String Pwd,
-			String Pays) {
+	public boolean majInfos(String Nom, String Prenom, String Mail, String Pwd, String Pays) {
 		// your code here
 		return false;
 	}

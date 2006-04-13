@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Vector;
  */
 public class Canal {
 
-// ATTRIBUTS DU CANAL
+// ATTRIBUTS DU CANAL (propres à un objet)
 // *************************************************
 
 	/**
@@ -23,8 +24,12 @@ public class Canal {
 	/**
 	 * Nombre maximal d'auditeurs
 	 */
-	private int utilmax;
+	private int utilMax;
 
+	
+	/**
+	 * Port de diffusion
+	 */
 	private String port;
 	
 	/**
@@ -53,7 +58,7 @@ public class Canal {
 	 */
 	private RTPServer RTP = null;
 
-// CONSTRUCTEUR
+// CONSTRUCTEUR (créé une instance de la classe : un objet)
 // *************************************************
 
 	/**
@@ -69,17 +74,69 @@ public class Canal {
 	 * @param nom
 	 * @param fluxMax
 	 */
-	public Canal(String id, String nom, int utilmax) {
+	public Canal(String id, String nom, int utilMax) {
 		this.auditeurs = new Vector();
 		this.id = id;
 		this.nom = nom;
-		this.utilmax = utilmax;
+		this.utilMax = utilMax;
 	}
 
-// METHODES STATIQUES
+// METHODES STATIQUES (propres à la classe, inaccessibles depuis un objet)
 // *************************************************
+	
+	/**
+	 * Création du canal en base
+	 * @param String nom
+	 * @param int utilmax
+	 * @return Canal
+	 */
+	public static Canal create(String nom, int utilmax) {
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		System.out.println("Le Canal : " + nom + " a été créé");
+		
+		//On retourne un objet avec les infos complètes issues de la base
+		return Canal.getByName(nom);
+	}
+	
+	/**
+	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un nom
+	 * @param String nom
+	 * @return Canal
+	 */
+	public static Canal getByName(String nom) {
+		
+		//On va chercher les infos depuis la base, en partant d'un nom
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		//On retourne un objet canal configuré
+		return new Canal("classic", "classic", 10);
+	}
+	
+	/**
+	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un id
+	 * @param String id
+	 * @return Canal
+	 */
+	public static Canal getById(String id) {
+		
+		//On va chercher les infos depuis la base, en partant d'un id
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		//On retourne un objet canal configuré
+		return new Canal("classic", "classic", 10);
+	}
 
-// METHODES DYNAMIQUES
+// METHODES DYNAMIQUES (propres à un objet, inaccessibles depuis la classe)
 // *************************************************
 	
 	/**
@@ -100,20 +157,6 @@ public class Canal {
 		
 		//Si le RTPServer existe, on le stoppe
 		if (this.RTP != null) this.RTP.stop();
-	}
-	
-	/**
-	 * Création du canal ==> CONSTRUCTEUR ???
-	 * @param id
-	 * @param nom
-	 * @param fluxMax
-	 */
-	public void creer(String id, String nom, int utilmax, String port) {
-		this.id = id;
-        this.nom = nom;
-        this.utilmax = utilmax;
-        this.port = port;
-        System.out.println("Le Canal : " + nom + " a été créé");
 	}
 
 	/**
@@ -152,8 +195,8 @@ public class Canal {
 	 * Retourne le nombre maximal d'auditeurs supporté par le canal
 	 * @return int
 	 */
-	public int getutilmax() {
-		return utilmax;
+	public int getUtilMax() {
+		return utilMax;
 	}
 
 	/**
@@ -173,7 +216,7 @@ public class Canal {
 	 * @param idCanal
 	 * @return
 	 */
-	public boolean verifierPlanification(java.util.Date Jour, int heure, String idCanal) {
+	public boolean verifierPlanification(Date Jour, int heure, String idCanal) {
 		// your code here
 		return false;
 	}
@@ -184,20 +227,20 @@ public class Canal {
 	 * @param jour
 	 * @param heure
 	 */
-	public void bloquerPlage(String IdeProgramme, java.util.Date jour, int heure) {
+	public void bloquerPlage(String IdeProgramme, Date jour, int heure) {
 		// your code here
 	}
 	
 	/**
-	Diffuser un programme
-	 * @param idProgramme
+	 * Diffuser un programme
+	 * @param Programme
 	 */
-	public void diffuserProgramme(Programme Prog) {        
-		Prog.getTitre();
-		//Prog.DiffuserProgramme();
-		System.out.println("Le programme " +  Prog.getTitre() + " est en cours de diffusion");
-		for(int i = 0; i < Prog.getDocuments().size(); i++) {
-			String donnee = (String)Prog.getDocuments().elementAt(i);
+	public void diffuserProgramme(Programme p) {        
+		p.getTitre();
+		//p.diffuser();
+		System.out.println("Le programme " +  p.getTitre() + " est en cours de diffusion");
+		for(int i = 0; i < p.getDocuments().size(); i++) {
+			String donnee = (String)p.getDocuments().elementAt(i);
 			System.out.println("Le document : " + donnee + " a été diffusé");
 		}
 		//new RTPServer(Port, Prog.v);

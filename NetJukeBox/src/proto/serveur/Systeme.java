@@ -66,7 +66,8 @@ public class Systeme {
 		//On vérifie que le couple login/pwd existe
 		if (Utilisateur.verifierPwd(pwd, login)) {
 			
-			Utilisateur util = new Utilisateur(login);
+			//On récupère l'utilisateur depuis la base
+			Utilisateur util = Utilisateur.getByLogin(login);
 			
 			//On connecte l'utilisateur
 			util.connexion();
@@ -123,7 +124,7 @@ public class Systeme {
 	public Utilisateur chercherUtilisateur(String login) {
 		
 		//On vérifie que le couple login existe
-		if (Utilisateur.verifierLogin(login)) return new Utilisateur(login);
+		if (Utilisateur.verifierLogin(login)) return Utilisateur.getByLogin(login);
 
 		return null;
 	}
@@ -446,8 +447,8 @@ public class Systeme {
 	 * 
 	 * @param Canal
 	 */
-	public void CreerCanal(Object Canal) {
-		// your code here
+	public void creerCanal(String id, String nom, int utilMax) {
+		canaux.addElement(Canal.create(nom, utilMax));
 	}
 
 	/**

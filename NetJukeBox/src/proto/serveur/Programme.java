@@ -67,15 +67,52 @@ public class Programme {
 // METHODES STATIQUES
 //*********************************************************
 
+	/**
+	 * Création du programme en base
+	 * @param String titre
+	 * @param String thematique
+	 * @return Programme
+	 */
+	public static Programme create(String titre, String thematique) {
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		return Programme.getByTitre(titre);
+	}
+	
+	/**
+	 * Insancie un objet programme après avoir récupéré ces infos depuis la base à partir de son titre
+	 * @param String titre
+	 * @return Programme
+	 */
+	public static Programme getByTitre(String titre) {
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		return new Programme("id", "titre", "thematique");
+	}
+	
+	/**
+	 * Insancie un objet programme après avoir récupéré ces infos depuis la base à partir de son id
+	 * @param String id
+	 * @return Programme
+	 */
+	public static Programme getById(String id) {
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		return new Programme("id", "titre", "thematique");
+	}
+	
+	
 // METHODES DYNAMIQUES
 //*********************************************************
-
-	// Initialisation du proramme à vide
-	public void Creer(String Id_Prog, String Titre, String Thematique) {
-		this.id = Id_Prog;
-		this.titre = Titre;
-		this.thematique = Thematique;
-	}
 
 	/**
 	 * Retourne l'identifiant du programme
