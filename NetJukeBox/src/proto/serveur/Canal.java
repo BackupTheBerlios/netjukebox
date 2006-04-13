@@ -23,8 +23,10 @@ public class Canal {
 	/**
 	 * Nombre maximal d'auditeurs
 	 */
-	private int fluxMax;
+	private int utilmax;
 
+	private String port;
+	
 	/**
 	 * Etat du canal
 	 */
@@ -67,11 +69,11 @@ public class Canal {
 	 * @param nom
 	 * @param fluxMax
 	 */
-	public Canal(String id, String nom, int fluxMax) {
+	public Canal(String id, String nom, int utilmax) {
 		this.auditeurs = new Vector();
 		this.id = id;
 		this.nom = nom;
-		this.fluxMax = fluxMax;
+		this.utilmax = utilmax;
 	}
 
 // METHODES STATIQUES
@@ -101,13 +103,37 @@ public class Canal {
 	}
 
 	/**
+	 * Création du RTPServer
+	 * @param ip
+	 * @param port
+	 */
+	public void createRTPServer(String ip, int port) {
+		
+		//Si le RTPServer n'existe pas, on le crée
+		if (this.RTP == null) this.RTP = new RTPServer(ip, port);
+	}
+	
+	/**
+	 * Arrête la diffusion
+	 */
+	public void stopDiffusion() {
+		
+		//Si le RTPServer existe, on le stoppe
+		if (this.RTP != null) this.RTP.stop();
+	}
+	
+	/**
 	 * Création du canal ==> CONSTRUCTEUR ???
 	 * @param id
 	 * @param nom
 	 * @param fluxMax
 	 */
-	public void creer(String id, String nom, int fluxMax) {
-		// your code here
+	public void creer(String id, String nom, int utilmax, String port) {
+		this.id = id;
+        this.nom = nom;
+        this.utilmax = utilmax;
+        this.port = port;
+        System.out.println("Le Canal : " + nom + " a été créé");
 	}
 
 	/**
@@ -146,8 +172,8 @@ public class Canal {
 	 * Retourne le nombre maximal d'auditeurs supporté par le canal
 	 * @return int
 	 */
-	public int getFluxMax() {
-		return fluxMax;
+	public int getutilmax() {
+		return utilmax;
 	}
 
 	/**
@@ -181,14 +207,22 @@ public class Canal {
 	public void bloquerPlage(String IdeProgramme, java.util.Date jour, int heure) {
 		// your code here
 	}
-
+	
 	/**
-	 * Diffuser un programme
+	Diffuser un programme
 	 * @param idProgramme
 	 */
-	public void diffuserProgramme(String idProgramme) {
-		// your code here
-	}
+	public void diffuserProgramme(Programme Prog) {        
+		Prog.getTitre();
+		//Prog.DiffuserProgramme();
+		System.out.println("Le programme " +  Prog.getTitre() + " est en cours de diffusion");
+		for(int i = 0; i < Prog.getDocuments().size(); i++) {
+			String donnee = (String)Prog.getDocuments().elementAt(i);
+			System.out.println("Le document : " + donnee + " a été diffusé");
+		}
+		//new RTPServer(Port, Prog.v);
+	} 
+	
 
 	/**
 	 * Rend le canal actif
