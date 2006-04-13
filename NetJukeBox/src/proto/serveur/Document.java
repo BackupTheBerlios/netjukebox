@@ -33,17 +33,17 @@ public class Document {
 	/**
 	 * Jour de parution du document
 	 */
-	private int jour;
+	private String jour;
 
 	/**
 	 * Mois de parution du document
 	 */
-	private int mois;
+	private String mois;
 
 	/**
 	 * Année de parution du document
 	 */
-	private int annee;
+	private String annee;
 
 	/**
 	 * Langue du document
@@ -75,7 +75,7 @@ public class Document {
 	private java.util.Collection programmes = new java.util.TreeSet();
 
 	private Contrat contrat;
-
+	
 // CONSTRUCTEUR
 //********************************************
 	
@@ -83,8 +83,8 @@ public class Document {
 		
 	}
 	
-	public Document(String id, String titre, int duree, int jour,
-			int mois, int annee, String source, String langue, String genre,
+	public Document(String id, String titre, int duree, String jour,
+			String mois, String annee, String source, String langue, String genre,
 			String fichier) {
 
 		this.id = id;
@@ -105,8 +105,8 @@ public class Document {
 // METHODES DYNAMIQUES
 //********************************************
 
-	public void Creer(String Id_Doc, String Titre, int Duree, int Jour,
-			int Mois, int Annee, String Source, String Langue, String Genre,
+	public void Creer(String Id_Doc, String Titre, int Duree, String Jour,
+			String Mois, String Annee, String Source, String Langue, String Genre,
 			String Fichier) {
 		
 		this.id = Id_Doc;
@@ -170,31 +170,13 @@ public class Document {
 	}
 
 	/**
-	 * Pose un verrou sur le document à partir d'un programme
-	 * @param idProg
+	 * Retourne le chemin où stocké le document
+	 * @return String
 	 */
-	public void poserVerrou(String idProg) {
-		verrous.addElement(idProg);
-		compteur_verrou = compteur_verrou + 1;
-		System.out.println("Document verrouillé : " + this.id);
-		System.out.println("Le compteur de verrou = " + compteur_verrou);
+	public String getFichier() {
+		return fichier;
 	}
 
-	/**
-	 * Enlève un verrou sur le document à partir d'un programme
-	 * @param idProg
-	 */
-	public void deverouillerDocument(String idProg) {
-		verrous.remove(idProg);
-		compteur_verrou = compteur_verrou - 1;
-		System.out.println("Document déverrouillé : " + this.id);
-		System.out.println("Le compteur de verrou = " + compteur_verrou);
-	}
-
-	public void compterVerrouProgramme(int Verrou) {
-		System.out.println();// your code here
-	}
-	
 	/**
 	 * Retourne l'état du document
 	 * @return String
@@ -202,16 +184,95 @@ public class Document {
 	public String getEtat() {
 		return etat;
 	}
+	
+	/**
+	 * Pose un verrou sur le document
+	 */
+	public void poserVerrou() {
+		compteur_verrou = compteur_verrou + 1;
+		System.out.println("Le compteur de verrou = " + compteur_verrou);
+	}
 
+	/**
+	 * Enlève un verrou sur le document
+	 */
+	public void deverouillerDocument() {
+		compteur_verrou = compteur_verrou - 1;
+		System.out.println("Le compteur de verrou = " + compteur_verrou);
+	}
+	
+	/**
+	 * Affiche le nombre de verrous sur le document
+	 * Affiche les programmes vérrouillant le document
+	 */
+	public void compterVerrouProgramme() {
+		System.out.println("Le document : " + id + " est verrouillé : " + compteur_verrou + " fois");
+	}
+	
+	/**
+	 * Affiche la liste des programmes vérrouillant le document
+	 */
+	public void getProgrammesArchives() {
+		int i;
+		if (verrous.size() != 0) {
+			for (i = 0; i < verrous.size(); i++) {
+				String prog = (String) verrous.elementAt(i);
+				System.out.println("Le document : " + id + " est verrouillé par le programme : " + prog);
+			}
+		} else {
+			System.out.println("Le document : " + id + " est verrouillé par aucun programme");
+		}
+	}
+
+	/**
+	 * Ajoute l'id du programme qui insère le document dans sa liste
+	 * Appel la fonction de pose d'un verrou
+	 * @param String
+	 */
+	public void ajouterProgramme(String idProg) {
+		verrous.addElement(idProg);
+		System.out.println("Document verrouillé : " + this.id);
+		poserVerrou();
+	}
+
+	/**
+	 * Supprime l'id du programme qui supprime le document dans sa liste
+	 * Appel la fonction de déverrouillage
+	 * @param String
+	 */
+	public void enleverProgramme(String idProg) {
+		verrous.remove(idProg);
+		System.out.println("Document déverrouillé : " + this.id);
+		deverouillerDocument();
+	}
+	
 	/**
 	 * Retourne la date de création du document
 	 * @return Date
 	 */
-	public java.util.Date GetDate_Céation() {
-		// your code here
-		return null;
+	public java.util.Date GetDate_Creation() {
+		String Date = jour + "-"+ mois + "-" + annee;
+		TransformeDate TD = new TransformeDate(Date);
+		System.out.println(TD.d);
+		return TD.d;
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Attribue un nom au fichier
 	 * @param fichier
@@ -219,7 +280,7 @@ public class Document {
 	public void nommerFichier(String fichier) {
 		// your code here
 	}
-
+	
 	/**
 	 * Insère les informations du document
 	 * @param id
@@ -277,20 +338,6 @@ public class Document {
 	}
 
 	public void selectionner() {
-		// your code here
-	}
-
-	public void getProgrammesArchives() {
-		// your code here
-	}
-
-	
-
-	public void ajouterProgramme(String idProg) {
-		// your code here
-	}
-
-	public void enleverProgramme(String idProg) {
 		// your code here
 	}
 }
