@@ -123,7 +123,7 @@ public class Programme {
 	 */
 	public void ajouterDocument(Document Doc) {
 		documents.addElement(Doc.getId());
-		Doc.poserVerrou(id);
+		Doc.ajouterProgramme(id);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class Programme {
 	 */
 	public void retraitDocument(Document Doc) {
 		documents.remove(Doc.getId());
-		Doc.deverouillerDocument(this.id);
+		Doc.enleverProgramme(this.id);
 	}
 
 	/**
@@ -183,24 +183,43 @@ public class Programme {
 		}
 	}
 
-	// //////////////////// INUTILE ????? ///////////////////////////////////
-	public void VerouillerDocuments(String Id_Doc) {
-		System.out.println("Document verrouillé : " + Id_Doc);
-	}
-
-	public void DeverouillerDocuments(String Id_Doc) {
-		System.out.println("Document déverrouillé : " + Id_Doc);
-	}
-
-	// ////////////////////INUTILE ????? ///////////////////////////////////
+	/**
+	 *INUTILE ?????
+	 *public void VerouillerDocuments(String Id_Doc) {
+	 *System.out.println("Document verrouillé : " + Id_Doc);
+	 *}
+	 *public void DeverouillerDocuments(String Id_Doc) {
+	 *System.out.println("Document déverrouillé : " + Id_Doc);
+	 *}
+	 */
 
 	// Modification des informations d'un programme
 	public void InsertionInfos(String Id_Prog, String Titre, String Thematique) {
 		// your code here
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// A quoi ça sert ???
-	public Diffusion dIFFUSION;
+	///// ==> public Diffusion dIFFUSION; ==> A DECOMMENTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	public java.util.Collection dOCUMENT = new java.util.TreeSet();
 
