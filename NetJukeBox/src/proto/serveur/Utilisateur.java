@@ -80,6 +80,23 @@ public class Utilisateur {
 		  //On retourne une nouvelle instance d'Utilisateur avec ces infos
 		  return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France");
 	}
+	
+	/**
+	 * Détruit les infos d'un canal contenues dans la base
+	 * @param login
+	 * @return
+	 */
+	public static boolean deleteByLogin(String login) {
+		
+		//On supprime l'utilisateur de l'annuaire, en partant d'un login
+		
+		//************
+		// => LDAP <=
+		//************
+		
+		//On retourne le resultat de l'opération (succès/échec)
+		return true;
+	}
 
 	/**
 	 * Vérifie l'existence du couple Login/Pwd
@@ -134,6 +151,20 @@ public class Utilisateur {
 //*************************************************
 	
 	/**
+	 * Supprimer l'utilisateur
+	 * @return boolean
+	 */
+	public boolean supprimer() {
+		
+		//On déconnecte l'utilisateur
+		this.deconnecter();
+		
+		//On supprime ses infos de l'annuaire
+		return Utilisateur.deleteByLogin(this.login);
+	}	
+		
+		
+	/**
 	 * Deconnecterl'utilisateur
 	 * @return
 	 */
@@ -170,23 +201,6 @@ public class Utilisateur {
 	}
 
 	/**
-	 * Supprimer l'utilisateur
-	 * @param Login
-	 */
-	public void supprimerUtilisateur(String Login) {
-		// your code here
-	}
-	
-	/**
-	 * Supprimer les informations relatives à l'utilisateur
-	 */
-	public void supprimerInfos() {
-		// your code here
-	}
-
-
-
-	/**
 	 * Modifier les informations de l'utilisateur
 	 */
 	public void modifierInfos() {
@@ -213,13 +227,6 @@ public class Utilisateur {
 	public boolean verifConnecte() {
 		// your code here
 		return false;
-	}
-
-	/**
-	 * Supprimer l'utilisateur
-	 */
-	public void supprimer() {
-		// your code here
 	}
 
 	/**

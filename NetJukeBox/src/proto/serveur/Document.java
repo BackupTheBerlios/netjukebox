@@ -174,10 +174,36 @@ public class Document {
 		
 		return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
 	}
+	
+	/**
+	 * Détruit les infos d'un document contenues dans la base
+	 * @param id
+	 * @return
+	 */
+	public static boolean deleteById(String id) {
+		
+		//On supprime le document de la base, en partant d'un id
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		//On retourne le resultat de l'opération (succès/échec)
+		return true;
+	}
 
 // METHODES DYNAMIQUES
 //********************************************
 
+	/**
+	 * Détruit le document et ses infos en base
+	 * @return boolean
+	 */
+	public boolean supprimer() {
+		
+		//On supprime les infos de la base
+		return Document.deleteById(this.id);
+	}
 
 
 	/**
@@ -339,19 +365,6 @@ public class Document {
 		return false;
 	}
 
-	public void supprimer() {
-		// your code here
-	}
-
-	public boolean suppression() {
-		// your code here
-		return false;
-	}
-
-	public boolean supprimerInfos() {
-		// your code here
-		return false;
-	}
 
 	public boolean modifier(String Id_Doc, String Titre,
 			java.util.Date Date_Creation, String Source, String Langue,

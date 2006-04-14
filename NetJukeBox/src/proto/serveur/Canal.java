@@ -135,6 +135,23 @@ public class Canal {
 		//On retourne un objet canal configuré
 		return new Canal("classic", "classic", 10);
 	}
+	
+	/**
+	 * Détruit les infos d'un canal contenues dans la base
+	 * @param id
+	 * @return
+	 */
+	public static boolean deleteById(String id) {
+		
+		//On supprime le canal de la base, en partant d'un id
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		//On retourne le resultat de l'opération (succès/échec)
+		return true;
+	}
 
 // METHODES DYNAMIQUES (propres à un objet, inaccessibles depuis la classe)
 // *************************************************
@@ -160,11 +177,16 @@ public class Canal {
 	}
 
 	/**
-	 * Détruit le canal
-	 * @param Id_Canal
+	 * Détruit le canal et ses infos en base
+	 * @return boolean
 	 */
-	public void detruire(String Id_Canal) {
-		// your code here
+	public boolean supprimer() {
+		
+		//On stoppe la diffusion éventuelle
+		this.stopDiffusion();
+		
+		//On supprime les infos de la base
+		return Canal.deleteById(this.id);
 	}
 
 	/**

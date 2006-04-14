@@ -110,10 +110,37 @@ public class Programme {
 		return new Programme("id", "titre", "thematique");
 	}
 	
+	/**
+	 * Détruit les infos d'un programme contenues dans la base
+	 * @param id
+	 * @return
+	 */
+	public static boolean deleteById(String id) {
+		
+		//On supprime le programme de la base, en partant d'un id
+		
+		//************
+		// => JDBC <=
+		//************
+		
+		//On retourne le resultat de l'opération (succès/échec)
+		return true;
+	}
+	
 	
 // METHODES DYNAMIQUES
 //*********************************************************
 
+	/**
+	 * Détruit le programme et ses infos en base
+	 * @return boolean
+	 */
+	public boolean supprimer() {
+		
+		//On supprime les infos de la base
+		return Programme.deleteById(this.id);
+	}
+	
 	/**
 	 * Retourne l'identifiant du programme
 	 * @return String
