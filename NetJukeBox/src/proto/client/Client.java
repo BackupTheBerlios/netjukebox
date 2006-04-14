@@ -1,46 +1,169 @@
 package proto.client;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 //Arguments : 192.168.0.2 10000
 
-import java.io.IOException;
-import java.util.Vector;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
 
-import org.apache.xmlrpc.*;
-
+/**
+ * Client du Net-JukeBox (classe principale)
+ */
 public class Client {
+	
+// ATTRIBUTS
+//***********************************
+	
+	/**
+	 * Client XMLRPC
+	 */
+	private XMLClient clientXML = null;
+	
+	/**
+	 * Etat connecté
+	 */
+	private boolean etatConnecte = false;
+	
+
+// CONSTRUCTEUR
+//***********************************
+	
+	/**
+	 * Constructeur (main sans args)
+	 */
+	public Client() {
+		
+		// Demande d'infos pour le Client XML
+		BufferedReader reader = null;
+		try{
+			reader= new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("###########################################");
+			System.out.println("IP du serveur: ");
+			String ip = reader.readLine();
+			System.out.println("Port du serveur: ");
+			String port = reader.readLine();
+			
+			// On initialise le client XML
+			initializeXML(ip, port);
+			
+			// On démarre le menu
+			menu();
+		} catch (Exception e){
+			System.out.println(e);
+			System.exit(1);
+		}
+	}
+	
+	/**
+	 * Constructeur (main avec args)
+	 * @param ip
+	 * @param port
+	 */
+	public Client(String ip, String port) {
+		
+		//On initialise le client XML
+		initializeXML(ip, port);
+		
+		//On démarre le menu
+		menu();
+	}
+	
+// METHODES DYNAMIQUES
+//***********************************
+	
+	/**
+	 * Initialise le client XMLRPC et se connecte au serveur XMLRPC
+	 * @param String ip
+	 * @param String port
+	 */
+	private void initializeXML(String ip, String port) {
+		
+		//Si le client XML n'est pas déjà initialisé
+		if (clientXML == null) {
+		
+			clientXML = new XMLClient(ip, port);
+			
+		//Sinon, déjà initialisé
+		} else {
+			System.out.println("WARNING: Client XML déjà initialisé !");
+		}
+	}
+	
+	
+// DIALOGUE AVEC L'UTILISATEUR (MENU)
+//***********************************
+	
+	private void menu() {
+		
+		//Gestion des saisies clavier
+		BufferedReader reader = null;
+		String ligne;
+		
+		System.out.println("###########################################");
+		System.out.println("Entrez 'end' pour terminer");
+		System.out.println("###########################################");
+		
+		try{
+			reader= new BufferedReader(new InputStreamReader(System.in));
+			do {
+				System.out.println("> ");
+				ligne = reader.readLine();
+				
+				// CONNEXION
+				if (ligne == "connexion") {
+					System.out.println("Login: ");
+					String login = lire();
+					System.out.println("Pwd: ");
+					String pwd = lire();
+					boolean connecte = clientXML.connexion(login, pwd);
+					if (connecte) System.out.println("OK: Utilisateur connecté");
+					else System.out.println("ERR: Utilisateur non connecté");
+				}
+				
+				// DECONNEXION
+				if (ligne == "deconnexion") {
+					boolean deconnecte = clientXML.deconnexion();
+					if (deconnecte) System.out.println("OK: Utilisateur déconnecté");
+					else System.out.println("ERR: Utilisateur toujours connecté");
+				}
+				
+			} while (ligne!="end");
+		} catch (Exception e){
+			System.out.println(e);
+		}
+	}
+	
+	/**
+	 * Lecture d'une ligne en console
+	 * @return
+	 */
+	private String lire() {
+
+		BufferedReader reader = null;
+		try{
+			reader= new BufferedReader(new InputStreamReader(System.in));
+			return reader.readLine();
+		} catch (Exception e){
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+// MAIN
+//***********************************
 	public static void main(String args[]) {
-		if (args.length < 1) {
-			System.out.println("Usage: java client [adresseServeur] [portServeur]");
-			System.exit(-1);
+		
+		//S'il y a des paramètres en ligne de commande
+		//Usage: java client [adresseServeur] [portServeur]
+		if (args.length == 2) {
+			new Client(args[0], args[1]);
 		}
-		try {
-			// Utilise lengthpilote Sax d'Apache Xerces
-			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
-			// Creation du client & identification du serveur
-			XmlRpcClient client = new XmlRpcClient("http://"+args[0]+":"+args[1]);
-			// Création de la requête
-			Vector params = new Vector();
-			// Récupération de l'adresse ip du client
-			String AdresseIp = InetAddress.getLocalHost().getHostAddress ();
-			params.addElement(AdresseIp);
-			String port = "22224";
-			params.addElement(port);
-			System.out.println(AdresseIp);
-			// Adresse la requête et affiche les résultats
-			String result = (String)client.execute("Gestionnaire.Gestionnaire", params);
-			//System.out.println("Réponse du serveur : " + result);
-			//Démarage du client streaming
-			new RTPClient(result);
-			System.out.println("Client Streaming démarré");
-		} catch (ClassNotFoundException e) {
-			System.out.println("Impossible de localiser le pilote Sax");
-		} catch (MalformedURLException e) {
-			System.out.println("URL non conforme au format du serveur XML-RPC");
-		} catch (IOException e) {
-			System.out.println("IO Exception: " + e.getMessage());
-		} catch (XmlRpcException e) {
-			System.out.println("Exception E/S : " + e.getMessage());
+		
+		//Sinon, on les demandera à l'utilisateur
+		else {
+			//On démarre le client
+			new Client();
 		}
+		
 	}
 }
