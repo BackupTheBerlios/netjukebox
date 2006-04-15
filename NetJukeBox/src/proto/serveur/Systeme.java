@@ -61,7 +61,9 @@ public class Systeme {
 	 * @param pwd
 	 * @return String
 	 */
-	public String Connexion(String login, String pwd) {
+	public String connexion(String login, String pwd) {
+		
+		System.out.println("Connexion de l'utilisateur "+login);
 		
 		//On vérifie que le couple login/pwd existe
 		if (Utilisateur.verifierPwd(pwd, login)) {
@@ -75,11 +77,14 @@ public class Systeme {
 			//On l'ajoute à la liste des utilisateurs connectés au système
 			utilisateurs.addElement(util);
 			
-			return "Connexion établie";
+			System.out.println("Utilisateur "+login+" connecté");
+			return Boolean.toString(true);
+			
 		}
 		
 		//Sinon, connexion refusée
-		return "Connexion refusée";
+		System.out.println("Utilisateur "+login+" non connecté");
+		return Boolean.toString(false);
 	}
 	/**
 	 * Deconnexion d'un utilisateur
@@ -87,6 +92,8 @@ public class Systeme {
 	 * @return String
 	 */
 	public String deconnexion(String login) {
+		
+		System.out.println("Deconnexion de l'utilisateur "+login);
 		
 		//S'il y a des utilisateurs connectés
 		if (utilisateurs.size()>0) {
@@ -109,11 +116,14 @@ public class Systeme {
 				//On le supprime de la liste des utilisateurs connectés au système
 				utilisateurs.removeElementAt(indice);
 				
-				return "Utilisateur deconnecté";
+				System.out.println("Utilisateur "+login+" deconnecté");
+				return Boolean.toString(true);
 			}
-			return "Utilisateur introuvable";
+			System.out.println("Utilisateur "+login+" introuvable");
+			return Boolean.toString(false);
 		}
-		return "Aucun utilisateur n'est connecté";
+		System.out.println("Aucun utilisateur n'est connecté");
+		return Boolean.toString(false);
 	}
 
 	/**

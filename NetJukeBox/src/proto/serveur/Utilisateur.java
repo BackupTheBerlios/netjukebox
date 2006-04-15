@@ -108,7 +108,7 @@ public class Utilisateur {
 		// => LDAP <=
 		//*************
 		
-		return (pwd=="toto" && login=="toto");
+		return (pwd.equalsIgnoreCase("toto") && login.equalsIgnoreCase("toto"));
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class Utilisateur {
 		// => LDAP <=
 		//*************
 		
-		return (login=="toto");
+		return (login.equalsIgnoreCase("toto"));
 	}
 	
 	
