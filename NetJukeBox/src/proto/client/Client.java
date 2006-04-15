@@ -2,6 +2,7 @@ package proto.client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 
 //Arguments : 192.168.0.2 10000
 
@@ -38,9 +39,9 @@ public class Client {
 		try{
 			reader= new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("###########################################");
-			System.out.println("IP du serveur: ");
+			System.out.print("IP du serveur: ");
 			String ip = reader.readLine();
-			System.out.println("Port du serveur: ");
+			System.out.print("Port du serveur: ");
 			String port = reader.readLine();
 			
 			// On initialise le client XML
@@ -81,7 +82,18 @@ public class Client {
 		//Si le client XML n'est pas déjà initialisé
 		if (clientXML == null) {
 		
+			//On initialise le client
 			clientXML = new XMLClient(ip, port);
+			
+			try {
+				//On essaye de se connecter au serveur XML
+				if (clientXML.testConnectXML(InetAddress.getLocalHost().getAddress().toString())) {
+					System.err.println("INFO: Serveur XML contacté avec succès !");
+				}
+				else System.err.println("WARNING: Serveur XML injoignable !");
+			} catch (Exception e) {
+				System.err.println("ERREUR: "+e);
+			}
 			
 		//Sinon, déjà initialisé
 		} else {
@@ -99,21 +111,25 @@ public class Client {
 		BufferedReader reader = null;
 		String ligne;
 		
-		System.out.println("###########################################");
-		System.out.println("Entrez 'end' pour terminer");
-		System.out.println("###########################################");
+		System.out.println();
+		System.out.println("####################################################");
+		System.out.println("       Bienvenue sur le client Net-JukeBox");
+		System.out.println();
+		System.out.println("Entrez 'help' pour lister les commandes disponibles");
+		System.out.println("####################################################");
 		
 		try{
 			reader= new BufferedReader(new InputStreamReader(System.in));
 			do {
-				System.out.println("> ");
+				System.out.println();
+				System.out.print("> ");
 				ligne = reader.readLine();
 				
 				// CONNEXION
 				if  (ligne.equalsIgnoreCase("connexion")) {
-					System.out.println("Login: ");
+					System.out.print("Login: ");
 					String login = lire();
-					System.out.println("Pwd: ");
+					System.out.print("Pwd: ");
 					String pwd = lire();
 					boolean connecte = clientXML.connexion(login, pwd);
 					if (connecte) System.err.println("INFO: Utilisateur connecté");
@@ -127,12 +143,31 @@ public class Client {
 					else System.err.println("ERREUR: Utilisateur toujours connecté");
 				}
 				
+				// HELP
+				if (ligne.equalsIgnoreCase("help")) {
+					System.out.println("Commandes disponibles:");
+					System.out.println(" connexion : ouvrir une session sur le serveur");
+					System.out.println(" deconnexion : fermer la session");
+					System.out.println(" end : terminer");
+					System.out.println(" help : lister les commandes disponibles");
+				}
+				
+				// END
+				if (ligne.equalsIgnoreCase("end")) {
+					System.out.println();
+					System.out.println("###########################################");
+					System.out.println("Fermeture du client");
+					System.out.println("###########################################");
+					System.exit(1);
+				}
+				
+				// COMMANDE INCONNUE
+				else {
+					System.out.println("Commande inconnue");
+				}
+				
 			} while (!ligne.equalsIgnoreCase("end"));
 			
-			System.out.println("###########################################");
-			System.out.println("Fermeture du client");
-			System.out.println("###########################################");
-			System.exit(1);
 		} catch (Exception e){
 			System.err.println("ERREUR:" + e);
 		}

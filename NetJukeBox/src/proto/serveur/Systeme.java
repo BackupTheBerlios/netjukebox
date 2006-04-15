@@ -52,6 +52,19 @@ public class Systeme {
 // METHODES DU SYSTEME
 //************************************************************
 	
+	//XMLRPC
+	//*******************************************************
+	
+	/**
+	 * Signale au client que le seveur est bien connecté
+	 * @param String ip
+	 * @return String
+	 */
+	public String testConnectXML(String ip) {
+		System.out.println("Test de connexion envoyé par client XML "+ip);
+		return Boolean.toString(true);
+	}
+	
 	// UTILISATEUR
 	//*******************************************************
 	

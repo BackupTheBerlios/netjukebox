@@ -49,6 +49,7 @@ public class XMLClient {
 				
 				// Creation du client & identification du serveur
 				clientXML = new XmlRpcClient("http://"+ip+":"+port);
+
 				System.err.println("INFO: Client Streaming démarré");
 				
 			} catch (ClassNotFoundException e) {
@@ -69,6 +70,30 @@ public class XMLClient {
 	
 // METHODES DYNAMIQUES
 //**************************************
+	
+	/**
+	 * Tentative de connexion au seveur XML
+	 * @param String ip
+	 * @return boolean
+	 */
+	public boolean testConnectXML(String ip) {
+		
+			System.err.println("INFO: Tentative de connexion au serveur XML...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(ip);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.testConnectXML", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+	}
 	
 	/**
 	 * Identifie l'utilisateur sur le serveur principal
