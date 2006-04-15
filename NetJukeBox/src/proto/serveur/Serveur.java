@@ -20,7 +20,7 @@ public class Serveur {
 			
 			// Enregistre la classe du gestionnaire
 			server.addHandler("Gestionnaire", new Gestionnaire());
-			//server.addHandler("Systeme", new Systeme());
+			server.addHandler("Systeme", new Systeme(args[0], args[2]));
 			
 			//Trace dans la console
 			System.out.println("Adresse serveur de streaming : " + args[0]);

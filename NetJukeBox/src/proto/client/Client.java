@@ -85,7 +85,7 @@ public class Client {
 			
 		//Sinon, déjà initialisé
 		} else {
-			System.out.println("WARNING: Client XML déjà initialisé !");
+			System.err.println("WARNING: Client XML déjà initialisé !");
 		}
 	}
 	
@@ -110,24 +110,24 @@ public class Client {
 				ligne = reader.readLine();
 				
 				// CONNEXION
-				if (ligne == "connexion") {
+				if  (ligne.equalsIgnoreCase("connexion")) {
 					System.out.println("Login: ");
 					String login = lire();
 					System.out.println("Pwd: ");
 					String pwd = lire();
 					boolean connecte = clientXML.connexion(login, pwd);
-					if (connecte) System.out.println("OK: Utilisateur connecté");
-					else System.out.println("ERR: Utilisateur non connecté");
+					if (connecte) System.err.println("INFO: Utilisateur connecté");
+					else System.err.println("ERREUR: Utilisateur non connecté");
 				}
 				
 				// DECONNEXION
-				if (ligne == "deconnexion") {
+				if (ligne.equalsIgnoreCase("deconnexion")) {
 					boolean deconnecte = clientXML.deconnexion();
-					if (deconnecte) System.out.println("OK: Utilisateur déconnecté");
-					else System.out.println("ERR: Utilisateur toujours connecté");
+					if (deconnecte) System.err.println("INFO: Utilisateur déconnecté");
+					else System.err.println("ERREUR: Utilisateur toujours connecté");
 				}
 				
-			} while (ligne!="end");
+			} while (!ligne.equalsIgnoreCase("end"));
 		} catch (Exception e){
 			System.out.println(e);
 		}

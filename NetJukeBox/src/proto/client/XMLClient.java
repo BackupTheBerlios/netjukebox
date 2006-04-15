@@ -42,26 +42,19 @@ public class XMLClient {
 		
 		//Si le client XML n'est pas déjà initialisé
 		if (clientXML == null) {
-		
+			System.err.println("INFO: Initialisation XMLRPC en cours...");
 			try {
 				// Utilise lengthpilote Sax d'Apache Xerces
 				XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
 				
 				// Creation du client & identification du serveur
 				clientXML = new XmlRpcClient("http://"+ip+":"+port);
-				
-				// Création de la requête
-				Vector params = new Vector();
-				
-				// Adresse la requête et affiche les résultats
-				String result = (String)clientXML.execute("Systeme.Systeme", params);
-				//System.out.println("Réponse du serveur : " + result);
-				System.out.println("Client Streaming démarré");
+				System.err.println("INFO: Client Streaming démarré");
 				
 			} catch (ClassNotFoundException e) {
-				System.out.println("Impossible de localiser le pilote Sax");
+				System.err.println("ERREUR: Impossible de localiser le pilote Sax");
 			} catch (MalformedURLException e) {
-				System.out.println("URL non conforme au format du serveur XML-RPC");
+				System.err.println("ERREUR: URL non conforme au format du serveur XML-RPC");
 
 			} catch (Exception e) {
 				System.out.println("ERREUR: " + e);
@@ -69,7 +62,7 @@ public class XMLClient {
 			
 		//Sinon, déjà initialisé
 		} else {
-			System.out.println("WARNING: Client XML déjà initialisé !");
+			System.err.println("WARNING: Client XML déjà initialisé !");
 		}
 	}
 
@@ -87,7 +80,7 @@ public class XMLClient {
 		
 		//Si l'utilisateur n'est pas connecté au seveur
 		if (!etatConnecte) {
-		
+			System.err.println("INFO: Connexion en cours...");
 			this.login = login;
 			try {
 				// Création de la requête
@@ -102,13 +95,13 @@ public class XMLClient {
 				return etatConnecte;
 				
 			} catch (Exception e) {
-				System.out.println("ERREUR : " + e);
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 		
 		//Sinon, déjà connecté
 		} else {
-			System.out.println("WARNING: Client déjà connecté au serveur !");
+			System.err.println("WARNING: Client déjà connecté au serveur !");
 			return false;
 		}
 	}
@@ -123,7 +116,7 @@ public class XMLClient {
 		
 		//Si l'utilisateur est connecté au seveur
 		if (!etatConnecte) {
-		
+			System.err.println("INFO: Déconnexion en cours...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -137,13 +130,13 @@ public class XMLClient {
 				return estDeconnecte;
 				
 			} catch (Exception e) {
-				System.out.println("ERREUR : " + e);
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 		
 		//Sinon, n'est pas connecté
 		} else {
-			System.out.println("WARNING: Le client n'est pas connecté au serveur !");
+			System.err.println("WARNING: Le client n'est pas connecté au serveur !");
 			return false;
 		}
 	}
