@@ -38,6 +38,8 @@ etat : Boolean; --à revoir ...
 ajouterDocument (d : Document);
 supprimerDocument (d : Document);
 modifierDocument(d : Document);
+rechercherDocument(d : Document);
+archiverDocument (d : Document);
 enlecture(etat : Etat): Boolean;
 estprogramme (etat : Etat) : Boolean;
 <endclass>

@@ -1,9 +1,8 @@
 package netjukebox
 
 --chaque entite (classe) possede un identifiant unique (clé primaire)
-
-context Class
-self.typedFeature-> select(extensionStereotype.Name=Identifiant).size()>=1
+--context Class
+--self.typedFeature-> select(extensionStereotype.Name=Identifiant).size()>=1
 
 context Utilisateur
 inv : id_utilisateur->notEmpty()
@@ -14,13 +13,13 @@ and self.droit->notEmpty()       --par défaut le droit est celui d'un "Usager"
 
 context Systeme::creerUtilisateur(u:Utilisateur)
 pre : Utilisateur->excludes(u)                          --L'utilisateur n'existe pas dans la base
-post: Utilisateur->exists(u1 | u1.oclIsNew()            --L'utilisateur est crée 
-	  and u1.id_utilisateur = id_utilisateur            --..et possède un identifiant
-	  and Utilisateur = Utilisateur@pre->including(u1)) --..et desormais il existe dans la base
-
+post: Utilisateur->exists(u | u.oclIsNew()            --L'utilisateur est crée 
+	  and u.id_utilisateur = id_utilisateur            --..et possède un identifiant
+      and Utilisateur = Utilisateur@pre->including(u)) --..et desormais il existe dans la base
+      
 context Systeme::supprimerUtilisateur(u:Utilisateur)
 pre : Utilisateur->includes(u)      --L'utilisateur existe
-      and self.etat = false         --.. et il n'est pas connecté
+      --and self.etat = false         --.. et il n'est pas connecté
 post: Utilisateur@pre->excludes(u)  --.. désormas il n'existe plus
 
 context Utilisateur::connecter(login : String, pwd : String)
@@ -42,16 +41,26 @@ context Document::ajouterDocument(d:Document)
 pre : Document->excludes(d)                              --document inexistant dans la base 
 post: Document->exists(d1 | d1.oclIsNew())               --document existant dans la base
 	  and self.etat = false                              --et l'état par défaut est "non diffusion"
-	  
-context Document::supprimerDocument(d:Document)
-pre : Document->includes(d)       -- le document à supprimer est existant dans la base
-      and self.etat = false       -- et il n'est pas en cours de diffussion
-post: Document@pre->excludes(d)   -- le docuement n'existe plus dans la base
 
 context Document::modifierDocument(d:Document)
 pre : Document->includes(d)       --le document à modifier existe dans la base
       and self.etat = false       -- et il n'est pas en cours de diffussion
 post : Document@pre->includes(d)  --le document existe toujours dans la base
+
+context Document::rechercherDocument(d:Document)
+pre :Document->includes(d) or Document->excludes(d) -- le document recherché peut être existant ou inextant dans la base
+post:Document->includes(d) or Document->excludes(d) -- le document recherché ne sera en rien modifié à la suite de cette recherche
+			  
+context Document::supprimerDocument(d:Document)
+pre : Document->includes(d)       -- le document à supprimer est existant dans la base
+      and self.etat = false       -- et il n'est pas en cours de diffussion
+post: Document@pre->excludes(d)   -- le document n'existe plus dans la base
+
+context Document::archiverDocument(d:Document)
+pre : Document->includes(d)       -- le document à archiver est existant dans la base
+     --and aDocument.(aEnlecture) = true      -- et il n'est pas en cours de diffussion, ni composant d'une liste de programme
+post: Document@pre->includes(d)   -- le document n'existe plus dans la base
+      and self.etat = true
 
 context Canal
 inv : id_canal->notEmpty()
