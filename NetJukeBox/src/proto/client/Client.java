@@ -128,8 +128,13 @@ public class Client {
 				}
 				
 			} while (!ligne.equalsIgnoreCase("end"));
+			
+			System.out.println("###########################################");
+			System.out.println("Fermeture du client");
+			System.out.println("###########################################");
+			System.exit(1);
 		} catch (Exception e){
-			System.out.println(e);
+			System.err.println("ERREUR:" + e);
 		}
 	}
 	
