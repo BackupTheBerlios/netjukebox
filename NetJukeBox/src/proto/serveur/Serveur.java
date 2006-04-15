@@ -19,7 +19,6 @@ public class Serveur {
 			WebServer server = new WebServer(Integer.parseInt(args[1]));
 			
 			// Enregistre la classe du gestionnaire
-			server.addHandler("Gestionnaire", new Gestionnaire());
 			server.addHandler("Systeme", new Systeme(args[0], args[2]));
 			
 			//Trace dans la console

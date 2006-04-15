@@ -115,7 +115,7 @@ public class XMLClient {
 	public boolean deconnexion() {
 		
 		//Si l'utilisateur est connecté au seveur
-		if (!etatConnecte) {
+		if (etatConnecte) {
 			System.err.println("INFO: Déconnexion en cours...");
 			try {
 				// Création de la requête

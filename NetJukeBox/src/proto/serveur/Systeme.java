@@ -102,7 +102,7 @@ public class Systeme {
 			int indice=0 ;
 			Utilisateur util = (Utilisateur)utilisateurs.elementAt(indice);
 			
-			while (indice<utilisateurs.size() && util.getLogin()!=login) {
+			while ((indice+1)<utilisateurs.size() && util.getLogin()!=login) {
 
 				util = (Utilisateur)utilisateurs.elementAt(++indice);
 			}
