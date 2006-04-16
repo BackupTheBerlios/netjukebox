@@ -326,7 +326,7 @@ public class Systeme {
 		Document doc = Document.getById(idDoc);
 		
 		//On vérifie que le programme et le document existent
-		if (prog == null && doc == null) {
+		if (prog != null && doc != null) {
 			
 			//On récupère les indices dans les vecteurs du systeme
 			int indiceProg = programmes.indexOf(prog);
