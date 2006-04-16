@@ -110,7 +110,7 @@ public class Canal {
 		
 		if (nom.equalsIgnoreCase("classic")) {
 			//On retourne un objet canal configuré
-			return new Canal("classic", "classic", 10);
+			return new Canal("1", "classic", 10);
 		}
 		
 		//Sinon, on retourne un objet vide
@@ -131,9 +131,9 @@ public class Canal {
 		// => JDBC <=
 		//************
 		
-		if (id.equalsIgnoreCase("classic")) {
+		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet canal configuré
-			return new Canal("classic", "classic", 10);
+			return new Canal("1", "classic", 10);
 		}
 		
 		//Sinon, on retourne un objet vide
@@ -155,7 +155,7 @@ public class Canal {
 		//************
 		
 		//Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
-		canaux.addElement(Canal.getById("classic"));
+		canaux.addElement(Canal.getById("1"));
 		
 		//On retourne le vecteur contenant les objets canaux instanciés
 		return canaux;

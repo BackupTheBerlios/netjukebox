@@ -281,4 +281,38 @@ public class XMLClient {
 			return false;
 		}
 	}
+	
+	/**
+	 * Ajouter un document à un programme
+	 * @param String idDoc
+	 * @param String idProg
+	 * @return boolean
+	 */
+	public boolean ajouterDocumentProgramme(String idDoc, String idProg) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Ajout du document au programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(idDoc);
+				params.addElement(idProg);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.ajouterDocumentProgramme", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non conecté au serveur !");
+			return false;
+		}
+	}
 }

@@ -154,9 +154,9 @@ public class Document {
 		// => JDBC <=
 		//************
 
-		if (titre.equalsIgnoreCase("titre")) {
+		if (titre.equalsIgnoreCase("Rhapsody in Blue")) {
 			//On retourne un objet document configuré
-			return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+			return new Document("1", "Rhapsody in Blue", 1100, "01", "01", "2006", "Source", "FR", "classic", "file://home/philippe/njb/1.mp3");
 		}
 		
 		//Sinon, on retourne un objet vide
@@ -174,9 +174,9 @@ public class Document {
 		// => JDBC <=
 		//************
 		
-		if (id.equalsIgnoreCase("id")) {
+		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet document configuré
-			return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+			return new Document("1", "Rhapsody in Blue", 1100, "01", "01", "2006", "Source", "FR", "classic", "file://home/philippe/njb/1.mp3");
 		}
 		
 		//Sinon, on retourne un objet vide

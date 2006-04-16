@@ -215,6 +215,22 @@ public class Client {
 					}
 				}
 				
+				// AJOUTERDOCUMENTPROGRAMME
+				if  (ligne.equalsIgnoreCase("ajouterDocumentProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du document source: ");
+						String idDoc = lire();
+						System.out.print("ID du programme cible: ");
+						String idProg = lire();
+						boolean connecte = clientXML.ajouterDocumentProgramme(idDoc, idProg);
+						if (connecte) System.err.println("INFO: Document ajouté au programme");
+						else System.err.println("ERREUR: Document non ajouté au progamme");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
 					System.out.println("Commandes disponibles:");
@@ -223,6 +239,7 @@ public class Client {
 					System.out.println(" creerCanal : créer un canal");
 					System.out.println(" creerProgramme : créer un programme");
 					System.out.println(" creerDocument : créer un document");
+					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

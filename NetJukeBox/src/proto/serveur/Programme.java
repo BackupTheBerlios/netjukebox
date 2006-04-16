@@ -86,9 +86,9 @@ public class Programme {
 		// => JDBC <=
 		//************
 		
-		if (titre.equalsIgnoreCase("titre")) {
+		if (titre.equalsIgnoreCase("classic")) {
 			//On retourne un objet programme configuré
-			return new Programme("id", "titre", "thematique");
+			return new Programme("1", "classic", "Musique classique");
 		}
 		
 		//Sinon, on retourne un objet vide
@@ -106,9 +106,9 @@ public class Programme {
 		// => JDBC <=
 		//************
 
-		if (id.equalsIgnoreCase("id")) {
+		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet programme configuré
-			return new Programme("id", "titre", "thematique");
+			return new Programme("1", "classic", "Musique classique");
 		}
 		
 		//Sinon, on retourne un objet vide
@@ -214,18 +214,21 @@ public class Programme {
 	 */
 	public Document ajouterDocument(Document doc) {
 		documents.addElement(doc.getId());
-		doc.ajouterProgramme(id);
+		doc.ajouterProgramme(this.id);
 		
 		return doc;
 	}
 
 	/**
 	 * Retire un document du programme
-	 * @param Doc
+	 * @param Document doc
+	 * @return Document
 	 */
-	public void retraitDocument(Document Doc) {
-		documents.remove(Doc.getId());
-		Doc.enleverProgramme(this.id);
+	public Document retirerDocument(Document doc) {
+		documents.remove(doc.getId());
+		doc.enleverProgramme(this.id);
+		
+		return doc;
 	}
 
 	/**
