@@ -56,6 +56,13 @@ public class Systeme {
 	public Systeme(String ipStreaming, String portStreaming) {
 		this.ipStreaming = ipStreaming;
 		this.portStreaming = portStreaming;
+		
+		/*
+		//On initialise les listes de canaux, programmes, documents
+		canaux = Canal.getAll();
+		programmes = Programme.getAll();
+		documents = Document.getAll();
+		*/
 	}
 	
 // METHODES DU SYSTEME
@@ -306,6 +313,42 @@ public class Systeme {
 		return Boolean.toString(false);
 	}
 	
+	/**
+	 * Ajoute un document dans un programme
+	 * @param String idDoc
+	 * @param String idProg
+	 * @return String
+	 */
+	public String ajouterDocumentProgramme(String idDoc, String idProg) {
+		System.out.println("Ajout du document "+idDoc+" au programme "+idProg);
+		
+		Programme prog = Programme.getById(idProg);
+		Document doc = Document.getById(idDoc);
+		
+		//On vérifie que le programme et le document existent
+		if (prog == null && doc == null) {
+			
+			//On récupère les indices dans les vecteurs du systeme
+			int indiceProg = programmes.indexOf(prog);
+			int indiceDoc = documents.indexOf(doc);
+			
+			//On ajoute le document au programme
+			doc = prog.ajouterDocument(doc);
+			
+			//On met à jour les vecteurs systemes
+			programmes.setElementAt(prog, indiceProg);
+			documents.setElementAt(doc, indiceDoc);
+			
+			System.out.println("Document "+idDoc+" ajouté au programme "+idProg);
+			return Boolean.toString(true);
+			
+		}
+		
+		//Sinon, ajout refusé
+		System.out.println("Le document "+idDoc+" n'a pas été ajouté au programme "+idProg);
+		return Boolean.toString(false);
+	}
+	
 	public void RechercherProgramme(String Id_Prog, String Titre,
 			String Thematique) {
 		// your code here
@@ -320,10 +363,6 @@ public class Systeme {
 	}
 
 	public void SaisirInfosProgramme(String Id_Prog, String Titre) {
-		// your code here
-	}
-
-	public void AjouterDocument(String Id_Doc) {
 		// your code here
 	}
 
@@ -367,6 +406,11 @@ public class Systeme {
 		//Sinon, création refusée
 		System.out.println("Canal '"+nom+"' non créé");
 		return Boolean.toString(false);
+	}
+	
+	
+	public void plannifierProgramme(String idProg) {
+		// your code here
 	}
 
 	public void ValiderCreationCanal() {
@@ -460,10 +504,6 @@ public class Systeme {
 	}
 
 	public void RetraitCanal() {
-		// your code here
-	}
-
-	public void PlannifierProgramme(String Id_Prog) {
 		// your code here
 	}
 

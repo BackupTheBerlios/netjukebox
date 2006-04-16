@@ -116,6 +116,27 @@ public class Programme {
 	}
 	
 	/**
+	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
+	 * @return Vector
+	 */
+	public static Vector getAll() {
+		
+		//On crée un vecteur pour contenir les objets programmes instanciés
+		Vector programmes = new Vector();
+		
+		//On va chercher dans la base la liste des id de tous les programmes
+		//************
+		// => JDBC <=
+		//************
+		
+		//Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
+		programmes.addElement(Programme.getById("id"));
+		
+		//On retourne le vecteur contenant les objets programmes instanciés
+		return programmes;
+	}
+	
+	/**
 	 * Détruit les infos d'un programme contenues dans la base
 	 * @param id
 	 * @return
@@ -189,10 +210,13 @@ public class Programme {
 	/**
 	 * Ajoute un document au programme
 	 * @param Document doc
+	 * @return Document
 	 */
-	public void ajouterDocument(Document Doc) {
-		documents.addElement(Doc.getId());
-		Doc.ajouterProgramme(id);
+	public Document ajouterDocument(Document doc) {
+		documents.addElement(doc.getId());
+		doc.ajouterProgramme(id);
+		
+		return doc;
 	}
 
 	/**
