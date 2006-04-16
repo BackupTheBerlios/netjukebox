@@ -5,7 +5,7 @@ import org.apache.xmlrpc.*;
 public class Serveur {
 	public static void main(String[] args) {
 		if (args.length < 1) {
-			System.out.println("Usage: java serveur [adresseStreaming] [portClient] [portStreaming]");
+			System.out.println("Usage: java serveur [portClient] [ipStreaming] [portStreaming]");
 			System.exit(-1);
 		}
 		try {
@@ -16,14 +16,14 @@ public class Serveur {
 			System.out.println("Démarrage du serveur XML-RPC...");
 			
 			//Creation du serveur xmlrpc
-			WebServer server = new WebServer(Integer.parseInt(args[1]));
+			WebServer server = new WebServer(Integer.parseInt(args[0]));
 			
 			// Enregistre la classe du gestionnaire
-			server.addHandler("Systeme", new Systeme(args[0], args[2]));
+			server.addHandler("Systeme", new Systeme(args[1], args[2]));
 			
 			//Trace dans la console
-			System.out.println("Adresse serveur de streaming : " + args[0]);
-			System.out.println("Port du serveur XMLRPC : " + args[1]);
+			System.out.println("Port du serveur XMLRPC : " + args[0]);
+			System.out.println("Adresse serveur de streaming : " + args[1]);
 			System.out.println("Port du serveur de streaming : " + args[2]);
 			
 			System.out.println("En attente de requête ...");

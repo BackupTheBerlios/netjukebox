@@ -87,7 +87,7 @@ public class Client {
 			
 			try {
 				//On essaye de se connecter au serveur XML
-				if (clientXML.testConnectXML(InetAddress.getLocalHost().getAddress().toString())) {
+				if (clientXML.testConnectXML(InetAddress.getLocalHost().getHostAddress())) {
 					System.err.println("INFO: Serveur XML contacté avec succès !");
 				}
 				else System.err.println("WARNING: Serveur XML injoignable !");
@@ -159,11 +159,6 @@ public class Client {
 					System.out.println("Fermeture du client");
 					System.out.println("###########################################");
 					System.exit(1);
-				}
-				
-				// COMMANDE INCONNUE
-				else {
-					System.out.println("Commande inconnue");
 				}
 				
 			} while (!ligne.equalsIgnoreCase("end"));
