@@ -72,13 +72,18 @@ public class Utilisateur {
 	 */
 	public static Utilisateur getByLogin(String login) {
 
-		  //On récupère les infos depuis l'annuaire
-		  //***********
-		  // => LDAP <=
-		  //***********
-
-		  //On retourne une nouvelle instance d'Utilisateur avec ces infos
-		  return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France");
+		//On récupère les infos depuis l'annuaire
+		//***********
+		// => LDAP <=
+		//***********
+		
+		if (login.equalsIgnoreCase("toto")) {
+			//On retourne un objet utilisateur configuré
+			return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France");
+		}
+		
+		//Sinon, on retourne un objet vide
+		return null;
 	}
 	
 	/**

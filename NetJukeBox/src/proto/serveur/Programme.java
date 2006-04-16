@@ -47,13 +47,6 @@ public class Programme {
 	
 	/**
 	 * Constructeur
-	 */
-	public Programme() {
-	
-	}
-	
-	/**
-	 * Constructeur
 	 * @param String id
 	 * @param titre
 	 * @param thematique
@@ -93,7 +86,13 @@ public class Programme {
 		// => JDBC <=
 		//************
 		
-		return new Programme("id", "titre", "thematique");
+		if (titre.equalsIgnoreCase("titre")) {
+			//On retourne un objet programme configuré
+			return new Programme("id", "titre", "thematique");
+		}
+		
+		//Sinon, on retourne un objet vide
+		return null;
 	}
 	
 	/**
@@ -106,8 +105,14 @@ public class Programme {
 		//************
 		// => JDBC <=
 		//************
+
+		if (id.equalsIgnoreCase("id")) {
+			//On retourne un objet programme configuré
+			return new Programme("id", "titre", "thematique");
+		}
 		
-		return new Programme("id", "titre", "thematique");
+		//Sinon, on retourne un objet vide
+		return null;
 	}
 	
 	/**

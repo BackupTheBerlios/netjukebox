@@ -86,13 +86,7 @@ public class Document {
 //********************************************
 	
 	/**
-	 * Constructeur simple
-	 */
-	public Document() {	
-	}
-	
-	/**
-	 * Constructeur complet
+	 * Constructeur
 	 * @param id
 	 * @param titre
 	 * @param duree
@@ -140,10 +134,12 @@ public class Document {
 			String mois, String annee, String source, String langue, String genre,
 			String fichier) {
 		
+		//On crée le document dans la base
 		//************
 		// => JDBC <=
 		//************
 		
+		//On retourne ensuite un objet pour ce document
 		return Document.getByTitre(titre);
 	}
 	
@@ -157,8 +153,14 @@ public class Document {
 		//************
 		// => JDBC <=
 		//************
+
+		if (titre.equalsIgnoreCase("titre")) {
+			//On retourne un objet document configuré
+			return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+		}
 		
-		return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+		//Sinon, on retourne un objet vide
+		return null;
 	}
 	
 	/**
@@ -172,7 +174,34 @@ public class Document {
 		// => JDBC <=
 		//************
 		
-		return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+		if (id.equalsIgnoreCase("id")) {
+			//On retourne un objet document configuré
+			return new Document("id", "titre", 100, "jour", "mois", "annee", "source", "langue", "genre", "fichier");
+		}
+		
+		//Sinon, on retourne un objet vide
+		return null;
+	}
+	
+	/**
+	 * Retourne un vecteur d'objets documents instanciés à partir de toutes les infos de la base 
+	 * @return Vector
+	 */
+	public static Vector getAll() {
+		
+		//On crée un vecteur pour contenir les objets documents instanciés
+		Vector documents = new Vector();
+		
+		//On va chercher dans la liste des id de tous les documents
+		//************
+		// => JDBC <=
+		//************
+		
+		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
+		documents.addElement(Document.getById("id"));
+		
+		//On retourne le vecteur contenant les objets canaux instanciés
+		return documents;
 	}
 	
 	/**

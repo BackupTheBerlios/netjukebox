@@ -60,13 +60,6 @@ public class Canal {
 
 // CONSTRUCTEUR (créé une instance de la classe : un objet)
 // *************************************************
-
-	/**
-	 * Constructeur
-	 */
-	public Canal() {
-		this.auditeurs = new Vector();
-	}
 	
 	/**
 	 * Constructeur
@@ -99,7 +92,7 @@ public class Canal {
 		System.out.println("Le Canal : " + nom + " a été créé");
 		
 		//On retourne un objet avec les infos complètes issues de la base
-		return Canal.getByName(nom);
+		return Canal.getByNom(nom);
 	}
 	
 	/**
@@ -107,7 +100,7 @@ public class Canal {
 	 * @param String nom
 	 * @return Canal
 	 */
-	public static Canal getByName(String nom) {
+	public static Canal getByNom(String nom) {
 		
 		//On va chercher les infos depuis la base, en partant d'un nom
 		
@@ -115,8 +108,14 @@ public class Canal {
 		// => JDBC <=
 		//************
 		
-		//On retourne un objet canal configuré
-		return new Canal("classic", "classic", 10);
+		if (nom.equalsIgnoreCase("classic")) {
+			//On retourne un objet canal configuré
+			return new Canal("classic", "classic", 10);
+		}
+		
+		//Sinon, on retourne un objet vide
+		return null;
+		
 	}
 	
 	/**
@@ -132,8 +131,34 @@ public class Canal {
 		// => JDBC <=
 		//************
 		
-		//On retourne un objet canal configuré
-		return new Canal("classic", "classic", 10);
+		if (id.equalsIgnoreCase("classic")) {
+			//On retourne un objet canal configuré
+			return new Canal("classic", "classic", 10);
+		}
+		
+		//Sinon, on retourne un objet vide
+		return null;
+	}
+	
+	/**
+	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
+	 * @return Vector
+	 */
+	public static Vector getAll() {
+		
+		//On crée un vecteur pour contenir les objets canaux instanciés
+		Vector canaux = new Vector();
+		
+		//On va chercher dans la base la liste des id de tous les canaux
+		//************
+		// => JDBC <=
+		//************
+		
+		//Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
+		canaux.addElement(Canal.getById("classic"));
+		
+		//On retourne le vecteur contenant les objets canaux instanciés
+		return canaux;
 	}
 	
 	/**

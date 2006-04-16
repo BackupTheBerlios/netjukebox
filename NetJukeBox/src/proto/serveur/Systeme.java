@@ -29,13 +29,23 @@ public class Systeme {
 	/**
 	 * Utilisateurs connectés aux système
 	 */
-	private Vector utilisateurs;
+	private Vector utilisateurs = new Vector();
 	
 	
 	/**
 	 * Canaux de diffusion
 	 */
-	private Vector canaux;
+	private Vector canaux = new Vector();
+	
+	/**
+	 * Documents
+	 */
+	private Vector documents = new Vector();
+	
+	/**
+	 * Programmes
+	 */
+	private Vector programmes = new Vector();
 
 // CONSTRUCTEUR
 //************************************************************
@@ -46,7 +56,6 @@ public class Systeme {
 	public Systeme(String ipStreaming, String portStreaming) {
 		this.ipStreaming = ipStreaming;
 		this.portStreaming = portStreaming;
-		utilisateurs = new Vector();
 	}
 	
 // METHODES DU SYSTEME
@@ -152,69 +161,45 @@ public class Systeme {
 		return null;
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
+	
 	public void inscription() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void suppressionUtilisateur() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void rechercheUtilisateur() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Login
-	 */
 	public void rechercherUtilisateur(String Login) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Login
-	 */
 	public void selectionnerUtilisateur(String Login) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Login
-	 */
 	public void supprimerUtilisateur(String Login) {
+		// your code here
+	}
+	
+	public boolean emailValide(String Email) {
+		// your code here
+		return false;
+	}
+
+	public void modifierUtilisateur() {
+		// your code here
+	}
+
+	public void modifierUtil(String Login) {
+		// your code here
+	}
+
+	public void getListePermissions() {
 		// your code here
 	}
 
@@ -222,240 +207,136 @@ public class Systeme {
 	//*******************************************************
 	
 	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
+	 * Création d'un document
+	 * @param String titre
+	 * @param String duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return String
 	 */
+	public String creerDocument(String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+
+		System.out.println("Création du document "+titre);
+		
+		//On vérifie que le document n'existe pas
+		if (Document.getByTitre(titre) == null) {
+			
+			//On crée le document et on l'ajoute à la liste des documents du système
+			documents.addElement(Document.create(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier));
+			
+			System.out.println("Document '"+titre+"' créé");
+			return Boolean.toString(true);
+			
+		}
+		
+		//Sinon, création refusée
+		System.out.println("Document '"+titre+"' non créé");
+		return Boolean.toString(false);
+	}
+	
 	public void supprimerDocument() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void ajouterDocument() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @return
-	 */
 	public boolean documentExistant() {
 		// your code here
 		return false;
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Doc
-	 */
 	public void supprimerDoc(String Id_Doc) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void modifierDocument() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Doc
-	 */
 	public void modifierDoc(String Id_Doc) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Doc
-	 */
 	public void selectionnerDocument(String Id_Doc) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void rechercheDocument() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Doc
-	 */
 	public void rechercherDocument(String Id_Doc) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Email
-	 * @return
-	 */
-	public boolean emailValide(String Email) {
-		// your code here
-		return false;
-	}
-
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
-	public void modifierUtilisateur() {
-		// your code here
-	}
-
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Login
-	 */
-	public void modifierUtil(String Login) {
-		// your code here
-	}
-
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
-	public void getListePermissions() {
-		// your code here
-	}
 	
 	// PROGRAMME
 	//*******************************************************
 
 	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 * @param Titre
-	 * @param Thematique
+	 * Création d'un programme
+	 * @param String titre
+	 * @param String thematique
+	 * @return String
 	 */
+	public String creerProgramme(String titre, String thematique) {
+
+		System.out.println("Création du programme "+titre);
+		
+		//On vérifie que le programme n'existe pas
+		if (Programme.getByTitre(titre) == null) {
+			
+			//On crée le programme et on l'ajoute à la liste des programmes du système
+			programmes.addElement(Programme.create(titre, thematique));
+			
+			System.out.println("Programme '"+titre+"' créé");
+			return Boolean.toString(true);
+			
+		}
+		
+		//Sinon, création refusée
+		System.out.println("Programme '"+titre+"' non créé");
+		return Boolean.toString(false);
+	}
+	
 	public void RechercherProgramme(String Id_Prog, String Titre,
 			String Thematique) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 */
 	public void SupprimerProgramme(String Id_Prog) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param SuppressionProgramme
-	 */
 	public void ConfirmerSupprimerProgramme(Boolean SuppressionProgramme) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 * @param Titre
-	 */
 	public void SaisirInfosProgramme(String Id_Prog, String Titre) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Doc
-	 */
 	public void AjouterDocument(String Id_Doc) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Doc
-	 */
 	public void RechercherDocument(String Id_Doc) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 */
 	public void AjouterProgrammeArchive(String Id_Prog) {
+		// your code here
+	}
+	
+	public void VerifierinfosProgramme(String Id_Prog, String Titre,
+			String Thematique) {
 		// your code here
 	}
 	
@@ -463,478 +344,182 @@ public class Systeme {
 	//*******************************************************
 
 	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Canal
+	 * Création d'un canal
+	 * @param String nom
+	 * @param String utilMax
+	 * @return String
 	 */
-	public void creerCanal(String id, String nom, int utilMax) {
-		canaux.addElement(Canal.create(nom, utilMax));
+	public String creerCanal(String nom, String utilMax) {
+
+		System.out.println("Création du canal "+nom);
+		
+		//On vérifie que le canal n'existe pas
+		if (Canal.getByNom(nom) == null) {
+			
+			//On crée le canal et on l'ajoute à la liste des canaux du système
+			canaux.addElement(Canal.create(nom, Integer.parseInt(utilMax)));
+			
+			System.out.println("Canal '"+nom+"' créé");
+			return Boolean.toString(true);
+			
+		}
+		
+		//Sinon, création refusée
+		System.out.println("Canal '"+nom+"' non créé");
+		return Boolean.toString(false);
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Programme
-	 */
-	public void CreerProgramme(Object Programme) {
-		// your code here
-	}
-
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void ValiderCreationCanal() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void PlannifierUnProgramme() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 */
 	public void DiffuserProgramme(String Id_Prog) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @return
-	 */
 	public ArrayIndexOutOfBoundsException ListeDocs() {
 		// your code here
 		return null;
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param SuppressionCanal
-	 */
 	public void ConfirmerSupprimerCanal(boolean SuppressionCanal) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Suppression
-	 */
 	public void AnnulerSupprimerProgramme(boolean Suppression) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Confirmation
-	 */
 	public void ConfirmerCreationCanal(boolean Confirmation) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void RechercherUnCanal() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Canal
-	 */
 	public void SupprimerCanal(String Id_Canal) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Supprimer
-	 */
 	public void AnnulerSupprimerCanal(boolean Supprimer) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Canal
-	 * @param NomCanal
-	 * @param Flux_Max
-	 */
 	public void VerifierInfosCanal(String Id_Canal, String NomCanal,
 			int Flux_Max) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 * @param Titre
-	 * @param Thematique
-	 */
-	public void VerifierinfosProgramme(String Id_Prog, String Titre,
-			String Thematique) {
-		// your code here
-	}
-
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Validation
-	 */
 	public void ValiderAjout(boolean Validation) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Validation
-	 */
 	public void ValiderModification(boolean Validation) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Doc
-	 */
 	public void RetirerDocument(String Id_Doc) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 */
 	public void RetirerProgramme(String Id_Prog) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void AjoutDocument() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void AjouterProgramme() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param choix
-	 */
 	public void insertion(String choix) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Canal
-	 */
 	public void AjoutCanal(String Id_Canal) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void ValiderCreerProgramme() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 */
 	public void AjoutProgramme(String Id_Prog) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void SupprimerUnProgramme() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void RetraitCanal() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 */
 	public void PlannifierProgramme(String Id_Prog) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void ModifierUnProgramme() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Prog
-	 */
 	public void ModifierProgramme(String Id_Prog) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Choix
-	 */
 	public void ChoixModification(String Choix) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Duree
-	 */
 	public void VerifierDuree(int Duree) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Canal
-	 * @param NomCanal
-	 * @param Flux_Max
-	 */
 	public void RechercherCanal(String Id_Canal, String NomCanal, int Flux_Max) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id
-	 */
 	public void Retirer(String Id) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void SupprimerUnCanal() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void retraitProgramme() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @return
-	 */
 	public boolean Modifier() {
 		// your code here
 		return false;
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Id_Canal
-	 */
 	public void PlanifierSurCanal(String Id_Canal) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Jour
-	 * @param Heure
-	 */
 	public void VerifierJourHeure(java.util.Date Jour, int Heure) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void RechercherUnProgramme() {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 * 
-	 * @param Choix
-	 */
 	public void ArretDiffusion(boolean Choix) {
 		// your code here
 	}
 
-	/**
-	 * <p>
-	 * Does ...
-	 * </p>
-	 * 
-	 */
 	public void AjouterDocumentProgramme() {
 		// your code here
 	}

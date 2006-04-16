@@ -127,20 +127,92 @@ public class Client {
 				
 				// CONNEXION
 				if  (ligne.equalsIgnoreCase("connexion")) {
-					System.out.print("Login: ");
-					String login = lire();
-					System.out.print("Pwd: ");
-					String pwd = lire();
-					boolean connecte = clientXML.connexion(login, pwd);
-					if (connecte) System.err.println("INFO: Utilisateur connecté");
-					else System.err.println("ERREUR: Utilisateur non connecté");
+					if (!etatConnecte) {
+						System.out.print("Login: ");
+						String login = lire();
+						System.out.print("Pwd: ");
+						String pwd = lire();
+						etatConnecte = clientXML.connexion(login, pwd);
+						if (etatConnecte) System.err.println("INFO: Utilisateur connecté");
+						else System.err.println("ERREUR: Utilisateur non connecté");
+					}
+					else {
+						System.err.print("WARNING: Vous êtes déjà connecté au serveur !");
+					}
 				}
 				
 				// DECONNEXION
 				if (ligne.equalsIgnoreCase("deconnexion")) {
-					boolean deconnecte = clientXML.deconnexion();
-					if (deconnecte) System.err.println("INFO: Utilisateur déconnecté");
-					else System.err.println("ERREUR: Utilisateur toujours connecté");
+					if (etatConnecte) {
+						etatConnecte = clientXML.deconnexion();
+						if (!etatConnecte) System.err.println("INFO: Utilisateur déconnecté");
+						else System.err.println("ERREUR: Utilisateur toujours connecté");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// CREERCANAL
+				if  (ligne.equalsIgnoreCase("creerCanal")) {
+					if (etatConnecte) {
+						System.out.print("Nom du canal: ");
+						String nom = lire();
+						System.out.print("Nombre maximal d'auditeurs: ");
+						String utilMax = lire();
+						boolean connecte = clientXML.creerCanal(nom, utilMax);
+						if (connecte) System.err.println("INFO: Canal créé");
+						else System.err.println("ERREUR: Canal non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// CREERPROGRAMME
+				if  (ligne.equalsIgnoreCase("creerProgramme")) {
+					if (etatConnecte) {
+						System.out.print("Titre du programme: ");
+						String titre = lire();
+						System.out.print("Thématique: ");
+						String thematique = lire();
+						boolean connecte = clientXML.creerProgramme(titre, thematique);
+						if (connecte) System.err.println("INFO: Programme créé");
+						else System.err.println("ERREUR: Programme non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// CREERDOCUMENT
+				if  (ligne.equalsIgnoreCase("creerDocument")) {
+					if (etatConnecte) {
+						System.out.print("Titre du document: ");
+						String titre = lire();
+						System.out.print("Durée: ");
+						String duree = lire();
+						System.out.print("Jour de parution: ");
+						String jour = lire();
+						System.out.print("Mois de parution: ");
+						String mois = lire();
+						System.out.print("Année de parution: ");
+						String annee = lire();
+						System.out.print("Source: ");
+						String source = lire();
+						System.out.print("Langue: ");
+						String langue = lire();
+						System.out.print("Genre: ");
+						String genre = lire();
+						System.out.print("Fichier: ");
+						String fichier = lire();
+						boolean connecte = clientXML.creerDocument(titre, duree, jour, mois, annee, source, langue, genre, fichier);
+						if (connecte) System.err.println("INFO: Document créé");
+						else System.err.println("ERREUR: Document non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
 				}
 				
 				// HELP
@@ -148,12 +220,16 @@ public class Client {
 					System.out.println("Commandes disponibles:");
 					System.out.println(" connexion : ouvrir une session sur le serveur");
 					System.out.println(" deconnexion : fermer la session");
+					System.out.println(" creerCanal : créer un canal");
+					System.out.println(" creerProgramme : créer un programme");
+					System.out.println(" creerDocument : créer un document");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}
 				
 				// END
 				if (ligne.equalsIgnoreCase("end")) {
+					if (etatConnecte) clientXML.deconnexion();
 					System.out.println();
 					System.out.println("###########################################");
 					System.out.println("Fermeture du client");

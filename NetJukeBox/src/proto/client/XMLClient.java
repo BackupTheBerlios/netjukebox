@@ -165,4 +165,120 @@ public class XMLClient {
 			return false;
 		}
 	}
+	
+	/**
+	 * Création d'un canal
+	 * @param String nom
+	 * @param String utilMax
+	 * @return boolean
+	 */
+	public boolean creerCanal(String nom, String utilMax) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Création d'un canal...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(nom);
+				params.addElement(utilMax);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.creerCanal", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non conecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Création d'un programme
+	 * @param String titre
+	 * @param String thematique
+	 * @return boolean
+	 */
+	public boolean creerProgramme(String titre, String thematique) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Création d'un programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(titre);
+				params.addElement(thematique);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.creerProgramme", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non conecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Création d'un document
+	 * @param String titre
+	 * @param String duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return boolean
+	 */
+	public boolean creerDocument(String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Création d'un document...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(titre);
+				params.addElement(duree);
+				params.addElement(jour);
+				params.addElement(mois);
+				params.addElement(annee);
+				params.addElement(source);
+				params.addElement(langue);
+				params.addElement(genre);
+				params.addElement(fichier);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.creerDocument", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non conecté au serveur !");
+			return false;
+		}
+	}
 }
