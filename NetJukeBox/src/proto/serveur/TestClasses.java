@@ -24,7 +24,7 @@ public class TestClasses {
 		P1.ajouterDocument(D3);
 		P1.ajouterDocument(D4);
 
-		P1.retraitDocument(D2);
+		P1.retirerDocument(D2);
 
 		Programme P2 = Programme.create("TITI", "Thema");
 		Document D5 = Document.create("TitreD5", 3, "01", "01", "2006", "SourceD5", "LangueD5", "GenreD5", "FichierD5");
