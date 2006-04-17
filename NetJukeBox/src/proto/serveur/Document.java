@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -130,15 +131,17 @@ public class Document {
 	 * @param String genre
 	 * @param String fichier
 	 * @return Document
+	 * @throws SQLException 
 	 */
 	public static Document create(String titre, int duree, String jour,
 			String mois, String annee, String source, String langue, String genre,
-			String fichier) {
+			String fichier) throws SQLException {
 		
 		//On crée le document dans la base
-		//************
-		// => JDBC <=
-		//************
+		String requete = "INSERT INTO Document('" + titre + "', '" + duree + "', '" + jour + 
+		"', '" + mois + "', '" + annee + "', '" + source + "', '" + langue + "', '" + genre +
+		"', '" + fichier + "');"; 
+		new Jdbc(requete);
 		
 		//On retourne ensuite un objet pour ce document
 		return Document.getByTitre(titre);
@@ -148,12 +151,12 @@ public class Document {
 	 * Instancie un objet document après avoir récupéré ces infos depuis la base à partir de son titre
 	 * @param String titre
 	 * @return Document
+	 * @throws SQLException 
 	 */
-	public static Document getByTitre(String titre) {
+	public static Document getByTitre(String titre) throws SQLException {
 		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT * FROM Document WHERE titre = '" + titre + "';";
+		new Jdbc(requete); 
 
 		if (titre.equalsIgnoreCase("Rhapsody in Blue")) {
 			//On retourne un objet document configuré
@@ -168,12 +171,13 @@ public class Document {
 	 * Instancie un objet document après avoir récupéré ces infos depuis la base à partir de son id
 	 * @param String id
 	 * @return Document
+	 * @throws SQLException 
 	 */
-	public static Document getById(String id) {
+	public static Document getById(String id) throws SQLException {
 		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT * FROM Document WHERE id_doc = '" + id + "';";
+		new Jdbc(requete); 
+
 		
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet document configuré
@@ -186,10 +190,12 @@ public class Document {
 	
 	/**
 	 * Retourne un vecteur d'objets documents instanciés à partir de toutes les infos de la base 
+
 	 * @return Hashtable
+	 * @throws SQLException 
 	 */
-	public static Hashtable getAll() {
-		
+
+	public static Hashtable getAll() throws SQLException {		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable documents = new Hashtable();
 		
