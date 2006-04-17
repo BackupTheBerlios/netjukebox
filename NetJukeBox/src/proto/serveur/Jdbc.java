@@ -1,8 +1,8 @@
 package proto.serveur;
 
 import java.sql.*;
-import java.util.Dictionary;
-import java.util.Enumeration;
+//import java.util.Dictionary;
+//import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class Jdbc {
@@ -13,7 +13,7 @@ public class Jdbc {
 	//Permet la recuperation des donnees
 	private ResultSet rs;
 	//Création d'un dictionnaire retournant les données 
-    static Dictionary dico = new Hashtable();
+    static Hashtable dico = new Hashtable();
 	
 	//Initialise les instances necessaires a la connexion a la base
 	private void connectToDB(String requete) {
@@ -26,9 +26,9 @@ public class Jdbc {
 			while (rs.next()) {
 				for (int i = 1; i <= colomnCount; i++) {
 					//Récupération du nom de la colonne
-					String colonne = (String) rsmd.getColumnName(i);
+					Object colonne = rsmd.getColumnName(i);
 					//Récupération de la donnée
-					String donnee = (String) rs.getObject(i);
+					Object donnee = rs.getObject(i);
 					//Création du dictionnaire à retourner à l'objet
 					dico.put(colonne, donnee);				
 				}
@@ -40,7 +40,7 @@ public class Jdbc {
 		}
 	}
 
-	static Dictionary retour() {
+	static Hashtable retour() {
 		return dico;	
 	}
 	
