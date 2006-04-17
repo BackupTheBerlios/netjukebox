@@ -1,9 +1,10 @@
 package proto.serveur;
 
 import java.sql.*;
-//import java.util.Dictionary;
+import java.util.Dictionary;
 //import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 public class Jdbc {
 	//Connexion a la base
@@ -12,9 +13,9 @@ public class Jdbc {
 	Statement state;
 	//Permet la recuperation des donnees
 	private ResultSet rs;
-	//Création d'un dictionnaire retournant les données 
-    static Hashtable dico = new Hashtable();
-	
+	//Création du vecteur encapsulant les différents dico
+    static Vector vecteur = new Vector();
+    
 	//Initialise les instances necessaires a la connexion a la base
 	private void connectToDB(String requete) {
 		initConnection("org.postgresql.Driver","jdbc:postgresql://192.168.0.2:5432/NetJukeBox", "postgres", "postgres");
@@ -29,8 +30,10 @@ public class Jdbc {
 					Object colonne = rsmd.getColumnName(i);
 					//Récupération de la donnée
 					Object donnee = rs.getObject(i);
-					//Création du dictionnaire à retourner à l'objet
-					dico.put(colonne, donnee);				
+					//Création d'un dictionnaire retournant les données
+					Dictionary dico = new Hashtable();
+					dico.put(colonne, donnee);
+					vecteur.add(dico);
 				}
 			}
 			retour();
@@ -40,8 +43,8 @@ public class Jdbc {
 		}
 	}
 
-	static Hashtable retour() {
-		return dico;	
+	static Vector retour() {
+		return vecteur;	
 	}
 	
 	private void initConnection (String driver, String url, String login, String password) {
