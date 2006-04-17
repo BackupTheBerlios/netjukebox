@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -117,12 +118,12 @@ public class Programme {
 	
 	/**
 	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
-	 * @return Vector
+	 * @return Hashtable
 	 */
-	public static Vector getAll() {
+	public static Hashtable getAll() {
 		
 		//On crée un vecteur pour contenir les objets programmes instanciés
-		Vector programmes = new Vector();
+		Hashtable programmes = new Hashtable();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
 		//************
@@ -130,7 +131,7 @@ public class Programme {
 		//************
 		
 		//Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
-		programmes.addElement(Programme.getById("id"));
+		programmes.put("1", Programme.getById("1"));
 		
 		//On retourne le vecteur contenant les objets programmes instanciés
 		return programmes;
@@ -210,13 +211,19 @@ public class Programme {
 	/**
 	 * Ajoute un document au programme
 	 * @param Document doc
-	 * @return Document
 	 */
-	public Document ajouterDocument(Document doc) {
-		documents.addElement(doc.getId());
-		doc.ajouterProgramme(this.id);
+	public void ajouterDocument(Document doc) {
 		
-		return doc;
+		//On ajoute le document au programme
+		//************
+		// => JDBC <=
+		//************
+		
+		//On met à jour le vecteurs d'association
+		documents.addElement(doc.getId());
+		
+		//On signale au document cet ajout
+		doc.ajouterProgramme(this.id);
 	}
 
 	/**
@@ -225,7 +232,16 @@ public class Programme {
 	 * @return Document
 	 */
 	public Document retirerDocument(Document doc) {
+		
+		// On retire le document du programme
+		//************
+		// => JDBC <=
+		//************
+		
+		//On met à jour le vecteur d'association
 		documents.remove(doc.getId());
+		
+		//On signale au document ce retrait
 		doc.enleverProgramme(this.id);
 		
 		return doc;
@@ -243,7 +259,7 @@ public class Programme {
 	 * Ajoute un programme (ensemble de documents) au programme
 	 * @param prog
 	 */
-	public void AjouterProgramme(Programme prog) {
+	public void ajouterProgramme(Programme prog) {
 		prog.listerDocuments();
 		// System.out.println(Prog.v);
 		int i;

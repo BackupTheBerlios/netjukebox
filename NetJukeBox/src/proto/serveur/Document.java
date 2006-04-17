@@ -1,6 +1,7 @@
 package proto.serveur;
 
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -185,12 +186,12 @@ public class Document {
 	
 	/**
 	 * Retourne un vecteur d'objets documents instanciés à partir de toutes les infos de la base 
-	 * @return Vector
+	 * @return Hashtable
 	 */
-	public static Vector getAll() {
+	public static Hashtable getAll() {
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
-		Vector documents = new Vector();
+		Hashtable documents = new Hashtable();
 		
 		//On va chercher dans la liste des id de tous les documents
 		//************
@@ -198,9 +199,9 @@ public class Document {
 		//************
 		
 		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
-		documents.addElement(Document.getById("id"));
+		documents.put("1", Document.getById("1"));
 		
-		//On retourne le vecteur contenant les objets canaux instanciés
+		//On retourne le vecteur contenant les objets documents instanciés
 		return documents;
 	}
 	
@@ -328,6 +329,7 @@ public class Document {
 	 * @param String
 	 */
 	public void ajouterProgramme(String idProg) {
+		programmes.addElement(idProg);
 		verrous.addElement(idProg);
 		System.out.println("Document verrouillé : " + this.id);
 		System.out.println("Le compteur de verrou = " + verrous.size());
@@ -339,6 +341,7 @@ public class Document {
 	 * @param String
 	 */
 	public void enleverProgramme(String idProg) {
+		programmes.removeElement(idProg);
 		verrous.remove(idProg);
 		System.out.println("Document déverrouillé : " + this.id);
 		System.out.println("Le compteur de verrou = " + verrous.size());

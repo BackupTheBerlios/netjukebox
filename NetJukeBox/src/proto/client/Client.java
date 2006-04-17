@@ -144,7 +144,7 @@ public class Client {
 				// DECONNEXION
 				if (ligne.equalsIgnoreCase("deconnexion")) {
 					if (etatConnecte) {
-						etatConnecte = clientXML.deconnexion();
+						etatConnecte = !clientXML.deconnexion();
 						if (!etatConnecte) System.err.println("INFO: Utilisateur déconnecté");
 						else System.err.println("ERREUR: Utilisateur toujours connecté");
 					}

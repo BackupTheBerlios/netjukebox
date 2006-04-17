@@ -1,6 +1,7 @@
 package proto.serveur;
 
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -142,12 +143,12 @@ public class Canal {
 	
 	/**
 	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
-	 * @return Vector
+	 * @return Hashtable
 	 */
-	public static Vector getAll() {
+	public static Hashtable getAll() {
 		
 		//On crée un vecteur pour contenir les objets canaux instanciés
-		Vector canaux = new Vector();
+		Hashtable canaux = new Hashtable();
 		
 		//On va chercher dans la base la liste des id de tous les canaux
 		//************
@@ -155,7 +156,7 @@ public class Canal {
 		//************
 		
 		//Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
-		canaux.addElement(Canal.getById("1"));
+		canaux.put("1", Canal.getById("1"));
 		
 		//On retourne le vecteur contenant les objets canaux instanciés
 		return canaux;

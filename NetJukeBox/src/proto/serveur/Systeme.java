@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -29,23 +30,23 @@ public class Systeme {
 	/**
 	 * Utilisateurs connectés aux système
 	 */
-	private Vector utilisateurs = new Vector();
+	private Hashtable utilisateurs = new Hashtable();
 	
 	
 	/**
 	 * Canaux de diffusion
 	 */
-	private Vector canaux = new Vector();
+	private Hashtable canaux = new Hashtable();
 	
 	/**
 	 * Documents
 	 */
-	private Vector documents = new Vector();
+	private Hashtable documents = new Hashtable();
 	
 	/**
 	 * Programmes
 	 */
-	private Vector programmes = new Vector();
+	private Hashtable programmes = new Hashtable();
 
 // CONSTRUCTEUR
 //************************************************************
@@ -57,12 +58,10 @@ public class Systeme {
 		this.ipStreaming = ipStreaming;
 		this.portStreaming = portStreaming;
 		
-		/*
 		//On initialise les listes de canaux, programmes, documents
-		canaux = Canal.getAll();
-		programmes = Programme.getAll();
-		documents = Document.getAll();
-		*/
+		this.canaux = Canal.getAll();
+		this.programmes = Programme.getAll();
+		this.documents = Document.getAll();
 	}
 	
 // METHODES DU SYSTEME
@@ -104,7 +103,7 @@ public class Systeme {
 			util.connexion();
 			
 			//On l'ajoute à la liste des utilisateurs connectés au système
-			utilisateurs.addElement(util);
+			utilisateurs.put(login, util);
 			
 			System.out.println("Utilisateur "+login+" connecté");
 			return Boolean.toString(true);
@@ -128,22 +127,16 @@ public class Systeme {
 		if (utilisateurs.size()>0) {
 			
 			//On recherche l'utilisateur en question parmi cette liste
-			int indice=0 ;
-			Utilisateur util = (Utilisateur)utilisateurs.elementAt(indice);
-			
-			while ((indice+1)<utilisateurs.size() && util.getLogin()!=login) {
-
-				util = (Utilisateur)utilisateurs.elementAt(++indice);
-			}
-			
-			//Si on a trouvé l'utilisateur connecté
-			if (indice<utilisateurs.size()) {
+			if (utilisateurs.containsKey(login)) {
+				
+				//On récupère l'objet utilisateur
+				Utilisateur util = (Utilisateur)utilisateurs.get(login);
 				
 				//On le déconnecte
 				util.deconnexion();
 				
 				//On le supprime de la liste des utilisateurs connectés au système
-				utilisateurs.removeElementAt(indice);
+				utilisateurs.remove(login);
 				
 				System.out.println("Utilisateur "+login+" deconnecté");
 				return Boolean.toString(true);
@@ -233,8 +226,11 @@ public class Systeme {
 		//On vérifie que le document n'existe pas
 		if (Document.getByTitre(titre) == null) {
 			
-			//On crée le document et on l'ajoute à la liste des documents du système
-			documents.addElement(Document.create(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier));
+			//On crée le document
+			Document d = Document.create(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier);
+			
+			//On l'ajoute à la liste des documents du système
+			documents.put(d.getId(), d);
 			
 			System.out.println("Document '"+titre+"' créé");
 			return Boolean.toString(true);
@@ -300,8 +296,11 @@ public class Systeme {
 		//On vérifie que le programme n'existe pas
 		if (Programme.getByTitre(titre) == null) {
 			
-			//On crée le programme et on l'ajoute à la liste des programmes du système
-			programmes.addElement(Programme.create(titre, thematique));
+			//On crée le programme
+			Programme p = Programme.create(titre, thematique);
+			
+			//On l'ajoute à la liste des programmes du système
+			programmes.put(p.getId(), p);
 			
 			System.out.println("Programme '"+titre+"' créé");
 			return Boolean.toString(true);
@@ -322,22 +321,15 @@ public class Systeme {
 	public String ajouterDocumentProgramme(String idDoc, String idProg) {
 		System.out.println("Ajout du document "+idDoc+" au programme "+idProg);
 		
-		Programme prog = Programme.getById(idProg);
-		Document doc = Document.getById(idDoc);
-		
 		//On vérifie que le programme et le document existent
-		if (prog != null && doc != null) {
+		if (programmes.containsKey(idProg) && documents.containsKey(idDoc)) {
 			
-			//On récupère les indices dans les vecteurs du systeme
-			int indiceProg = programmes.indexOf(prog);
-			int indiceDoc = documents.indexOf(doc);
+			//On récupère les objets
+			Document d = (Document)documents.get(idDoc);
+			Programme p = (Programme)programmes.get(idProg);
 			
 			//On ajoute le document au programme
-			doc = prog.ajouterDocument(doc);
-			
-			//On met à jour les vecteurs systemes
-			programmes.setElementAt(prog, indiceProg);
-			documents.setElementAt(doc, indiceDoc);
+			p.ajouterDocument(d);
 			
 			System.out.println("Document "+idDoc+" ajouté au programme "+idProg);
 			return Boolean.toString(true);
@@ -395,8 +387,11 @@ public class Systeme {
 		//On vérifie que le canal n'existe pas
 		if (Canal.getByNom(nom) == null) {
 			
-			//On crée le canal et on l'ajoute à la liste des canaux du système
-			canaux.addElement(Canal.create(nom, Integer.parseInt(utilMax)));
+			//On crée le canal
+			Canal c = Canal.create(nom, Integer.parseInt(utilMax));
+			
+			//On l'ajoute à la liste des canaux du système
+			canaux.put(c.getId(), c);
 			
 			System.out.println("Canal '"+nom+"' créé");
 			return Boolean.toString(true);
