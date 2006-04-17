@@ -231,6 +231,67 @@ public class Client {
 					}
 				}
 				
+				// DIFFUSERPROGRAMME
+				if  (ligne.equalsIgnoreCase("diffuserProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme source: ");
+						String idProg = lire();
+						System.out.print("ID du canal cible: ");
+						String idCanal = lire();
+						boolean connecte = clientXML.diffuserProgramme(idProg, idCanal);
+						if (connecte) System.err.println("INFO: Diffusion du programme lancée sur le canal");
+						else System.err.println("ERREUR: Diffusion du programme non lancée sur le canal");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// PLANIFIERPROGRAMME
+				if  (ligne.equalsIgnoreCase("planifierProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme source: ");
+						String idProg = lire();
+						System.out.print("ID du canal cible: ");
+						String idCanal = lire();
+						System.out.print("Jour de planification: ");
+						String jour = lire();
+						System.out.print("Mois: ");
+						String mois = lire();
+						System.out.print("Année: ");
+						String annee = lire();
+						System.out.print("Heure: ");
+						String heure = lire();
+						System.out.print("Minute: ");
+						String minute = lire();
+						System.out.print("Seconde: ");
+						String seconde = lire();
+						boolean connecte = clientXML.planifierProgramme(idProg, idCanal, jour, mois, annee, heure, minute, seconde);
+						if (connecte) System.err.println("INFO: Programme planifié sur le canal");
+						else System.err.println("ERREUR: Programme non planifié");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// ECOUTERCANAL
+				if  (ligne.equalsIgnoreCase("ecouterCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal source: ");
+						String idCanal = lire();
+						String url = clientXML.ecouterCanal(idCanal);
+						if (url != null) {
+							System.err.println("INFO: Ecoute du canal lancée");
+							new RTPClient(url);
+						}
+						else System.err.println("ERREUR: Ecoute du canal non lancée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
 					System.out.println("Commandes disponibles:");
@@ -240,6 +301,8 @@ public class Client {
 					System.out.println(" creerProgramme : créer un programme");
 					System.out.println(" creerDocument : créer un document");
 					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
+					System.out.println(" diffuserProgramme : diffuser un programme sur un canal");
+					System.out.println(" ecouterCanal : ecouter un canal");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

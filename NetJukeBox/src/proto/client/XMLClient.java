@@ -161,7 +161,7 @@ public class XMLClient {
 		
 		//Sinon, n'est pas connecté
 		} else {
-			System.err.println("WARNING: Le client n'est pas connecté au serveur !");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -195,7 +195,7 @@ public class XMLClient {
 		
 		//Sinon, non connecté
 		} else {
-			System.err.println("WARNING: Client non conecté au serveur !");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -229,7 +229,7 @@ public class XMLClient {
 		
 		//Sinon, non connecté
 		} else {
-			System.err.println("WARNING: Client non conecté au serveur !");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -277,7 +277,7 @@ public class XMLClient {
 		
 		//Sinon, non connecté
 		} else {
-			System.err.println("WARNING: Client non conecté au serveur !");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -311,8 +311,118 @@ public class XMLClient {
 		
 		//Sinon, non connecté
 		} else {
-			System.err.println("WARNING: Client non conecté au serveur !");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
+		}
+	}
+	
+	/**
+	 * Diffuser un programme sur un canal
+	 * @param String idProg
+	 * @param String idCanal
+	 * @return boolean
+	 */
+	public boolean diffuserProgramme(String idProg, String idCanal) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Diffusion du programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(idProg);
+				params.addElement(idCanal);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.diffuserProgramme", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Planifier un programme sur un canal
+	 * @param String idProg
+	 * @param String idCanal
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String heure
+	 * @param String minute
+	 * @param String seconde 
+	 * @return boolean
+	 */
+	public boolean planifierProgramme(String idProg, String idCanal, String jour, String mois, String annee, String heure, String minute, String seconde) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Planification du programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(idProg);
+				params.addElement(idCanal);
+				params.addElement(jour);
+				params.addElement(mois);
+				params.addElement(annee);
+				params.addElement(heure);
+				params.addElement(minute);
+				params.addElement(seconde);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.planifierProgramme", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Ecouter un canal
+	 * @param String idCanal
+	 * @return String
+	 */
+	public String ecouterCanal(String idCanal) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Ecoute d'un canal...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(idCanal);
+				
+				// Adresse la requête et affiche les résultats
+				return (String)clientXML.execute("Systeme.ecouterCanal", params);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
 		}
 	}
 }

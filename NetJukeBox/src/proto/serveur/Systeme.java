@@ -403,9 +403,97 @@ public class Systeme {
 		return Boolean.toString(false);
 	}
 	
+	/**
+	 * Planifier un programme sur un canal
+	 * @param String idProg
+	 * @param String idCanal
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String heure
+	 * @param String minute
+	 * @param String seconde 
+	 * @return String
+	 */
+	public String planifierProgramme(String idProg, String idCanal, String jour, String mois, String annee, String heure, String minute, String seconde) {
+
+		System.out.println("Planification du programme "+idProg+" sur le canal "+idCanal);
+		
+		//On vérifie que le canal et le programme existent
+		if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+			
+			//On récupère les objets
+			Canal c = (Canal)canaux.get(idCanal);
+			Programme p = (Programme)programmes.get(idProg);
+			
+			//On planifie le programme
+			//c.planifierProgramme(p);
+			
+			System.out.println("Programme "+idProg+" planifié sur le canal "+idCanal);
+			return Boolean.toString(true);
+			
+		}
+		
+		//Sinon, ajout refusé
+		System.out.println("Le programme "+idProg+" n'a pas été palnifié sur le canal "+idCanal);
+		return Boolean.toString(false);
+	}
 	
-	public void plannifierProgramme(String idProg) {
-		// your code here
+	/**
+	 * Diffuser un programme sur un canal
+	 * @param String idProg
+	 * @param String idCanal
+	 * @return String
+	 */
+	public String diffuserProgramme(String idProg, String idCanal) {
+		
+		System.out.println("Diffusion du programme "+idProg+" sur le canal "+idCanal);
+		
+		//On vérifie que le canal et le programme existent
+		if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+			
+			//On récupère les objets
+			Canal c = (Canal)canaux.get(idCanal);
+			Programme p = (Programme)programmes.get(idProg);
+			
+			//On diffuse le programme
+			c.createRTPServer(ipStreaming, Integer.parseInt(portStreaming));
+			c.diffuserProgramme(p);
+			
+			System.out.println("Programme "+idProg+" en diffusion sur le canal "+idCanal);
+			return Boolean.toString(true);
+			
+		}
+		
+		//Sinon, ajout refusé
+		System.out.println("La diffusion du programme "+idProg+" n'a pas été lancée sur le canal "+idCanal);
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Ecouter un canal (retourne l'URL du canal)
+	 * @param String idCanal
+	 * @return String
+	 */
+	public String ecouterCanal(String idCanal) {
+		System.out.println("Ecoute du canal "+idCanal);
+		
+		//On vérifie que le canal et le programme existent
+		if (canaux.containsKey(idCanal)) {
+			
+			//On récupère l'objet canal
+			Canal c = (Canal)canaux.get(idCanal);
+			
+			System.out.println("Construction de l'url du canal "+idCanal);
+			String url = c.getUrlStreaming();
+			System.out.println("URL: "+url);
+			
+			return url;
+		}
+		
+		//Sinon, ajout refusé
+		System.out.println("Canal "+idCanal+" inconnu");
+		return null;
 	}
 
 	public void ValiderCreationCanal() {
@@ -413,10 +501,6 @@ public class Systeme {
 	}
 
 	public void PlannifierUnProgramme() {
-		// your code here
-	}
-
-	public void DiffuserProgramme(String Id_Prog) {
 		// your code here
 	}
 

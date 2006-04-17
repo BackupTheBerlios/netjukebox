@@ -34,7 +34,7 @@ public class Programme {
 	/**
 	 * Liste des documents associés au programme
 	 */
-	private Vector documents = new Vector();
+	private Hashtable documents = new Hashtable();
 	
 
 	// Initialisation du fichier archive
@@ -196,7 +196,7 @@ public class Programme {
 	 * Retourne les documents associés au programme
 	 * @return Vector of Document
 	 */
-	public Vector getDocuments() {
+	public Hashtable getDocuments() {
 		return documents;
 	}
 
@@ -220,10 +220,10 @@ public class Programme {
 		//************
 		
 		//On met à jour le vecteurs d'association
-		documents.addElement(doc.getId());
+		documents.put(doc.getId(), doc);
 		
 		//On signale au document cet ajout
-		doc.ajouterProgramme(this.id);
+		doc.ajouterProgramme(this);
 	}
 
 	/**
@@ -249,9 +249,9 @@ public class Programme {
 
 	/**
 	 * Retourne la liste des documents associés au programme
-	 * @return Vector of Document
+	 * @return Hashtable
 	 */
-	public Vector listerDocuments() {
+	public Hashtable listerDocuments() {
 		return documents;
 	}
 	
@@ -260,7 +260,7 @@ public class Programme {
 	 * @param prog
 	 */
 	public void ajouterProgramme(Programme prog) {
-		prog.listerDocuments();
+		/*prog.listerDocuments();
 		// System.out.println(Prog.v);
 		int i;
 		String donnee;
@@ -270,12 +270,12 @@ public class Programme {
 			System.out.println("Le document : " + donnee + " du programme : "
 					+ prog.getId() + " a été inséré dans le programme : "
 					+ this.id);
-		}
+		}*/
 	}
 
 	// Sauvegarde du vecteur de document si cela n'a pas déjà été fait
 	public void archiver() {
-		int i;
+		/*int i;
 		String donnee;
 		if (etat_archive == "false") {
 			etat_archive = "true";
@@ -292,7 +292,7 @@ public class Programme {
 					+ fichier_archive);
 		} else {
 			System.out.println("Erreur : le programme est deja archive");
-		}
+		}*/
 	}
 
 	/**

@@ -76,7 +76,7 @@ public class Document {
 	/**
 	 * Liste des programmes associés au document
 	 */
-	private Vector programmes = new Vector();
+	private Hashtable programmes = new Hashtable();
 
 	/**
 	 * Contrat relatif au document
@@ -324,24 +324,24 @@ public class Document {
 	}
 
 	/**
-	 * Ajoute l'id du programme qui insère le document dans sa liste
+	 * Ajoute le programme qui insère le document dans sa liste
 	 * Appel la fonction de pose d'un verrou
-	 * @param String
+	 * @param Programme prog
 	 */
-	public void ajouterProgramme(String idProg) {
-		programmes.addElement(idProg);
-		verrous.addElement(idProg);
+	public void ajouterProgramme(Programme prog) {
+		programmes.put(prog.getId(), prog);
+		verrous.addElement(prog.getId());
 		System.out.println("Document verrouillé : " + this.id);
 		System.out.println("Le compteur de verrou = " + verrous.size());
 	}
 
 	/**
-	 * Supprime l'id du programme qui supprime le document dans sa liste
+	 * Supprime de sa liste le programme qui supprime le document
 	 * Appel la fonction de déverrouillage
 	 * @param String
 	 */
 	public void enleverProgramme(String idProg) {
-		programmes.removeElement(idProg);
+		programmes.remove(idProg);
 		verrous.remove(idProg);
 		System.out.println("Document déverrouillé : " + this.id);
 		System.out.println("Le compteur de verrou = " + verrous.size());

@@ -6,19 +6,14 @@ import javax.media.format.*;
 import javax.media.protocol.*;
 
 public class RTPClient implements ControllerListener {
-	/**public static void main(String [] args) {
-		new RTPClient();
-	}*/
 
-	String connect;
-	public RTPClient(String connect) {
-		this.connect = connect;
-		Player p;
-		String srcUrl = "rtp://"+connect+"/audio/1";
-		System.out.println(srcUrl);
-		DataSink sink;
-		MediaLocator src = new MediaLocator(srcUrl);
+	private Player p;
+	
+	public RTPClient(String url) {
+		
+		System.out.println(url);
 		try {
+			MediaLocator src = new MediaLocator(url);
 			p = Manager.createPlayer(src);
 			p.addControllerListener(this);
 			p.start();
@@ -31,7 +26,8 @@ public class RTPClient implements ControllerListener {
 
 	public synchronized void controllerUpdate(ControllerEvent evt) {
 		if (evt instanceof EndOfMediaEvent) {
-			System.exit(0);
+			System.out.println("Fin du média");
+			p.stop();
 		}
 		else {
 			System.out.println(evt.toString());

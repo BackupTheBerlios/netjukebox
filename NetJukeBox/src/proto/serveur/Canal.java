@@ -1,6 +1,7 @@
 package proto.serveur;
 
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -183,6 +184,16 @@ public class Canal {
 // *************************************************
 	
 	/**
+	 * Retourne l'URL du canal
+	 */
+	public String getUrlStreaming() {
+		if (RTP!=null) {
+			return RTP.getUrl();
+		}
+		return null;
+	}
+	
+	/**
 	 * Création du RTPServer
 	 * @param ip
 	 * @param port
@@ -191,6 +202,15 @@ public class Canal {
 		
 		//Si le RTPServer n'existe pas, on le crée
 		if (this.RTP == null) this.RTP = new RTPServer(ip, port);
+	}
+	
+	/**
+	 * Lance la diffusion
+	 */
+	public void startDiffusion() {
+		
+		//Si le RTPServer existe, on le stoppe
+		if (this.RTP != null) this.RTP.diffuser();
 	}
 	
 	/**
@@ -220,7 +240,7 @@ public class Canal {
 	 * @return boolean
 	 */
 	public boolean estActif() {
-		return etat == "ACTIF";
+		return etat.equalsIgnoreCase("ACTIF");
 	}
 
 	/**
@@ -284,14 +304,21 @@ public class Canal {
 	 * @param Programme
 	 */
 	public void diffuserProgramme(Programme p) {        
-		p.getTitre();
+		//p.getTitre();
 		//p.diffuser();
 		System.out.println("Le programme " +  p.getTitre() + " est en cours de diffusion");
+		
+		Vector medias = new Vector();
+		Enumeration cles = p.getDocuments().keys();
+		
 		for(int i = 0; i < p.getDocuments().size(); i++) {
-			String donnee = (String)p.getDocuments().elementAt(i);
-			System.out.println("Le document : " + donnee + " a été diffusé");
+			medias.addElement(((Document)p.getDocuments().get(cles.nextElement())).getFichier());
 		}
-		//new RTPServer(Port, Prog.v);
+		
+		if (RTP!=null) {
+			RTP.programmer(medias);
+			RTP.diffuser();
+		}
 	} 
 	
 

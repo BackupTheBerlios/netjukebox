@@ -14,16 +14,12 @@ import javax.media.MediaLocator;
 import javax.media.Processor;
 import javax.media.RealizeCompleteEvent;
 import javax.media.control.TrackControl;
-import javax.media.datasink.DataSinkEvent;
-import javax.media.datasink.DataSinkListener;
-import javax.media.datasink.EndOfStreamEvent;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.DataSource;
 import javax.media.protocol.PushBufferDataSource;
 import javax.media.rtp.RTPManager;
 import javax.media.rtp.SendStream;
 import javax.media.rtp.SessionAddress;
-import javax.media.rtp.rtcp.SourceDescription;
 
 /**
  * RTP Server : serveur de streaming pour un canal
@@ -142,7 +138,21 @@ public class RTPServer implements ControllerListener {
 //***************************************************	
 	
 // METHODES DYNAMIQUES	
-//***************************************************	
+//***************************************************
+	
+	/**
+	 * Retourne l'URL
+	 */
+	public String getUrl() {
+		try {
+			String ipServeur = InetAddress.getLocalHost().getHostAddress();
+			return "rtp://"+ipServeur+":"+port+"/audio/"+piste;
+		} catch (Exception e) {
+			System.err.println("ERREUR: "+e);
+			return null;
+		}
+		
+	}
 	
 	/**
 	 * Programmer une liste de médias à diffuser
