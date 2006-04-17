@@ -1,11 +1,12 @@
 package proto.serveur;
 
+import java.sql.SQLException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import proto.serveur.*;
 
 public class TestClasses {
-	public static void main (String[] args) throws AddressException, MessagingException {
+	public static void main (String[] args) throws AddressException, MessagingException, SQLException {
 
 		Utilisateur U1 = Utilisateur.create("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
 		//new EnvoiMail("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");

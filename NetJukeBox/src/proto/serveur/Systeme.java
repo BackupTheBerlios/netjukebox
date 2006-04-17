@@ -1,5 +1,8 @@
 package proto.serveur;
 
+
+import java.sql.SQLException;
+import java.util.Hashtable;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -218,8 +221,10 @@ public class Systeme {
 	 * @param String genre
 	 * @param String fichier
 	 * @return String
+	 * @throws SQLException 
+	 * @throws NumberFormatException 
 	 */
-	public String creerDocument(String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+	public String creerDocument(String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) throws NumberFormatException, SQLException {
 
 		System.out.println("Création du document "+titre);
 		
@@ -317,8 +322,9 @@ public class Systeme {
 	 * @param String idDoc
 	 * @param String idProg
 	 * @return String
+	 * @throws SQLException 
 	 */
-	public String ajouterDocumentProgramme(String idDoc, String idProg) {
+	public String ajouterDocumentProgramme(String idDoc, String idProg) throws SQLException {
 		System.out.println("Ajout du document "+idDoc+" au programme "+idProg);
 		
 		//On vérifie que le programme et le document existent
