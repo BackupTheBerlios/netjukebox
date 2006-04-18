@@ -2,6 +2,7 @@ package proto.serveur;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -90,7 +91,8 @@ public class Canal {
 	public static Canal create(String nom, int utilmax) throws SQLException {
 		
 		String requete = "INSERT INTO Canal('" + nom + "', '" + utilmax + "');";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 		
 		System.out.println("Le Canal : " + nom + " a été créé");
 		
@@ -108,7 +110,13 @@ public class Canal {
 		
 		//On va chercher les infos depuis la base, en partant d'un nom
 		String requete = "SELECT * FROM Canal WHERE nom = '" + nom + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 		
 		if (nom.equalsIgnoreCase("classic")) {
 			//On retourne un objet canal configuré
@@ -130,7 +138,13 @@ public class Canal {
 		
 		//On va chercher les infos depuis la base, en partant d'un id
 		String requete = "SELECT * FROM Canal WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 		
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet canal configuré
@@ -152,7 +166,13 @@ public class Canal {
 		Hashtable canaux = new Hashtable();
 		
 		String requete = "SELECT * FROM Canal;";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 		
 		//Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
 		canaux.put("1", Canal.getById("1"));
@@ -170,8 +190,9 @@ public class Canal {
 	public static boolean deleteById(String id) throws SQLException {
 		
 		//On supprime le canal de la base, en partant d'un id
-		String requete = "DELTE * FROM Canal WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		String requete = "DELETE * FROM Canal WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
@@ -361,11 +382,13 @@ public class Canal {
 	
 	public void setNom(String id, String nom) throws SQLException {
 		String requete = "UPDATE Canal SET nom = '" + nom + "' WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 	}
 	
 	public void setUtilMax(String id, int utilmax) throws SQLException {
 		String requete = "UPDATE Canal SET utilmax = '" + utilmax + "' WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 	}
 }

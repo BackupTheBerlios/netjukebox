@@ -1,6 +1,7 @@
 package proto.serveur;
 
 import java.sql.SQLException;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -72,7 +73,8 @@ public class Programme {
 	public static Programme create(String titre, String thematique) throws SQLException {
 		
 		String requete = "INSERT INTO Programme('" + titre + "', '" + thematique + "');";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 		
 		return Programme.getByTitre(titre);
 	}
@@ -86,7 +88,13 @@ public class Programme {
 	public static Programme getByTitre(String titre) throws SQLException {
 		
 		String requete = "SELECT * FROM Programme WHERE titre = '" + titre + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 		
 		if (titre.equalsIgnoreCase("classic")) {
 			//On retourne un objet programme configuré
@@ -106,8 +114,14 @@ public class Programme {
 	public static Programme getById(String id) throws SQLException {
 		
 		String requete = "SELECT * FROM Programme WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
 
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
+		
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet programme configuré
 			return new Programme("1", "classic", "Musique classique");
@@ -129,7 +143,13 @@ public class Programme {
 		
 		//On va chercher dans la base la liste des id de tous les programmes
 		String requete = "SELECT id FROM Programme;";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 		
 		//Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		programmes.put("1", Programme.getById("1"));
@@ -148,7 +168,8 @@ public class Programme {
 		
 		//On supprime le programme de la base, en partant d'un id
 		String requete = "DELETE * FROM Programme WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
@@ -383,12 +404,14 @@ public class Programme {
 	
 	public void setTitre(String id, String titre) throws SQLException {
 		String requete = "UPDATE Programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 	}
 	
 	public void setUtilMax(String id, String thematique) throws SQLException {
 		String requete = "UPDATE Programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
-		new Jdbc(requete);
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 	}
 	
 	
