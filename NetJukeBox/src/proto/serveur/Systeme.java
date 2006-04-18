@@ -61,8 +61,9 @@ public class Systeme {
 	
 	/**
 	 * Constructeur
+	 * @throws SQLException 
 	 */
-	public Systeme(String ipStreaming, String portStreaming) {
+	public Systeme(String ipStreaming, String portStreaming) throws SQLException {
 		this.ipStreaming = ipStreaming;
 		this.portStreaming = portStreaming;
 		
@@ -302,8 +303,9 @@ public class Systeme {
 	 * @param String titre
 	 * @param String thematique
 	 * @return String
+	 * @throws SQLException 
 	 */
-	public String creerProgramme(String titre, String thematique) {
+	public String creerProgramme(String titre, String thematique) throws SQLException {
 
 		System.out.println("Création du programme "+titre);
 		
@@ -394,8 +396,10 @@ public class Systeme {
 	 * @param String nom
 	 * @param String utilMax
 	 * @return String
+	 * @throws SQLException 
+	 * @throws NumberFormatException 
 	 */
-	public String creerCanal(String nom, String utilMax) {
+	public String creerCanal(String nom, String utilMax) throws NumberFormatException, SQLException {
 
 		System.out.println("Création du canal "+nom);
 		
