@@ -3,8 +3,7 @@ package proto.serveur;
 
 import java.sql.SQLException;
 import java.util.Hashtable;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.prefs.Preferences;
 
 /**
  * Classe contenant la logique principale du serveur principal
@@ -55,6 +54,11 @@ public class Systeme {
 	 * Connexion à la base de données
 	 */
 	private Jdbc base;
+	
+	/**
+	 * Préférences
+	 */
+	private Preferences prefs;
 
 // CONSTRUCTEUR
 //************************************************************
@@ -63,13 +67,23 @@ public class Systeme {
 	 * Constructeur
 	 * @throws SQLException 
 	 */
-	public Systeme(String ipStreaming, String portStreaming) throws SQLException {
-		this.ipStreaming = ipStreaming;
-		this.portStreaming = portStreaming;
+	public Systeme(Preferences prefs) throws SQLException {
+		
+		this.prefs = prefs;
+		this.ipStreaming = prefs.node("streaming").get("ip", null);
+		this.portStreaming = prefs.node("streaming").get("port", null);
 		
 		//On initialise la connection à la base
+		String driver = prefs.node("jdbc").get("driver", null);
+		String type = prefs.node("jdbc").get("type", null);
+		String ip = prefs.node("jdbc").get("ip", null);
+		String port = prefs.node("jdbc").get("port", null);
+		String baseName = prefs.node("jdbc").get("base", null);
+		String login = prefs.node("jdbc").get("login", null);
+		String pwd = prefs.node("jdbc").get("pwd", null);
+		
 		this.base = Jdbc.getInstance();
-		base.openDB("org.postgresql.Driver", "jdbc:postgresql://127.0.0.1:5432/NetJukeBox", "postgres", "postgres");
+		base.openDB(driver, "jdbc:"+type+"://"+ip+":"+port+"/"+baseName, login, pwd);
 		
 		//On initialise les listes de canaux, programmes, documents
 		this.canaux = Canal.getAll();

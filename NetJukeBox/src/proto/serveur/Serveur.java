@@ -1,13 +1,30 @@
 package proto.serveur;
 
-import org.apache.xmlrpc.*;
+import java.io.File;
+import java.util.prefs.Preferences;
 
+import org.apache.xmlrpc.WebServer;
+import org.apache.xmlrpc.XmlRpc;
+import org.ini4j.IniFile;
+
+/**
+ * Classe d'initialisation du serveur
+ */
 public class Serveur {
-	public static void main(String[] args) {
-		if (args.length < 1) {
-			System.out.println("Usage: java serveur [portClient] [ipStreaming] [portStreaming]");
-			System.exit(-1);
-		}
+	
+	/**
+	 * Point d'entrée du serveur
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+		
+		//USAGE : java Serveur [filename.ini]
+		
+		//Fichier d'initialisation par défaut (si pas de paramètres)
+		String filename = args.length > 0 ? args[0] : "src/proto/serveur/serveur.ini";
+		Preferences prefs = new IniFile(new File(filename));
+		
 		try {
 			// Utilise le pilote Sax d'Apache Xerces
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
@@ -16,10 +33,10 @@ public class Serveur {
 			System.out.println("Démarrage du serveur XML-RPC...");
 			
 			//Creation du serveur xmlrpc
-			WebServer server = new WebServer(Integer.parseInt(args[0]));
+			WebServer server = new WebServer(Integer.parseInt(prefs.node("xmlrpc").get("port", null)));
 			
 			// Enregistre la classe du gestionnaire
-			server.addHandler("Systeme", new Systeme(args[1], args[2]));
+			server.addHandler("Systeme", new Systeme(prefs));
 			
 			//Trace dans la console
 			System.out.println("Port du serveur XMLRPC : " + args[0]);
