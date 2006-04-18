@@ -33,13 +33,13 @@ public class TestClasses {
 		P2.ajouterDocument(D5);
 		P2.ajouterDocument(D6);
 
-		P1.AjouterProgramme(P2);
+		P1.ajouterProgramme(P2);
 
 		Programme P3 = Programme.create("TATA", "Thema");
 		Document D7 = Document.create("TitreD7", 3, "01", "07", "2010", "SourceD7", "LangueD7", "GenreD7", "FichierD7");
 		P3.ajouterDocument(D7);
 
-		P1.AjouterProgramme(P3);
+		P1.ajouterProgramme(P3);
 
 		P1.archiver();
 		P1.archiver();
