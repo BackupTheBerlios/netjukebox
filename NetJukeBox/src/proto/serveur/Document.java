@@ -2,6 +2,7 @@ package proto.serveur;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -159,8 +160,14 @@ public class Document {
 	public static Document getByTitre(String titre) /*throws SQLException*/ {
 		
 		String requete = "SELECT * FROM Document WHERE titre = '" + titre + "';";
+
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 		
 		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
 
@@ -184,8 +191,14 @@ public class Document {
 	public static Document getById(String id) /*throws SQLException*/ {
 		
 		String requete = "SELECT * FROM Document WHERE id_doc = '" + id + "';";
+
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 
 		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
 
@@ -212,9 +225,15 @@ public class Document {
 		Hashtable documents = new Hashtable();
 		
 		//On va chercher dans la liste des id de tous les documents
-		String requete = "SELECT DISTINCT id_doc FROM Document;";
+
+		String requete = "SELECT id FROM Document;";
 		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete); 
+		Vector resultats = base.executeQuery(requete);
+		
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			System.out.println(dico.get("nom"));
+		}
 		
 		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
 
@@ -232,14 +251,14 @@ public class Document {
 	 * Détruit les infos d'un document contenues dans la base
 	 * @param id
 	 * @return
+	 * @throws SQLException 
 	 */
-	public static boolean deleteById(String id) {
+	public static boolean deleteById(String id) throws SQLException {
 		
 		//On supprime le document de la base, en partant d'un id
-		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "DELETE * FROM Document WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
@@ -251,8 +270,9 @@ public class Document {
 	/**
 	 * Détruit le document et ses infos en base
 	 * @return boolean
+	 * @throws SQLException 
 	 */
-	public boolean supprimer() {
+	public boolean supprimer() throws SQLException {
 		
 		//On supprime les infos de la base
 		return Document.deleteById(this.id);
@@ -381,10 +401,59 @@ public class Document {
 		return TD.d;
 	}
 	
+	public void setFichier(String id, String fichier) throws SQLException {
+		String requete = "UPDATE Document SET fichier = '" + fichier + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
 	
+	public void setGenre(String id, String genre) throws SQLException {
+		String requete = "UPDATE Document SET genre = '" + genre + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
 	
+	public void setLangue(String id, String langue) throws SQLException {
+		String requete = "UPDATE Document SET langue = '" + langue + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
 	
+	public void setSource(String id, String source) throws SQLException {
+		String requete = "UPDATE Document SET source = '" + source + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
 	
+	public void setAnnee(String id, String annee) throws SQLException {
+		String requete = "UPDATE Document SET annee = '" + annee + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
+	
+	public void setMois(String id, String mois) throws SQLException {
+		String requete = "UPDATE Document SET mois = '" + mois + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
+	
+	public void setJour(String id, String jour) throws SQLException {
+		String requete = "UPDATE Document SET jour = '" + jour + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
+	
+	public void setTitre(String id, String titre) throws SQLException {
+		String requete = "UPDATE Document SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
+	
+	public void setDuree(String id, int duree) throws SQLException {
+		String requete = "UPDATE Document SET duree = '" + duree + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
+	}
 	
 	/**
 	 * Attribue un nom au fichier
