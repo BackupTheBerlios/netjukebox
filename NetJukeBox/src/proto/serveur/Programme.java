@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -66,12 +67,12 @@ public class Programme {
 	 * @param String titre
 	 * @param String thematique
 	 * @return Programme
+	 * @throws SQLException 
 	 */
-	public static Programme create(String titre, String thematique) {
+	public static Programme create(String titre, String thematique) throws SQLException {
 		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "INSERT INTO Programme('" + titre + "', '" + thematique + "');";
+		new Jdbc(requete);
 		
 		return Programme.getByTitre(titre);
 	}
@@ -80,12 +81,12 @@ public class Programme {
 	 * Insancie un objet programme après avoir récupéré ces infos depuis la base à partir de son titre
 	 * @param String titre
 	 * @return Programme
+	 * @throws SQLException 
 	 */
-	public static Programme getByTitre(String titre) {
+	public static Programme getByTitre(String titre) throws SQLException {
 		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT * FROM Programme WHERE titre = '" + titre + "';";
+		new Jdbc(requete);
 		
 		if (titre.equalsIgnoreCase("classic")) {
 			//On retourne un objet programme configuré
@@ -100,12 +101,12 @@ public class Programme {
 	 * Insancie un objet programme après avoir récupéré ces infos depuis la base à partir de son id
 	 * @param String id
 	 * @return Programme
+	 * @throws SQLException 
 	 */
-	public static Programme getById(String id) {
+	public static Programme getById(String id) throws SQLException {
 		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT * FROM Programme WHERE id = '" + id + "';";
+		new Jdbc(requete);
 
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet programme configuré
@@ -119,16 +120,16 @@ public class Programme {
 	/**
 	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
 	 * @return Hashtable
+	 * @throws SQLException 
 	 */
-	public static Hashtable getAll() {
+	public static Hashtable getAll() throws SQLException {
 		
 		//On crée un vecteur pour contenir les objets programmes instanciés
 		Hashtable programmes = new Hashtable();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT id FROM Programme;";
+		new Jdbc(requete);
 		
 		//Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		programmes.put("1", Programme.getById("1"));
@@ -141,14 +142,13 @@ public class Programme {
 	 * Détruit les infos d'un programme contenues dans la base
 	 * @param id
 	 * @return
+	 * @throws SQLException 
 	 */
-	public static boolean deleteById(String id) {
+	public static boolean deleteById(String id) throws SQLException {
 		
 		//On supprime le programme de la base, en partant d'un id
-		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "DELETE * FROM Programme WHERE id = '" + id + "';";
+		new Jdbc(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
@@ -161,8 +161,9 @@ public class Programme {
 	/**
 	 * Détruit le programme et ses infos en base
 	 * @return boolean
+	 * @throws SQLException 
 	 */
-	public boolean supprimer() {
+	public boolean supprimer() throws SQLException {
 		
 		//On supprime les infos de la base
 		return Programme.deleteById(this.id);
@@ -349,10 +350,6 @@ public class Programme {
 		// your code here
 	}
 
-	public void SetTitre(String Titre) {
-		// your code here
-	}
-
 	public void RetraitProgramme(String Id_Prog) {
 		// your code here
 	}
@@ -383,4 +380,16 @@ public class Programme {
 		// your code here
 		return false;
 	}
+	
+	public void setTitre(String id, String titre) throws SQLException {
+		String requete = "UPDATE Programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		new Jdbc(requete);
+	}
+	
+	public void setUtilMax(String id, String thematique) throws SQLException {
+		String requete = "UPDATE Programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
+		new Jdbc(requete);
+	}
+	
+	
 }

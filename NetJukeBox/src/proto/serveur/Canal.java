@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -84,12 +85,12 @@ public class Canal {
 	 * @param String nom
 	 * @param int utilmax
 	 * @return Canal
+	 * @throws SQLException 
 	 */
-	public static Canal create(String nom, int utilmax) {
+	public static Canal create(String nom, int utilmax) throws SQLException {
 		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "INSERT INTO Canal('" + nom + "', '" + utilmax + "');";
+		new Jdbc(requete);
 		
 		System.out.println("Le Canal : " + nom + " a été créé");
 		
@@ -101,14 +102,13 @@ public class Canal {
 	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un nom
 	 * @param String nom
 	 * @return Canal
+	 * @throws SQLException 
 	 */
-	public static Canal getByNom(String nom) {
+	public static Canal getByNom(String nom) throws SQLException {
 		
 		//On va chercher les infos depuis la base, en partant d'un nom
-		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT * FROM Canal WHERE nom = '" + nom + "';";
+		new Jdbc(requete);
 		
 		if (nom.equalsIgnoreCase("classic")) {
 			//On retourne un objet canal configuré
@@ -124,14 +124,13 @@ public class Canal {
 	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un id
 	 * @param String id
 	 * @return Canal
+	 * @throws SQLException 
 	 */
-	public static Canal getById(String id) {
+	public static Canal getById(String id) throws SQLException {
 		
 		//On va chercher les infos depuis la base, en partant d'un id
-		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT * FROM Canal WHERE id = '" + id + "';";
+		new Jdbc(requete);
 		
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet canal configuré
@@ -145,16 +144,15 @@ public class Canal {
 	/**
 	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
 	 * @return Hashtable
+	 * @throws SQLException 
 	 */
-	public static Hashtable getAll() {
+	public static Hashtable getAll() throws SQLException {
 		
 		//On crée un vecteur pour contenir les objets canaux instanciés
 		Hashtable canaux = new Hashtable();
 		
-		//On va chercher dans la base la liste des id de tous les canaux
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT * FROM Canal;";
+		new Jdbc(requete);
 		
 		//Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
 		canaux.put("1", Canal.getById("1"));
@@ -167,14 +165,13 @@ public class Canal {
 	 * Détruit les infos d'un canal contenues dans la base
 	 * @param id
 	 * @return
+	 * @throws SQLException 
 	 */
-	public static boolean deleteById(String id) {
+	public static boolean deleteById(String id) throws SQLException {
 		
 		//On supprime le canal de la base, en partant d'un id
-		
-		//************
-		// => JDBC <=
-		//************
+		String requete = "DELTE * FROM Canal WHERE id = '" + id + "';";
+		new Jdbc(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
@@ -225,8 +222,9 @@ public class Canal {
 	/**
 	 * Détruit le canal et ses infos en base
 	 * @return boolean
+	 * @throws SQLException 
 	 */
-	public boolean supprimer() {
+	public boolean supprimer() throws SQLException {
 		
 		//On stoppe la diffusion éventuelle
 		this.stopDiffusion();
@@ -359,5 +357,15 @@ public class Canal {
 	 */
 	public void relanceDiffusionCanal(String idCanal) {
 		// your code here
+	}
+	
+	public void setNom(String id, String nom) throws SQLException {
+		String requete = "UPDATE Canal SET nom = '" + nom + "' WHERE id = '" + id + "';";
+		new Jdbc(requete);
+	}
+	
+	public void setUtilMax(String id, int utilmax) throws SQLException {
+		String requete = "UPDATE Canal SET utilmax = '" + utilmax + "' WHERE id = '" + id + "';";
+		new Jdbc(requete);
 	}
 }
