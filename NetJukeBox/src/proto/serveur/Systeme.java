@@ -50,6 +50,11 @@ public class Systeme {
 	 * Programmes
 	 */
 	private Hashtable programmes = new Hashtable();
+	
+	/**
+	 * Connexion à la base de données
+	 */
+	private Jdbc base;
 
 // CONSTRUCTEUR
 //************************************************************
@@ -60,6 +65,10 @@ public class Systeme {
 	public Systeme(String ipStreaming, String portStreaming) {
 		this.ipStreaming = ipStreaming;
 		this.portStreaming = portStreaming;
+		
+		//On initialise la connection à la base
+		this.base = Jdbc.getInstance();
+		base.openDB("org.postgresql.Driver", "jdbc:postgresql://127.0.0.1:5432/NetJukeBox", "postgres", "postgres");
 		
 		//On initialise les listes de canaux, programmes, documents
 		this.canaux = Canal.getAll();

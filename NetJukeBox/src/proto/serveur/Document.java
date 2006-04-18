@@ -84,6 +84,7 @@ public class Document {
 	 */
 	private Contrat contrat;
 	
+	
 // CONSTRUCTEUR
 //********************************************
 	
@@ -135,13 +136,15 @@ public class Document {
 	 */
 	public static Document create(String titre, int duree, String jour,
 			String mois, String annee, String source, String langue, String genre,
-			String fichier) throws SQLException {
+			String fichier) /*throws SQLException*/ {
 		
 		//On crée le document dans la base
 		String requete = "INSERT INTO Document('" + titre + "', '" + duree + "', '" + jour + 
 		"', '" + mois + "', '" + annee + "', '" + source + "', '" + langue + "', '" + genre +
 		"', '" + fichier + "');"; 
-		new Jdbc(requete);
+		
+		Jdbc base = Jdbc.getInstance();
+		base.executeUpdate(requete);
 		
 		//On retourne ensuite un objet pour ce document
 		return Document.getByTitre(titre);
@@ -153,15 +156,20 @@ public class Document {
 	 * @return Document
 	 * @throws SQLException 
 	 */
-	public static Document getByTitre(String titre) throws SQLException {
+	public static Document getByTitre(String titre) /*throws SQLException*/ {
 		
 		String requete = "SELECT * FROM Document WHERE titre = '" + titre + "';";
-		new Jdbc(requete); 
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
 
+		//----------- TEST SANS JDBC---------------------
 		if (titre.equalsIgnoreCase("Rhapsody in Blue")) {
 			//On retourne un objet document configuré
 			return new Document("1", "Rhapsody in Blue", 1100, "01", "01", "2006", "Source", "FR", "classic", "file://home/philippe/njb/1.mp3");
 		}
+		//-----------------------------------------------
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -173,16 +181,20 @@ public class Document {
 	 * @return Document
 	 * @throws SQLException 
 	 */
-	public static Document getById(String id) throws SQLException {
+	public static Document getById(String id) /*throws SQLException*/ {
 		
 		String requete = "SELECT * FROM Document WHERE id_doc = '" + id + "';";
-		new Jdbc(requete); 
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
 
-		
+		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
+
+		//----------- TEST SANS JDBC---------------------
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet document configuré
 			return new Document("1", "Rhapsody in Blue", 1100, "01", "01", "2006", "Source", "FR", "classic", "file://home/philippe/njb/1.mp3");
 		}
+		//-----------------------------------------------
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -195,17 +207,22 @@ public class Document {
 	 * @throws SQLException 
 	 */
 
-	public static Hashtable getAll() throws SQLException {		
+	public static Hashtable getAll() /*throws SQLException*/ {		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable documents = new Hashtable();
 		
 		//On va chercher dans la liste des id de tous les documents
-		//************
-		// => JDBC <=
-		//************
+		String requete = "SELECT DISTINCT id_doc FROM Document;";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete); 
+		
+		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
+
+		//----------- TEST SANS JDBC---------------------
 		
 		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
 		documents.put("1", Document.getById("1"));
+		//-----------------------------------------------
 		
 		//On retourne le vecteur contenant les objets documents instanciés
 		return documents;
