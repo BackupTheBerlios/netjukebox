@@ -137,7 +137,7 @@ public class Document {
 	 */
 	public static Document create(String titre, int duree, String jour,
 			String mois, String annee, String source, String langue, String genre,
-			String fichier) /*throws SQLException*/ {
+			String fichier) throws SQLException {
 		
 		//On crée le document dans la base
 		String requete = "INSERT INTO Document('" + titre + "', '" + duree + "', '" + jour + 
@@ -145,10 +145,16 @@ public class Document {
 		"', '" + fichier + "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
 		
-		//On retourne ensuite un objet pour ce document
-		return Document.getByTitre(titre);
+		//Si l'insertion s'est bien déroulée
+		if (nbRows>0) {
+			//On retourne ensuite un objet pour ce document
+			return Document.getByTitre(titre);
+		}
+		
+		//Sinon on retourne un objet vide
+		return null;
 	}
 	
 	/**
@@ -157,26 +163,43 @@ public class Document {
 	 * @return Document
 	 * @throws SQLException 
 	 */
-	public static Document getByTitre(String titre) /*throws SQLException*/ {
+	public static Document getByTitre(String titre) throws SQLException {
 		
 		String requete = "SELECT * FROM Document WHERE titre = '" + titre + "';";
 
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+		//S'il y a un resultat
+		if (resultats != null) {
+			
+			//On prend le 1er élément
+			Dictionary dico = (Dictionary) resultats.firstElement();
+			
+			//On mappe les champs
+			String id = (String)dico.get("id");
+			String titreDoc = (String)dico.get("titre");
+			int duree = Integer.parseInt((String)dico.get("duree"));
+			String jour = (String)dico.get("jour");
+			String mois = (String)dico.get("mois");
+			String annee = (String)dico.get("annee");
+			String source = (String)dico.get("source");
+			String langue = (String)dico.get("langue");
+			String genre = (String)dico.get("genre");
+			String fichier = (String)dico.get("fichier");
+			
+			//On retourne l'objet
+			return new Document(id, titreDoc, duree, jour, mois, annee, source, langue, genre, fichier);
 		}
-		
-		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
 
+		/*
 		//----------- TEST SANS JDBC---------------------
 		if (titre.equalsIgnoreCase("Rhapsody in Blue")) {
 			//On retourne un objet document configuré
 			return new Document("1", "Rhapsody in Blue", 1100, "01", "01", "2006", "Source", "FR", "classic", "file://home/philippe/njb/1.mp3");
 		}
 		//-----------------------------------------------
+		*/
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -188,26 +211,43 @@ public class Document {
 	 * @return Document
 	 * @throws SQLException 
 	 */
-	public static Document getById(String id) /*throws SQLException*/ {
+	public static Document getById(String id) throws SQLException {
 		
 		String requete = "SELECT * FROM Document WHERE id_doc = '" + id + "';";
 
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+		//S'il y a un resultat
+		if (resultats != null) {
+			
+			//On prend le 1er élément
+			Dictionary dico = (Dictionary) resultats.firstElement();
+			
+			//On mappe les champs
+			String idDoc = (String)dico.get("id");
+			String titre = (String)dico.get("titre");
+			int duree = Integer.parseInt((String)dico.get("duree"));
+			String jour = (String)dico.get("jour");
+			String mois = (String)dico.get("mois");
+			String annee = (String)dico.get("annee");
+			String source = (String)dico.get("source");
+			String langue = (String)dico.get("langue");
+			String genre = (String)dico.get("genre");
+			String fichier = (String)dico.get("fichier");
+			
+			//On retourne l'objet
+			return new Document(idDoc, titre, duree, jour, mois, annee, source, langue, genre, fichier);
 		}
 
-		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
-
+		/*
 		//----------- TEST SANS JDBC---------------------
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet document configuré
 			return new Document("1", "Rhapsody in Blue", 1100, "01", "01", "2006", "Source", "FR", "classic", "file://home/philippe/njb/1.mp3");
 		}
 		//-----------------------------------------------
+		*/
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -220,28 +260,27 @@ public class Document {
 	 * @throws SQLException 
 	 */
 
-	public static Hashtable getAll() /*throws SQLException*/ {		
+	public static Hashtable getAll() throws SQLException {		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable documents = new Hashtable();
 		
 		//On va chercher dans la liste des id de tous les documents
-
 		String requete = "SELECT id FROM Document;";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
+		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+			String id = (String)dico.get("id");
+			documents.put(id, Document.getById(id));
 		}
-		
-		// TRAITER LE VECTEUR ET CREER UN OBJET POUR CHAQUE LIGNE
 
+		/*
 		//----------- TEST SANS JDBC---------------------
-		
-		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
 		documents.put("1", Document.getById("1"));
 		//-----------------------------------------------
+		*/
 		
 		//On retourne le vecteur contenant les objets documents instanciés
 		return documents;
@@ -258,10 +297,10 @@ public class Document {
 		//On supprime le document de la base, en partant d'un id
 		String requete = "DELETE * FROM Document WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
-		return true;
+		return nbRows>0;
 	}
 
 // METHODES DYNAMIQUES
@@ -394,65 +433,228 @@ public class Document {
 	 * Retourne la date de création du document
 	 * @return Date
 	 */
-	public Date GetDate_Creation() {
-		String Date = jour + "-"+ mois + "-" + annee;
-		TransformeDate TD = new TransformeDate(Date);
+	public Date getDateCreation() {
+		String date = jour + "-"+ mois + "-" + annee;
+		TransformeDate TD = new TransformeDate(date);
 		System.out.println(TD.d);
 		return TD.d;
 	}
 	
-	public void setFichier(String id, String fichier) throws SQLException {
+	/**
+	 * Met à jour l'attribut fichier
+	 * @param String fichier
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setFichier(String fichier) throws SQLException {
 		String requete = "UPDATE Document SET fichier = '" + fichier + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.fichier = fichier;
+		}
+		return nbRows>0;
 	}
 	
-	public void setGenre(String id, String genre) throws SQLException {
+	/**
+	 * Met à jour l'attribut genre
+	 * @param genre
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setGenre(String genre) throws SQLException {
 		String requete = "UPDATE Document SET genre = '" + genre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.genre = genre;
+		}
+		return nbRows>0;
 	}
 	
-	public void setLangue(String id, String langue) throws SQLException {
+	/**
+	 * Met à jour l'attribut langue
+	 * @param String langue
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setLangue(String langue) throws SQLException {
 		String requete = "UPDATE Document SET langue = '" + langue + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.langue = langue;
+		}
+		return nbRows>0;
 	}
 	
-	public void setSource(String id, String source) throws SQLException {
+	/**
+	 * Met à jour l'attribut source
+	 * @param String source
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setSource(String source) throws SQLException {
 		String requete = "UPDATE Document SET source = '" + source + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.source = source;
+		}
+		return nbRows>0;
 	}
 	
-	public void setAnnee(String id, String annee) throws SQLException {
+	/**
+	 * Met à jour l'attribut annee
+	 * @param String annee
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setAnnee(String annee) throws SQLException {
 		String requete = "UPDATE Document SET annee = '" + annee + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.annee = annee;
+		}
+		return nbRows>0;
 	}
 	
-	public void setMois(String id, String mois) throws SQLException {
+	/**
+	 * Met à jour l'attibut mois
+	 * @param String mois
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setMois(String mois) throws SQLException {
 		String requete = "UPDATE Document SET mois = '" + mois + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.mois = mois;
+		}
+		return nbRows>0;
 	}
 	
-	public void setJour(String id, String jour) throws SQLException {
+	/**
+	 * Met à jour l'attribut jour
+	 * @param String jour
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setJour(String jour) throws SQLException {
 		String requete = "UPDATE Document SET jour = '" + jour + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.jour = jour;
+		}
+		return nbRows>0;
 	}
 	
-	public void setTitre(String id, String titre) throws SQLException {
+	/**
+	 * Met à jour l'attribut titre
+	 * @param String titre
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setTitre(String titre) throws SQLException {
 		String requete = "UPDATE Document SET titre = '" + titre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.titre = titre;
+		}
+		return nbRows>0;
 	}
 	
-	public void setDuree(String id, int duree) throws SQLException {
+	/**
+	 * Met à jour l'attribut durée
+	 * @param String duree
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setDuree(int duree) throws SQLException {
 		String requete = "UPDATE Document SET duree = '" + duree + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.duree = duree;
+		}
+		return nbRows>0;
+	}
+	
+	/**
+	 * Modifie les attributs
+	 * @param String titre
+	 * @param int duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return boolean
+	 */
+	public boolean modifier(String titre, int duree, String jour,
+			String mois, String annee, String source, String langue, String genre,
+			String fichier) {
+		
+		String requete = "UPDATE Document SET titre = '" + titre + ", duree = '" + duree + "', jour = '"+ jour +
+			"', mois = '"+ mois +"', annee = '" + annee + "', source = '" + source + "', langue = '" + langue +
+			"', genre = '" + langue + "', fichier = '" + fichier + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.titre = titre;
+			this.jour = jour;
+			this.mois = mois;
+			this.annee = annee;
+			this.source = source;
+			this.langue = langue;
+			this.genre = genre;
+			this.fichier = fichier;
+			this.duree = duree;
+		}
+		return nbRows>0;
+	}
+
+	/**
+	 * Vérifie l'état EN LECTURE
+	 * @return boolean
+	 */
+	public boolean enLecture() {
+		return etat.equalsIgnoreCase("LECTURE");
+	}
+
+	/**
+	 * Vérifie l'état PROFRAMME
+	 * @return boolean
+	 */
+	public boolean estProgramme() {
+		return etat.equalsIgnoreCase("PROGRAMME");
 	}
 	
 	/**
@@ -461,49 +663,6 @@ public class Document {
 	 */
 	public void nommerFichier(String fichier) {
 		// your code here
-	}
-	
-	/**
-	 * Insère les informations du document
-	 * @param id
-	 * @param titre
-	 * @param dateCreation
-	 * @param source
-	 * @param langue
-	 * @param genre
-	 */
-	public void insertionInfos(String id, String Ttitre,
-			java.util.Date dateCreation, String source, String langue,
-			String genre) {
-		
-		// your code here
-	}
-
-	public boolean enLecture(String Etat) {
-		// your code here
-		return false;
-	}
-
-	public boolean estProgramme(String Etat) {
-		// your code here
-		return false;
-	}
-
-
-	public boolean modifier(String Id_Doc, String Titre,
-			java.util.Date Date_Creation, String Source, String Langue,
-			String Genre) {
-		
-		// your code here
-		return false;
-	}
-
-	public boolean majInfos(String Id_Doc, String Titre,
-			java.util.Date Date_Creation, String Source, String Langue,
-			String Genre) {
-		
-		// your code here
-		return false;
 	}
 
 	public void selectionner() {

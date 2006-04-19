@@ -49,8 +49,8 @@ public class TestClasses {
 		D2.compterVerrouProgramme();
 		D2.getProgrammesArchives();
 	
-		D1.GetDate_Creation();
-		D7.GetDate_Creation();
+		D1.getDateCreation();
+		D7.getDateCreation();
 		
 		Canal C1 = Canal.create("Rock", 20);
 		C1.createRTPServer("192.168.1.255", 2224);
