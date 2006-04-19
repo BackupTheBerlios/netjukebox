@@ -74,9 +74,16 @@ public class Programme {
 		
 		String requete = "INSERT INTO Programme('" + titre + "', '" + thematique + "');";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
 		
-		return Programme.getByTitre(titre);
+		//Si l'insertion s'est bien déroulée
+		if (nbRows>0) {
+			//On retourne ensuite un objet pour ce programme
+			return Programme.getByTitre(titre);
+		}
+		
+		//Sinon, retourne un objet vide
+		return null;
 	}
 	
 	/**
@@ -91,15 +98,29 @@ public class Programme {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+		// S'il y a un resultat
+		if (resultats != null) {
+			
+			//On prend le 1er élément
+			Dictionary dico = (Dictionary) resultats.firstElement();
+			
+			//On mappe les champs
+			String id = (String)dico.get("id");
+			String titreProg = (String)dico.get("titre");
+			String thematique = (String)dico.get("thematique");
+			
+			//On retourne l'objet
+			return new Programme(id, titreProg, thematique);
 		}
 		
+		/*
+		//---------------- TEST SANS JDBC --------------------
 		if (titre.equalsIgnoreCase("classic")) {
 			//On retourne un objet programme configuré
 			return new Programme("1", "classic", "Musique classique");
 		}
+		//----------------------------------------------------
+		*/
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -117,15 +138,29 @@ public class Programme {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+		// S'il y a un resultat
+		if (resultats != null) {
+			
+			//On prend le 1er élément
+			Dictionary dico = (Dictionary) resultats.firstElement();
+			
+			//On mappe les champs
+			String idProg = (String)dico.get("id");
+			String titre = (String)dico.get("titre");
+			String thematique = (String)dico.get("thematique");
+			
+			//On retourne l'objet
+			return new Programme(idProg, titre, thematique);
 		}
 		
+		/*
+		//---------------- TEST SANS JDBC --------------------
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet programme configuré
 			return new Programme("1", "classic", "Musique classique");
 		}
+		//----------------------------------------------------
+		*/
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -146,13 +181,18 @@ public class Programme {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
+		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+			String id = (String)dico.get("id");
+			programmes.put(id, Programme.getById(id));
 		}
 		
-		//Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
+		/*
+		//---------------- TEST SANS JDBC --------------------
 		programmes.put("1", Programme.getById("1"));
+		//----------------------------------------------------
+		*/
 		
 		//On retourne le vecteur contenant les objets programmes instanciés
 		return programmes;
@@ -169,10 +209,10 @@ public class Programme {
 		//On supprime le programme de la base, en partant d'un id
 		String requete = "DELETE * FROM Programme WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
-		return true;
+		return nbRows>0;
 	}
 	
 	
@@ -230,6 +270,42 @@ public class Programme {
 		return etat;
 	}
 
+	/**
+	 * Met à jour l'attribut titre
+	 * @param String titre
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setTitre(String titre) throws SQLException {
+		String requete = "UPDATE Programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.titre = titre;
+		}
+		return nbRows>0;
+	}
+	
+	/**
+	 * Met à jour l'attribut thematique
+	 * @param String thematique
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setThematique(String thematique) throws SQLException {
+		String requete = "UPDATE Programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.thematique = thematique;
+		}
+		return nbRows>0;
+	}
+	
 	/**
 	 * Ajoute un document au programme
 	 * @param Document doc
@@ -326,38 +402,9 @@ public class Programme {
 	 *System.out.println("Document déverrouillé : " + Id_Doc);
 	 *}
 	 */
-
-	// Modification des informations d'un programme
-	public void InsertionInfos(String Id_Prog, String Titre, String Thematique) {
-		// your code here
-	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	// A quoi ça sert ???
 	///// ==> public Diffusion dIFFUSION; ==> A DECOMMENTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-	public java.util.Collection dOCUMENT = new java.util.TreeSet();
-
-	public Programme PROGRAMME;
 
 	public boolean enDiffusion() {
 		return false;
@@ -401,18 +448,5 @@ public class Programme {
 		// your code here
 		return false;
 	}
-	
-	public void setTitre(String id, String titre) throws SQLException {
-		String requete = "UPDATE Programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
-	}
-	
-	public void setUtilMax(String id, String thematique) throws SQLException {
-		String requete = "UPDATE Programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
-	}
-	
-	
+
 }

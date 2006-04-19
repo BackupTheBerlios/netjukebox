@@ -92,12 +92,16 @@ public class Canal {
 		
 		String requete = "INSERT INTO Canal('" + nom + "', '" + utilmax + "');";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
 		
-		System.out.println("Le Canal : " + nom + " a été créé");
+		//Si l'insertion s'est bien déroulée
+		if (nbRows>0) {
+			//On retourne ensuite un objet pour ce canal
+			return Canal.getByNom(nom);
+		}
 		
-		//On retourne un objet avec les infos complètes issues de la base
-		return Canal.getByNom(nom);
+		//Sinon, retourne un objet vide
+		return null;
 	}
 	
 	/**
@@ -113,15 +117,29 @@ public class Canal {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+		// S'il y a un resultat
+		if (resultats != null) {
+			
+			//On prend le 1er élément
+			Dictionary dico = (Dictionary) resultats.firstElement();
+			
+			//On mappe les champs
+			String id = (String)dico.get("id");
+			String nomCanal = (String)dico.get("nom");
+			int utilMax = Integer.parseInt((String)dico.get("utilMax"));
+			
+			//On retourne l'objet
+			return new Canal(id, nomCanal, utilMax);
 		}
 		
+		/*
+		//------------ TEST SANS JDBC ---------------
 		if (nom.equalsIgnoreCase("classic")) {
 			//On retourne un objet canal configuré
 			return new Canal("1", "classic", 10);
 		}
+		//-------------------------------------------
+		*/
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -141,15 +159,29 @@ public class Canal {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+		// S'il y a un resultat
+		if (resultats != null) {
+			
+			//On prend le 1er élément
+			Dictionary dico = (Dictionary) resultats.firstElement();
+			
+			//On mappe les champs
+			String idCanal = (String)dico.get("id");
+			String nom = (String)dico.get("nom");
+			int utilMax = Integer.parseInt((String)dico.get("utilMax"));
+			
+			//On retourne l'objet
+			return new Canal(idCanal, nom, utilMax);
 		}
 		
+		/*
+		//------------ TEST SANS JDBC ---------------
 		if (id.equalsIgnoreCase("1")) {
 			//On retourne un objet canal configuré
 			return new Canal("1", "classic", 10);
 		}
+		//-------------------------------------------
+		*/
 		
 		//Sinon, on retourne un objet vide
 		return null;
@@ -169,13 +201,18 @@ public class Canal {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
+		// Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			System.out.println(dico.get("nom"));
+			String id = (String)dico.get("id");
+			canaux.put(id, Canal.getById(id));
 		}
 		
-		//Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
+		/*
+		//-------- TEST SANS JDBC -------------
 		canaux.put("1", Canal.getById("1"));
+		//-------------------------------------
+		*/
 		
 		//On retourne le vecteur contenant les objets canaux instanciés
 		return canaux;
@@ -183,8 +220,8 @@ public class Canal {
 	
 	/**
 	 * Détruit les infos d'un canal contenues dans la base
-	 * @param id
-	 * @return
+	 * @param String id
+	 * @return boolean
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) throws SQLException {
@@ -192,10 +229,10 @@ public class Canal {
 		//On supprime le canal de la base, en partant d'un id
 		String requete = "DELETE * FROM Canal WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
-		return true;
+		return nbRows>0;
 	}
 
 // METHODES DYNAMIQUES (propres à un objet, inaccessibles depuis la classe)
@@ -203,6 +240,7 @@ public class Canal {
 	
 	/**
 	 * Retourne l'URL du canal
+	 * @return String
 	 */
 	public String getUrlStreaming() {
 		if (RTP!=null) {
@@ -380,15 +418,39 @@ public class Canal {
 		// your code here
 	}
 	
-	public void setNom(String id, String nom) throws SQLException {
+	/**
+	 * Met à jour l'attribut nom
+	 * @param String nom
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setNom(String nom) throws SQLException {
 		String requete = "UPDATE Canal SET nom = '" + nom + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.nom = nom;
+		}
+		return nbRows>0;
 	}
 	
-	public void setUtilMax(String id, int utilmax) throws SQLException {
+	/**
+	 * Met à jour l'attribut utilMax
+	 * @param int utilmax
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setUtilMax(int utilmax) throws SQLException {
 		String requete = "UPDATE Canal SET utilmax = '" + utilmax + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
-		base.executeUpdate(requete);
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.utilMax = utilmax;
+		}
+		return nbRows>0;
 	}
 }
