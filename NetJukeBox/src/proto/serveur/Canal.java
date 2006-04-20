@@ -90,7 +90,7 @@ public class Canal {
 	 */
 	public static Canal create(String nom, int utilmax) throws SQLException {
 		
-		String requete = "INSERT INTO Canal('" + nom + "', '" + utilmax + "');";
+		String requete = "INSERT INTO canal ('" + nom + "', '" + utilmax + "');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -113,7 +113,7 @@ public class Canal {
 	public static Canal getByNom(String nom) throws SQLException {
 		
 		//On va chercher les infos depuis la base, en partant d'un nom
-		String requete = "SELECT * FROM Canal WHERE nom = '" + nom + "';";
+		String requete = "SELECT * FROM canal WHERE nom = '" + nom + "';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
@@ -155,7 +155,7 @@ public class Canal {
 	public static Canal getById(String id) throws SQLException {
 		
 		//On va chercher les infos depuis la base, en partant d'un id
-		String requete = "SELECT * FROM Canal WHERE id = '" + id + "';";
+		String requete = "SELECT * FROM canal WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
@@ -197,7 +197,7 @@ public class Canal {
 		//On crée un vecteur pour contenir les objets canaux instanciés
 		Hashtable canaux = new Hashtable();
 		
-		String requete = "SELECT * FROM Canal;";
+		String requete = "SELECT * FROM canal;";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
@@ -227,7 +227,7 @@ public class Canal {
 	public static boolean deleteById(String id) throws SQLException {
 		
 		//On supprime le canal de la base, en partant d'un id
-		String requete = "DELETE * FROM Canal WHERE id = '" + id + "';";
+		String requete = "DELETE * FROM canal WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -425,7 +425,7 @@ public class Canal {
 	 * @throws SQLException
 	 */
 	public boolean setNom(String nom) throws SQLException {
-		String requete = "UPDATE Canal SET nom = '" + nom + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE canal SET nom = '" + nom + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -443,7 +443,7 @@ public class Canal {
 	 * @throws SQLException
 	 */
 	public boolean setUtilMax(int utilmax) throws SQLException {
-		String requete = "UPDATE Canal SET utilmax = '" + utilmax + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE canal SET utilmax = '" + utilmax + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		

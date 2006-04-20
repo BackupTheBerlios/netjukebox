@@ -258,12 +258,18 @@ public class Systeme {
 			//On crée le document
 			Document d = Document.create(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier);
 			
-			//On l'ajoute à la liste des documents du système
-			documents.put(d.getId(), d);
+			//Si le document a bien été créé
+			if (d != null) {
+				//On l'ajoute à la liste des documents du système
+				documents.put(d.getId(), d);
+				
+				System.out.println("Document '"+titre+"' créé");
+				return Boolean.toString(true);
+			}
 			
-			System.out.println("Document '"+titre+"' créé");
-			return Boolean.toString(true);
-			
+			//Sinon, création a échoué
+			System.out.println("Document '"+titre+"' non créé");
+			return Boolean.toString(false);
 		}
 		
 		//Sinon, création refusée

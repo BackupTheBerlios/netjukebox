@@ -3,6 +3,7 @@ package proto.serveur;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -139,10 +140,12 @@ public class Document {
 			String mois, String annee, String source, String langue, String genre,
 			String fichier) throws SQLException {
 		
+		//On assemble la date
+		String date = jour+mois+annee;
+		
 		//On crée le document dans la base
-		String requete = "INSERT INTO Document('" + titre + "', '" + duree + "', '" + jour + 
-		"', '" + mois + "', '" + annee + "', '" + source + "', '" + langue + "', '" + genre +
-		"', '" + fichier + "');"; 
+		String requete = "INSERT INTO document('" + titre + "', '" + duree + "', '" + date +
+			"', '" + source + "', '" + langue + "', '" + genre + "', '" + fichier + "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -165,7 +168,7 @@ public class Document {
 	 */
 	public static Document getByTitre(String titre) throws SQLException {
 		
-		String requete = "SELECT * FROM Document WHERE titre = '" + titre + "';";
+		String requete = "SELECT * FROM document WHERE titre = '" + titre + "';";
 
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
@@ -180,13 +183,15 @@ public class Document {
 			String id = (String)dico.get("id");
 			String titreDoc = (String)dico.get("titre");
 			int duree = Integer.parseInt((String)dico.get("duree"));
-			String jour = (String)dico.get("jour");
-			String mois = (String)dico.get("mois");
-			String annee = (String)dico.get("annee");
 			String source = (String)dico.get("source");
 			String langue = (String)dico.get("langue");
 			String genre = (String)dico.get("genre");
 			String fichier = (String)dico.get("fichier");
+			
+			String date = (String)dico.get("date");
+			String jour = date.substring(0,1); // (String)dico.get("jour");
+			String mois = date.substring(2,3); // (String)dico.get("mois");
+			String annee = date.substring(4,7); // (String)dico.get("annee");
 			
 			//On retourne l'objet
 			return new Document(id, titreDoc, duree, jour, mois, annee, source, langue, genre, fichier);
@@ -213,7 +218,7 @@ public class Document {
 	 */
 	public static Document getById(String id) throws SQLException {
 		
-		String requete = "SELECT * FROM Document WHERE id_doc = '" + id + "';";
+		String requete = "SELECT * FROM document WHERE id_doc = '" + id + "';";
 
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
@@ -228,13 +233,15 @@ public class Document {
 			String idDoc = (String)dico.get("id");
 			String titre = (String)dico.get("titre");
 			int duree = Integer.parseInt((String)dico.get("duree"));
-			String jour = (String)dico.get("jour");
-			String mois = (String)dico.get("mois");
-			String annee = (String)dico.get("annee");
 			String source = (String)dico.get("source");
 			String langue = (String)dico.get("langue");
 			String genre = (String)dico.get("genre");
 			String fichier = (String)dico.get("fichier");
+			
+			String date = (String)dico.get("date");
+			String jour = date.substring(0,1); // (String)dico.get("jour");
+			String mois = date.substring(2,3); // (String)dico.get("mois");
+			String annee = date.substring(4,7); // (String)dico.get("annee");
 			
 			//On retourne l'objet
 			return new Document(idDoc, titre, duree, jour, mois, annee, source, langue, genre, fichier);
@@ -265,7 +272,7 @@ public class Document {
 		Hashtable documents = new Hashtable();
 		
 		//On va chercher dans la liste des id de tous les documents
-		String requete = "SELECT id FROM Document;";
+		String requete = "SELECT id FROM document;";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
@@ -295,7 +302,7 @@ public class Document {
 	public static boolean deleteById(String id) throws SQLException {
 		
 		//On supprime le document de la base, en partant d'un id
-		String requete = "DELETE * FROM Document WHERE id = '" + id + "';";
+		String requete = "DELETE * FROM document WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -447,7 +454,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setFichier(String fichier) throws SQLException {
-		String requete = "UPDATE Document SET fichier = '" + fichier + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET fichier = '" + fichier + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -483,7 +490,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setLangue(String langue) throws SQLException {
-		String requete = "UPDATE Document SET langue = '" + langue + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET langue = '" + langue + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -501,7 +508,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setSource(String source) throws SQLException {
-		String requete = "UPDATE Document SET source = '" + source + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET source = '" + source + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -519,7 +526,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setAnnee(String annee) throws SQLException {
-		String requete = "UPDATE Document SET annee = '" + annee + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET annee = '" + annee + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -537,7 +544,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setMois(String mois) throws SQLException {
-		String requete = "UPDATE Document SET mois = '" + mois + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET mois = '" + mois + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -555,7 +562,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setJour(String jour) throws SQLException {
-		String requete = "UPDATE Document SET jour = '" + jour + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET jour = '" + jour + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -573,7 +580,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setTitre(String titre) throws SQLException {
-		String requete = "UPDATE Document SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET titre = '" + titre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -591,7 +598,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setDuree(int duree) throws SQLException {
-		String requete = "UPDATE Document SET duree = '" + duree + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET duree = '" + duree + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -619,7 +626,7 @@ public class Document {
 			String mois, String annee, String source, String langue, String genre,
 			String fichier) {
 		
-		String requete = "UPDATE Document SET titre = '" + titre + ", duree = '" + duree + "', jour = '"+ jour +
+		String requete = "UPDATE document SET titre = '" + titre + ", duree = '" + duree + "', jour = '"+ jour +
 			"', mois = '"+ mois +"', annee = '" + annee + "', source = '" + source + "', langue = '" + langue +
 			"', genre = '" + langue + "', fichier = '" + fichier + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();

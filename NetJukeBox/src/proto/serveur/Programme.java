@@ -72,7 +72,7 @@ public class Programme {
 	 */
 	public static Programme create(String titre, String thematique) throws SQLException {
 		
-		String requete = "INSERT INTO Programme('" + titre + "', '" + thematique + "');";
+		String requete = "INSERT INTO programme ('" + titre + "', '" + thematique + "');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -94,7 +94,7 @@ public class Programme {
 	 */
 	public static Programme getByTitre(String titre) throws SQLException {
 		
-		String requete = "SELECT * FROM Programme WHERE titre = '" + titre + "';";
+		String requete = "SELECT * FROM programme WHERE titre = '" + titre + "';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
@@ -134,7 +134,7 @@ public class Programme {
 	 */
 	public static Programme getById(String id) throws SQLException {
 		
-		String requete = "SELECT * FROM Programme WHERE id = '" + id + "';";
+		String requete = "SELECT * FROM programme WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 
@@ -177,7 +177,7 @@ public class Programme {
 		Hashtable programmes = new Hashtable();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
-		String requete = "SELECT id FROM Programme;";
+		String requete = "SELECT id FROM programme;";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
@@ -207,7 +207,7 @@ public class Programme {
 	public static boolean deleteById(String id) throws SQLException {
 		
 		//On supprime le programme de la base, en partant d'un id
-		String requete = "DELETE * FROM Programme WHERE id = '" + id + "';";
+		String requete = "DELETE * FROM programme WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -277,7 +277,7 @@ public class Programme {
 	 * @throws SQLException
 	 */
 	public boolean setTitre(String titre) throws SQLException {
-		String requete = "UPDATE Programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -295,7 +295,7 @@ public class Programme {
 	 * @throws SQLException
 	 */
 	public boolean setThematique(String thematique) throws SQLException {
-		String requete = "UPDATE Programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		

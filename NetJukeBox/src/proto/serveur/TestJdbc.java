@@ -12,12 +12,13 @@ public class TestJdbc {
 		String nom = "pipi";
 		String prenom = "pépé";
 		String tel = "111111";	
-		//String requete = "INSERT INTO Annuaire VALUES ('" + nom + "', '" + prenom + "', '" +tel + "');"; 
+		String requete = "INSERT INTO annuaire VALUES ('" + nom + "', '" + prenom + "', '" +tel + "');"; 
 		Jdbc base = Jdbc.getInstance();
-		base.openDB("org.postgresql.Driver", "jdbc:postgresql://192.168.0.2:5432/NetJukeBox", "postgres", "postgres");
-		//base = Jdbc.getInstance();
-		//base.executeUpdate(requete);
-		String requete1 = "SELECT nom FROM Annuaire WHERE nom = 'papa';";
+		base.openDB("org.postgresql.Driver", "jdbc:postgresql://127.0.0.1:5432/NetJukeBox", "postgres", "postgres");
+		base.executeUpdate(requete);
+		
+		/*
+		String requete1 = "SELECT nom FROM annuaire WHERE nom = 'pipi';";
 		Vector resultats = base.executeQuery(requete1);
 		
 		for (int j = 0; j < resultats.size(); j++) {
@@ -31,6 +32,7 @@ public class TestJdbc {
 				//System.out.println(donnee.nextElement());
 			//}
 		}
+		*/
 	}
 }	
 		

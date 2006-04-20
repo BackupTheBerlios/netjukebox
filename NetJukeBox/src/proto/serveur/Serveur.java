@@ -39,9 +39,9 @@ public class Serveur {
 			server.addHandler("Systeme", new Systeme(prefs));
 			
 			//Trace dans la console
-			System.out.println("Port du serveur XMLRPC : " + args[0]);
-			System.out.println("Adresse serveur de streaming : " + args[1]);
-			System.out.println("Port du serveur de streaming : " + args[2]);
+			System.out.println("Port du serveur XMLRPC : " + prefs.node("xmlrpc").get("port", null));
+			System.out.println("Adresse serveur de streaming : " + prefs.node("streaming").get("ip", null));
+			System.out.println("Port du serveur de streaming : " + prefs.node("streaming").get("port", null));
 			
 			System.out.println("En attente de requête ...");
 
