@@ -279,15 +279,46 @@ public class Client {
 					}
 				}
 				
-				// ECOUTERCANAL
-				if  (ligne.equalsIgnoreCase("ecouterCanal")) {
+				// STARTCANAL
+				if  (ligne.equalsIgnoreCase("startCanal")) {
 					if (etatConnecte) {
 						System.out.print("ID du canal source: ");
 						String idCanal = lire();
-						String url = clientXML.ecouterCanal(idCanal);
-						if (url != null) {
+						if (clientXML.startCanal(idCanal)) {
+							System.err.println("INFO: Diffusion du canal lancée");
+						}
+						else System.err.println("ERREUR: Diffusion du canal non lancée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// STOPCANAL
+				if  (ligne.equalsIgnoreCase("stopCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal source: ");
+						String idCanal = lire();
+						if (clientXML.stopCanal(idCanal)) {
+							System.err.println("INFO: Canal arrété");
+						}
+						else System.err.println("ERREUR: Canal non stoppé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// STARTPLAYER
+				if  (ligne.equalsIgnoreCase("startPlayer")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal source: ");
+						String idCanal = lire();
+						String urlPlayer = clientXML.ecouterCanal(idCanal);
+						if (urlPlayer != null) {
+							RTPClient player = RTPClient.getInstance();
+							player.start(urlPlayer);
 							System.err.println("INFO: Ecoute du canal lancée");
-							new RTPClient(url);
 						}
 						else System.err.println("ERREUR: Ecoute du canal non lancée");
 					}
@@ -296,15 +327,12 @@ public class Client {
 					}
 				}
 				
-				// STOPPERCANAL
-				if  (ligne.equalsIgnoreCase("stopperCanal")) {
+				// STOPPLAYER
+				if  (ligne.equalsIgnoreCase("stopPlayer")) {
 					if (etatConnecte) {
-						System.out.print("ID du canal source: ");
-						String idCanal = lire();
-						if (clientXML.stopperCanal(idCanal)) {
-							System.err.println("INFO: Canal arrété");
-						}
-						else System.err.println("ERREUR: Canal non stoppé");
+						RTPClient player = RTPClient.getInstance();
+						player.stop();
+						System.err.println("INFO: Player arrété");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
@@ -321,8 +349,10 @@ public class Client {
 					System.out.println(" creerDocument : créer un document");
 					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
 					System.out.println(" diffuserProgramme : diffuser un programme sur un canal");
-					System.out.println(" ecouterCanal : ecouter un canal");
-					System.out.println(" stopperCanal : stopper un canal");
+					System.out.println(" startCanal : lancer la diffusion d'un canal");
+					System.out.println(" stopCanal : stopper la diffusion d'un canal");
+					System.out.println(" startPlayer : lancer l'écoute un canal");
+					System.out.println(" stopPlayer : stopper l'écoute d'un canal");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

@@ -529,11 +529,9 @@ public class Systeme {
 			
 			//On récupère l'objet canal
 			Canal c = (Canal)canaux.get(idCanal);
-			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++);
 			System.out.println("Construction de l'url du canal "+idCanal);
 			String url = c.getUrlStreaming();
 			System.out.println("URL: "+url);
-			c.startDiffusion();
 			return url;
 		}
 		
@@ -543,11 +541,34 @@ public class Systeme {
 	}
 	
 	/**
-	 * Stoppe un canal
+	 * Lancer la diffusion d'un canal
 	 * @param String idCanal
 	 * @return String
 	 */
-	public String stopperCanal(String idCanal) {
+	public String startCanal(String idCanal) {
+		System.out.println("Ecoute du canal "+idCanal);
+		
+		//On vérifie que le canal et le programme existent
+		if (canaux.containsKey(idCanal)) {
+			
+			//On récupère l'objet canal
+			Canal c = (Canal)canaux.get(idCanal);
+			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++);
+			c.startDiffusion();
+			return Boolean.toString(true);
+		}
+		
+		//Sinon, ajout refusé
+		System.out.println("Canal "+idCanal+" inconnu");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Stoppe la diffusion d'un canal
+	 * @param String idCanal
+	 * @return String
+	 */
+	public String stopCanal(String idCanal) {
 		System.out.println("Stopper le canal "+idCanal);
 		
 		//On vérifie que le canal et le programme existent
