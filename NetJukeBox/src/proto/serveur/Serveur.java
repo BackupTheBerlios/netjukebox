@@ -48,8 +48,8 @@ public class Serveur {
 			server.start();
 		} catch (ClassNotFoundException e) {
 			System.out.println("Impossible de localiser le pilote SAX");
-		} catch (Exception e) {
+		} /*catch (Exception e) {
 			System.out.println("Impossible de démarrer le serveur : "+ e.getMessage());
-		}
+		}*/
 	}
 }

@@ -70,9 +70,11 @@ public class Programme {
 	 * @return Programme
 	 * @throws SQLException 
 	 */
-	public static Programme create(String titre, String thematique) throws SQLException {
+	public static Programme create(String titre, String thematique) /*throws SQLException*/ {
 		
-		String requete = "INSERT INTO programme ('" + titre + "', '" + thematique + "');";
+		System.out.println("Programme.create()");
+		
+		String requete = "INSERT INTO programme (titre, thematique) VALUES ('" + titre + "', '" + thematique + "');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -92,22 +94,31 @@ public class Programme {
 	 * @return Programme
 	 * @throws SQLException 
 	 */
-	public static Programme getByTitre(String titre) throws SQLException {
+	public static Programme getByTitre(String titre) /*throws SQLException*/ {
+		
+		System.out.println("Programme.getByTitre("+titre+")");
 		
 		String requete = "SELECT * FROM programme WHERE titre = '" + titre + "';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
 		// S'il y a un resultat
-		if (resultats != null) {
+		if (resultats != null && resultats.size()>0) {
 			
 			//On prend le 1er élément
 			Dictionary dico = (Dictionary) resultats.firstElement();
 			
 			//On mappe les champs
-			String id = (String)dico.get("id");
+			String id = String.valueOf((Integer)dico.get("id"));
 			String titreProg = (String)dico.get("titre");
 			String thematique = (String)dico.get("thematique");
+			
+			System.out.println("-------- Programme -----------");
+			System.out.println("Nb de champs: "+dico.size());
+			System.out.println("ID: "+id);
+			System.out.println("Titre: "+titreProg);
+			System.out.println("Thématique: "+thematique);
+			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
 			return new Programme(id, titreProg, thematique);
@@ -132,22 +143,31 @@ public class Programme {
 	 * @return Programme
 	 * @throws SQLException 
 	 */
-	public static Programme getById(String id) throws SQLException {
+	public static Programme getById(String id) /*throws SQLException*/ {
+		
+		System.out.println("Programme.getById("+id+")");
 		
 		String requete = "SELECT * FROM programme WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 
 		// S'il y a un resultat
-		if (resultats != null) {
+		if (resultats != null && resultats.size()>0) {
 			
 			//On prend le 1er élément
 			Dictionary dico = (Dictionary) resultats.firstElement();
 			
 			//On mappe les champs
-			String idProg = (String)dico.get("id");
+			String idProg = String.valueOf((Integer)dico.get("id"));
 			String titre = (String)dico.get("titre");
 			String thematique = (String)dico.get("thematique");
+			
+			System.out.println("-------- Programme -----------");
+			System.out.println("Nb de champs: "+dico.size());
+			System.out.println("ID: "+idProg);
+			System.out.println("Titre: "+titre);
+			System.out.println("Thématique: "+thematique);
+			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
 			return new Programme(idProg, titre, thematique);
@@ -171,7 +191,9 @@ public class Programme {
 	 * @return Hashtable
 	 * @throws SQLException 
 	 */
-	public static Hashtable getAll() throws SQLException {
+	public static Hashtable getAll() /*throws SQLException*/ {
+		
+		System.out.println("Programme.getAll()");
 		
 		//On crée un vecteur pour contenir les objets programmes instanciés
 		Hashtable programmes = new Hashtable();
@@ -181,10 +203,12 @@ public class Programme {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
+		System.out.println("Programme.getAll() : "+resultats.size()+" programme(s) trouvé(s)");
+		
 		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			String id = (String)dico.get("id");
+			String id = String.valueOf((Integer)dico.get("id"));
 			programmes.put(id, Programme.getById(id));
 		}
 		
@@ -204,7 +228,7 @@ public class Programme {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public static boolean deleteById(String id) throws SQLException {
+	public static boolean deleteById(String id) /*throws SQLException*/ {
 		
 		//On supprime le programme de la base, en partant d'un id
 		String requete = "DELETE * FROM programme WHERE id = '" + id + "';";
@@ -224,7 +248,7 @@ public class Programme {
 	 * @return boolean
 	 * @throws SQLException 
 	 */
-	public boolean supprimer() throws SQLException {
+	public boolean supprimer() /*throws SQLException*/ {
 		
 		//On supprime les infos de la base
 		return Programme.deleteById(this.id);
@@ -276,7 +300,7 @@ public class Programme {
 	 * @return boolean
 	 * @throws SQLException
 	 */
-	public boolean setTitre(String titre) throws SQLException {
+	public boolean setTitre(String titre) /*throws SQLException*/ {
 		String requete = "UPDATE programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -294,7 +318,7 @@ public class Programme {
 	 * @return boolean
 	 * @throws SQLException
 	 */
-	public boolean setThematique(String thematique) throws SQLException {
+	public boolean setThematique(String thematique) /*throws SQLException*/ {
 		String requete = "UPDATE programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);

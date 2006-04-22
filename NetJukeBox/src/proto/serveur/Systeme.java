@@ -82,8 +82,15 @@ public class Systeme {
 		String login = prefs.node("jdbc").get("login", null);
 		String pwd = prefs.node("jdbc").get("pwd", null);
 		
-		this.base = Jdbc.getInstance();
-		base.openDB(driver, "jdbc:"+type+"://"+ip+":"+port+"/"+baseName, login, pwd);
+		String url = "jdbc:"+type+"://"+ip+":"+port+"/"+baseName;
+		
+		System.err.println("BD Driver: "+driver);
+		System.err.println("BD URL: "+url);
+		System.err.println("BD Login: "+login);
+		System.err.println("BD Pwd: "+pwd);
+		
+		base = Jdbc.getInstance();
+		base.openDB(driver, url, login, pwd);
 		
 		//On initialise les listes de canaux, programmes, documents
 		this.canaux = Canal.getAll();
