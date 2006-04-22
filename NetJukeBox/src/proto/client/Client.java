@@ -296,6 +296,21 @@ public class Client {
 					}
 				}
 				
+				// STOPPERCANAL
+				if  (ligne.equalsIgnoreCase("stopperCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal source: ");
+						String idCanal = lire();
+						if (clientXML.stopperCanal(idCanal)) {
+							System.err.println("INFO: Canal arrété");
+						}
+						else System.err.println("ERREUR: Canal non stoppé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
 					System.out.println("Commandes disponibles:");
@@ -307,6 +322,7 @@ public class Client {
 					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
 					System.out.println(" diffuserProgramme : diffuser un programme sur un canal");
 					System.out.println(" ecouterCanal : ecouter un canal");
+					System.out.println(" stopperCanal : stopper un canal");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

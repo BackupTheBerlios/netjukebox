@@ -103,7 +103,7 @@ public class RTPServer implements ControllerListener {
 		this.ip = ip;
 		this.port = port;
 		this.piste = "1";
-		this.publicite = "file://home/philippe/njb/pub.mp3";
+		this.publicite = "file://home/philippe/njb/pub.wav";
 		this.medias = new Vector();
 		
 		// Creation du MediaLocator pour l'Adresse de destination
@@ -166,6 +166,7 @@ public class RTPServer implements ControllerListener {
 	 * Arrêter la diffusion
 	 */
 	public void stop() {
+		System.out.println("Diffusion stoppée");
 		cDiffuse=false;
 		if (OutputSink != null) OutputSink.close();
 	}
@@ -174,7 +175,7 @@ public class RTPServer implements ControllerListener {
 	 * Lancer la diffusion
 	 */
 	public void diffuser() {
-		
+		System.out.println("Diffusion lancée");
 		cDiffuse=true;
 		
 		//Si on a des medias à diffuser
@@ -193,6 +194,7 @@ public class RTPServer implements ControllerListener {
 	 * @param filename
 	 */
 	private void sendStream(String filename) {
+		System.out.println("Diffusion de "+filename);
 		pRealized = false;
 		pConfigured = false;
 		try {

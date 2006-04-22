@@ -21,7 +21,7 @@ public class Systeme {
 	/**
 	 * Port de diffusion (streaming)
 	 */
-	private String portStreaming;
+	private int portStreaming;
 	
 	/**
 	 * Port du serveur XML
@@ -71,7 +71,7 @@ public class Systeme {
 		
 		this.prefs = prefs;
 		this.ipStreaming = prefs.node("streaming").get("ip", null);
-		this.portStreaming = prefs.node("streaming").get("port", null);
+		this.portStreaming = Integer.parseInt(prefs.node("streaming").get("port", null));
 		
 		//On initialise la connection à la base
 		String driver = prefs.node("jdbc").get("driver", null);
@@ -503,7 +503,7 @@ public class Systeme {
 			Programme p = (Programme)programmes.get(idProg);
 			
 			//On diffuse le programme
-			c.createRTPServer(ipStreaming, Integer.parseInt(portStreaming));
+			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++);
 			c.diffuserProgramme(p);
 			
 			System.out.println("Programme "+idProg+" en diffusion sur le canal "+idCanal);
@@ -529,11 +529,11 @@ public class Systeme {
 			
 			//On récupère l'objet canal
 			Canal c = (Canal)canaux.get(idCanal);
-			
+			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++);
 			System.out.println("Construction de l'url du canal "+idCanal);
 			String url = c.getUrlStreaming();
 			System.out.println("URL: "+url);
-			
+			c.startDiffusion();
 			return url;
 		}
 		
@@ -541,6 +541,29 @@ public class Systeme {
 		System.out.println("Canal "+idCanal+" inconnu");
 		return null;
 	}
+	
+	/**
+	 * Stoppe un canal
+	 * @param String idCanal
+	 * @return String
+	 */
+	public String stopperCanal(String idCanal) {
+		System.out.println("Stopper le canal "+idCanal);
+		
+		//On vérifie que le canal et le programme existent
+		if (canaux.containsKey(idCanal)) {
+			
+			//On récupère l'objet canal
+			Canal c = (Canal)canaux.get(idCanal);
+			c.stopDiffusion();
+			return Boolean.toString(true);
+		}
+		
+		//Sinon, ajout refusé
+		System.out.println("Canal "+idCanal+" inconnu");
+		return Boolean.toString(false);
+	}
+	
 
 	public void ValiderCreationCanal() {
 		// your code here

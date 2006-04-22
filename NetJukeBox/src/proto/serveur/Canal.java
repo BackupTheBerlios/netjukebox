@@ -284,6 +284,10 @@ public class Canal {
 		if (this.RTP == null) this.RTP = new RTPServer(ip, port);
 	}
 	
+	public boolean isRTPstarted() {
+		return RTP != null;
+	}
+	
 	/**
 	 * Lance la diffusion
 	 */

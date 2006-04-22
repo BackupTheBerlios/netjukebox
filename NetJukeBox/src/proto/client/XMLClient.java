@@ -425,4 +425,35 @@ public class XMLClient {
 			return null;
 		}
 	}
+	
+	/**
+	 * Stopper un canal
+	 * @param String idCanal
+	 * @return boolean
+	 */
+	public boolean stopperCanal(String idCanal) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Arrêt d'un canal...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(idCanal);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.stopperCanal", params);
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
 }
