@@ -1,8 +1,12 @@
 package proto.client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.prefs.Preferences;
+
+import org.ini4j.IniFile;
 
 //Arguments : 192.168.0.2 10000
 
@@ -342,19 +346,16 @@ public class Client {
 	
 // MAIN
 //***********************************
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 		
-		//S'il y a des paramètres en ligne de commande
-		//Usage: java client [adresseServeur] [portServeur]
-		if (args.length == 2) {
-			new Client(args[0], args[1]);
-		}
+		//USAGE : java Client [filename.ini]
 		
-		//Sinon, on les demandera à l'utilisateur
-		else {
-			//On démarre le client
-			new Client();
-		}
+		//Fichier d'initialisation par défaut (si pas de paramètres)
+		String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
+		Preferences prefs = new IniFile(new File(filename));
+		
+		//On démarre le client
+		new Client(prefs.node("serveur").get("ip", null), prefs.node("serveur").get("port", null));
 		
 	}
 }
