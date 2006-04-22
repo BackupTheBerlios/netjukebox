@@ -130,7 +130,14 @@ public class Canal {
 			//On mappe les champs
 			String id = String.valueOf((Integer)dico.get("id"));
 			String nomCanal = (String)dico.get("nom");
-			int utilMax = (int)(Integer)dico.get("utilMax");
+			int utilMax = (int)(Integer)dico.get("utilmax");
+			
+			System.out.println("-------- Canal -----------");
+			System.out.println("Nb de champs: "+dico.size());
+			System.out.println("ID: "+id);
+			System.out.println("Nom: "+nomCanal);
+			System.out.println("Nb max d'auditeurs: "+utilMax);
+			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
 			return new Canal(id, nomCanal, utilMax);
@@ -174,7 +181,14 @@ public class Canal {
 			//On mappe les champs
 			String idCanal = String.valueOf((Integer)dico.get("id"));
 			String nom = (String)dico.get("nom");
-			int utilMax = (int)(Integer)dico.get("utilMax");
+			int utilMax = (int)(Integer)dico.get("utilmax");
+			
+			System.out.println("-------- Canal -----------");
+			System.out.println("Nb de champs: "+dico.size());
+			System.out.println("ID: "+idCanal);
+			System.out.println("Nom: "+nom);
+			System.out.println("Nb max d'auditeurs: "+utilMax);
+			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
 			return new Canal(idCanal, nom, utilMax);
