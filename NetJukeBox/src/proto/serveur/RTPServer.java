@@ -92,18 +92,19 @@ public class RTPServer implements ControllerListener {
 //***************************************************	
 	
 	/**
-	 * Constructeur simple (publicité par défaut)
+	 * Constructeur
 	 * @param ip
 	 * @param port
 	 * @param piste
 	 */
-	public RTPServer(String ip, int port) {
+	public RTPServer(String ip, int port, String publicite) {
 
 		System.out.println("Création d'un serveur RTP");
 		this.ip = ip;
 		this.port = port;
 		this.piste = "1";
-		this.publicite = "file://home/philippe/njb/pub.wav";
+		this.publicite = publicite;
+		//this.publicite = "file://home/philippe/njb/pub.wav";
 		this.medias = new Vector();
 		
 		// Creation du MediaLocator pour l'Adresse de destination
@@ -119,7 +120,7 @@ public class RTPServer implements ControllerListener {
 	 * @param piste
 	 * @param publicite
 	 */
-	public RTPServer(String ip, int port, String piste, String publicite) {
+/*	public RTPServer(String ip, int port, String piste, String publicite) {
 
 		System.out.println("Création d'un serveur RTP");
 		this.ip = ip;
@@ -133,6 +134,7 @@ public class RTPServer implements ControllerListener {
 		System.out.println("Serveur RTP créé");
 
 	}
+*/
 
 // METHODES STATIQUES
 //***************************************************	

@@ -278,10 +278,10 @@ public class Canal {
 	 * @param ip
 	 * @param port
 	 */
-	public void createRTPServer(String ip, int port) {
+	public void createRTPServer(String ip, int port, String publicite) {
 		
 		//Si le RTPServer n'existe pas, on le crée
-		if (this.RTP == null) this.RTP = new RTPServer(ip, port);
+		if (this.RTP == null) this.RTP = new RTPServer(ip, port, publicite);
 	}
 	
 	public boolean isRTPstarted() {

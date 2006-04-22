@@ -503,7 +503,7 @@ public class Systeme {
 			Programme p = (Programme)programmes.get(idProg);
 			
 			//On diffuse le programme
-			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++);
+			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
 			c.diffuserProgramme(p);
 			
 			System.out.println("Programme "+idProg+" en diffusion sur le canal "+idCanal);
@@ -553,7 +553,7 @@ public class Systeme {
 			
 			//On récupère l'objet canal
 			Canal c = (Canal)canaux.get(idCanal);
-			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++);
+			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
 			c.startDiffusion();
 			return Boolean.toString(true);
 		}
