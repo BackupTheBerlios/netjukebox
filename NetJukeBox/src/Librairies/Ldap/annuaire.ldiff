@@ -1,0 +1,29 @@
+dn: dc=netjukebox, dc=com
+dc: netjukebox
+o: netjukebox.com
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+
+dn: cn=admin,dc=netjukebox, dc=com
+cn: admin
+userPassword: mot2passe
+objectClass: top
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+
+dn:ou=usager,dc=netjukebox, dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou:usager
+
+dn:ou=respprog,dc=netjukebox, dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou:respprog
+
+dn:ou=admin,dc=netjukebox, dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou:admin
+
