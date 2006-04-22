@@ -38,6 +38,10 @@ public class Programme {
 	 */
 	private Hashtable documents = new Hashtable();
 	
+	/**
+	 * Durée du programme
+	 */
+	private long duree;
 
 	// Initialisation du fichier archive
 	String fichier_archive = "_Archive.txt";
@@ -54,10 +58,12 @@ public class Programme {
 	 * @param titre
 	 * @param thematique
 	 */
-	public Programme (String id, String titre, String thematique) {
+	public Programme (String id, String titre, String thematique, long duree) {
 		this.id = id;
 		this.titre = titre;
 		this.thematique = thematique;
+		this.duree = duree;
+		this.documents = getDocumentsProgrammes();
 	}
 
 // METHODES STATIQUES
@@ -112,16 +118,18 @@ public class Programme {
 			String id = String.valueOf((Integer)dico.get("id"));
 			String titreProg = (String)dico.get("titre");
 			String thematique = (String)dico.get("thematique");
+			long duree = (long)(Long)dico.get("duree");
 			
 			System.out.println("-------- Programme -----------");
 			System.out.println("Nb de champs: "+dico.size());
 			System.out.println("ID: "+id);
 			System.out.println("Titre: "+titreProg);
 			System.out.println("Thématique: "+thematique);
+			System.out.println("Durée: "+duree);
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
-			return new Programme(id, titreProg, thematique);
+			return new Programme(id, titreProg, thematique, duree);
 		}
 		
 		/*
@@ -161,16 +169,18 @@ public class Programme {
 			String idProg = String.valueOf((Integer)dico.get("id"));
 			String titre = (String)dico.get("titre");
 			String thematique = (String)dico.get("thematique");
+			long duree = (long)(Long)dico.get("duree");
 			
 			System.out.println("-------- Programme -----------");
 			System.out.println("Nb de champs: "+dico.size());
 			System.out.println("ID: "+idProg);
 			System.out.println("Titre: "+titre);
 			System.out.println("Thématique: "+thematique);
+			System.out.println("Durée: "+duree);
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
-			return new Programme(idProg, titre, thematique);
+			return new Programme(idProg, titre, thematique, duree);
 		}
 		
 		/*
@@ -242,6 +252,29 @@ public class Programme {
 	
 // METHODES DYNAMIQUES
 //*********************************************************
+	
+	private Hashtable getDocumentsProgrammes() {
+		System.out.println("Programme.getDocumentsProgrammes()");
+		
+		//On crée un vecteur pour contenir les objets documents instanciés
+		Hashtable docs = new Hashtable();
+		
+		//On va chercher dans la base la liste des id de tous les programmes
+		String requete = "SELECT id_doc, calage FROM programmation WHERE id_prog = '"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		System.out.println("Programme.getDocumentsProgrammes() : "+resultats.size()+" docment(s) trouvé(s)");
+		
+		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			String id = String.valueOf((Integer)dico.get("id_doc"));
+			docs.put(id, Document.getById(id));
+		}
+		
+		return docs;
+	}
 
 	/**
 	 * Détruit le programme et ses infos en base
@@ -293,6 +326,32 @@ public class Programme {
 	public boolean getEtat() {
 		return etat;
 	}
+	
+	/**
+	 * Retourne la durée du programme
+	 * @return long
+	 */
+	public long getDuree() {
+		return duree;
+	}
+	
+	/**
+	 * Met à jour l'attribut duree
+	 * @param String titre
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean setDuree(long duree) /*throws SQLException*/ {
+		String requete = "UPDATE programme SET duree = '" + duree + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.duree = duree;
+		}
+		return nbRows>0;
+	}
 
 	/**
 	 * Met à jour l'attribut titre
@@ -337,15 +396,22 @@ public class Programme {
 	public void ajouterDocument(Document doc) {
 		
 		//On ajoute le document au programme
-		//************
-		// => JDBC <=
-		//************
+		String requete = "INSERT INTO programmation (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +(duree+doc.getDuree())+"');";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
 		
-		//On met à jour le vecteurs d'association
-		documents.put(doc.getId(), doc);
-		
-		//On signale au document cet ajout
-		doc.ajouterProgramme(this);
+		//Si l'insertion s'est bien déroulée
+		if (nbRows>0) {
+			
+			//On met à jour le vecteurs d'association
+			documents.put(doc.getId(), doc);
+			
+			//On met à jour la durée du programme
+			this.setDuree(duree+doc.getDuree());
+			
+			//On signale au document cet ajout
+			doc.ajouterProgramme(this);
+		}
 	}
 
 	/**

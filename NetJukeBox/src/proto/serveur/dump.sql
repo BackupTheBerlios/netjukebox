@@ -1,36 +1,4 @@
 --
--- PostgreSQL database cluster dump
---
-
-\connect "template1"
-
---
--- Users
---
-
-
-
-
-
-
-
---
--- Database creation
---
-
-CREATE DATABASE "NetJukeBox" WITH TEMPLATE = template0 OWNER = postgres ENCODING = 'LATIN1';
-
-
---
--- Users
---
-
-ALTER USER postgres WITH CREATEDB CREATEUSER;
-
-
-\connect "NetJukeBox"
-
---
 -- PostgreSQL database dump
 --
 
@@ -220,13 +188,27 @@ ALTER TABLE public.permission OWNER TO postgres;
 SET default_with_oids = true;
 
 --
+-- Name: programmation; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE programmation (
+    id_prog integer NOT NULL,
+    id_doc integer NOT NULL,
+    calage bigint DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.programmation OWNER TO postgres;
+
+--
 -- Name: programme; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE programme (
     id serial NOT NULL,
     titre character varying NOT NULL,
-    thematique character varying
+    thematique character varying,
+    duree bigint DEFAULT 0
 );
 
 
@@ -302,8 +284,8 @@ INSERT INTO canal VALUES (2, 'jazz', 20);
 -- Data for Name: document; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO document VALUES (1, 'Rhaspody in Blue', 1200, '01-01-2006', 'Philippe', 'FR', 'classic', 'file://home/philippe/NJB/1.mp3');
-INSERT INTO document VALUES (2, 'test', 10, '02-03-2005', 'Dom', 'EN', 'jazz', 'file://home/philippe/NJB/2.mp3');
+INSERT INTO document VALUES (1, 'Rhaspody in Blue', 1200, '01-01-2006', 'Philippe', 'FR', 'classic', 'file://home/philippe/njb/1.mp3');
+INSERT INTO document VALUES (2, 'test', 10, '02-03-2005', 'Dom', 'EN', 'jazz', 'file://home/philippe/njb/2.mp3');
 
 
 --
@@ -343,10 +325,17 @@ INSERT INTO document VALUES (2, 'test', 10, '02-03-2005', 'Dom', 'EN', 'jazz', '
 
 
 --
+-- Data for Name: programmation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO programmation VALUES (1, 1, 1200);
+
+
+--
 -- Data for Name: programme; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO programme VALUES (1, 'prog1', 'classic');
+INSERT INTO programme VALUES (1, 'prog1', 'classic', 1200);
 
 
 --
@@ -360,6 +349,26 @@ INSERT INTO programme VALUES (1, 'prog1', 'classic');
 --
 
 
+
+--
+-- Name: id_doc; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY document
+    ADD CONSTRAINT id_doc PRIMARY KEY (id);
+
+
+ALTER INDEX public.id_doc OWNER TO postgres;
+
+--
+-- Name: id_prog; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY programme
+    ADD CONSTRAINT id_prog PRIMARY KEY (id);
+
+
+ALTER INDEX public.id_prog OWNER TO postgres;
 
 --
 -- Name: pk_attribuer; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
@@ -486,41 +495,19 @@ ALTER TABLE ONLY gerer
 
 
 --
--- Name: public; Type: ACL; Schema: -; Owner: postgres
+-- Name: id_doc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
+ALTER TABLE ONLY programmation
+    ADD CONSTRAINT id_doc FOREIGN KEY (id_doc) REFERENCES document(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
--- PostgreSQL database dump complete
+-- Name: id_prog; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-\connect template1
-
---
--- PostgreSQL database dump
---
-
-SET client_encoding = 'LATIN9';
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-
---
--- Name: DATABASE template1; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON DATABASE template1 IS 'Default template database';
-
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
---
-
-COMMENT ON SCHEMA public IS 'Standard public schema';
+ALTER TABLE ONLY programmation
+    ADD CONSTRAINT id_prog FOREIGN KEY (id_prog) REFERENCES programme(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
@@ -535,9 +522,5 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 
 --
 -- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database cluster dump complete
 --
 
