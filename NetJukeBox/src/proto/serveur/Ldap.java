@@ -15,24 +15,59 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 
+/**
+ * Interface la base ldap avec JNDI
+ */
 public class Ldap {
+	/**
+	 * Singleton
+	 */
 	private static Ldap instance;
+	
+	/**
+	 * Nom du driver
+	 */
 	private String driver; //= "com.sun.jndi.ldap.LdapCtxFactory";
+	
+	/**
+	 * URL de la base
+	 */
 	private String url; //= "ldap://localhost:389/dc=netjukebox,dc=com";
+	
+	/**
+	 * Mode d'authentification à la base
+	 */
 	private String auth; //= "simple";
+	
+	/**
+	 * Login d'accès à la base
+	 */
 	private String login; //= "cn=admin,dc=netjukebox,dc=com";
+	
+	/**
+	 * Mot de passe d'accès à la base
+	 */
 	private String pwd; //= "mot2passe";
+	
+	/**
+	 * Connection courante à la base
+	 */
 	private static InitialDirContext connect = null;
 	
 //	 CONSTRUCTEUR
 //	********************************************
-
+	/**
+	 * Constructeur vide (Singleton)
+	 */
 		public Ldap() {
 		}
 	    
 //	 METHODES STATIQUES
 //	********************************************
-	public static synchronized Ldap getInstance(){
+	/**
+	 * Retourne l'instance du Singleton
+	 */
+		public static synchronized Ldap getInstance(){
 		if (instance == null)
 			instance = new Ldap();
 		return instance;
@@ -40,6 +75,14 @@ public class Ldap {
 	
 //  METHODES DYNAMIQUES
 //	********************************************	
+	/**
+	 * Connecte à la base ldap
+     * @param String driver
+     * @param String url
+     * @param String auth
+     * @param String login
+     * @param String pwd
+	 */
 	public boolean openLdap(String driver, String url, String auth, String login, String pwd) {
     	this.driver = driver;
     	this.url = url;
@@ -50,6 +93,10 @@ public class Ldap {
     	return this.openLdap();
     }
 	
+	/**
+	 * Se connecte à la base ldap
+	 * @return boolean
+	 */
 	public boolean openLdap() {
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
@@ -71,6 +118,11 @@ public class Ldap {
 	    return false;
 	}
 	
+	/**
+	 * Ferme la connexion à la base de données
+	 * @return boolean
+	 * @throws NamingException
+	 */
 	public boolean closeldap() throws NamingException {
 		if (connect != null) {
 			connect.close();
@@ -79,7 +131,13 @@ public class Ldap {
     	System.out.println("Vous avez été déconnecté de la base.");
 		return false;
 	}
-
+	/**
+	 * Supprime un utilisateur
+	 * @param login
+	 * @param role
+	 * @return
+	 * @throws NamingException
+	 */
 	public boolean executeSupprimer(String login, String role) throws NamingException {
 		String requete =  "uid=" + login + ",ou=" + role;
 		Dictionary attr = getAttributs(login, role);
@@ -100,6 +158,14 @@ public class Ldap {
 			}
 	}
 	
+	/**
+	 * Modifie les attributs d'un utilisateur
+	 * @param champs
+	 * @param donnee
+	 * @param nom
+	 * @param role
+	 * @return
+	 */
 	public boolean ModifieAttributs(String champs, String donnee, String nom, String role) {
 		String requete = "uid=" + nom + ",ou=" + role;
 		Dictionary attr = getAttributs(nom, role);
@@ -125,7 +191,17 @@ public class Ldap {
 			return false;
 		}
 	}
-
+	/**
+	 * Crée un utilisateur
+	 * @param login
+	 * @param pwd
+	 * @param nom
+	 * @param prenom
+	 * @param mail
+	 * @param pays
+	 * @param role
+	 * @return
+	 */
 	public boolean executeCreer(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
 		// entry's DN
 		String entryDN = "uid=" + login + ",ou=" + role;
@@ -167,7 +243,13 @@ public class Ldap {
     		return false;
     	}
 	}
-
+	
+	/**
+	 * Récupère les attributs d'un utilisateur
+	 * @param login
+	 * @param role
+	 * @return
+	 */
 	public Dictionary getAttributs(String login, String role) {
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
@@ -179,7 +261,12 @@ public class Ldap {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * Récupère les attributs d'un utilisateur
+	 * @param attrs
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	Dictionary printAttrs(Attributes attrs) {
 		Dictionary ligne = new Hashtable();
@@ -204,6 +291,13 @@ public class Ldap {
 		return ligne;
 	}	
 	
+	/**
+	 * Change le role d'un utilisateur du Netjukebox
+	 * @param login
+	 * @param ancienrole
+	 * @param nouveaurole
+	 * @return
+	 */
 	public boolean changerRole(String login, String ancienrole, String nouveaurole){
 		String ancien = "uid=" + login + ", ou=" + ancienrole;
 		String nouveau = "uid=" + login + ", ou=" + nouveaurole;
