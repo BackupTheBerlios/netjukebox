@@ -2,10 +2,7 @@ package proto.serveur;
 
 import java.util.Date;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Hashtable;
-//import java.util.Vector;
-//import javax.naming.directory.*;
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -17,8 +14,6 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
-
-import com.sun.corba.se.pept.transport.Connection;
 
 public class Ldap {
 	private static Ldap instance;
@@ -76,7 +71,7 @@ public class Ldap {
 	    return false;
 	}
 	
-	public boolean closeldap() throws NamingException {
+	public static boolean closeldap() throws NamingException {
 		if (connect != null) {
 			connect.close();
 			return true;
@@ -85,26 +80,32 @@ public class Ldap {
 		return false;
 	}
 	
-	public boolean executeSupprimer(String nom, String role) {
-		String requete =  "sn=" + nom  + ",ou=" + role;
-		try {	
+	public boolean executeSupprimer(String nom, String role) throws NamingException {
+		String requete =  "sn=" + nom + ",ou=" + role;
+		Dictionary attr = getAttributs(nom, role);
+		if (attr == null) {
+			return false;
+		} else 
 			try {
-				((Context) connect).destroySubcontext(requete);
+				connect.destroySubcontext(requete);
 				System.out.println( "Entrée supprimée " + requete + "." );
 				return true;
 			} catch (NameNotFoundException e) {
 				System.out.println( "Cette entrée" + requete + " n'existe pas dans cette branche.");
 				return false;
 			} 
-		}
-		catch (NamingException e) {
-			System.err.println("Il y a un probleme pour suppression de donnée!" + e);
-			return false;
-		}
-	} 
+			catch (NamingException e) {
+				System.err.println("Il y a un probleme pour suppression de donnée!" + e);
+				return false;
+			}
+	}
 	
-	public boolean ModifieAttributs(String champs, String donnee, String utilisateur, String role) {
-		String requete = "sn=" + utilisateur + ",ou=" + role;
+	public boolean ModifieAttributs(String champs, String donnee, String nom, String role) {
+		String requete = "sn=" + nom + ",ou=" + role;
+		Dictionary attr = getAttributs(nom, role);
+		if (attr == null) {
+			return false;
+		} else
 		try {
 			/* construct the list of modifications to make */
 			ModificationItem[] mods = new ModificationItem[2];
@@ -115,7 +116,7 @@ public class Ldap {
 			Attribute mod1 = new BasicAttribute("description","Dernière modification : " + (new Date()).toString());
 			mods[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, mod1);
 			/* make the change */
-			((DirContext) connect).modifyAttributes(requete, mods);
+			connect.modifyAttributes(requete, mods);
 			System.out.println( "La modification est faite!." );
 			return true;
 		} 
@@ -152,7 +153,7 @@ public class Ldap {
     		entry.put(userPassword);
     		entry.put(oc);
     		// Add the entry
-    		((DirContext) connect).createSubcontext(entryDN, entry);
+    		connect.createSubcontext(entryDN, entry);
     		System.out.println( "L'utilisateur "+ sn +" est crée sous "+entryDN+"!");
     		return true ;
     	} catch (NamingException e) {
@@ -161,22 +162,15 @@ public class Ldap {
     	}
 	}
 
-	public static void getAttributs(String nom, String role) {
+	public static Dictionary getAttributs(String nom, String role) {
 		String requete = "sn=" + nom + ",ou=" + role;
 		try {
-			Attributes answer = ((DirContext) connect).getAttributes(requete);
+			Attributes answer = connect.getAttributes(requete);
 			Dictionary ligne = printAttrs(answer);
-			
-			Enumeration donnee = ligne.elements();
-			Enumeration colonne = ligne.keys();
-			
-			for(int i = 0; i < ligne.size(); i++){
-				System.out.print(colonne.nextElement() + " : "); 
-				System.out.println(donnee.nextElement());
-			}
-	
+			return ligne;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Erreur l'utilisateur : "+ nom + " n'existe pas");
+			return null;
 		}
 	}
 
@@ -194,14 +188,26 @@ public class Ldap {
     				for (NamingEnumeration e = attr.getAll(); 
     					e.hasMore();
      					ligne.put(attr.getID(), e.next()));
-    					//System.out.println(attr.getID()+ ":" + e.next()));
     			}	
     			return ligne;
     		} catch (NamingException e) {
-    			e.printStackTrace();
+    			System.out.println("Erreur l'utilisateur n'existe pas");
     			return null;
     		}
     	}
 		return ligne;
 	}	
+	
+	public static boolean changerRole(String nom, String ancienrole, String nouveaurole){
+		String ancien = "sn=" + nom + ", ou=" + ancienrole;
+		String nouveau = "sn=" + nom + ", ou=" + nouveaurole;
+		try {
+			connect.rename(ancien, nouveau);
+			//System.out.println(connect.lookup(nouveau));
+		    return true;
+		} catch (NamingException e) {
+			System.out.println("Erreur l'utilisateur n'existe pas");
+		    return false;
+		}
+	}
 }
