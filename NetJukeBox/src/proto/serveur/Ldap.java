@@ -14,6 +14,8 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
 
 /**
  * Interface la base ldap avec JNDI
@@ -268,7 +270,7 @@ public class Ldap {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	Dictionary printAttrs(Attributes attrs) {
+	private Dictionary printAttrs(Attributes attrs) {
 		Dictionary ligne = new Hashtable();
 		if (attrs == null) {
     		System.out.println("No attributes");
@@ -310,4 +312,57 @@ public class Ldap {
 		    return false;
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public boolean GetLoginPasswd(String log){
+		try {
+			// Specify the ids of the attributes to return
+			SearchControls ctls = new SearchControls();
+			ctls.setReturningObjFlag(true);
+
+			//String filter = "uid=" + log;
+			String filter = "uid=" + log;
+			// Search for objects using filter
+			NamingEnumeration answer = connect.search("ou=usager", filter, ctls);
+			NamingEnumeration answer1 = connect.search("ou=respprog", filter, ctls);
+			NamingEnumeration answer2 = connect.search("ou=admin", filter, ctls);
+			//Print the answer
+			printSearchEnumeration(answer);
+			printSearchEnumeration(answer1);
+			printSearchEnumeration(answer2);
+			// Close the context when we're done
+			connect.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	
+	private void printSearchEnumeration(NamingEnumeration answer) {
+		try {
+		    while ( answer.hasMore()) {
+			SearchResult sr = (SearchResult) answer.next();
+			System.out.println(sr.getName());
+		    }
+		} catch (NamingException e) {
+		    e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
 }
