@@ -118,6 +118,21 @@ public class Systeme {
 	//*******************************************************
 	
 	/**
+	 * Vérifie que l'utilisateur à la permission requise
+	 * @param String login
+	 * @param String perm
+	 * @return boolean
+	 */
+	private boolean verifPermission(String login, String perm) {
+		
+		//On récupère l'utilisateur
+		Utilisateur u = (Utilisateur)utilisateurs.get(login);
+		
+		//On retourne le résultat
+		return u.verifPermission(perm);
+	}
+	
+	/**
 	 * Connexion d'un utilisateur
 	 * @param login
 	 * @param pwd
@@ -127,25 +142,33 @@ public class Systeme {
 		
 		System.out.println("Connexion de l'utilisateur "+login);
 		
-		//On vérifie que le couple login/pwd existe
-		if (Utilisateur.verifierPwd(pwd, login)) {
+		//On vérifie que l'utilisateur n'est pas déjà connecté
+		if (!utilisateurs.containsKey(login)) {
+		
+			//On vérifie que le couple login/pwd existe
+			if (Utilisateur.verifierPwd(pwd, login)) {
+				
+				//On récupère l'utilisateur depuis la base
+				Utilisateur util = Utilisateur.getByLogin(login);
+				
+				//On connecte l'utilisateur
+				util.connexion();
+				
+				//On l'ajoute à la liste des utilisateurs connectés au système
+				utilisateurs.put(login, util);
+				
+				System.out.println("Utilisateur "+login+" connecté");
+				return Boolean.toString(true);
+				
+			}
 			
-			//On récupère l'utilisateur depuis la base
-			Utilisateur util = Utilisateur.getByLogin(login);
-			
-			//On connecte l'utilisateur
-			util.connexion();
-			
-			//On l'ajoute à la liste des utilisateurs connectés au système
-			utilisateurs.put(login, util);
-			
-			System.out.println("Utilisateur "+login+" connecté");
-			return Boolean.toString(true);
-			
+			//Sinon, connexion refusée
+			System.out.println("Utilisateur "+login+" non connecté");
+			return Boolean.toString(false);
 		}
 		
 		//Sinon, connexion refusée
-		System.out.println("Utilisateur "+login+" non connecté");
+		System.out.println("Utilisateur "+login+" déjà connecté");
 		return Boolean.toString(false);
 	}
 	/**
@@ -242,6 +265,7 @@ public class Systeme {
 	
 	/**
 	 * Création d'un document
+	 * @param String login
 	 * @param String titre
 	 * @param String duree
 	 * @param String jour
@@ -255,32 +279,39 @@ public class Systeme {
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
 	 */
-	public String creerDocument(String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) throws NumberFormatException, SQLException {
+	public String creerDocument(String login, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) throws NumberFormatException, SQLException {
 
 		System.out.println("Création du document "+titre);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "creerDocument")) {
 		
-		//On vérifie que le document n'existe pas
-		if (Document.getByTitre(titre) == null) {
-			
-			//On crée le document
-			Document d = Document.create(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier);
-			
-			//Si le document a bien été créé
-			if (d != null) {
-				//On l'ajoute à la liste des documents du système
-				documents.put(d.getId(), d);
+			//On vérifie que le document n'existe pas
+			if (Document.getByTitre(titre) == null) {
 				
-				System.out.println("Document '"+titre+"' créé");
-				return Boolean.toString(true);
+				//On crée le document
+				Document d = Document.create(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier);
+				
+				//Si le document a bien été créé
+				if (d != null) {
+					//On l'ajoute à la liste des documents du système
+					documents.put(d.getId(), d);
+					
+					System.out.println("Document '"+titre+"' créé");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, création a échoué
+				System.out.println("Document '"+titre+"' non créé");
+				return Boolean.toString(false);
 			}
 			
-			//Sinon, création a échoué
+			//Sinon, création refusée
 			System.out.println("Document '"+titre+"' non créé");
 			return Boolean.toString(false);
 		}
-		
-		//Sinon, création refusée
-		System.out.println("Document '"+titre+"' non créé");
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Document non créé");
 		return Boolean.toString(false);
 	}
 	
@@ -327,61 +358,76 @@ public class Systeme {
 
 	/**
 	 * Création d'un programme
+	 * @param String login
 	 * @param String titre
 	 * @param String thematique
 	 * @return String
 	 * @throws SQLException 
 	 */
-	public String creerProgramme(String titre, String thematique) throws SQLException {
+	public String creerProgramme(String login, String titre, String thematique) throws SQLException {
 
 		System.out.println("Création du programme "+titre);
 		
-		//On vérifie que le programme n'existe pas
-		if (Programme.getByTitre(titre) == null) {
-			
-			//On crée le programme
-			Programme p = Programme.create(titre, thematique);
-			
-			//On l'ajoute à la liste des programmes du système
-			programmes.put(p.getId(), p);
-			
-			System.out.println("Programme '"+titre+"' créé");
-			return Boolean.toString(true);
-			
-		}
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "creerProgramme")) {
 		
+			//On vérifie que le programme n'existe pas
+			if (Programme.getByTitre(titre) == null) {
+				
+				//On crée le programme
+				Programme p = Programme.create(titre, thematique);
+				
+				//On l'ajoute à la liste des programmes du système
+				programmes.put(p.getId(), p);
+				
+				System.out.println("Programme '"+titre+"' créé");
+				return Boolean.toString(true);
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Programme '"+titre+"' non créé");
+			return Boolean.toString(false);
+		}
 		//Sinon, création refusée
-		System.out.println("Programme '"+titre+"' non créé");
+		System.out.println("Permission non accordée. Programme non créé");
 		return Boolean.toString(false);
 	}
 	
 	/**
 	 * Ajoute un document dans un programme
+	 * @param String login
 	 * @param String idDoc
 	 * @param String idProg
 	 * @return String
 	 * @throws SQLException 
 	 */
-	public String ajouterDocumentProgramme(String idDoc, String idProg) throws SQLException {
+	public String ajouterDocumentProgramme(String login, String idDoc, String idProg) throws SQLException {
 		System.out.println("Ajout du document "+idDoc+" au programme "+idProg);
 		
-		//On vérifie que le programme et le document existent
-		if (programmes.containsKey(idProg) && documents.containsKey(idDoc)) {
-			
-			//On récupère les objets
-			Document d = (Document)documents.get(idDoc);
-			Programme p = (Programme)programmes.get(idProg);
-			
-			//On ajoute le document au programme
-			p.ajouterDocument(d);
-			
-			System.out.println("Document "+idDoc+" ajouté au programme "+idProg);
-			return Boolean.toString(true);
-			
-		}
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "ajouterDocumentProgramme")) {
 		
+			//On vérifie que le programme et le document existent
+			if (programmes.containsKey(idProg) && documents.containsKey(idDoc)) {
+				
+				//On récupère les objets
+				Document d = (Document)documents.get(idDoc);
+				Programme p = (Programme)programmes.get(idProg);
+				
+				//On ajoute le document au programme
+				p.ajouterDocument(d);
+				
+				System.out.println("Document "+idDoc+" ajouté au programme "+idProg);
+				return Boolean.toString(true);
+				
+			}
+			
+			//Sinon, ajout refusé
+			System.out.println("Le document "+idDoc+" n'a pas été ajouté au programme "+idProg);
+			return Boolean.toString(false);
+		}
 		//Sinon, ajout refusé
-		System.out.println("Le document "+idDoc+" n'a pas été ajouté au programme "+idProg);
+		System.out.println("Permission non accordée. Le document non programmé");
 		return Boolean.toString(false);
 	}
 	
@@ -420,37 +466,46 @@ public class Systeme {
 
 	/**
 	 * Création d'un canal
+	 * @param String login
 	 * @param String nom
 	 * @param String utilMax
 	 * @return String
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
 	 */
-	public String creerCanal(String nom, String utilMax) throws NumberFormatException, SQLException {
+	public String creerCanal(String login, String nom, String utilMax) throws NumberFormatException, SQLException {
 
 		System.out.println("Création du canal "+nom);
 		
-		//On vérifie que le canal n'existe pas
-		if (Canal.getByNom(nom) == null) {
-			
-			//On crée le canal
-			Canal c = Canal.create(nom, Integer.parseInt(utilMax));
-			
-			//On l'ajoute à la liste des canaux du système
-			canaux.put(c.getId(), c);
-			
-			System.out.println("Canal '"+nom+"' créé");
-			return Boolean.toString(true);
-			
-		}
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "creerCanal")) {
 		
+			//On vérifie que le canal n'existe pas
+			if (Canal.getByNom(nom) == null) {
+				
+				//On crée le canal
+				Canal c = Canal.create(nom, Integer.parseInt(utilMax));
+				
+				//On l'ajoute à la liste des canaux du système
+				canaux.put(c.getId(), c);
+				
+				System.out.println("Canal '"+nom+"' créé");
+				return Boolean.toString(true);
+				
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Canal '"+nom+"' non créé");
+			return Boolean.toString(false);
+		}
 		//Sinon, création refusée
-		System.out.println("Canal '"+nom+"' non créé");
+		System.out.println("Permission non accordée. Canal non créé");
 		return Boolean.toString(false);
 	}
 	
 	/**
 	 * Planifier un programme sur un canal
+	 * @param String login
 	 * @param String idProg
 	 * @param String idCanal
 	 * @param String jour
@@ -461,127 +516,172 @@ public class Systeme {
 	 * @param String seconde 
 	 * @return String
 	 */
-	public String planifierProgramme(String idProg, String idCanal, String jour, String mois, String annee, String heure, String minute, String seconde) {
+	public String planifierProgramme(String login, String idProg, String idCanal, String jour, String mois, String annee, String heure, String minute, String seconde) {
 
 		System.out.println("Planification du programme "+idProg+" sur le canal "+idCanal);
 		
-		//On vérifie que le canal et le programme existent
-		if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "planifierCanal")) {
+		
+			//On vérifie que le canal et le programme existent
+			if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+				
+				//On récupère les objets
+				Canal c = (Canal)canaux.get(idCanal);
+				Programme p = (Programme)programmes.get(idProg);
+				
+				//On planifie le programme
+				//c.planifierProgramme(p);
+				
+				System.out.println("Programme "+idProg+" planifié sur le canal "+idCanal);
+				return Boolean.toString(true);
+				
+			}
 			
-			//On récupère les objets
-			Canal c = (Canal)canaux.get(idCanal);
-			Programme p = (Programme)programmes.get(idProg);
-			
-			//On planifie le programme
-			//c.planifierProgramme(p);
-			
-			System.out.println("Programme "+idProg+" planifié sur le canal "+idCanal);
-			return Boolean.toString(true);
-			
+			//Sinon, ajout refusé
+			System.out.println("Le programme "+idProg+" n'a pas été palnifié sur le canal "+idCanal);
+			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Le programme "+idProg+" n'a pas été palnifié sur le canal "+idCanal);
+		System.out.println("Permission non accordée. Programme non planifié");
 		return Boolean.toString(false);
 	}
 	
 	/**
 	 * Diffuser un programme sur un canal
+	 * @param String login
 	 * @param String idProg
 	 * @param String idCanal
 	 * @return String
 	 */
-	public String diffuserProgramme(String idProg, String idCanal) {
+	public String diffuserProgramme(String login, String idProg, String idCanal) {
 		
 		System.out.println("Diffusion du programme "+idProg+" sur le canal "+idCanal);
 		
-		//On vérifie que le canal et le programme existent
-		if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "diffuserProgramme")) {
+		
+			//On vérifie que le canal et le programme existent
+			if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+				
+				//On récupère les objets
+				Canal c = (Canal)canaux.get(idCanal);
+				Programme p = (Programme)programmes.get(idProg);
+				
+				//On diffuse le programme
+				if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
+				c.diffuserProgramme(p);
+				
+				System.out.println("Programme "+idProg+" en diffusion sur le canal "+idCanal);
+				return Boolean.toString(true);
+				
+			}
 			
-			//On récupère les objets
-			Canal c = (Canal)canaux.get(idCanal);
-			Programme p = (Programme)programmes.get(idProg);
-			
-			//On diffuse le programme
-			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
-			c.diffuserProgramme(p);
-			
-			System.out.println("Programme "+idProg+" en diffusion sur le canal "+idCanal);
-			return Boolean.toString(true);
-			
+			//Sinon, ajout refusé
+			System.out.println("La diffusion du programme "+idProg+" n'a pas été lancée sur le canal "+idCanal);
+			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("La diffusion du programme "+idProg+" n'a pas été lancée sur le canal "+idCanal);
+		System.out.println("Permission non accordée. Diffusion non lancée");
 		return Boolean.toString(false);
 	}
 	
 	/**
 	 * Ecouter un canal (retourne l'URL du canal)
+	 * @param String login
 	 * @param String idCanal
 	 * @return String
 	 */
-	public String ecouterCanal(String idCanal) {
+	public String ecouterCanal(String login, String idCanal) {
 		System.out.println("Ecoute du canal "+idCanal);
 		
-		//On vérifie que le canal et le programme existent
-		if (canaux.containsKey(idCanal)) {
+		//	On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "ecouterCanal")) {
+		
+			//On vérifie que le canal et le programme existent
+			if (canaux.containsKey(idCanal)) {
+				
+				//On récupère l'objet canal
+				Canal c = (Canal)canaux.get(idCanal);
+				System.out.println("Construction de l'url du canal "+idCanal);
+				String url = c.getUrlStreaming();
+				System.out.println("URL: "+url);
+				return url;
+			}
 			
-			//On récupère l'objet canal
-			Canal c = (Canal)canaux.get(idCanal);
-			System.out.println("Construction de l'url du canal "+idCanal);
-			String url = c.getUrlStreaming();
-			System.out.println("URL: "+url);
-			return url;
+			//Sinon, ajout refusé
+			System.out.println("Canal "+idCanal+" inconnu");
+			return null;
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Canal "+idCanal+" inconnu");
+		System.out.println("Permission non accordée.");
 		return null;
 	}
 	
 	/**
 	 * Lancer la diffusion d'un canal
+	 * @param String login
 	 * @param String idCanal
 	 * @return String
 	 */
-	public String startCanal(String idCanal) {
+	public String startCanal(String login, String idCanal) {
 		System.out.println("Ecoute du canal "+idCanal);
 		
-		//On vérifie que le canal et le programme existent
-		if (canaux.containsKey(idCanal)) {
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "ecouterCanal")) {
+		
+			//On vérifie que le canal et le programme existent
+			if (canaux.containsKey(idCanal)) {
+				
+				//On récupère l'objet canal
+				Canal c = (Canal)canaux.get(idCanal);
+				if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
+				c.startDiffusion();
+				return Boolean.toString(true);
+			}
 			
-			//On récupère l'objet canal
-			Canal c = (Canal)canaux.get(idCanal);
-			if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
-			c.startDiffusion();
-			return Boolean.toString(true);
+			//Sinon, ajout refusé
+			System.out.println("Canal "+idCanal+" inconnu");
+			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Canal "+idCanal+" inconnu");
+		System.out.println("Permission non accordée. Canal non démarré");
 		return Boolean.toString(false);
+			
 	}
 	
 	/**
 	 * Stoppe la diffusion d'un canal
+	 * @param String login
 	 * @param String idCanal
 	 * @return String
 	 */
-	public String stopCanal(String idCanal) {
+	public String stopCanal(String login, String idCanal) {
 		System.out.println("Stopper le canal "+idCanal);
 		
-		//On vérifie que le canal et le programme existent
-		if (canaux.containsKey(idCanal)) {
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "ecouterCanal")) {
+		
+			//On vérifie que le canal et le programme existent
+			if (canaux.containsKey(idCanal)) {
+				
+				//On récupère l'objet canal
+				Canal c = (Canal)canaux.get(idCanal);
+				c.stopDiffusion();
+				return Boolean.toString(true);
+			}
 			
-			//On récupère l'objet canal
-			Canal c = (Canal)canaux.get(idCanal);
-			c.stopDiffusion();
-			return Boolean.toString(true);
+			//Sinon, ajout refusé
+			System.out.println("Canal "+idCanal+" inconnu");
+			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Canal "+idCanal+" inconnu");
+		System.out.println("Permission non accordée. Canal non arrété");
 		return Boolean.toString(false);
 	}
 	

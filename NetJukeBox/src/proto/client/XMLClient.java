@@ -180,6 +180,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(nom);
 				params.addElement(utilMax);
 				
@@ -214,6 +215,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(titre);
 				params.addElement(thematique);
 				
@@ -255,6 +257,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(titre);
 				params.addElement(duree);
 				params.addElement(jour);
@@ -296,6 +299,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(idDoc);
 				params.addElement(idProg);
 				
@@ -330,6 +334,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(idProg);
 				params.addElement(idCanal);
 				
@@ -370,6 +375,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(idProg);
 				params.addElement(idCanal);
 				params.addElement(jour);
@@ -409,6 +415,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(idCanal);
 				
 				// Adresse la requête et affiche les résultats
@@ -439,6 +446,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(idCanal);
 				
 				// Adresse la requête et affiche les résultats
@@ -470,6 +478,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
+				params.addElement(login);
 				params.addElement(idCanal);
 				
 				// Adresse la requête et affiche les résultats
