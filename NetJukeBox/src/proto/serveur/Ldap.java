@@ -71,7 +71,7 @@ public class Ldap {
 	    return false;
 	}
 	
-	public static boolean closeldap() throws NamingException {
+	public boolean closeldap() throws NamingException {
 		if (connect != null) {
 			connect.close();
 			return true;
@@ -79,7 +79,7 @@ public class Ldap {
     	System.out.println("Vous avez été déconnecté de la base.");
 		return false;
 	}
-	
+
 	public boolean executeSupprimer(String login, String role) throws NamingException {
 		String requete =  "uid=" + login + ",ou=" + role;
 		Dictionary attr = getAttributs(login, role);
@@ -168,7 +168,7 @@ public class Ldap {
     	}
 	}
 
-	public static Dictionary getAttributs(String login, String role) {
+	public Dictionary getAttributs(String login, String role) {
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
 			Attributes answer = connect.getAttributes(requete);
@@ -181,7 +181,7 @@ public class Ldap {
 	}
 
 	@SuppressWarnings("unchecked")
-	static Dictionary printAttrs(Attributes attrs) {
+	Dictionary printAttrs(Attributes attrs) {
 		Dictionary ligne = new Hashtable();
 		if (attrs == null) {
     		System.out.println("No attributes");
@@ -204,7 +204,7 @@ public class Ldap {
 		return ligne;
 	}	
 	
-	public static boolean changerRole(String login, String ancienrole, String nouveaurole){
+	public boolean changerRole(String login, String ancienrole, String nouveaurole){
 		String ancien = "uid=" + login + ", ou=" + ancienrole;
 		String nouveau = "uid=" + login + ", ou=" + nouveaurole;
 		try {
