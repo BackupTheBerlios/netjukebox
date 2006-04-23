@@ -1,5 +1,10 @@
 package proto.serveur;
 
+import java.util.Dictionary;
+import java.util.Enumeration;
+
+import javax.naming.NamingException;
+
 /**
  * Utlisateur du Net-JukeBox
  */
@@ -38,9 +43,14 @@ public class Utilisateur {
 	private String pays;
 
 	/**
+	 * Role de l'utilisateur
+	 */
+	private String role;
+
+	/**
 	 * #DEFINITION#
 	 */
-	private Attribuer attribuer;
+	//private Attribuer attribuer;
 
 // METHODES STATIQUES
 //*************************************************
@@ -53,33 +63,37 @@ public class Utilisateur {
 	 * @param String prenom
 	 * @param String mail
 	 * @param String pays
+	 * @param String role
 	 * @return Utilisateur
 	 */
-	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays){
+	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
 		
-		//On insère les infos dans l'annuaire
-		//***********
-		// => LDAP <=
-		//***********
+		Ldap ldap = Ldap.getInstance();
+		ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
 		
 		//On retourne un objet configuré avec les infos issues de LDAP
-		return Utilisateur.getByLogin(login);
+		return Utilisateur.getByLogin(login, role);
 	}
 	 
 	/**
 	 * Insancie un objet utilisateur après avoir récupéré ces infos depuis LDAP à partir de son login
 	 * @param login
 	 */
-	public static Utilisateur getByLogin(String login) {
-
-		//On récupère les infos depuis l'annuaire
-		//***********
-		// => LDAP <=
-		//***********
+	@SuppressWarnings("static-access")
+	public static Utilisateur getByLogin(String login, String role) {
+		
+		Ldap ldap = Ldap.getInstance();
+		Dictionary resultats = ldap.getAttributs(login, role);
+		Enumeration donnee = resultats.elements();
+		Enumeration colonne = resultats.keys();
+		for(int i = 0; i < resultats.size(); i++){
+			System.out.print(colonne.nextElement() + " : "); 
+			System.out.println(donnee.nextElement());
+		}
 		
 		if (login.equalsIgnoreCase("toto")) {
 			//On retourne un objet utilisateur configuré
-			return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France");
+			return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France", "role");
 		}
 		
 		//Sinon, on retourne un objet vide
@@ -90,14 +104,13 @@ public class Utilisateur {
 	 * Détruit les infos d'un canal contenues dans la base
 	 * @param login
 	 * @return
+	 * @throws NamingException 
 	 */
-	public static boolean deleteByLogin(String login) {
+	public static boolean deleteByLogin(String login, String role) throws NamingException {
 		
 		//On supprime l'utilisateur de l'annuaire, en partant d'un login
-		
-		//************
-		// => LDAP <=
-		//************
+		Ldap ldap = Ldap.getInstance();
+		ldap.executeSupprimer(login, role);
 		
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
@@ -109,6 +122,9 @@ public class Utilisateur {
 	 * @param login
 	 */
 	public static boolean verifierPwd(String pwd, String login) {
+		
+		Ldap ldap = Ldap.getInstance();
+		
 		//*************
 		// => LDAP <=
 		//*************
@@ -122,6 +138,9 @@ public class Utilisateur {
 	 * @param login
 	 */
 	public static boolean verifierLogin(String login) {
+		
+		Ldap ldap = Ldap.getInstance();
+		
 		//*************
 		// => LDAP <=
 		//*************
@@ -142,14 +161,15 @@ public class Utilisateur {
 		/**
 		 * Constructeur complet
 		 */
-		public Utilisateur(String login, String pwd, String nom, String prenom, String mail, String pays) {
-			
+		public Utilisateur(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
+
 			this.login = login;
 			this.pwd = pwd;
 			this.nom=nom;
 			this.prenom=prenom;
 			this.mail=mail;
 			this.pays=pays;
+			this.role=role;
 		}
 	
 // METHODES DYNAMIQUES
@@ -158,14 +178,15 @@ public class Utilisateur {
 	/**
 	 * Supprimer l'utilisateur
 	 * @return boolean
+	 * @throws NamingException 
 	 */
-	public boolean supprimer() {
+	public boolean supprimer() throws NamingException {
 		
 		//On déconnecte l'utilisateur
 		this.deconnecter();
 		
 		//On supprime ses infos de l'annuaire
-		return Utilisateur.deleteByLogin(this.login);
+		return Utilisateur.deleteByLogin(this.login, this.role);
 	}	
 		
 		
@@ -209,7 +230,8 @@ public class Utilisateur {
 	 * Modifier les informations de l'utilisateur
 	 */
 	public void modifierInfos() {
-		// your code here
+		Ldap ldap = Ldap.getInstance();
+		ldap.ModifieAttributs("mail", "new@gmail", "gentaz", "admin");
 	}
 
 	
@@ -281,6 +303,14 @@ public class Utilisateur {
 	public String getPays() {
 		return pays;
 	}
+	
+	/**
+	 * Retourne le role de l'utilisateur
+	 * @return String
+	 */
+	public String getRole() {
+		return role;
+	}
 
 	/**
 	 * Vérification de l'état de connexion de l'utilisateur
@@ -337,9 +367,10 @@ public class Utilisateur {
 	 * @param Id_Perm
 	 * @return boolean
 	 */
-	public boolean ajouterPermission(int Id_Perm) {
-		// your code here
-		return false;
+	@SuppressWarnings("static-access")
+	public void ajouterPermission(String login, String ancienrole, String nouveaurole) {
+		Ldap ldap = Ldap.getInstance();
+		ldap.changerRole(login, ancienrole, nouveaurole);
 	}
 
 	/**
@@ -361,5 +392,18 @@ public class Utilisateur {
 	public boolean definirPermission(int Id_Perm, String Lib_Perm) {
 		// your code here
 		return false;
+	}
+	
+	/**
+	 * Vérfie que l'utilisateur a bien la permission requise
+	 * @param String perm
+	 * @return boolean
+	 */
+	public boolean verifPermission(String perm) {
+
+		//if (permssions.containsKey(perm)) return permssions.get(perm);
+		//else return false;
+				
+		return true;
 	}
 }
