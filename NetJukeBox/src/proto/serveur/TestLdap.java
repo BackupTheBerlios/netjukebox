@@ -13,13 +13,14 @@ public class TestLdap {
 		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", 
 				"simple", "cn=admin,dc=netjukebox,dc=com", "mot2passe");
 
-		ldap.executeCreer("gentaz", "Dominique gentaz", "Dominique", "domi@gmail.com", "domi", "respprog");
+		//ldap.executeCreer("login", "password", "toto", "titi", "toto@gmail.com", "france", "usager");
+		//ldap.executeCreer("log", "pass", "tata", "tutu", "tata@gmail.com", "france", "respprog");
+		//ldap.changerRole("login", "usager", "admin");
 		
-		ldap.changerRole("gentaz", "respprog", "admin");
+		//ldap.ModifieAttributs("mail", "new@gmail", "login", "admin");
 		
-		ldap.ModifieAttributs("mail", "new@gmail", "gentaz", "admin");
 		
-		Dictionary resultats = ldap.getAttributs("gentaz", "admin");
+		Dictionary resultats = ldap.getAttributs("login", "usager");
 		Enumeration donnee = resultats.elements();
 		Enumeration colonne = resultats.keys();
 		for(int i = 0; i < resultats.size(); i++){
@@ -27,6 +28,6 @@ public class TestLdap {
 			System.out.println(donnee.nextElement());
 		}
 
-		ldap.executeSupprimer("gentaz", "respprog");
+		//ldap.executeSupprimer("login", "admin");
 	}
 }
