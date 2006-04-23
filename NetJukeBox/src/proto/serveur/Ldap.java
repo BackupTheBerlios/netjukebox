@@ -21,7 +21,7 @@ public class Ldap {
 	private String url; //= "ldap://localhost:389/dc=netjukebox,dc=com";
 	private String auth; //= "simple";
 	private String login; //= "cn=admin,dc=netjukebox,dc=com";
-	private String pwd; //= "secret";
+	private String pwd; //= "mot2passe";
 	private static InitialDirContext connect = null;
 	
 //	 CONSTRUCTEUR
@@ -80,9 +80,9 @@ public class Ldap {
 		return false;
 	}
 	
-	public boolean executeSupprimer(String nom, String role) throws NamingException {
-		String requete =  "sn=" + nom + ",ou=" + role;
-		Dictionary attr = getAttributs(nom, role);
+	public boolean executeSupprimer(String login, String role) throws NamingException {
+		String requete =  "uid=" + login + ",ou=" + role;
+		Dictionary attr = getAttributs(login, role);
 		if (attr == null) {
 			return false;
 		} else 
@@ -101,7 +101,7 @@ public class Ldap {
 	}
 	
 	public boolean ModifieAttributs(String champs, String donnee, String nom, String role) {
-		String requete = "sn=" + nom + ",ou=" + role;
+		String requete = "uid=" + nom + ",ou=" + role;
 		Dictionary attr = getAttributs(nom, role);
 		if (attr == null) {
 			return false;
@@ -126,15 +126,19 @@ public class Ldap {
 		}
 	}
 
-	public boolean executeCreer(String login, String nom, String prenom, String email, String pwd, String role) {
+	public boolean executeCreer(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
 		// entry's DN
-		String entryDN = "sn=" + login + ",ou=" + role;
+		String entryDN = "uid=" + login + ",ou=" + role;
+		String personne = nom + " " + prenom;
 		// entry's attributes
-		Attribute sn = new BasicAttribute("sn", login);
-		Attribute cn = new BasicAttribute("cn", nom);
-		Attribute givenName = new BasicAttribute("givenName", prenom);
-		Attribute mail = new BasicAttribute("mail", email);
+		Attribute uid = new BasicAttribute("uid", login);
 		Attribute userPassword = new BasicAttribute("userPassword", pwd);
+		Attribute sn = new BasicAttribute("sn", nom);
+		Attribute givenName = new BasicAttribute("givenName", prenom);
+		Attribute cn = new BasicAttribute("cn", personne);
+		Attribute email = new BasicAttribute("mail", mail);
+		Attribute p = new BasicAttribute("st", pays);
+		Attribute r = new BasicAttribute("ou", role);
     	
 		Attribute oc = new BasicAttribute("objectClass");
     	oc.add("top");
@@ -142,34 +146,36 @@ public class Ldap {
     	oc.add("organizationalPerson");
     	oc.add("inetOrgPerson");
     	
-
     	try {
     		// build the entry
     		Attributes entry = new BasicAttributes();
-    		entry.put(sn);
-    		entry.put(cn);
-    		entry.put(givenName);
-    		entry.put(mail);
+    		entry.put(uid);
     		entry.put(userPassword);
+    		entry.put(sn);
+    		entry.put(givenName);
+    		entry.put(cn);
+    		entry.put(email);
+    		entry.put(p);
+    		entry.put(r);
     		entry.put(oc);
     		// Add the entry
     		connect.createSubcontext(entryDN, entry);
-    		System.out.println( "L'utilisateur "+ sn +" est crée sous "+entryDN+"!");
+    		System.out.println( "L'utilisateur "+ uid +" est crée sous "+entryDN+"!");
     		return true ;
     	} catch (NamingException e) {
-    		System.err.println("Erreur pour la création de l'utilisateur "+ cn +"!"+ e);
+    		System.err.println("Erreur pour la création de l'utilisateur "+ uid +"!"+ e);
     		return false;
     	}
 	}
 
-	public static Dictionary getAttributs(String nom, String role) {
-		String requete = "sn=" + nom + ",ou=" + role;
+	public static Dictionary getAttributs(String login, String role) {
+		String requete = "uid=" + login + ",ou=" + role;
 		try {
 			Attributes answer = connect.getAttributes(requete);
 			Dictionary ligne = printAttrs(answer);
 			return ligne;
 		} catch (Exception e) {
-			System.out.println("Erreur l'utilisateur : "+ nom + " n'existe pas");
+			System.out.println("Erreur l'utilisateur : "+ login + " n'existe pas");
 			return null;
 		}
 	}
@@ -198,9 +204,9 @@ public class Ldap {
 		return ligne;
 	}	
 	
-	public static boolean changerRole(String nom, String ancienrole, String nouveaurole){
-		String ancien = "sn=" + nom + ", ou=" + ancienrole;
-		String nouveau = "sn=" + nom + ", ou=" + nouveaurole;
+	public static boolean changerRole(String login, String ancienrole, String nouveaurole){
+		String ancien = "uid=" + login + ", ou=" + ancienrole;
+		String nouveau = "uid=" + login + ", ou=" + nouveaurole;
 		try {
 			connect.rename(ancien, nouveau);
 			//System.out.println(connect.lookup(nouveau));
