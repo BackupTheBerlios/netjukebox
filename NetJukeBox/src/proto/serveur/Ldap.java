@@ -2,6 +2,7 @@ package proto.serveur;
 
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
@@ -324,22 +325,27 @@ public class Ldap {
 	
 	
 	
-	public boolean GetLoginPasswd(String log){
+	public boolean getLogin(String log){
 		try {
 			// Specify the ids of the attributes to return
+			String[] attr = {"uid", "userPassword", "ou"};
 			SearchControls ctls = new SearchControls();
-			ctls.setReturningObjFlag(true);
+			ctls.setReturningAttributes(attr);
+			ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
 			//String filter = "uid=" + log;
 			String filter = "uid=" + log;
 			// Search for objects using filter
-			NamingEnumeration answer = connect.search("ou=usager", filter, ctls);
-			NamingEnumeration answer1 = connect.search("ou=respprog", filter, ctls);
-			NamingEnumeration answer2 = connect.search("ou=admin", filter, ctls);
+			NamingEnumeration answer = connect.search("", filter, ctls);
 			//Print the answer
-			printSearchEnumeration(answer);
-			printSearchEnumeration(answer1);
-			printSearchEnumeration(answer2);
+			Dictionary resultat = printSearchEnumeration(answer);
+			Enumeration donnee = resultat.elements();
+			for(int i = 0; i < resultat.size(); i++){
+				//String result = (String) donnee.nextElement();
+				//patternStr = "";
+				
+				//System.out.println(result);
+			}
 			// Close the context when we're done
 			connect.close();
 			return true;
@@ -349,15 +355,24 @@ public class Ldap {
 		}
 	}
 	
-	
-	private void printSearchEnumeration(NamingEnumeration answer) {
+	/**
+	 * Recherche du login dans les branches de l'annuaire
+	 * @param answer
+	 * @return Object
+	 */
+	@SuppressWarnings("unchecked")
+	private Dictionary printSearchEnumeration(NamingEnumeration answer) {
+		Dictionary resultat = new Hashtable();
 		try {
-		    while ( answer.hasMore()) {
+		    while (answer.hasMore()) {
 			SearchResult sr = (SearchResult) answer.next();
-			System.out.println(sr.getName());
+			System.out.println(sr.getAttributes());
+			resultat.put("resultat", sr.getAttributes());
 		    }
+		    return resultat;
 		} catch (NamingException e) {
 		    e.printStackTrace();
+		    return  null;
 		}
 	}
 	
