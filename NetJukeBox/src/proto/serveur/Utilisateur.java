@@ -4,6 +4,8 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 
 /**
  * Utlisateur du Net-JukeBox
@@ -65,31 +67,35 @@ public class Utilisateur {
 	 * @param String pays
 	 * @param String role
 	 * @return Utilisateur
+	 * @throws NamingException 
 	 */
-	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
+	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays, String role) throws NamingException {
 		
 		Ldap ldap = Ldap.getInstance();
 		ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
 		
 		//On retourne un objet configuré avec les infos issues de LDAP
-		return Utilisateur.getByLogin(login, role);
+		return Utilisateur.getByLogin(login);
 	}
 	 
 	/**
 	 * Insancie un objet utilisateur après avoir récupéré ces infos depuis LDAP à partir de son login
 	 * @param login
+	 * @throws NamingException 
 	 */
 	@SuppressWarnings("static-access")
-	public static Utilisateur getByLogin(String login, String role) {
+	public static Utilisateur getByLogin(String login) throws NamingException {
 		
 		Ldap ldap = Ldap.getInstance();
-		Dictionary resultats = ldap.getAttributs(login, role);
+		Dictionary resultats = ldap.getLogin(login);
 		Enumeration donnee = resultats.elements();
-		Enumeration colonne = resultats.keys();
-		for(int i = 0; i < resultats.size(); i++){
-			System.out.print(colonne.nextElement() + " : "); 
-			System.out.println(donnee.nextElement());
-		}
+		Attributes result = (Attributes) donnee.nextElement();
+		Attribute log = result.get("uid");
+		Attribute pwd = result.get("userPassword");
+		Attribute role = result.get("ou");
+		System.out.println(pwd.get());
+		System.out.println(log.get());
+		System.out.println(role.get());
 		
 		if (login.equalsIgnoreCase("toto")) {
 			//On retourne un objet utilisateur configuré
@@ -231,7 +237,7 @@ public class Utilisateur {
 	 */
 	public void modifierInfos() {
 		Ldap ldap = Ldap.getInstance();
-		ldap.ModifieAttributs("mail", "new@gmail", "gentaz", "admin");
+		//ldap.ModifieAttributs("mail", "new@gmail", "gentaz", "admin");
 	}
 
 	

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.StringTokenizer;
+
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -313,19 +315,13 @@ public class Ldap {
 		    return false;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public boolean getLogin(String log){
+
+	/**
+	 * 
+	 * @param log
+	 * @return
+	 */
+	public Dictionary getLogin(String login){
 		try {
 			// Specify the ids of the attributes to return
 			String[] attr = {"uid", "userPassword", "ou"};
@@ -333,51 +329,37 @@ public class Ldap {
 			ctls.setReturningAttributes(attr);
 			ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
-			//String filter = "uid=" + log;
-			String filter = "uid=" + log;
+			String filter = "uid=" + login;
 			// Search for objects using filter
 			NamingEnumeration answer = connect.search("", filter, ctls);
 			//Print the answer
 			Dictionary resultat = printSearchEnumeration(answer);
-			Enumeration donnee = resultat.elements();
-			for(int i = 0; i < resultat.size(); i++){
-				//String result = (String) donnee.nextElement();
-				//patternStr = "";
-				
-				//System.out.println(result);
-			}
 			// Close the context when we're done
 			connect.close();
-			return true;
+			return resultat;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 	
 	/**
 	 * Recherche du login dans les branches de l'annuaire
 	 * @param answer
-	 * @return Object
+	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
 	private Dictionary printSearchEnumeration(NamingEnumeration answer) {
 		Dictionary resultat = new Hashtable();
 		try {
 		    while (answer.hasMore()) {
-			SearchResult sr = (SearchResult) answer.next();
-			System.out.println(sr.getAttributes());
-			resultat.put("resultat", sr.getAttributes());
+		    	SearchResult sr = (SearchResult) answer.next();
+		    	resultat.put("resultat", sr.getAttributes());
 		    }
 		    return resultat;
 		} catch (NamingException e) {
 		    e.printStackTrace();
 		    return  null;
 		}
-	}
-	
-	
-	
-	
-	
+	}	
 }

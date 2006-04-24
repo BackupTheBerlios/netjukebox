@@ -3,6 +3,8 @@ package proto.serveur;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 
 public class TestLdap {
 		
@@ -19,7 +21,7 @@ public class TestLdap {
 		
 		//ldap.ModifieAttributs("mail", "new@gmail", "login", "admin");
 		
-		
+		/**
 		Dictionary resultats = ldap.getAttributs("login", "usager");
 		Enumeration donnee = resultats.elements();
 		Enumeration colonne = resultats.keys();
@@ -27,7 +29,18 @@ public class TestLdap {
 			System.out.print(colonne.nextElement() + " : "); 
 			System.out.println(donnee.nextElement());
 		}
-
+		*/
+		
+		Dictionary resultats = ldap.getLogin("login");
+		Enumeration donnee = resultats.elements();
+		Attributes result = (Attributes) donnee.nextElement();
+		Attribute log = result.get("uid");
+		Attribute pwd = result.get("userPassword");
+		Attribute role = result.get("ou");
+		System.out.println(pwd.get());
+		System.out.println(log.get());
+		System.out.println(role.get());
+		
 		//ldap.executeSupprimer("login", "admin");
 	}
 }
