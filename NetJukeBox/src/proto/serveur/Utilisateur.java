@@ -160,32 +160,47 @@ public class Utilisateur {
 	 * Vérifie l'existence du couple Login/Pwd
 	 * @param pwd
 	 * @param login
+	 * @throws NamingException 
 	 */
-	public static boolean verifierPwd(String pwd, String login) {
+	public static boolean verifierPwd(String pwd, String login) throws NamingException {
 		
 		Ldap ldap = Ldap.getInstance();
-		
-		//*************
-		// => LDAP <=
-		//*************
-		
-		return (pwd.equalsIgnoreCase("toto") && login.equalsIgnoreCase("toto"));
+		Dictionary resultats = ldap.getLogin(login);
+		Enumeration donnee = resultats.elements();
+		// S'il y a un resultat
+		String passwd, log;
+		if (resultats != null && resultats.size()>0) {
+			Attributes result = (Attributes) donnee.nextElement();
+			Attribute uid = result.get("uid");
+			Attribute motdepasse = result.get("userPassword");
+			log = (String) uid.get();
+			passwd = (String) motdepasse.get();
+			return passwd.equalsIgnoreCase(pwd) && log.equalsIgnoreCase(login); 
+		} else return false;
+		//return (pwd.equalsIgnoreCase("toto") && login.equalsIgnoreCase("toto"));
 	}
 	
 	/**
 	 * Vérifie l'existence du Login
 	 * @param pwd
 	 * @param login
+	 * @throws NamingException 
 	 */
-	public static boolean verifierLogin(String login) {
+	public static boolean verifierLogin(String login) throws NamingException {
 		
 		Ldap ldap = Ldap.getInstance();
+		Dictionary resultats = ldap.getLogin(login);
+		Enumeration donnee = resultats.elements();
+		// S'il y a un resultat
+		String log;
+		if (resultats != null && resultats.size()>0) {
+			Attributes result = (Attributes) donnee.nextElement();
+			Attribute uid = result.get("uid");
+			log = (String) uid.get();
+			return log.equalsIgnoreCase(login); 
+		} else return false;
 		
-		//*************
-		// => LDAP <=
-		//*************
-		
-		return (login.equalsIgnoreCase("toto"));
+		//return (login.equalsIgnoreCase("toto"));
 	}
 	
 	
