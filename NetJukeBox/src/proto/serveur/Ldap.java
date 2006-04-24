@@ -145,7 +145,7 @@ public class Ldap {
 	 */
 	public boolean executeSupprimer(String login, String role) throws NamingException {
 		String requete =  "uid=" + login + ",ou=" + role;
-		Dictionary attr = getAttributs(login, role);
+		Dictionary attr = getLogin(login);
 		if (attr == null) {
 			return false;
 		} else 
@@ -173,7 +173,7 @@ public class Ldap {
 	 */
 	public boolean ModifieAttributs(String champs, String donnee, String nom, String role) {
 		String requete = "uid=" + nom + ",ou=" + role;
-		Dictionary attr = getAttributs(nom, role);
+		Dictionary attr = getLogin(nom);
 		if (attr == null) {
 			return false;
 		} else
@@ -250,53 +250,6 @@ public class Ldap {
 	}
 	
 	/**
-	 * Récupère les attributs d'un utilisateur
-	 * @param login
-	 * @param role
-	 * @return
-	 */
-	public Dictionary getAttributs(String login, String role) {
-		String requete = "uid=" + login + ",ou=" + role;
-		try {
-			Attributes answer = connect.getAttributes(requete);
-			Dictionary ligne = printAttrs(answer);
-			return ligne;
-		} catch (Exception e) {
-			System.out.println("Erreur l'utilisateur : "+ login + " n'existe pas");
-			return null;
-		}
-	}
-	
-	/**
-	 * Récupère les attributs d'un utilisateur
-	 * @param attrs
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private Dictionary printAttrs(Attributes attrs) {
-		Dictionary ligne = new Hashtable();
-		if (attrs == null) {
-    		System.out.println("No attributes");
-    	} else {
-    		try {
-    			for (NamingEnumeration ae = attrs.getAll();
-	    			ae.hasMore();) {
-    				Attribute attr = (Attribute)ae.next();
-
-    				for (NamingEnumeration e = attr.getAll(); 
-    					e.hasMore();
-     					ligne.put(attr.getID(), e.next()));
-    			}	
-    			return ligne;
-    		} catch (NamingException e) {
-    			System.out.println("Erreur l'utilisateur n'existe pas");
-    			return null;
-    		}
-    	}
-		return ligne;
-	}	
-	
-	/**
 	 * Change le role d'un utilisateur du Netjukebox
 	 * @param login
 	 * @param ancienrole
@@ -315,7 +268,7 @@ public class Ldap {
 		    return false;
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @param log
@@ -324,7 +277,7 @@ public class Ldap {
 	public Dictionary getLogin(String login){
 		try {
 			// Specify the ids of the attributes to return
-			String[] attr = {"uid", "userPassword", "ou"};
+			String[] attr = {"uid", "userPassword", "sn", "givenName", "cn", "mail", "st", "ou"};
 			SearchControls ctls = new SearchControls();
 			ctls.setReturningAttributes(attr);
 			ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -361,5 +314,56 @@ public class Ldap {
 		    e.printStackTrace();
 		    return  null;
 		}
+	}
+	
+	
+	/**
+	 * Récupère les attributs d'un utilisateur
+	 * @param login
+	 * @param role
+	 * @return
+	 */
+	/**
+	public Dictionary getAttributs(String login, String role) {
+		String requete = "uid=" + login + ",ou=" + role;
+		try {
+			Attributes answer = connect.getAttributes(requete);
+			Dictionary ligne = printAttrs(answer);
+			return ligne;
+		} catch (Exception e) {
+			System.out.println("Erreur l'utilisateur : "+ login + " n'existe pas");
+			return null;
+		}
+	}
+	
+	/**
+	 * Récupère les attributs d'un utilisateur
+	 * @param attrs
+	 * @return
+	 */
+	/**
+	@SuppressWarnings("unchecked")
+	private Dictionary printAttrs(Attributes attrs) {
+		Dictionary ligne = new Hashtable();
+		if (attrs == null) {
+    		System.out.println("No attributes");
+    	} else {
+    		try {
+    			for (NamingEnumeration ae = attrs.getAll();
+	    			ae.hasMore();) {
+    				Attribute attr = (Attribute)ae.next();
+
+    				for (NamingEnumeration e = attr.getAll(); 
+    					e.hasMore();
+     					ligne.put(attr.getID(), e.next()));
+    			}	
+    			return ligne;
+    		} catch (NamingException e) {
+    			System.out.println("Erreur l'utilisateur n'existe pas");
+    			return null;
+    		}
+    	}
+		return ligne;
 	}	
+	*/
 }

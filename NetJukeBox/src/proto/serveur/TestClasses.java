@@ -8,7 +8,7 @@ import proto.serveur.*;
 public class TestClasses {
 	public static void main (String[] args) throws AddressException, MessagingException, SQLException {
 
-		Utilisateur U1 = Utilisateur.create("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
+		//Utilisateur U1 = Utilisateur.create("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
 		//new EnvoiMail("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
 
 		Document D1 = Document.create("TitreD1", 3, "01", "01", "2006", "SourceD1", "LangueD1", "GenreD1", "FichierD1");
@@ -53,7 +53,7 @@ public class TestClasses {
 		D7.getDateCreation();
 		
 		Canal C1 = Canal.create("Rock", 20);
-		C1.createRTPServer("192.168.1.255", 2224);
+		//C1.createRTPServer("192.168.1.255", 2224);
 		C1.diffuserProgramme(P1);
 	}
 }

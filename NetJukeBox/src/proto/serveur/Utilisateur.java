@@ -84,28 +84,62 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	@SuppressWarnings("static-access")
-	public static Utilisateur getByLogin(String login) throws NamingException {
+	public static Utilisateur getByLogin(String log) throws NamingException {
 		
 		Ldap ldap = Ldap.getInstance();
-		Dictionary resultats = ldap.getLogin(login);
+		Dictionary resultats = ldap.getLogin(log);
 		Enumeration donnee = resultats.elements();
-		Attributes result = (Attributes) donnee.nextElement();
-		Attribute log = result.get("uid");
-		Attribute pwd = result.get("userPassword");
-		Attribute role = result.get("ou");
-		System.out.println(pwd.get());
-		System.out.println(log.get());
-		System.out.println(role.get());
 		
+		// S'il y a un resultat
+		if (resultats != null && resultats.size()>0) {
+			
+			Attributes result = (Attributes) donnee.nextElement();
+			Attribute uid = result.get("uid");
+			Attribute pwd = result.get("userPassword");
+			Attribute ou = result.get("ou");
+			Attribute sn = result.get("sn");
+			Attribute givenName = result.get("givenName");
+			Attribute mail = result.get("mail");
+			Attribute st = result.get("st");
+									
+			System.out.println("-------- Utilisateur -----------");
+			System.out.println("Nb de champs: "+result.size());
+			System.out.println("Login : " + uid.get());
+			System.out.println("UserPassword : " + pwd.get());
+			System.out.println("Nom : " + sn.get());
+			System.out.println("Prenom : " + givenName.get());
+			System.out.println("Mail : " + mail.get());
+			System.out.println("Pays : " + st.get());
+			System.out.println("role : " + ou.get());
+			System.out.println("-----------------------------");
+			
+			String login = (String) uid.get();
+			String passwd = (String) pwd.get();
+			String nom = (String) sn.get();
+			String prenom = (String) givenName.get();
+			String email = (String) mail.get();
+			String pays = (String) st.get();
+			String role = (String) ou.get();
+			
+			//On retourne l'objet
+			return new Utilisateur(login, passwd, nom, prenom, email, pays, role);
+		}
+		
+		/**
 		if (login.equalsIgnoreCase("toto")) {
 			//On retourne un objet utilisateur configuré
 			return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France", "role");
 		}
+		//Sinon, on retourne un objet vide
+		return null;
+		*/
 		
 		//Sinon, on retourne un objet vide
 		return null;
 	}
 	
+		
+		
 	/**
 	 * Détruit les infos d'un canal contenues dans la base
 	 * @param login

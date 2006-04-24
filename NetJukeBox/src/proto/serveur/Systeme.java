@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.prefs.Preferences;
 
+import javax.naming.NamingException;
+
 /**
  * Classe contenant la logique principale du serveur principal
  */
@@ -137,8 +139,9 @@ public class Systeme {
 	 * @param login
 	 * @param pwd
 	 * @return String
+	 * @throws NamingException 
 	 */
-	public String connexion(String login, String pwd) {
+	public String connexion(String login, String pwd) throws NamingException {
 		
 		System.out.println("Connexion de l'utilisateur "+login);
 		
@@ -209,8 +212,9 @@ public class Systeme {
 	 * Recherche un utilisateur à partir de son login
 	 * @param login
 	 * @return Utilisateur
+	 * @throws NamingException 
 	 */
-	public Utilisateur chercherUtilisateur(String login) {
+	public Utilisateur chercherUtilisateur(String login) throws NamingException {
 		
 		//On vérifie que le couple login existe
 		if (Utilisateur.verifierLogin(login)) return Utilisateur.getByLogin(login);
