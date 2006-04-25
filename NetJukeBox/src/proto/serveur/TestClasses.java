@@ -3,14 +3,21 @@ package proto.serveur;
 import java.sql.SQLException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.naming.NamingException;
 import proto.serveur.*;
 
 public class TestClasses {
-	public static void main (String[] args) throws AddressException, MessagingException, SQLException {
-
-		//Utilisateur U1 = Utilisateur.create("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
+	
+	public static Ldap ldap;
+	
+	public static void main (String[] args) throws AddressException, MessagingException, SQLException, NamingException {
+		ldap = Ldap.getInstance();
+		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", "admin", "mot2passe", "admin", "dc=netjukebox,dc=com");
+		Utilisateur U1 = Utilisateur.create("Login1", "MotDePasse", "Nom1", "Prenom1", "dominique.gentaz@tiscali.fr", "Pays", "admin");
 		//new EnvoiMail("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
-
+		
+		
+		/**
 		Document D1 = Document.create("TitreD1", 3, "01", "01", "2006", "SourceD1", "LangueD1", "GenreD1", "FichierD1");
 
 		Document D2 = Document.create("TitreD2", 3, "01", "01", "2006", "SourceD2", "LangueD2", "GenreD2", "FichierD2");
@@ -55,5 +62,6 @@ public class TestClasses {
 		Canal C1 = Canal.create("Rock", 20);
 		//C1.createRTPServer("192.168.1.255", 2224);
 		C1.diffuserProgramme(P1);
+		*/
 	}
 }
