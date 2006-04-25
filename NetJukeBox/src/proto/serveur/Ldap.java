@@ -55,6 +55,16 @@ public class Ldap {
 	private String pwd; //= "mot2passe";
 	
 	/**
+	 * Role de l'usager
+	 */
+	private String role;
+	
+	/**
+	 * Nom de l'annuaire ldap
+	 */
+	private String base;
+	
+	/**
 	 * Connection courante à la base
 	 */
 	private static InitialDirContext connect = null;
@@ -88,12 +98,14 @@ public class Ldap {
      * @param String login
      * @param String pwd
 	 */
-	public boolean openLdap(String driver, String url, String auth, String login, String pwd) {
+	public boolean openLdap(String driver, String url, String auth, String login, String pwd, String role, String base) {
     	this.driver = driver;
     	this.url = url;
     	this.login = login;
     	this.pwd = pwd;
     	this.auth = auth;
+    	this.role = role;
+    	this.base = base;
     	
     	return this.openLdap();
     }
@@ -103,11 +115,12 @@ public class Ldap {
 	 * @return boolean
 	 */
 	public boolean openLdap() {
+		String log = "uid=" + login + ",ou=" + role + "," + base;
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
 		env.put(DirContext.PROVIDER_URL, url);
 		env.put(Context.SECURITY_AUTHENTICATION, auth);
-		env.put(Context.SECURITY_PRINCIPAL, login);
+		env.put(Context.SECURITY_PRINCIPAL, log);
 		env.put(Context.SECURITY_CREDENTIALS, pwd);
 	    if (connect == null) {
 	    	try {
