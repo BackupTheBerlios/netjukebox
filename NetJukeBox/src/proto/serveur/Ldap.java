@@ -158,7 +158,7 @@ public class Ldap {
 	 */
 	public boolean executeSupprimer(String login, String role) throws NamingException {
 		String requete =  "uid=" + login + ",ou=" + role;
-		Dictionary attr = getLogin(login);
+		Dictionary attr = getAttributs(login, role);
 		if (attr == null) {
 			return false;
 		} else 
@@ -171,7 +171,7 @@ public class Ldap {
 				return false;
 			} 
 			catch (NamingException e) {
-				System.err.println("Il y a un probleme pour suppression de donnée!" + e);
+				System.err.println("Il y a un probleme pour suppression de donnée! " + e);
 				return false;
 			}
 	}
@@ -336,7 +336,7 @@ public class Ldap {
 	 * @param role
 	 * @return
 	 */
-	/**
+	
 	public Dictionary getAttributs(String login, String role) {
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
@@ -354,7 +354,7 @@ public class Ldap {
 	 * @param attrs
 	 * @return
 	 */
-	/**
+	
 	@SuppressWarnings("unchecked")
 	private Dictionary printAttrs(Attributes attrs) {
 		Dictionary ligne = new Hashtable();
@@ -378,5 +378,5 @@ public class Ldap {
     	}
 		return ligne;
 	}	
-	*/
+	
 }

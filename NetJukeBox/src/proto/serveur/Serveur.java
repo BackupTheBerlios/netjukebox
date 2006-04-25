@@ -23,6 +23,7 @@ public class Serveur {
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
 		String filename = args.length > 0 ? args[0] : "src/proto/serveur/serveur.ini";
+		//String filename = args.length > 0 ? args[0] : "/home/admindg/workspace/Netjukebox/proto/serveur/serveur.ini";
 		Preferences prefs = new IniFile(new File(filename));
 		
 		try {

@@ -13,7 +13,7 @@ public class TestClasses {
 	public static void main (String[] args) throws AddressException, MessagingException, SQLException, NamingException {
 		ldap = Ldap.getInstance();
 		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", "admin", "mot2passe", "admin", "dc=netjukebox,dc=com");
-		Utilisateur U1 = Utilisateur.create("Login1", "MotDePasse", "Nom1", "Prenom1", "dominique.gentaz@tiscali.fr", "Pays", "admin");
+		Utilisateur U1 = Utilisateur.create("Login2", "MotDePasse2", "Nom2", "Prenom2", "dominique.gentaz@tiscali.fr", "Pays", "usager");
 		//new EnvoiMail("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
 		
 		

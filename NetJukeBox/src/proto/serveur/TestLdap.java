@@ -14,9 +14,11 @@ public class TestLdap {
 		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", 
 				"simple", "admin" , "mot2passe", "admin", "dc=netjukebox,dc=com");
 		
-		ldap.executeCreer("Login1", "MotDePasse", "Nom1", "Prenom1", "dominique.gentaz@tiscali.fr", "Pays", "admin");
-		ldap.executeCreer("login", "password", "toto", "titi", "toto@gmail.com", "france", "usager");
-		ldap.executeCreer("log", "pass", "tata", "tutu", "tata@gmail.com", "france", "respprog");
+		ldap.executeSupprimer("login2", "usager");
+		
+		//ldap.executeCreer("Login1", "MotDePasse", "Nom1", "Prenom1", "dominique.gentaz@tiscali.fr", "Pays", "admin");
+		//ldap.executeCreer("login", "password", "toto", "titi", "toto@gmail.com", "france", "usager");
+		//ldap.executeCreer("log", "pass", "tata", "tutu", "tata@gmail.com", "france", "respprog");
 		
 		//ldap.changerRole("login", "usager", "admin");
 		
@@ -42,6 +44,6 @@ public class TestLdap {
 		System.out.println(log.get());
 		System.out.println(role.get());
 		*/
-		//ldap.executeSupprimer("login", "admin");
+		
 	}
 }
