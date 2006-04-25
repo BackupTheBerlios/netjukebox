@@ -496,4 +496,88 @@ public class XMLClient {
 			return false;
 		}
 	}
+	
+	/**
+	 * Lister les documents disponibles sur le serveur
+	 * @return Vector
+	 */
+	public Vector listerDocuments() {
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Liste des documents...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				
+				// Adresse la requête et affiche les résultats
+				return (Vector)clientXML.execute("Systeme.listerDocuments", params);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Lister les programmes disponibles sur le serveur
+	 * @return Vector
+	 */
+	public Vector listerProgrammes() {
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Liste des programmes...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				
+				// Adresse la requête et affiche les résultats
+				return (Vector)clientXML.execute("Systeme.listerProgrammes", params);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Lister les canaux disponibles sur le serveur
+	 * @return Vector
+	 */
+	public Vector listerCanaux() {
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Liste des canaux...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				
+				// Adresse la requête et affiche les résultats
+				return (Vector)clientXML.execute("Systeme.listerCanaux", params);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
 }

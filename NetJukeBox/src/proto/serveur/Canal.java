@@ -263,6 +263,21 @@ public class Canal {
 // *************************************************
 	
 	/**
+	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
+	 * @return Dictionary
+	 */
+	public Dictionary getAttributesDictionary() {
+		
+		Dictionary dico = new Hashtable();
+		
+		dico.put("id", id);
+		dico.put("nom", nom);
+		dico.put("utilMax", utilMax);
+		
+		return dico;
+	}
+	
+	/**
 	 * Retourne l'URL du canal
 	 * @return String
 	 */

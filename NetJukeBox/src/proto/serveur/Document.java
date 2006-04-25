@@ -193,9 +193,9 @@ public class Document {
 			String fichier = (String)dico.get("fichier");
 			
 			String date = (String)dico.get("date");
-			String jour = date.substring(0,1); // (String)dico.get("jour");
-			String mois = date.substring(2,3); // (String)dico.get("mois");
-			String annee = date.substring(4,7); // (String)dico.get("annee");
+			String jour = date.substring(0,2); // (String)dico.get("jour");
+			String mois = date.substring(3,5); // (String)dico.get("mois");
+			String annee = date.substring(6,10); // (String)dico.get("annee");
 			
 			System.out.println("-------- Document -----------");
 			System.out.println("Nb de champs: "+dico.size());
@@ -257,9 +257,9 @@ public class Document {
 			String fichier = (String)dico.get("fichier");
 			
 			String date = (String)dico.get("date");			
-			String jour = date.substring(0,1); // (String)dico.get("jour");
-			String mois = date.substring(3,4); // (String)dico.get("mois");
-			String annee = date.substring(6,9); // (String)dico.get("annee");
+			String jour = date.substring(0,2); // (String)dico.get("jour");
+			String mois = date.substring(3,5); // (String)dico.get("mois");
+			String annee = date.substring(6,10); // (String)dico.get("annee");
 			
 			System.out.println("-------- Document -----------");
 			System.out.println("Nb de champs: "+dico.size());
@@ -359,6 +359,26 @@ public class Document {
 		return Document.deleteById(this.id);
 	}
 
+	
+	/**
+	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
+	 * @return Dictionary
+	 */
+	public Dictionary getAttributesDictionary() {
+		
+		Dictionary dico = new Hashtable();
+		
+		dico.put("id", id);
+		dico.put("titre", titre);
+		dico.put("duree", duree);
+		dico.put("genre", genre);
+		dico.put("source", source);
+		dico.put("langue", langue);
+		dico.put("date", (jour+"-"+mois+"-"+annee));
+		dico.put("fichier", fichier);
+		
+		return dico;
+	}
 
 	/**
 	 * Retourne l'identifiant du document

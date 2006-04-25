@@ -71,8 +71,8 @@ public class Utilisateur {
 	 */
 	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays, String role) throws NamingException {
 		
-		Ldap ldap = Ldap.getInstance();
-		ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
+		//Ldap ldap = Ldap.getInstance();
+		//ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
 		
 		//On retourne un objet configuré avec les infos issues de LDAP
 		return Utilisateur.getByLogin(login);
@@ -86,7 +86,7 @@ public class Utilisateur {
 	@SuppressWarnings("static-access")
 	public static Utilisateur getByLogin(String log) throws NamingException {
 		
-		Ldap ldap = Ldap.getInstance();
+		/*Ldap ldap = Ldap.getInstance();
 		Dictionary resultats = ldap.getLogin(log);
 		Enumeration donnee = resultats.elements();
 		
@@ -123,19 +123,16 @@ public class Utilisateur {
 			
 			//On retourne l'objet
 			return new Utilisateur(login, passwd, nom, prenom, email, pays, role);
-		}
+		}*/
 		
-		/**
-		if (login.equalsIgnoreCase("toto")) {
+		
+		if (log.equalsIgnoreCase("toto")) {
 			//On retourne un objet utilisateur configuré
 			return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France", "role");
 		}
 		//Sinon, on retourne un objet vide
 		return null;
-		*/
-		
-		//Sinon, on retourne un objet vide
-		return null;
+
 	}
 	
 		
@@ -164,7 +161,7 @@ public class Utilisateur {
 	 */
 	public static boolean verifierPwd(String pwd, String login) throws NamingException {
 		
-		Ldap ldap = Ldap.getInstance();
+		/*Ldap ldap = Ldap.getInstance();
 		Dictionary resultats = ldap.getLogin(login);
 		Enumeration donnee = resultats.elements();
 		// S'il y a un resultat
@@ -177,7 +174,9 @@ public class Utilisateur {
 			passwd = (String) motdepasse.get();
 			return passwd.equalsIgnoreCase(pwd) && log.equalsIgnoreCase(login); 
 		} else return false;
-		//return (pwd.equalsIgnoreCase("toto") && login.equalsIgnoreCase("toto"));
+		*/
+		
+		return (pwd.equalsIgnoreCase("toto") && login.equalsIgnoreCase("toto"));
 	}
 	
 	/**

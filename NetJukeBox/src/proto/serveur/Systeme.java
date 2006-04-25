@@ -2,7 +2,9 @@ package proto.serveur;
 
 
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 import java.util.prefs.Preferences;
 
 import javax.naming.NamingException;
@@ -319,6 +321,37 @@ public class Systeme {
 		return Boolean.toString(false);
 	}
 	
+	/**
+	 * Lister les documents disponibles
+	 * @param String login
+	 * @return Vector
+	 */
+	public Vector listerDocuments(String login) {
+
+		System.out.println("Liste des documents disponibles");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "listerDocuments")) {
+		
+			//On crée le vecteur
+			Vector vDocuments = new Vector();
+			
+			//On récupère la liste des documents
+			Enumeration listeDocs = documents.elements();
+			Document d;
+			
+			while (listeDocs.hasMoreElements()) {
+				d = (Document)listeDocs.nextElement();
+				vDocuments.addElement(d.getAttributesDictionary());
+			}
+			
+			return vDocuments;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Documents non listés");
+		return null;
+	}
+	
 	public void supprimerDocument() {
 		// your code here
 	}
@@ -433,6 +466,37 @@ public class Systeme {
 		//Sinon, ajout refusé
 		System.out.println("Permission non accordée. Le document non programmé");
 		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Lister les programmes disponibles
+	 * @param String login
+	 * @return Vector
+	 */
+	public Vector listerProgrammes(String login) {
+
+		System.out.println("Liste des programmes disponibles");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "listerProgrammes")) {
+		
+			//On crée le vecteur
+			Vector vProgrammes = new Vector();
+			
+			//On récupère la liste des documents
+			Enumeration listeProgrammes = programmes.elements();
+			Programme p = null;
+			
+			while (listeProgrammes.hasMoreElements()) {
+				p = (Programme)listeProgrammes.nextElement();
+				vProgrammes.addElement(p.getAttributesDictionary());
+			}
+			
+			return vProgrammes;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Programmes non listés");
+		return null;
 	}
 	
 	public void RechercherProgramme(String Id_Prog, String Titre,
@@ -687,6 +751,37 @@ public class Systeme {
 		//Sinon, ajout refusé
 		System.out.println("Permission non accordée. Canal non arrété");
 		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Lister les canaux disponibles
+	 * @param String login
+	 * @return Vector
+	 */
+	public Vector listerCanaux(String login) {
+
+		System.out.println("Liste des canaux disponibles");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "listerCanaux")) {
+		
+			//On crée le vecteur
+			Vector vCanaux = new Vector();
+			
+			//On récupère la liste des documents
+			Enumeration listeCanaux = canaux.elements();
+			Canal c;
+			
+			while (listeCanaux.hasMoreElements()) {
+				c = (Canal)listeCanaux.nextElement();
+				vCanaux.addElement(c.getAttributesDictionary());
+			}
+			
+			return vCanaux;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Canaux non listés");
+		return null;
 	}
 	
 

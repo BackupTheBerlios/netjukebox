@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.Dictionary;
+import java.util.Vector;
 import java.util.prefs.Preferences;
 
 import org.ini4j.IniFile;
@@ -339,6 +341,88 @@ public class Client {
 					}
 				}
 				
+				// LSTERDOCUMENT
+				if  (ligne.equalsIgnoreCase("listerDocument")) {
+					if (etatConnecte) {
+						Vector vDocuments = clientXML.listerDocuments();
+						if (vDocuments!=null && vDocuments.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vDocuments.size(); i++){
+								d = (Dictionary)vDocuments.get(i);
+								System.out.println("----------------- Document -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Titre: "+d.get("titre"));
+								System.out.println("Durée: "+d.get("duree"));
+								System.out.println("Date: "+d.get("date"));
+								System.out.println("Genre: "+d.get("genre"));
+								System.out.println("Source: "+d.get("source"));
+								System.out.println("Langue: "+d.get("langue"));
+								System.out.println("Fichier: "+d.get("fichier"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Documents listés");
+						}
+						else System.err.println("WARNING: Aucun document disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERPROGRAMME
+				if  (ligne.equalsIgnoreCase("listerProgramme")) {
+					if (etatConnecte) {
+						Vector vProgrammes = clientXML.listerProgrammes();
+						if (vProgrammes!=null && vProgrammes.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary p;
+							for (int i=0; i<vProgrammes.size(); i++){
+								p = (Dictionary)vProgrammes.get(i);
+								System.out.println("----------------- Programme -------------------");
+								System.out.println("Id: "+p.get("id"));
+								System.out.println("Titre: "+p.get("titre"));
+								System.out.println("Thématique: "+p.get("thematique"));
+								System.out.println("Durée: "+p.get("duree"));
+								System.out.println("Nb docs: "+p.get("nbDocs"));
+								System.out.println("-----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programmes listés");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERCANAL
+				if  (ligne.equalsIgnoreCase("listerCanal")) {
+					if (etatConnecte) {
+						Vector vCanaux = clientXML.listerCanaux();
+						if (vCanaux!=null && vCanaux.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vCanaux.size(); i++){
+								c = (Dictionary)vCanaux.get(i);
+								System.out.println("----------------- Canal -------------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Nom: "+c.get("nom"));
+								System.out.println("NbMax auditeurs: "+c.get("utilMax"));
+								System.out.println("-------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programmes listés");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
 					System.out.println("Commandes disponibles:");
@@ -353,6 +437,9 @@ public class Client {
 					System.out.println(" stopCanal : stopper la diffusion d'un canal");
 					System.out.println(" startPlayer : lancer l'écoute un canal");
 					System.out.println(" stopPlayer : stopper l'écoute d'un canal");
+					System.out.println(" listerDocument : lister les documents disponibles");
+					System.out.println(" listerProgramme : lister les programmes disponibles");
+					System.out.println(" listerCanal : lister les canaux disponibles");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

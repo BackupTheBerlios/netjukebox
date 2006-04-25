@@ -253,6 +253,27 @@ public class Programme {
 // METHODES DYNAMIQUES
 //*********************************************************
 	
+	/**
+	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
+	 * @return Dictionary
+	 */
+	public Dictionary getAttributesDictionary() {
+		
+		Dictionary dico = new Hashtable();
+		
+		dico.put("id", id);
+		dico.put("titre", titre);
+		dico.put("duree", Long.toString(duree));
+		dico.put("thematique", thematique);
+		dico.put("nbDocs", documents.size());
+		
+		return dico;
+	}
+	
+	/**
+	 * Retourne la liste des documents programmés
+	 * @return Hastable
+	 */
 	private Hashtable getDocumentsProgrammes() {
 		System.out.println("Programme.getDocumentsProgrammes()");
 		
