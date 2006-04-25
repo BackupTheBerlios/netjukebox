@@ -5,7 +5,8 @@ objectClass: top
 objectClass: dcObject
 objectClass: organization
 
-dn: cn=admin,dc=netjukebox, dc=com
+dn: uid=admin,dc=netjukebox, dc=com
+iud: admin
 cn: admin
 userPassword: mot2passe
 objectClass: top
