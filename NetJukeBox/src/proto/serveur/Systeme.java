@@ -63,6 +63,11 @@ public class Systeme {
 	 * Préférences
 	 */
 	private Preferences prefs;
+	
+	/**
+	 * Connexion à l'annuaire LDAP
+	 */
+	private Ldap ldap;
 
 // CONSTRUCTEUR
 //************************************************************
@@ -78,23 +83,46 @@ public class Systeme {
 		this.portStreaming = Integer.parseInt(prefs.node("streaming").get("port", null));
 		
 		//On initialise la connection à la base
-		String driver = prefs.node("jdbc").get("driver", null);
-		String type = prefs.node("jdbc").get("type", null);
-		String ip = prefs.node("jdbc").get("ip", null);
-		String port = prefs.node("jdbc").get("port", null);
-		String baseName = prefs.node("jdbc").get("base", null);
-		String login = prefs.node("jdbc").get("login", null);
-		String pwd = prefs.node("jdbc").get("pwd", null);
+		String driverjdbc = prefs.node("jdbc").get("driver", null);
+		String typejdbc = prefs.node("jdbc").get("type", null);
+		String ipjdbc = prefs.node("jdbc").get("ip", null);
+		String portjdbc = prefs.node("jdbc").get("port", null);
+		String baseNamejdbc = prefs.node("jdbc").get("base", null);
+		String loginjdbc = prefs.node("jdbc").get("login", null);
+		String pwdjdbc = prefs.node("jdbc").get("pwd", null);
 		
-		String url = "jdbc:"+type+"://"+ip+":"+port+"/"+baseName;
+		String urljdbc = "jdbc:"+typejdbc+"://"+ipjdbc+":"+portjdbc+"/"+baseNamejdbc;
 		
-		System.err.println("BD Driver: "+driver);
-		System.err.println("BD URL: "+url);
-		System.err.println("BD Login: "+login);
-		System.err.println("BD Pwd: "+pwd);
+		System.err.println("BD Driver: "+driverjdbc);
+		System.err.println("BD URL: "+urljdbc);
+		System.err.println("BD Login: "+loginjdbc);
+		System.err.println("BD Pwd: "+pwdjdbc);
 		
 		base = Jdbc.getInstance();
-		base.openDB(driver, url, login, pwd);
+		base.openDB(driverjdbc, urljdbc, loginjdbc, pwdjdbc);
+		
+		//On initialise la connection à l'annuaire LDAP
+		String driverldap = prefs.node("ldap").get("driver", null);
+		String typeldap = prefs.node("ldap").get("type", null);
+		String ipldap = prefs.node("ldap").get("ip", null);
+		String portldap = prefs.node("ldap").get("port", null);
+		String baseNameldap = prefs.node("ldap").get("base", null);
+		String authldap = prefs.node("ldap").get("auth", null);
+		String loginldap = prefs.node("ldap").get("login", null);
+		String pwdldap = prefs.node("ldap").get("pwd", null);
+		String role = prefs.node("ldap").get("role", null);
+		
+		String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
+		
+		System.err.println("LDAP Driver: " + driverldap);
+		System.err.println("LDAP URL: " + urlldap);
+		System.err.println("LDAP Login: " + loginldap);
+		System.err.println("LDAP Pwd: " + pwdldap);
+		
+		
+		
+		ldap = Ldap.getInstance();
+		ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, role, baseNameldap);
 		
 		//On initialise les listes de canaux, programmes, documents
 		this.canaux = Canal.getAll();
@@ -145,13 +173,13 @@ public class Systeme {
 	 */
 	public String connexion(String login, String pwd) throws NamingException {
 		
-		System.out.println("Connexion de l'utilisateur "+login);
+		System.out.println("Connexion de l'utilisateur "+ login);
 		
 		//On vérifie que l'utilisateur n'est pas déjà connecté
 		if (!utilisateurs.containsKey(login)) {
 		
 			//On vérifie que le couple login/pwd existe
-			if (Utilisateur.verifierPwd(pwd, login)) {
+			//if (Utilisateur.verifierPwd(pwd, login)) {
 				
 				//On récupère l'utilisateur depuis la base
 				Utilisateur util = Utilisateur.getByLogin(login);
@@ -165,17 +193,18 @@ public class Systeme {
 				System.out.println("Utilisateur "+login+" connecté");
 				return Boolean.toString(true);
 				
-			}
+			//}
 			
 			//Sinon, connexion refusée
-			System.out.println("Utilisateur "+login+" non connecté");
-			return Boolean.toString(false);
+			//System.out.println("Utilisateur "+login+" non connecté");
+			//return Boolean.toString(false);
 		}
 		
 		//Sinon, connexion refusée
 		System.out.println("Utilisateur "+login+" déjà connecté");
 		return Boolean.toString(false);
 	}
+	
 	/**
 	 * Deconnexion d'un utilisateur
 	 * @param login
