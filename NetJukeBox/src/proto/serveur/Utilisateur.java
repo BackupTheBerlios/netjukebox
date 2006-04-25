@@ -22,7 +22,7 @@ public class Utilisateur {
 	/**
 	 * Mot de passe du compte utilisateur
 	 */
-	private String pwd;
+	//private String pwd;
 
 	/**
 	 * Nom de l'utilisateur
@@ -86,7 +86,7 @@ public class Utilisateur {
 	@SuppressWarnings("static-access")
 	public static Utilisateur getByLogin(String log) throws NamingException {
 		
-		/*Ldap ldap = Ldap.getInstance();
+		Ldap ldap = Ldap.getInstance();
 		Dictionary resultats = ldap.getLogin(log);
 		Enumeration donnee = resultats.elements();
 		
@@ -114,7 +114,7 @@ public class Utilisateur {
 			System.out.println("-----------------------------");
 			
 			String login = (String) uid.get();
-			String passwd = (String) pwd.get();
+			//String passwd = (String) pwd.get();
 			String nom = (String) sn.get();
 			String prenom = (String) givenName.get();
 			String email = (String) mail.get();
@@ -122,14 +122,17 @@ public class Utilisateur {
 			String role = (String) ou.get();
 			
 			//On retourne l'objet
-			return new Utilisateur(login, passwd, nom, prenom, email, pays, role);
-		}*/
+			return new Utilisateur(login, nom, prenom, email, pays, role);
+		}
 		
-		
+		/**
 		if (log.equalsIgnoreCase("toto")) {
+
+		if (log.equalsIgnoreCase("toto")) {
+
 			//On retourne un objet utilisateur configuré
 			return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France", "role");
-		}
+		}*/
 		//Sinon, on retourne un objet vide
 		return null;
 
@@ -191,14 +194,21 @@ public class Utilisateur {
 		Dictionary resultats = ldap.getLogin(login);
 		Enumeration donnee = resultats.elements();
 		// S'il y a un resultat
-		String log;
+		String log = null;
+		String pwd = null;
+		String r = null;
 		if (resultats != null && resultats.size()>0) {
 			Attributes result = (Attributes) donnee.nextElement();
 			Attribute uid = result.get("uid");
+			Attribute passwd = result.get("userPassword");
+			Attribute role = result.get("ou");
 			log = (String) uid.get();
-			return log.equalsIgnoreCase(login); 
-		} else return false;
-		
+			pwd = (String) passwd.get();
+			r = (String) role.get();
+			//return log.equalsIgnoreCase(login); 
+		} //else return false;
+		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", log, pwd, r, "dc=netjukebox,dc=com");
+		return true;
 		//return (login.equalsIgnoreCase("toto"));
 	}
 	
@@ -215,10 +225,9 @@ public class Utilisateur {
 		/**
 		 * Constructeur complet
 		 */
-		public Utilisateur(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
+		public Utilisateur(String login, String nom, String prenom, String mail, String pays, String role) {
 
 			this.login = login;
-			this.pwd = pwd;
 			this.nom=nom;
 			this.prenom=prenom;
 			this.mail=mail;
@@ -346,9 +355,9 @@ public class Utilisateur {
 	 * Retourne le mot de passe de l'utilisateur
 	 * @return String
 	 */
-	public String getPwd() {
-		return pwd;
-	}
+	//public String getPwd() {
+		//return pwd;
+	//}
 
 	/**
 	 * Retourne le pays de l'utilisateur
