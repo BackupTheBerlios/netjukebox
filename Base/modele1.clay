@@ -9,13 +9,26 @@
 <table-list>
 <table alias="" name="UTILISATEUR" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="120" width="152" x="24" y="136"/>
+<table-figure-bounds height="120" width="142" x="13" y="91"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="LOGIN" remarks="">
+<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="ID_UTILISATEUR" remarks="">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="false" name="LOGIN" remarks="">
 <column-description></column-description>
 <data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
 <variant type-name-pattern="CHAR"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
 <variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
 </data-type>
 </column>
@@ -62,7 +75,7 @@
 </column-list>
 <primary-key alias="" name="PK_UTILISATEUR" remarks="">
 <primary-key-description></primary-key-description>
-<primary-key-column name="LOGIN"/>
+<primary-key-column name="ID_UTILISATEUR"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list/>
@@ -70,7 +83,7 @@
 </table>
 <table alias="" name="PROGRAMME" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="87" width="190" x="330" y="287"/>
+<table-figure-bounds height="93" width="141" x="485" y="263"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="false" name="ID_PROG" remarks="">
 <column-description></column-description>
@@ -96,12 +109,17 @@
 <variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="LOGIN" remarks="">
+<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="false" name="ID_UTILISATEUR" remarks="">
 <column-description></column-description>
-<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
-<variant type-name-pattern="CHAR"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
 </column-list>
@@ -116,7 +134,7 @@
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
-<foreign-key-column column-name="LOGIN" referenced-key-column-name="LOGIN"/>
+<foreign-key-column column-name="ID_UTILISATEUR" referenced-key-column-name="ID_UTILISATEUR"/>
 </foreign-key>
 <foreign-key alias="" name="FK_PROGRAMME_3" on-delete="" on-update="" referenced-key="PK_ETAT" referenced-table="ETAT" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
 <foreign-key-description></foreign-key-description>
@@ -125,12 +143,19 @@
 </foreign-key-figure>
 <foreign-key-column column-name="ID_ETAT" referenced-key-column-name="ID_ETAT"/>
 </foreign-key>
+<foreign-key alias="" name="FK_PROGRAMME_4" on-delete="" on-update="" referenced-key="PK_COMPOSER" referenced-table="COMPOSER" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="ID_PROG" referenced-key-column-name="ID_PROG"/>
+</foreign-key>
 </foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="DOCUMENT" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="196" width="186" x="321" y="393"/>
+<table-figure-bounds height="226" width="186" x="385" y="442"/>
 <column-list>
 <column alias="durée en secondes" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_DOC" remarks="">
 <column-description></column-description>
@@ -207,19 +232,6 @@
 <variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
 </data-type>
 </column>
-<column alias="Adresse entière (rue, cp, ville)" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_CONTRAT" remarks="">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_LANGUE" remarks="">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
@@ -246,6 +258,22 @@
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
+<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="false" name="ID_PROG" remarks="">
+<column-description></column-description>
+<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
+<variant type-name-pattern="CHAR"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="ID_UTILISATEUR" remarks="">
+<column-description></column-description>
+<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
+<variant type-name-pattern="CHAR"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
+</data-type>
+</column>
 <column alias="Actif" auto-increment="false" column-size="2" decimal-digits="0" default-value="" mandatory="true" name="ID_ETAT" remarks="">
 <column-description></column-description>
 <data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
@@ -266,21 +294,7 @@
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
-<foreign-key-column column-name="LOGIN" referenced-key-column-name="LOGIN"/>
-</foreign-key>
-<foreign-key alias="" name="FK_DOCUMENT_2" on-delete="" on-update="" referenced-key="PK_CONTRACTANT" referenced-table="CONTRACTANT" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
-<foreign-key-description></foreign-key-description>
-<foreign-key-figure>
-<fk-fig-bendpoint-list/>
-</foreign-key-figure>
-<foreign-key-column column-name="ID_CONTRAT" referenced-key-column-name="ID_CONTRAT"/>
-</foreign-key>
-<foreign-key alias="" name="FK_DOCUMENT_3" on-delete="" on-update="" referenced-key="PK_LANGUE" referenced-table="LANGUE" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
-<foreign-key-description></foreign-key-description>
-<foreign-key-figure>
-<fk-fig-bendpoint-list/>
-</foreign-key-figure>
-<foreign-key-column column-name="ID_LANGUE" referenced-key-column-name="ID_LANGUE"/>
+<foreign-key-column column-name="ID_UTILISATEUR" referenced-key-column-name="ID_UTILISATEUR"/>
 </foreign-key>
 <foreign-key alias="" name="FK_DOCUMENT_4" on-delete="" on-update="" referenced-key="PK_GENRE" referenced-table="GENRE" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
 <foreign-key-description></foreign-key-description>
@@ -296,12 +310,34 @@
 </foreign-key-figure>
 <foreign-key-column column-name="ID_ETAT" referenced-key-column-name="ID_ETAT"/>
 </foreign-key>
+<foreign-key alias="" name="FK_DOCUMENT_7" on-delete="" on-update="" referenced-key="PK_COMPOSER" referenced-table="COMPOSER" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="ID_PROG" referenced-key-column-name="ID_PROG"/>
+<foreign-key-column column-name="ID_DOC" referenced-key-column-name="ID_DOC"/>
+</foreign-key>
+<foreign-key alias="" name="FK_DOCUMENT_8" on-delete="" on-update="" referenced-key="PK_CONTRAT" referenced-table="CONTRAT" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="ID_DOC" referenced-key-column-name="ID_DOC"/>
+</foreign-key>
+<foreign-key alias="" name="FK_DOCUMENT_9" on-delete="" on-update="" referenced-key="PK_LANGUE" referenced-table="LANGUE" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="ID_LANGUE" referenced-key-column-name="ID_LANGUE"/>
+</foreign-key>
 </foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="PERMISSION" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="80" width="143" x="15" y="427"/>
+<table-figure-bounds height="80" width="143" x="7" y="488"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="3" decimal-digits="0" default-value="" mandatory="true" name="ID_PERM" remarks="">
 <column-description></column-description>
@@ -336,7 +372,7 @@
 <table alias="" name="ATTRIBUER" remarks="">
 <table-description>COUPLAGE DES INSTANCES DE PERMISSION ET DE UTILISATEUR&#13;
 </table-description>
-<table-figure-bounds height="55" width="123" x="27" y="312"/>
+<table-figure-bounds height="57" width="128" x="7" y="387"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="3" decimal-digits="0" default-value="" mandatory="true" name="ID_PERM" remarks="">
 <column-description></column-description>
@@ -351,19 +387,24 @@
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="LOGIN" remarks="">
+<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="ID_UTILISATEUR" remarks="">
 <column-description></column-description>
-<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
-<variant type-name-pattern="CHAR"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_ATTRIBUER" remarks="">
 <primary-key-description></primary-key-description>
 <primary-key-column name="ID_PERM"/>
-<primary-key-column name="LOGIN"/>
+<primary-key-column name="ID_UTILISATEUR"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
@@ -379,7 +420,7 @@
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
-<foreign-key-column column-name="LOGIN" referenced-key-column-name="LOGIN"/>
+<foreign-key-column column-name="ID_UTILISATEUR" referenced-key-column-name="ID_UTILISATEUR"/>
 </foreign-key>
 </foreign-key-list>
 <index-list/>
@@ -394,7 +435,7 @@ P3                                                                  En réalisat
 D1                                                                  en cours d'utilisation&#13;
 D2                                                                  Non utiliser&#13;
 </table-description>
-<table-figure-bounds height="60" width="114" x="924" y="309"/>
+<table-figure-bounds height="60" width="114" x="739" y="268"/>
 <column-list>
 <column alias="Actif" auto-increment="false" column-size="2" decimal-digits="0" default-value="" mandatory="true" name="ID_ETAT" remarks="">
 <column-description></column-description>
@@ -423,7 +464,7 @@ D2                                                                  Non utiliser
 </table>
 <table alias="" name="GENRE" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="62" width="128" x="15" y="534"/>
+<table-figure-bounds height="62" width="128" x="737" y="604"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_GENRE" remarks="">
 <column-description></column-description>
@@ -457,7 +498,7 @@ D2                                                                  Non utiliser
 </table>
 <table alias="" name="LANGUE" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="770" y="541"/>
+<table-figure-bounds height="-1" width="-1" x="736" y="530"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_LANGUE" remarks="">
 <column-description></column-description>
@@ -491,7 +532,7 @@ D2                                                                  Non utiliser
 </table>
 <table alias="" name="CONTRACTANT" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="924" y="428"/>
+<table-figure-bounds height="105" width="145" x="162" y="595"/>
 <column-list>
 <column alias="Adresse entière (rue, cp, ville)" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_CONTRAT" remarks="">
 <column-description></column-description>
@@ -528,19 +569,6 @@ D2                                                                  Non utiliser
 <variant type-name-pattern="DATE"/>
 </data-type>
 </column>
-<column alias="durée en secondes" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="ID_DOC" remarks="">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
 <column alias="durée en mois du contrat" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="DUREE_CONTRAT" remarks="">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
@@ -560,12 +588,20 @@ D2                                                                  Non utiliser
 <primary-key-column name="ID_CONTRAT"/>
 </primary-key>
 <unique-key-list/>
-<foreign-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_CONTRACTANT_1" on-delete="" on-update="" referenced-key="PK_CONTRAT" referenced-table="CONTRAT" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="ID_CONTRAT" referenced-key-column-name="ID_CONTRAT"/>
+</foreign-key>
+</foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="CANAL" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="129" width="121" x="338" y="-18"/>
+<table-figure-bounds height="129" width="121" x="461" y="-18"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="ID_CANAL" remarks="">
 <column-description></column-description>
@@ -663,7 +699,7 @@ D2                                                                  Non utiliser
 </table>
 <table alias="" name="PROTOCOLE" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="69" width="167" x="685" y="-6"/>
+<table-figure-bounds height="69" width="139" x="744" y="-8"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_PROTO" remarks="">
 <column-description></column-description>
@@ -705,7 +741,7 @@ D2                                                                  Non utiliser
 </table>
 <table alias="" name="JOURNAL" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="80" width="155" x="703" y="157"/>
+<table-figure-bounds height="80" width="119" x="181" y="83"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_JOURNAL" remarks="">
 <column-description></column-description>
@@ -737,7 +773,7 @@ D2                                                                  Non utiliser
 </table>
 <table alias="" name="GERER" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="52" width="109" x="61" y="16"/>
+<table-figure-bounds height="51" width="135" x="20" y="-8"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="ID_CANAL" remarks="">
 <column-description></column-description>
@@ -747,29 +783,27 @@ D2                                                                  Non utiliser
 <variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="LOGIN" remarks="">
+<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="ID_UTILISATEUR" remarks="">
 <column-description></column-description>
-<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
-<variant type-name-pattern="CHAR"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_GERER" remarks="">
 <primary-key-description></primary-key-description>
 <primary-key-column name="ID_CANAL"/>
-<primary-key-column name="LOGIN"/>
+<primary-key-column name="ID_UTILISATEUR"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_GERER_2" on-delete="" on-update="" referenced-key="PK_UTILISATEUR" referenced-table="UTILISATEUR" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
-<foreign-key-description></foreign-key-description>
-<foreign-key-figure>
-<fk-fig-bendpoint-list/>
-</foreign-key-figure>
-<foreign-key-column column-name="LOGIN" referenced-key-column-name="LOGIN"/>
-</foreign-key>
 <foreign-key alias="" name="FK_GERER_3" on-delete="" on-update="" referenced-key="PK_CANAL" referenced-table="CANAL" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
@@ -777,12 +811,19 @@ D2                                                                  Non utiliser
 </foreign-key-figure>
 <foreign-key-column column-name="ID_CANAL" referenced-key-column-name="ID_CANAL"/>
 </foreign-key>
+<foreign-key alias="" name="FK_GERER_2" on-delete="" on-update="" referenced-key="PK_UTILISATEUR" referenced-table="UTILISATEUR" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="ID_UTILISATEUR" referenced-key-column-name="ID_UTILISATEUR"/>
+</foreign-key>
 </foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="DIFFUSER" remarks="">
 <table-description></table-description>
-<table-figure-bounds height="84" width="171" x="321" y="158"/>
+<table-figure-bounds height="84" width="156" x="464" y="145"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="ID_PROG" remarks="">
 <column-description></column-description>
@@ -851,6 +892,81 @@ D2                                                                  Non utiliser
 <foreign-key-column column-name="ID_CANAL" referenced-key-column-name="ID_CANAL"/>
 </foreign-key>
 </foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="COMPOSER" remarks="">
+<table-description></table-description>
+<table-figure-bounds height="52" width="109" x="240" y="303"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="6" decimal-digits="0" default-value="" mandatory="true" name="ID_PROG" remarks="">
+<column-description></column-description>
+<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
+<variant type-name-pattern="CHAR"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_DOC" remarks="">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_COMPOSER" remarks="">
+<primary-key-description></primary-key-description>
+<primary-key-column name="ID_PROG"/>
+<primary-key-column name="ID_DOC"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list/>
+<index-list/>
+</table>
+<table alias="" name="CONTRAT" remarks="">
+<table-description></table-description>
+<table-figure-bounds height="64" width="110" x="166" y="491"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_DOC" remarks="">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="ID_CONTRAT" remarks="">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_CONTRAT" remarks="">
+<primary-key-description></primary-key-description>
+<primary-key-column name="ID_DOC"/>
+<primary-key-column name="ID_CONTRAT"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list/>
 <index-list/>
 </table>
 </table-list>
