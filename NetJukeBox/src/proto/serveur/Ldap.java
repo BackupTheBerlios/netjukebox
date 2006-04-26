@@ -300,8 +300,6 @@ public class Ldap {
 			NamingEnumeration answer = connect.search("", filter, ctls);
 			//Print the answer
 			Dictionary resultat = printSearchEnumeration(answer);
-			// Close the context when we're done
-			connect.close();
 			return resultat;
 		} catch (Exception e) {
 			e.printStackTrace();
