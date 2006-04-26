@@ -2,10 +2,7 @@ package proto.serveur;
 
 import java.util.Date;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.StringTokenizer;
-
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -149,6 +146,7 @@ public class Ldap {
     	System.out.println("Vous avez été déconnecté de la base.");
 		return false;
 	}
+	
 	/**
 	 * Supprime un utilisateur
 	 * @param login
@@ -209,6 +207,7 @@ public class Ldap {
 			return false;
 		}
 	}
+	
 	/**
 	 * Crée un utilisateur
 	 * @param login
