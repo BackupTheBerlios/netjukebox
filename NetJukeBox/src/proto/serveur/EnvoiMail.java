@@ -4,18 +4,59 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-public class EnvoiMail {	
-	static String host = "smtp.serveur.fr";
-	static String from = "prenom.nom@mail.fr";
+public class EnvoiMail {
+	/**
+	 * Adresse su serveur SMTP
+	 */
+	static String host = "localhost";
+	
+	/**
+	 * Adresse mail envoyant un message
+	 */
+	static String from = "mail@netjukebox.no-ip.org";
+	
+	/**
+	 * Destinataire du mail
+	 */
 	public String to;
+	
+	/**
+	 * Login à retourner
+	 */
 	public String Login;
+	
+	/**
+	 * Nom de l'usager
+	 */
 	public String Nom;
+	
+	/**
+	 * Prenom de l'usager
+	 */
 	public String Prenom;
+	
+	/**
+	 * Mot de passe de l'utilisateur
+	 */
 	public String Pwd;
+	
+	/**
+	 * Pays de l'usager
+	 */
 	public String Pays;
 
+	/**
+	 * Envoi un mail à l'usager venant de s'inscrire au NetJukeBox
+	 * @param Login
+	 * @param Nom
+	 * @param Prenom
+	 * @param Mail
+	 * @param Pwd
+	 * @param Pays
+	 * @throws AddressException
+	 * @throws MessagingException
+	 */
 	public EnvoiMail(String Login, String Nom, String Prenom, String Mail, String Pwd, String Pays) throws AddressException, MessagingException {
-		this.Login = Login;
 		this.Nom = Nom;
 		this.Prenom = Prenom;
 		this.to = Mail;
@@ -39,18 +80,15 @@ public class EnvoiMail {
 		//Set the subject
 		message.setSubject("Inscription au NetJukeBox");
 		//Set the content
-		message.setText("Votre login = " + Login + 
-						" Votre  Nom = " + Nom +
-						" Votre Prenom = " + Prenom +
-						" Votre adresse Mail = " + to +
-						" Votre mot de passe = " + Pwd + 
-						" Votre Pays = " + Pays);
+		message.setText("Confirmation d'inscription au NETJUKEBOX :" + '\n' +
+						'\n' +
+						"Votre login = " + Login + '\n' +
+						"Votre  Nom = " + Nom + '\n' +
+						"Votre Prenom = " + Prenom + '\n' +
+						"Votre adresse Mail = " + to + '\n' +
+						"Votre mot de passe = " + Pwd +  '\n' +
+						"Votre Pays = " + Pays);
 		//Send message
 		Transport.send(message);
-	}
-
-	public static void main (String[] args) throws AddressException, MessagingException {
-		new EnvoiMail("Login1", "Nom1" ,"Prenom1" , "adresse@mail.com", "MotDePasse", "Pays");
-		System.out.println("Mail envoyé");
 	}
 }
