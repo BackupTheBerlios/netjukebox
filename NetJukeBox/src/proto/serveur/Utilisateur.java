@@ -71,8 +71,8 @@ public class Utilisateur {
 	 */
 	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays, String role) throws NamingException {
 		
-		//Ldap ldap = Ldap.getInstance();
-		//ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
+		Ldap ldap = Ldap.getInstance();
+		ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
 		
 		//On retourne un objet configuré avec les infos issues de LDAP
 		return Utilisateur.getByLogin(login);
@@ -95,7 +95,6 @@ public class Utilisateur {
 			
 			Attributes result = (Attributes) donnee.nextElement();
 			Attribute uid = result.get("uid");
-			Attribute pwd = result.get("userPassword");
 			Attribute ou = result.get("ou");
 			Attribute sn = result.get("sn");
 			Attribute givenName = result.get("givenName");
@@ -105,7 +104,6 @@ public class Utilisateur {
 			System.out.println("-------- Utilisateur -----------");
 			System.out.println("Nb de champs: "+result.size());
 			System.out.println("Login : " + uid.get());
-			System.out.println("UserPassword : " + pwd.get());
 			System.out.println("Nom : " + sn.get());
 			System.out.println("Prenom : " + givenName.get());
 			System.out.println("Mail : " + mail.get());
@@ -155,32 +153,6 @@ public class Utilisateur {
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
 	}
-
-	/**
-	 * Vérifie l'existence du couple Login/Pwd
-	 * @param pwd
-	 * @param login
-	 * @throws NamingException 
-	 */
-	public static boolean verifierPwd(String pwd, String login) throws NamingException {
-		
-		/*Ldap ldap = Ldap.getInstance();
-		Dictionary resultats = ldap.getLogin(login);
-		Enumeration donnee = resultats.elements();
-		// S'il y a un resultat
-		String passwd, log;
-		if (resultats != null && resultats.size()>0) {
-			Attributes result = (Attributes) donnee.nextElement();
-			Attribute uid = result.get("uid");
-			Attribute motdepasse = result.get("userPassword");
-			log = (String) uid.get();
-			passwd = (String) motdepasse.get();
-			return passwd.equalsIgnoreCase(pwd) && log.equalsIgnoreCase(login); 
-		} else return false;
-		*/
-		
-		return (pwd.equalsIgnoreCase("toto") && login.equalsIgnoreCase("toto"));
-	}
 	
 	/**
 	 * Vérifie l'existence du Login
@@ -207,6 +179,7 @@ public class Utilisateur {
 			r = (String) role.get();
 			//return log.equalsIgnoreCase(login); 
 		} //else return false;
+		
 		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", log, pwd, r, "dc=netjukebox,dc=com");
 		return true;
 		//return (login.equalsIgnoreCase("toto"));
@@ -296,8 +269,6 @@ public class Utilisateur {
 		Ldap ldap = Ldap.getInstance();
 		//ldap.ModifieAttributs("mail", "new@gmail", "gentaz", "admin");
 	}
-
-	
 
 	/**
 	 * Attribuer une permission à l'utilisateur
