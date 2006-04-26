@@ -2,7 +2,6 @@ package proto.serveur;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
-
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -76,6 +75,7 @@ public class Utilisateur {
 		
 		//On retourne un objet configuré avec les infos issues de LDAP
 		return Utilisateur.getByLogin(login);
+		
 	}
 	 
 	/**
@@ -321,14 +321,6 @@ public class Utilisateur {
 	public String getMail() {
 		return mail;
 	}
-
-	/**
-	 * Retourne le mot de passe de l'utilisateur
-	 * @return String
-	 */
-	//public String getPwd() {
-		//return pwd;
-	//}
 
 	/**
 	 * Retourne le pays de l'utilisateur
