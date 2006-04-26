@@ -5,14 +5,6 @@ objectClass: top
 objectClass: dcObject
 objectClass: organization
 
-dn: uid=admin,dc=netjukebox, dc=com
-iud: admin
-cn: admin
-userPassword: mot2passe
-objectClass: top
-objectClass: organizationalRole
-objectClass: simpleSecurityObject
-
 dn:ou=usager,dc=netjukebox, dc=com
 objectClass: top
 objectClass: organizationalUnit
@@ -28,3 +20,13 @@ objectClass: top
 objectClass: organizationalUnit
 ou:admin
 
+dn: uid=admin,ou=admin,dc=netjukebox,dc=com
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+uid: admin
+cn: admin
+sn: admin
+givenName: admin
+userPassword: mot2passe
+mail: admin@gmail.com
