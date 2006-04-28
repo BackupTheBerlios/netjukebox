@@ -326,7 +326,7 @@ public class Canal {
 	 * @return boolean
 	 * @throws SQLException 
 	 */
-	public boolean supprimer() throws SQLException {
+	public boolean supprimer() /*throws SQLException*/ {
 		
 		//On stoppe la diffusion éventuelle
 		this.stopDiffusion();

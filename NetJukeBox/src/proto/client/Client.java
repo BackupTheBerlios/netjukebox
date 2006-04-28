@@ -586,8 +586,56 @@ public class Client {
 					System.out.println(" rechercherDocument : rechercher un document");
 					System.out.println(" rechercherProgramme : rechercher un programme");
 					System.out.println(" rechercherCanal : rechercher un canal");
+					System.out.println(" supprimerDocument : supprimer un document");
+					System.out.println(" supprimerProgramme : supprimer un programme");
+					System.out.println(" supprimerCanal : supprimer un canal");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
+				}
+				
+				// SUPPRIMERDOCUMENT
+				if  (ligne.equalsIgnoreCase("supprimerDocument")) {
+					if (etatConnecte) {
+						System.out.print("ID du document ");
+						String id = lire();
+						if (clientXML.supprimerDocument(id)) {
+							System.err.println("INFO: Document supprimé");
+						}
+						else System.err.println("ERREUR: Suppression du document échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERPROGRAMME
+				if  (ligne.equalsIgnoreCase("supprimerProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du progamme ");
+						String id = lire();
+						if (clientXML.supprimerProgramme(id)) {
+							System.err.println("INFO: Programme supprimé");
+						}
+						else System.err.println("ERREUR: Suppression du programme échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERCANAL
+				if  (ligne.equalsIgnoreCase("supprimerCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal ");
+						String id = lire();
+						if (clientXML.supprimerCanal(id)) {
+							System.err.println("INFO: Canal supprimé");
+						}
+						else System.err.println("ERREUR: Suppression du canal échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
 				}
 				
 				// END

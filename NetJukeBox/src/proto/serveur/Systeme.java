@@ -476,8 +476,46 @@ public class Systeme {
 		return null;
 	}
 	
-	public void supprimerDocument() {
-		// your code here
+	/**
+	 * Suppression d'un document
+	 * @param String login
+	 * @param String id
+	 * @return String
+	 */
+	public String supprimerDocument(String login, String id) {
+		System.out.println("Suppression du document "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "supprimerDocument")) {
+		
+			//On vérifie que le document existe
+			if (documents.containsKey(id)) {
+				
+				//On récupère l'objet document
+				Document d = (Document)documents.get(id);
+
+				//Si le document a bien été supprimé
+				if (d.supprimer()) {
+					
+					//On le retire de la liste des documents du système
+					documents.remove(id);
+					
+					System.out.println("Document '"+id+"' supprimé");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, suppression échouée
+				System.out.println("Document '"+id+"' non supprimé");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, document introuvable
+			System.out.println("Document '"+id+"' introuvable");
+			return Boolean.toString(false);
+		}
+		// Sinon, suppression refusée
+		System.out.println("Permission non accordée. Document non supprimé");
+		return Boolean.toString(false);
 	}
 
 	public void ajouterDocument() {
@@ -487,10 +525,6 @@ public class Systeme {
 	public boolean documentExistant() {
 		// your code here
 		return false;
-	}
-
-	public void supprimerDoc(String Id_Doc) {
-		// your code here
 	}
 
 	public void modifierDocument() {
@@ -659,8 +693,46 @@ public class Systeme {
 		return null;
 	}
 
-	public void SupprimerProgramme(String Id_Prog) {
-		// your code here
+	/**
+	 * Suppression d'un programme
+	 * @param String login
+	 * @param String id
+	 * @return String
+	 */
+	public String supprimerProgramme(String login, String id) {
+		System.out.println("Suppression du programme "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "supprimerProgramme")) {
+		
+			//On vérifie que le programme existe
+			if (programmes.containsKey(id)) {
+				
+				//On récupère l'objet document
+				Programme p = (Programme)programmes.get(id);
+
+				//Si le programme a bien été supprimé
+				if (p.supprimer()) {
+					
+					//On le retire de la liste des programmes du système
+					programmes.remove(id);
+					
+					System.out.println("Programme '"+id+"' supprimé");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, suppression échouée
+				System.out.println("Programme '"+id+"' non supprimé");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, programme introuvable
+			System.out.println("Programme '"+id+"' introuvable");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Programme non supprimé");
+		return Boolean.toString(false);
 	}
 
 	public void ConfirmerSupprimerProgramme(Boolean SuppressionProgramme) {
@@ -978,6 +1050,48 @@ public class Systeme {
 		return null;
 	}
 	
+	/**
+	 * Suppression d'un canal
+	 * @param String login
+	 * @param String id
+	 * @return String
+	 */
+	public String supprimerCanal(String login, String id) {
+		System.out.println("Suppression du canal "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "supprimerCanal")) {
+		
+			//On vérifie que le canal existe
+			if (canaux.containsKey(id)) {
+				
+				//On récupère l'objet canal
+				Canal c = (Canal)canaux.get(id);
+
+				//Si le document a bien été supprimé
+				if (c.supprimer()) {
+					
+					//On le retire de la liste des canaux du système
+					canaux.remove(id);
+					
+					System.out.println("Canal '"+id+"' supprimé");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, suppression échouée
+				System.out.println("Canal '"+id+"' non supprimé");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, canal introuvable
+			System.out.println("Canal '"+id+"' introuvable");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Canal non supprimé");
+		return Boolean.toString(false);
+	}
+	
 
 	public void ValiderCreationCanal() {
 		// your code here
@@ -1005,10 +1119,6 @@ public class Systeme {
 	}
 
 	public void RechercherUnCanal() {
-		// your code here
-	}
-
-	public void SupprimerCanal(String Id_Canal) {
 		// your code here
 	}
 

@@ -304,6 +304,13 @@ public class Programme {
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
 		
+		//On supprime les associations programme/document
+		Document d;
+		for (int i=0; i<documents.size(); i++){
+			d = (Document)documents.get(i);
+			d.enleverProgramme(id);
+		}
+		
 		//On supprime les infos de la base
 		return Programme.deleteById(this.id);
 	}
