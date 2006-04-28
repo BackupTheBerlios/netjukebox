@@ -318,7 +318,8 @@ public class Client {
 						String idCanal = lire();
 						String urlPlayer = clientXML.ecouterCanal(idCanal);
 						if (urlPlayer != null) {
-							RTPClient player = RTPClient.getInstance();
+							//RTPClient player = RTPClient.getInstance();
+							RTPClient2 player = RTPClient2.getInstance();
 							player.start(urlPlayer);
 							System.err.println("INFO: Ecoute du canal lancée");
 						}
@@ -332,7 +333,8 @@ public class Client {
 				// STOPPLAYER
 				if  (ligne.equalsIgnoreCase("stopPlayer")) {
 					if (etatConnecte) {
-						RTPClient player = RTPClient.getInstance();
+						//RTPClient player = RTPClient.getInstance();
+						RTPClient2 player = RTPClient2.getInstance();
 						player.stop();
 						System.err.println("INFO: Player arrété");
 					}
