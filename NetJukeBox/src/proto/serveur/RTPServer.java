@@ -104,7 +104,7 @@ public class RTPServer implements ControllerListener {
 		this.port = port;
 		this.piste = "1";
 		this.publicite = publicite;
-		//this.publicite = "file://home/philippe/njb/pub.wav";
+		//this.publicite = "file://home/philippe/njb/pub.mp3";
 		this.medias = new Vector();
 		
 		// Creation du MediaLocator pour l'Adresse de destination
@@ -148,7 +148,8 @@ public class RTPServer implements ControllerListener {
 	public String getUrl() {
 		try {
 			String ipServeur = InetAddress.getLocalHost().getHostAddress();
-			return "rtp://"+ipServeur+":"+port+"/audio/"+piste;
+			//return "rtp://"+ipServeur+":"+port+"/audio/"+piste;
+			return ipServeur+"/"+port;
 		} catch (Exception e) {
 			System.err.println("ERREUR: "+e);
 			return null;
@@ -171,6 +172,7 @@ public class RTPServer implements ControllerListener {
 		System.out.println("Diffusion stoppée");
 		cDiffuse=false;
 		if (OutputSink != null) OutputSink.close();
+		//if (OutputStream != null) OutputStream.close();
 	}
 	
 	/**
@@ -213,7 +215,7 @@ public class RTPServer implements ControllerListener {
 				}
 			}
 			setTrackFormat(p);
-			p.setContentDescriptor(new ContentDescriptor(ContentDescriptor.RAW_RTP));
+			p.setContentDescriptor(new ContentDescriptor(ContentDescriptor.RAW/*_RTP*/));
 			p.realize();
 			while (!pRealized) {
 				try {
@@ -312,6 +314,7 @@ public class RTPServer implements ControllerListener {
 		// Program the tracks.
 		for (int i = 0; i < tracks.length; i++) {
 			Format format = tracks[i].getFormat();
+			System.out.println("File Format: "+format);
 			if (tracks[i].isEnabled()) {
 				supported = tracks[i].getSupportedFormats();
 				for (int n = 0; n < supported.length; n++)
@@ -347,10 +350,10 @@ public class RTPServer implements ControllerListener {
 				System.out.println("EVT: EndOfMedia");
 				OutputSink.close();
 				OutputSink = null;
-				/*
-				OutputStream.close();
-				OutputStream = null;
-				 */
+				
+				//OutputStream.close();
+				//OutputStream = null;
+				
 				diffuser();
 			}
 			else {
