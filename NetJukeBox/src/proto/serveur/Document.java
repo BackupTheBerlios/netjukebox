@@ -337,7 +337,7 @@ public class Document {
 	public static boolean deleteById(String id) /*throws SQLException*/ {
 		
 		//On supprime le document de la base, en partant d'un id
-		String requete = "DELETE * FROM document WHERE id = '" + id + "';";
+		String requete = "DELETE FROM document WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -359,11 +359,11 @@ public class Document {
 		Programme p;
 		for (int i=0; i<programmes.size(); i++){
 			p = (Programme)programmes.get(i);
-			p.retirerDocument(id);
+			p.enleverDocument(id);
 		}
 		
 		//On supprime les infos de la base
-		return Document.deleteById(this.id);
+		return Document.deleteById(id);
 	}
 
 	

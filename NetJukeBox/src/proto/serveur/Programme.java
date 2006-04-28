@@ -241,7 +241,7 @@ public class Programme {
 	public static boolean deleteById(String id) /*throws SQLException*/ {
 		
 		//On supprime le programme de la base, en partant d'un id
-		String requete = "DELETE * FROM programme WHERE id = '" + id + "';";
+		String requete = "DELETE FROM programme WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -462,6 +462,22 @@ public class Programme {
 		
 		return doc;
 	}
+	
+	/**
+	 * Retire un document du programme
+	 * @param String id
+	 * @return boolean
+	 */
+	public boolean enleverDocument(String id) {
+		
+		//On retire le document du programme
+		//************
+		// => JDBC <=
+		//************
+		
+		documents.remove(id);
+		return true;
+	}
 
 	/**
 	 * Retourne la liste des documents associés au programme
@@ -555,11 +571,6 @@ public class Programme {
 
 	public void RelancerDiffusionProgramme(String Id_Prog) {
 		// your code here
-	}
-
-	public boolean retirerDocument(String Id) {
-		// your code here
-		return false;
 	}
 
 	public boolean retraitDoc(String Id) {

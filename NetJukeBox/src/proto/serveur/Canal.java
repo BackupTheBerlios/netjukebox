@@ -251,7 +251,7 @@ public class Canal {
 	public static boolean deleteById(String id) /*throws SQLException*/ {
 		
 		//On supprime le canal de la base, en partant d'un id
-		String requete = "DELETE * FROM canal WHERE id = '" + id + "';";
+		String requete = "DELETE FROM canal WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
