@@ -343,7 +343,7 @@ public class Client {
 					}
 				}
 				
-				// LSTERDOCUMENT
+				// LISTERDOCUMENT
 				if  (ligne.equalsIgnoreCase("listerDocument")) {
 					if (etatConnecte) {
 						Vector vDocuments = clientXML.listerDocuments();
@@ -453,6 +453,118 @@ public class Client {
 					}
 				}
 				
+				// RECHERCHERDOCUMENT
+				if  (ligne.equalsIgnoreCase("rechercherDocument")) {
+					if (etatConnecte) {
+						System.out.print("ID du document: ");
+						String id = lire();
+						System.out.print("Titre: ");
+						String titre = lire();
+						System.out.print("Durée: ");
+						String duree = lire();
+						System.out.print("Jour de parution: ");
+						String jour = lire();
+						System.out.print("Mois de parution: ");
+						String mois = lire();
+						System.out.print("Année de parution: ");
+						String annee = lire();
+						System.out.print("Source: ");
+						String source = lire();
+						System.out.print("Langue: ");
+						String langue = lire();
+						System.out.print("Genre: ");
+						String genre = lire();
+						System.out.print("Fichier: ");
+						String fichier = lire();
+						Vector vDocuments = clientXML.rechercherDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier);
+						if (vDocuments!=null && vDocuments.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vDocuments.size(); i++){
+								d = (Dictionary)vDocuments.get(i);
+								System.out.println("----------------- Document -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Titre: "+d.get("titre"));
+								System.out.println("Durée: "+d.get("duree"));
+								System.out.println("Date: "+d.get("date"));
+								System.out.println("Genre: "+d.get("genre"));
+								System.out.println("Source: "+d.get("source"));
+								System.out.println("Langue: "+d.get("langue"));
+								System.out.println("Fichier: "+d.get("fichier"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Document recherché");
+						}
+						else System.err.println("WARNING: Aucun document disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RECHERCHERPROGRAMME
+				if  (ligne.equalsIgnoreCase("rechercherProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme: ");
+						String id = lire();
+						System.out.print("Titre: ");
+						String titre = lire();
+						System.out.print("Thématique: ");
+						String thematique = lire();
+						Vector vProgrammes = clientXML.rechercherProgramme(id, titre, thematique);
+						if (vProgrammes!=null && vProgrammes.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vProgrammes.size(); i++){
+								d = (Dictionary)vProgrammes.get(i);
+								System.out.println("----------------- Programme -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Titre: "+d.get("titre"));
+								System.out.println("Thématique: "+d.get("thematique"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programme recherché");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RECHERCHERCANAL
+				if  (ligne.equalsIgnoreCase("rechercherCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal: ");
+						String id = lire();
+						System.out.print("Nom: ");
+						String nom = lire();
+						System.out.print("NbMax d'auditeurs: ");
+						String utilMax = lire();
+						Vector vCanaux = clientXML.rechercherCanal(id, nom, utilMax);
+						if (vCanaux!=null && vCanaux.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vCanaux.size(); i++){
+								d = (Dictionary)vCanaux.get(i);
+								System.out.println("----------------- Canal -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Nom: "+d.get("nom"));
+								System.out.println("NbMax d'auditeurs: "+d.get("utilMax"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Canal recherché");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
 					System.out.println("Commandes disponibles:");
@@ -471,6 +583,9 @@ public class Client {
 					System.out.println(" listerProgramme : lister les programmes disponibles");
 					System.out.println(" listerCanal : lister les canaux disponibles");
 					System.out.println(" inscription : inscription d'un nouvel utilisateur");
+					System.out.println(" rechercherDocument : rechercher un document");
+					System.out.println(" rechercherProgramme : rechercher un programme");
+					System.out.println(" rechercherCanal : rechercher un canal");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

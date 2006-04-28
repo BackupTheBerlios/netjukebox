@@ -625,4 +625,124 @@ public class XMLClient {
 			return false;
 		}
 	}
+	
+
+	/**
+	 * Rechercher un document
+	 * @param String id
+	 * @param String titre
+	 * @param String duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return Vector
+	 */
+	public Vector rechercherDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Recherche des documents...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(titre);
+				params.addElement(duree);
+				params.addElement(jour);
+				params.addElement(mois);
+				params.addElement(annee);
+				params.addElement(source);
+				params.addElement(langue);
+				params.addElement(genre);
+				params.addElement(fichier);
+				
+				// Adresse la requête et affiche les résultats
+				return (Vector)clientXML.execute("Systeme.rechercherDocument", params);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Rechercher un programme
+	 * @param String id
+	 * @param String titre
+	 * @param String thematique
+	 * @return Vector
+	 */
+	public Vector rechercherProgramme(String id, String titre, String thematique) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Recherche des programmes...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(titre);
+				params.addElement(thematique);
+				
+				// Adresse la requête et affiche les résultats
+				return (Vector)clientXML.execute("Systeme.rechercherProgramme", params);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Rechercher un canal
+	 * @param String id
+	 * @param String nom
+	 * @param String utilMax
+	 * @return Vector
+	 */
+	public Vector rechercherCanal(String id, String nom, String utilMax) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Recherche des canaux...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(nom);
+				params.addElement(utilMax);
+				
+				// Adresse la requête et affiche les résultats
+				return (Vector)clientXML.execute("Systeme.rechercherCanal", params);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
 }

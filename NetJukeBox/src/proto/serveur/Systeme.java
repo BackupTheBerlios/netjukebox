@@ -425,6 +425,57 @@ public class Systeme {
 		return null;
 	}
 	
+	/**
+	 * Recherche d'un document
+	 * @param String login
+	 * @param String id
+	 * @param String titre
+	 * @param String duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return Vector
+	 */
+	public Vector rechercherDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+
+		System.out.println("Recherche d'un document");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "rechercherDocument")) {
+			
+			//Vecteur de documents à retourner
+			Vector vDocuments = new Vector();
+		
+			//On récupère la liste des documents
+			Enumeration listeDocs = documents.elements();
+			Document d;
+			
+			while (listeDocs.hasMoreElements()) {
+				d = (Document)listeDocs.nextElement();
+				
+				if ((id.length()>0 && d.getId().contains(id))
+					|| (titre.length()>0 && d.getTitre().contains(titre))
+					|| (genre.length()>0 && d.getGenre().contains(genre))
+					|| (fichier.length()>0 && d.getFichier().contains(fichier))
+					|| (source.length()>0 && d.getSource().contains(source))
+					|| (langue.length()>0 && d.getLangue().contains(langue))
+					|| (duree.length()>0 && Integer.toString(d.getDuree()).contains(duree))) {
+					
+					vDocuments.addElement(d.getAttributesDictionary());
+				}
+			}
+			
+			return vDocuments;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Recherche non effectuées");
+		return null;
+	}
+	
 	public void supprimerDocument() {
 		// your code here
 	}
@@ -455,10 +506,6 @@ public class Systeme {
 	}
 
 	public void rechercheDocument() {
-		// your code here
-	}
-
-	public void rechercherDocument(String Id_Doc) {
 		// your code here
 	}
 
@@ -572,9 +619,44 @@ public class Systeme {
 		return null;
 	}
 	
-	public void RechercherProgramme(String Id_Prog, String Titre,
-			String Thematique) {
-		// your code here
+	/**
+	 * Recherche d'un programme
+	 * @param String login
+	 * @param String id
+	 * @param String titre
+	 * @param String thematique
+	 * @return Vector
+	 */
+	public Vector rechercherProgramme(String login, String id, String titre, String thematique) {
+
+		System.out.println("Recherche d'un programme");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "rechercherProgramme")) {
+			
+			//Vecteur de programmes à retourner
+			Vector vProgrammes = new Vector();
+		
+			//On récupère la liste des programmes
+			Enumeration listeProgs = programmes.elements();
+			Programme p;
+			
+			while (listeProgs.hasMoreElements()) {
+				p = (Programme)listeProgs.nextElement();
+				
+				if ((id.length()>0 && p.getId().contains(id))
+					|| (titre.length()>0 && p.getTitre().contains(titre))
+					|| (thematique.length()>0 && p.getThematique().contains(thematique))) {
+					
+					vProgrammes.addElement(p.getAttributesDictionary());
+				}
+			}
+			
+			return vProgrammes;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Recherche non effectuées");
+		return null;
 	}
 
 	public void SupprimerProgramme(String Id_Prog) {
@@ -854,6 +936,45 @@ public class Systeme {
 		}
 		// Sinon, création refusée
 		System.out.println("Permission non accordée. Canaux non listés");
+		return null;
+	}
+	
+	/**
+	 * Recherche d'un canal
+	 * @param String login
+	 * @param String id
+	 * @param String nom
+	 * @param String utilMax
+	 * @return Vector
+	 */
+	public Vector rechercherCanal(String login, String id, String nom, String utilMax) {
+
+		System.out.println("Recherche d'un canal");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "rechercherCanal")) {
+			
+			//Vecteur de canaux à retourner
+			Vector vCanaux = new Vector();
+		
+			//On récupère la liste des programmes
+			Enumeration listeCanx = canaux.elements();
+			Canal c;
+			
+			while (listeCanx.hasMoreElements()) {
+				c = (Canal)listeCanx.nextElement();
+				
+				if ((id.length()>0 && c.getId().contains(id))
+					|| (nom.length()>0 && c.getNom().contains(nom))) {
+					
+					vCanaux.addElement(c.getAttributesDictionary());
+				}
+			}
+			
+			return vCanaux;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Recherche non effectuées");
 		return null;
 	}
 	
