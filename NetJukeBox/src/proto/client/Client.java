@@ -425,6 +425,34 @@ public class Client {
 					}
 				}
 				
+				// INSCRIPTION
+				if  (ligne.equalsIgnoreCase("inscription")) {
+					if (etatConnecte) {
+						System.out.print("prenom: ");
+						String prenom = lire();
+						System.out.print("nom: ");
+						String nom = lire();
+						System.out.print("login: ");
+						String log = lire();
+						System.out.print("password: ");
+						String pass = lire();
+						System.out.print("email: ");
+						String email = lire();
+						System.out.print("role: ");
+						String role = lire();
+						System.out.print("pays: ");
+						String pays = lire();
+						
+						if (clientXML.inscription(log, pass, role, email, nom, prenom, pays)) {
+							System.err.println("INFO: Utilisateur inscrit");
+						}
+						else System.err.println("WARNING: Inscription impossible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
 					System.out.println("Commandes disponibles:");
@@ -442,6 +470,7 @@ public class Client {
 					System.out.println(" listerDocument : lister les documents disponibles");
 					System.out.println(" listerProgramme : lister les programmes disponibles");
 					System.out.println(" listerCanal : lister les canaux disponibles");
+					System.out.println(" inscription : inscription d'un nouvel utilisateur");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

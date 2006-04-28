@@ -254,8 +254,52 @@ public class Systeme {
 	}
 
 	
-	public void inscription() {
-		// your code here
+	/**
+	 * Inscription d'un utilisateur
+	 * @param String login
+	 * @param String log
+	 * @param String pass
+	 * @param String role
+	 * @param String email
+	 * @param String nom
+	 * @param String prenom
+	 * @param String pays
+	 * @return String
+	 */
+	public String inscription(String login, String log, String pass, String role, String email, String nom, String prenom, String pays) throws NamingException {
+		
+		System.out.println("Inscription de l'utilisateur "+log);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "inscription")) {
+		
+			//On vérifie que le login n'existe pas
+			if (!Utilisateur.verifierLogin(log)) {
+				
+				//On crée le document
+				Utilisateur u = Utilisateur.create(log, pass, nom, prenom, email, pays, role);
+				
+				//Si le document a bien été créé
+				if (u != null) {
+					//On l'ajoute à la liste des documents du système
+					utilisateurs.put(u.getLogin(), u);
+					
+					System.out.println("Utilisateur '"+log+"' créé");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, création a échoué
+				System.out.println("Utilisateur '"+log+"' non créé");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Utilisateur '"+log+"' déjà existant. Inscription annulée");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Inscription annulée");
+		return Boolean.toString(false);
 	}
 
 	public void suppressionUtilisateur() {

@@ -580,4 +580,49 @@ public class XMLClient {
 			return null;
 		}
 	}
+	
+	/**
+	 * Inscription d'un utilisateur
+	 * @param String log
+	 * @param String pass
+	 * @param String role
+	 * @param String email
+	 * @param String nom
+	 * @param String prenom
+	 * @param String pays
+	 * @return boolean
+	 */
+	public boolean inscription(String log, String pass, String role, String email, String nom, String prenom, String pays) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Inscription d'un utilisateur...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(log);
+				params.addElement(pass);
+				params.addElement(role);
+				params.addElement(email);
+				params.addElement(nom);
+				params.addElement(prenom);
+				params.addElement(pays);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.inscription", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
 }
