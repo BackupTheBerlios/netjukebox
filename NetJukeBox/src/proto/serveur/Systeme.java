@@ -7,6 +7,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.naming.NamingException;
 
 /**
@@ -265,8 +267,10 @@ public class Systeme {
 	 * @param String prenom
 	 * @param String pays
 	 * @return String
+	 * @throws MessagingException 
+	 * @throws AddressException 
 	 */
-	public String inscription(String login, String log, String pass, String role, String email, String nom, String prenom, String pays) throws NamingException {
+	public String inscription(String login, String log, String pass, String role, String email, String nom, String prenom, String pays) throws NamingException, AddressException, MessagingException {
 		
 		System.out.println("Inscription de l'utilisateur "+log);
 
@@ -285,6 +289,7 @@ public class Systeme {
 					utilisateurs.put(u.getLogin(), u);
 					
 					System.out.println("Utilisateur '"+log+"' créé");
+					new EnvoiMail(log, nom, prenom, email, pass, pays);
 					return Boolean.toString(true);
 				}
 				
