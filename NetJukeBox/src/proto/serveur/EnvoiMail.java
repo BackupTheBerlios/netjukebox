@@ -6,14 +6,19 @@ import javax.mail.internet.*;
 
 public class EnvoiMail {
 	/**
-	 * Adresse su serveur SMTP
+	 * Adresse du serveur SMTP
 	 */
-	static String host = "localhost";
+	private String Host; // = "192.168.0.2";
+	
+	/**
+	 * Port du serveur SMTP
+	 */
+	private String Port; // = "25";
 	
 	/**
 	 * Adresse mail envoyant un message
 	 */
-	static String from = "mail@netjukebox.no-ip.org";
+	private String From; // = "mail@netjukebox.no-ip.org";
 	
 	/**
 	 * Destinataire du mail
@@ -56,25 +61,29 @@ public class EnvoiMail {
 	 * @throws AddressException
 	 * @throws MessagingException
 	 */
-	public EnvoiMail(String Login, String Nom, String Prenom, String Mail, String Pwd, String Pays) throws AddressException, MessagingException {
-		this.Nom = Nom;
-		this.Prenom = Prenom;
-		this.to = Mail;
-		this.Pwd = Pwd;
-		this.Pays = Pays;
+	public EnvoiMail(String host, String port, String from, String login, String nom, String prenom, String mail, String pwd, String pays) throws AddressException, MessagingException {
+		this.Host = host;
+		this.Port = port;
+		this.From = from;
+		this.Login = login;
+		this.Nom = nom;
+		this.Prenom = prenom;
+		this.to = mail;
+		this.Pwd = pwd;
+		this.Pays = pays;
 			
 		//Get system properties
 		Properties props = System.getProperties();
 		//Setup mail server
-		props.put("mail.smtp.host", host);
-		props.put("mail.smtp.port", "25"); 
+		props.put("mail.smtp.host", Host);
+		props.put("mail.smtp.port", Port); 
 		//Get session
 		Session session = Session.getDefaultInstance(props, null);
 		session.setDebug(true);
 		//Define message
 		MimeMessage message = new MimeMessage(session);
 		//Set the from address
-		message.setFrom(new InternetAddress(from));
+		message.setFrom(new InternetAddress(From));
 		//Set the to address
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 		//Set the subject

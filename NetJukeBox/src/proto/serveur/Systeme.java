@@ -71,6 +71,21 @@ public class Systeme {
 	 */
 	private Ldap ldap;
 
+	/**
+	 * Adresse du serveur SMTP
+	 */
+	private String host;
+	
+	/**
+	 * Port du serveur SMTP
+	 */
+	private String port;
+	
+	/**
+	 * Adresse mail envoyeur
+	 */
+	private String from;
+	
 // CONSTRUCTEUR
 //************************************************************
 	
@@ -121,10 +136,17 @@ public class Systeme {
 		System.err.println("LDAP Login: " + loginldap);
 		System.err.println("LDAP Pwd: " + pwdldap);
 		
-		
-		
 		ldap = Ldap.getInstance();
 		ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, role, baseNameldap);
+	
+		//Récupération des information du serveur SMTP
+		this.host = prefs.node("smtp").get("host", null);
+		this.port = prefs.node("smtp").get("port", null);
+		this.from = prefs.node("smtp").get("from", null);
+		
+		System.err.println("Adresse du serveur SMTP : " + host);
+		System.err.println("Port du serveur SMTP : " + port);
+		System.err.println("Mail envoyeur depuis le serveur SMTP : " + from);
 		
 		//On initialise les listes de canaux, programmes, documents
 		this.canaux = Canal.getAll();
@@ -289,7 +311,7 @@ public class Systeme {
 					utilisateurs.put(u.getLogin(), u);
 					
 					System.out.println("Utilisateur '"+log+"' créé");
-					new EnvoiMail(log, nom, prenom, email, pass, pays);
+					new EnvoiMail(host, port, from, log, nom, prenom, email, pass, pays);
 					return Boolean.toString(true);
 				}
 				
