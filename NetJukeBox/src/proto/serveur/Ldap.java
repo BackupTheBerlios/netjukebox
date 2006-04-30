@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -176,34 +177,89 @@ public class Ldap {
 	
 	/**
 	 * Modifie les attributs d'un utilisateur
-	 * @param champs
-	 * @param donnee
 	 * @param nom
 	 * @param role
+	 * @param nouveau nom
+	 * @param nouveau prenom
+	 * @param nouveau mail
+	 * @param nouveau pays
 	 * @return
+	 * @throws NamingException 
 	 */
-	public boolean ModifieAttributs(String champs, String donnee, String nom, String role) {
-		String requete = "uid=" + nom + ",ou=" + role;
-		Dictionary attr = getLogin(nom);
-		if (attr == null) {
-			return false;
-		} else
+public boolean ModifieAttributs(String login, String role, String newnom, String newprenom, String newmail, String newpays) throws NamingException {
+		String requete = "uid=" + login + ",ou=" + role;
+		Dictionary attr = getAttributs(login, role);
+		String vide="";
+		String nomactuel = (String) attr.get("cn");
+		String prenomactuel = (String) attr.get("givenName");
+	
+			
+		// Save original attributes
+	    Attributes orig = connect.getAttributes(requete,new String[]{"nom","prenom","mail","pays"});
+	    
+	    // Specify the changes to make
+	    
 		try {
-			/* construct the list of modifications to make */
-			ModificationItem[] mods = new ModificationItem[2];
-			Attribute mod0 = new BasicAttribute(champs, donnee);
-			// Update mail attribute
-			mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, mod0);
-			/* Delete the description attribute altogether */
-			Attribute mod1 = new BasicAttribute("description","Dernière modification : " + (new Date()).toString());
-			mods[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, mod1);
-			/* make the change */
-			connect.modifyAttributes(requete, mods);
-			System.out.println( "La modification est faite!." );
-			return true;
-		} 
-		catch (NamingException e) {
-			System.err.println("La modification a échoué. " + e);
+			
+			ModificationItem[] mods = new ModificationItem[5];
+		    
+			// Remplace la valeur de l'attribut SN avec la nouvelle valeur
+		    if (newnom!=null)
+		    mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+			new BasicAttribute("sn", newnom));
+		    		
+		    // Remplace la valeur de l'attribut MAIL avec la nouvelle valeur
+		   if (newmail!=null)
+		    mods[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+			new BasicAttribute("mail", newmail));
+		    
+		   // Remplace la valeur de l'attribut GIVENNAME avec la nouvelle valeur
+		    if (newprenom!=null)
+		    mods[2] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+			new BasicAttribute("givenName", newprenom));
+		    
+		    // Remplace la valeur de l'attribut ST avec la nouvelle valeur
+		    if (newpays!=null)
+		    mods[3] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+			new BasicAttribute("st", newpays));
+		    
+		   String newcn;
+		    // Replace la valeur de l'attribut CN avec la nouvelle valeur
+		    if (newnom!=null) {
+				if (newprenom!=null) { 
+					newcn=(newnom + " " + newprenom);
+				} else { newcn=(newnom + " " + prenomactuel);
+	 			}
+			} else {
+				if (newprenom!=null) { newcn=(nomactuel + " " + newprenom);
+				} else { newcn=(nomactuel+ " " + prenomactuel);
+			}
+			}
+		    mods[4] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+					new BasicAttribute("cn", newcn));
+
+		    // Perform the requested modifications on the named object
+		    connect.modifyAttributes(requete, mods);
+	
+		    // Check attributes
+		    System.out.println("**** Nouveau attributs *****");
+		    GetattrsAll.printAttrs(connect.getAttributes(requete));
+	
+		    // Revert changes
+		    //connect.modifyAttributes(requete, DirContext.REPLACE_ATTRIBUTE, orig);
+	
+		    // Check that the attributes got restored
+		    System.out.println("**** reverted to original attributes *****");
+		    GetattrsAll.printAttrs(connect.getAttributes(requete));				
+		   
+		    if (attr == null)
+				return false;
+			else 
+				System.out.println( "Les modifications sont faites! ");
+				return true;
+		}
+	   catch (NamingException e) {
+			System.err.println("Les modifications ont échoué. " + e);
 			return false;
 		}
 	}
