@@ -133,10 +133,7 @@ public class Utilisateur {
 		}*/
 		//Sinon, on retourne un objet vide
 		return null;
-
 	}
-	
-		
 		
 	/**
 	 * Détruit les infos d'un canal contenues dans la base
@@ -161,27 +158,28 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	public static boolean verifierLogin(String login) throws NamingException {
-		
+		String log, pwd, r;
 		Ldap ldap = Ldap.getInstance();
 		Dictionary resultats = ldap.getLogin(login);
-		Enumeration donnee = resultats.elements();
-		// S'il y a un resultat
-		String log = null;
-		String pwd = null;
-		String r = null;
-		if (resultats != null && resultats.size()>0) {
-			Attributes result = (Attributes) donnee.nextElement();
-			Attribute uid = result.get("uid");
-			Attribute passwd = result.get("userPassword");
-			Attribute role = result.get("ou");
-			log = (String) uid.get();
-			pwd = (String) passwd.get();
-			r = (String) role.get();
-			//return log.equalsIgnoreCase(login); 
-		} //else return false;
-		
-		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", log, pwd, r, "dc=netjukebox,dc=com");
-		return true;
+		try {
+			Enumeration donnee = resultats.elements();
+			// S'il y a un resultat
+			if (resultats != null && resultats.size()>0) {
+				Attributes result = (Attributes) donnee.nextElement();
+				Attribute uid = result.get("uid");
+				Attribute passwd = result.get("userPassword");
+				Attribute role = result.get("ou");
+				log = (String) uid.get();
+				pwd = (String) passwd.get();
+				r = (String) role.get();
+				ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", log, pwd, r, "dc=netjukebox,dc=com");
+				//return log.equalsIgnoreCase(login); 
+			} //else return false;
+			return true;
+		} catch (Exception e){
+			System.out.println("Erreur le login : " + login + " nexiste pas");
+			return false;
+		}
 		//return (login.equalsIgnoreCase("toto"));
 	}
 	
@@ -265,9 +263,33 @@ public class Utilisateur {
 	/**
 	 * Modifier les informations de l'utilisateur
 	 */
-	public void modifierInfos() {
+	public void modifierInfos(String login) {
 		Ldap ldap = Ldap.getInstance();
-		//ldap.ModifieAttributs("mail", "new@gmail", "gentaz", "admin");
+		ldap.getLogin(login);
+		
+		Dictionary resultats = ldap.getLogin(login);
+		try {
+		Enumeration donnee = resultats.elements();
+		Attributes result = (Attributes) donnee.nextElement();
+		Attribute log = result.get("uid");
+		Attribute role = result.get("ou");
+		Attribute nom = result.get("sn");
+		Attribute prenom = result.get("givenName");
+		Attribute mail = result.get("mail");
+		Attribute pays = result.get("st");
+		
+		System.out.println(log.get());
+		System.out.println(role.get());
+		System.out.println(nom.get());
+		System.out.println(prenom.get());
+		System.out.println(mail.get());
+		System.out.println(pays.get());
+		//String titi = (String) log.get();
+		} catch (Exception e){
+			System.out.println("Erreur le login : " + login + " nexiste pas");
+		}
+				
+		ldap.ModifieAttributs(login , newlogin, nom, prenom, "new@mail", pays);
 	}
 
 	/**
