@@ -453,12 +453,13 @@ public class Client {
 					}
 				}
 				
-				//SUPPRESSION
-				if (ligne.equalsIgnoreCase("suppression")) {
-					System.out.print("login: ");
-					String log = lire();
-					
-					if (clientXML.suppression(log)) {
+				//SUPPRIMERUTILISATEUR
+				if (ligne.equalsIgnoreCase("supprimerUtilisateur")) {
+					if (etatConnecte) {
+						System.out.print("login: ");
+						String log = lire();
+						
+						if (clientXML.supprimerUtilisateur(log)) {
 							System.err.println("INFO: Utilisateur supprimé");
 						}
 						else System.err.println("WARNING: Suppression impossible");
@@ -466,6 +467,7 @@ public class Client {
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
+				}
 				
 				
 				// RECHERCHERDOCUMENT
@@ -648,6 +650,145 @@ public class Client {
 							System.err.println("INFO: Canal supprimé");
 						}
 						else System.err.println("ERREUR: Suppression du canal échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERDOCUMENT
+				if  (ligne.equalsIgnoreCase("modifierDocument")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID du document à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vDocuments = clientXML.rechercherDocument(id, "", "", "", "", "", "", "", "", "");
+						if (vDocuments!=null && vDocuments.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vDocuments.size(); i++){
+								d = (Dictionary)vDocuments.get(i);
+								System.out.println("----------------- Document -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Titre: "+d.get("titre"));
+								System.out.println("Durée: "+d.get("duree"));
+								System.out.println("Date: "+d.get("date"));
+								System.out.println("Genre: "+d.get("genre"));
+								System.out.println("Source: "+d.get("source"));
+								System.out.println("Langue: "+d.get("langue"));
+								System.out.println("Fichier: "+d.get("fichier"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Document recherché");
+							
+							//Si le doc existe, on le modifie
+							System.out.print("Nouveau titre: ");
+							String titre = lire();
+							System.out.print("Durée: ");
+							String duree = lire();
+							System.out.print("Jour de parution: ");
+							String jour = lire();
+							System.out.print("Mois de parution: ");
+							String mois = lire();
+							System.out.print("Année de parution: ");
+							String annee = lire();
+							System.out.print("Source: ");
+							String source = lire();
+							System.out.print("Langue: ");
+							String langue = lire();
+							System.out.print("Genre: ");
+							String genre = lire();
+							System.out.print("Fichier: ");
+							String fichier = lire();
+							boolean modifie = clientXML.modifierDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier);
+							if (modifie) System.err.println("INFO: Document modifié");
+							else System.err.println("ERREUR: Document non modifié");
+						}
+						else System.err.println("WARNING: Aucun document disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERPROGRAMME
+				if  (ligne.equalsIgnoreCase("modifierProgramme")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID du programme à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vProgrammes = clientXML.rechercherProgramme(id, "", "");
+						if (vProgrammes!=null && vProgrammes.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vProgrammes.size(); i++){
+								d = (Dictionary)vProgrammes.get(i);
+								System.out.println("----------------- Programme -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Titre: "+d.get("titre"));
+								System.out.println("Thématique: "+d.get("thematique"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programme recherché");
+							
+							//Si le prog existe, on le modifie
+							System.out.print("Nouveau titre: ");
+							String titre = lire();
+							System.out.print("Thématique: ");
+							String thematique = lire();
+							boolean modifie = clientXML.modifierProgramme(id, titre, thematique);
+							if (modifie) System.err.println("INFO: Programme modifié");
+							else System.err.println("ERREUR: Programme non modifié");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERCANAL
+				if  (ligne.equalsIgnoreCase("modifierCanal")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID du canal à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vCanaux = clientXML.rechercherCanal(id, "", "");
+						if (vCanaux!=null && vCanaux.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vCanaux.size(); i++){
+								d = (Dictionary)vCanaux.get(i);
+								System.out.println("----------------- Canal -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Nom: "+d.get("nom"));
+								System.out.println("NbMax d'auditeurs: "+d.get("utilMax"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Canal recherché");
+							
+							//Si le prog existe, on le modifie
+							System.out.print("Nouveau nom: ");
+							String nom = lire();
+							System.out.print("NbMax d'auditeurs: ");
+							String utilMax = lire();
+							boolean modifie = clientXML.modifierCanal(id, nom, utilMax);
+							if (modifie) System.err.println("INFO: Canal modifié");
+							else System.err.println("ERREUR: Canal non modifié");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
