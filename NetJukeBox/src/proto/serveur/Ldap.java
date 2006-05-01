@@ -3,6 +3,7 @@ package proto.serveur;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
@@ -186,52 +187,65 @@ public class Ldap {
 	 * @return
 	 * @throws NamingException 
 	 */
-public boolean ModifieAttributs(String login, String role, String newnom, String newprenom, String newmail, String newpays) throws NamingException {
-		String requete = "uid=" + login + ",ou=" + role;
-		Dictionary attr = getAttributs(login, role);
-		String vide="";
-		String nomactuel = (String) attr.get("cn");
-		String prenomactuel = (String) attr.get("givenName");
-	
-			
-		// Save original attributes
-	    Attributes orig = connect.getAttributes(requete,new String[]{"nom","prenom","mail","pays"});
-	    
-	    // Specify the changes to make
-	    
-		try {
-			
-			ModificationItem[] mods = new ModificationItem[5];
-		    
+public boolean ModifieAttributs(String login, String role,String newlogin,String newnom, String newprenom, String newmail, String newpays) throws NamingException {
+		
+	String log=login;
+			if (newlogin!=login){
+				Dictionary resultat = getLogin(newlogin);
+				try {
+					Enumeration donnee = resultat.elements();
+					Attributes result = (Attributes) donnee.nextElement();
+					Attribute l = result.get("uid");
+					System.out.println(l.get());
+					String r =(String) l.get();
+					System.out.println("L'utilisateur : "+ newlogin + " existe déjà! Votre login ne peut être modifié!");
+		    		log=login;
+				}
+				catch (Exception e){
+					System.out.println("L'utilisateur : "+ newlogin + " n'existe pas. Votre login va être modifié!");
+		    		connect.rename("uid=" + login + ",ou=" + role,"uid=" + newlogin + ",ou=" + role );
+		    		log=newlogin;
+					}
+		} 
+					
+			Dictionary attr = getAttributs(log, role);	
+			String requete = "uid=" + log + ",ou=" + role;
+			String nomactuel = (String) attr.get("cn");
+			String prenomactuel = (String) attr.get("givenName");
+			String mailactuel = (String) attr.get("mail");
+			String paysactuel = (String) attr.get("st");
+						
+		    ModificationItem[] mods = new ModificationItem[5];
+		try{	
 			// Remplace la valeur de l'attribut SN avec la nouvelle valeur
-		    if (newnom!=null)
+		    if (newnom!=nomactuel)
 		    mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("sn", newnom));
 		    		
 		    // Remplace la valeur de l'attribut MAIL avec la nouvelle valeur
-		   if (newmail!=null)
+		    if (newmail!=mailactuel)
 		    mods[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("mail", newmail));
 		    
 		   // Remplace la valeur de l'attribut GIVENNAME avec la nouvelle valeur
-		    if (newprenom!=null)
+		    if (newprenom!=prenomactuel)
 		    mods[2] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("givenName", newprenom));
 		    
 		    // Remplace la valeur de l'attribut ST avec la nouvelle valeur
-		    if (newpays!=null)
+		    if (newpays!=paysactuel)
 		    mods[3] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("st", newpays));
 		    
 		   String newcn;
 		    // Replace la valeur de l'attribut CN avec la nouvelle valeur
-		    if (newnom!=null) {
-				if (newprenom!=null) { 
+		    if (newnom!=nomactuel) {
+				if (newprenom!=prenomactuel) { 
 					newcn=(newnom + " " + newprenom);
 				} else { newcn=(newnom + " " + prenomactuel);
 	 			}
 			} else {
-				if (newprenom!=null) { newcn=(nomactuel + " " + newprenom);
+				if (newprenom!=prenomactuel) { newcn=(nomactuel + " " + newprenom);
 				} else { newcn=(nomactuel+ " " + prenomactuel);
 			}
 			}
@@ -244,13 +258,7 @@ public boolean ModifieAttributs(String login, String role, String newnom, String
 		    // Check attributes
 		    System.out.println("**** Nouveau attributs *****");
 		    GetattrsAll.printAttrs(connect.getAttributes(requete));
-	
-		    // Revert changes
-		    //connect.modifyAttributes(requete, DirContext.REPLACE_ATTRIBUTE, orig);
-	
-		    // Check that the attributes got restored
-		    System.out.println("**** reverted to original attributes *****");
-		    GetattrsAll.printAttrs(connect.getAttributes(requete));				
+
 		   
 		    if (attr == null)
 				return false;
