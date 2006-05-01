@@ -377,7 +377,7 @@ public class Systeme {
 	 */
 	 public void modifierUtil(String login, String newlogin, String nom, String prenom, String mail, String pays) throws NamingException {
 					
-			u.modifierInfos(login, role, newlogin, nom, prenom, mail, pays);
+			//u.modifierInfos(login, role, newlogin, nom, prenom, mail, pays);
 			
 	}
 	
@@ -588,6 +588,57 @@ public class Systeme {
 		System.out.println("Permission non accordée. Document non supprimé");
 		return Boolean.toString(false);
 	}
+	
+	/**
+	 * Modification d'un document
+	 * @param String login
+	 * @param String id
+	 * @param String titre
+	 * @param String duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return String
+	 * @throws SQLException 
+	 * @throws NumberFormatException 
+	 */
+	public String modifierDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) throws NumberFormatException, SQLException {
+
+		System.out.println("Modification du document "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "modifierDocument")) {
+		
+			//On vérifie que le document existe
+			if (documents.containsKey(id)) {
+				
+				//On récupère le doc
+				Document d = (Document)documents.get(id);
+				
+				//On modifie le document
+				if (d.modifier(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier)) {
+				
+					System.out.println("Document '"+id+"' modifié");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, création a échoué
+				System.out.println("Document '"+id+"' non modifié");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Document '"+id+"' non trouvé");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Document non modifié");
+		return Boolean.toString(false);
+	}
 
 	public void ajouterDocument() {
 		// your code here
@@ -596,14 +647,6 @@ public class Systeme {
 	public boolean documentExistant() {
 		// your code here
 		return false;
-	}
-
-	public void modifierDocument() {
-		// your code here
-	}
-
-	public void modifierDoc(String Id_Doc) {
-		// your code here
 	}
 
 	public void selectionnerDocument(String Id_Doc) {
@@ -803,6 +846,48 @@ public class Systeme {
 		}
 		// Sinon, création refusée
 		System.out.println("Permission non accordée. Programme non supprimé");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Modification d'un programme
+	 * @param String login
+	 * @param String id
+	 * @param String titre
+	 * @param String thematique
+	 * @return String
+	 */
+	public String modifierProgramme(String login, String id, String titre, String thematique) throws NumberFormatException, SQLException {
+
+		System.out.println("Modification du programme "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "modifierProgramme")) {
+		
+			//On vérifie que le programme existe
+			if (programmes.containsKey(id)) {
+				
+				//On récupère le prog
+				Programme p = (Programme)programmes.get(id);
+				
+				//On modifie le programme
+				if (p.modifier(titre, thematique)) {
+				
+					System.out.println("Programme '"+id+"' modifié");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, création a échoué
+				System.out.println("Programme '"+id+"' non modifié");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Programme '"+id+"' non trouvé");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Programme non modifié");
 		return Boolean.toString(false);
 	}
 
@@ -1160,6 +1245,48 @@ public class Systeme {
 		}
 		// Sinon, création refusée
 		System.out.println("Permission non accordée. Canal non supprimé");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Modification d'un canal
+	 * @param String login
+	 * @param String id
+	 * @param String nom
+	 * @param String utilMax
+	 * @return String
+	 */
+	public String modifierCanal(String login, String id, String nom, String utilMax) throws NumberFormatException, SQLException {
+
+		System.out.println("Modification du canal "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "modifierCanal")) {
+		
+			//On vérifie que le canal existe
+			if (canaux.containsKey(id)) {
+				
+				//On récupère le canal
+				Canal c = (Canal)canaux.get(id);
+				
+				//On modifie le canal
+				if (c.modifier(nom, Integer.valueOf(utilMax))) {
+				
+					System.out.println("Canal '"+id+"' modifié");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, création a échoué
+				System.out.println("Canal '"+id+"' non modifié");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Canal '"+id+"' non trouvé");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Canal non modifié");
 		return Boolean.toString(false);
 	}
 	

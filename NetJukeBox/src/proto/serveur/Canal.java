@@ -263,6 +263,27 @@ public class Canal {
 // *************************************************
 	
 	/**
+	 * Modifie les attributs
+	 * @param String nom
+	 * @param int utilMax
+	 * @return boolean
+	 */
+	public boolean modifier(String nom, int utilMax) {
+		
+		String requete = "UPDATE canal SET nom = '" + nom + "', utilMax = '" + utilMax + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.nom = nom;
+			this.utilMax = utilMax;
+		}
+		return nbRows>0;
+	}
+	
+	/**
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */

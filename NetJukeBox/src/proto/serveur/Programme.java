@@ -254,6 +254,27 @@ public class Programme {
 //*********************************************************
 	
 	/**
+	 * Modifie les attributs
+	 * @param String titre
+	 * @param String thematique
+	 * @return boolean
+	 */
+	public boolean modifier(String titre, String thematique) {
+		
+		String requete = "UPDATE programme SET titre = '" + titre + "', thematique = '" + thematique + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.titre = titre;
+			this.thematique = thematique;
+		}
+		return nbRows>0;
+	}
+	
+	/**
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */

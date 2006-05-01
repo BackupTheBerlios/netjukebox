@@ -582,35 +582,6 @@ public class Client {
 					}
 				}
 				
-				// HELP
-				if (ligne.equalsIgnoreCase("help")) {
-					System.out.println("Commandes disponibles:");
-					System.out.println(" connexion : ouvrir une session sur le serveur");
-					System.out.println(" deconnexion : fermer la session");
-					System.out.println(" creerCanal : créer un canal");
-					System.out.println(" creerProgramme : créer un programme");
-					System.out.println(" creerDocument : créer un document");
-					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
-					System.out.println(" diffuserProgramme : diffuser un programme sur un canal");
-					System.out.println(" startCanal : lancer la diffusion d'un canal");
-					System.out.println(" stopCanal : stopper la diffusion d'un canal");
-					System.out.println(" startPlayer : lancer l'écoute un canal");
-					System.out.println(" stopPlayer : stopper l'écoute d'un canal");
-					System.out.println(" listerDocument : lister les documents disponibles");
-					System.out.println(" listerProgramme : lister les programmes disponibles");
-					System.out.println(" listerCanal : lister les canaux disponibles");
-					System.out.println(" inscription : inscription d'un nouvel utilisateur");
-					System.out.println(" Suppression : suppression d'un utilisateur");
-					System.out.println(" rechercherDocument : rechercher un document");
-					System.out.println(" rechercherProgramme : rechercher un programme");
-					System.out.println(" rechercherCanal : rechercher un canal");
-					System.out.println(" supprimerDocument : supprimer un document");
-					System.out.println(" supprimerProgramme : supprimer un programme");
-					System.out.println(" supprimerCanal : supprimer un canal");
-					System.out.println(" end : terminer");
-					System.out.println(" help : lister les commandes disponibles");
-				}
-				
 				// SUPPRIMERDOCUMENT
 				if  (ligne.equalsIgnoreCase("supprimerDocument")) {
 					if (etatConnecte) {
@@ -793,6 +764,38 @@ public class Client {
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
+				}
+				
+				// HELP
+				if (ligne.equalsIgnoreCase("help")) {
+					System.out.println("Commandes disponibles:");
+					System.out.println(" connexion : ouvrir une session sur le serveur");
+					System.out.println(" deconnexion : fermer la session");
+					System.out.println(" creerCanal : créer un canal");
+					System.out.println(" creerProgramme : créer un programme");
+					System.out.println(" creerDocument : créer un document");
+					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
+					System.out.println(" diffuserProgramme : diffuser un programme sur un canal");
+					System.out.println(" startCanal : lancer la diffusion d'un canal");
+					System.out.println(" stopCanal : stopper la diffusion d'un canal");
+					System.out.println(" startPlayer : lancer l'écoute un canal");
+					System.out.println(" stopPlayer : stopper l'écoute d'un canal");
+					System.out.println(" listerDocument : lister les documents disponibles");
+					System.out.println(" listerProgramme : lister les programmes disponibles");
+					System.out.println(" listerCanal : lister les canaux disponibles");
+					System.out.println(" inscription : inscription d'un nouvel utilisateur");
+					System.out.println(" Suppression : suppression d'un utilisateur");
+					System.out.println(" rechercherDocument : rechercher un document");
+					System.out.println(" rechercherProgramme : rechercher un programme");
+					System.out.println(" rechercherCanal : rechercher un canal");
+					System.out.println(" supprimerDocument : supprimer un document");
+					System.out.println(" supprimerProgramme : supprimer un programme");
+					System.out.println(" supprimerCanal : supprimer un canal");
+					System.out.println(" modifierDocument : modifier un document");
+					System.out.println(" modifierProgramme : modifier un programme");
+					System.out.println(" modifierCanal : modifier un canal");
+					System.out.println(" end : terminer");
+					System.out.println(" help : lister les commandes disponibles");
 				}
 				
 				// END

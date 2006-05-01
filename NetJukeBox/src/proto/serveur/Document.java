@@ -688,7 +688,7 @@ public class Document {
 			String mois, String annee, String source, String langue, String genre,
 			String fichier) {
 		
-		String requete = "UPDATE document SET titre = '" + titre + ", duree = '" + duree + "', date = '"+ 
+		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree + "', date = '"+ 
 			jour +"-"+ mois +"-"+ annee + "', source = '" + source + "', langue = '" + langue +
 			"', genre = '" + langue + "', fichier = '" + fichier + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();

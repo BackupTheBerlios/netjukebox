@@ -631,7 +631,7 @@ public class XMLClient {
 	 * @param login
 	 * @return
 	 */
-	 public boolean suppression(String login) {
+	 public boolean supprimerUtilisateur(String login) {
 		if (etatConnecte) {
 			System.err.println("INFO: Suppression du compte ...");
 			try {
@@ -856,6 +856,131 @@ public class XMLClient {
 				
 				// Adresse la requête et affiche les résultats
 				String result = (String)clientXML.execute("Systeme.supprimerCanal", params);
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Modification d'un document
+	 * @param String id
+	 * @param String titre
+	 * @param String duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return boolean
+	 */
+	public boolean modifierDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Modification d'un document...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(titre);
+				params.addElement(duree);
+				params.addElement(jour);
+				params.addElement(mois);
+				params.addElement(annee);
+				params.addElement(source);
+				params.addElement(langue);
+				params.addElement(genre);
+				params.addElement(fichier);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.modifierDocument", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Modification d'un programme
+	 * @param String id
+	 * @param String titre
+	 * @param String thematique
+	 * @return boolean
+	 */
+	public boolean modifierProgramme(String id, String titre, String thematique) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Modification d'un programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(titre);
+				params.addElement(thematique);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.modifierProgramme", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Modification d'un canal
+	 * @param String id
+	 * @param String nom
+	 * @param String utilMax
+	 * @return boolean
+	 */
+	public boolean modifierCanal(String id, String nom, String utilMax) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Modification d'un canal...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(nom);
+				params.addElement(utilMax);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.modifierCanal", params);
+
 				return Boolean.parseBoolean(result);
 				
 			} catch (Exception e) {
