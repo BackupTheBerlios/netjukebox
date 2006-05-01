@@ -141,11 +141,11 @@ public class Utilisateur {
 	 * @return
 	 * @throws NamingException 
 	 */
-	public static boolean deleteByLogin(String login, String role) throws NamingException {
+	public static boolean deleteByLogin(String login) throws NamingException {
 		
 		//On supprime l'utilisateur de l'annuaire, en partant d'un login
 		Ldap ldap = Ldap.getInstance();
-		ldap.executeSupprimer(login, role);
+		ldap.executeSupprimer(login);
 		
 		//On retourne le resultat de l'opération (succès/échec)
 		return true;
@@ -220,7 +220,7 @@ public class Utilisateur {
 		this.deconnecter();
 		
 		//On supprime ses infos de l'annuaire
-		return Utilisateur.deleteByLogin(this.login, this.role);
+		return Utilisateur.deleteByLogin(this.login);
 	}	
 		
 		
@@ -262,34 +262,12 @@ public class Utilisateur {
 
 	/**
 	 * Modifier les informations de l'utilisateur
+	 * @throws NamingException 
 	 */
-	public void modifierInfos(String login) {
+	public void modifierInfos(String login, String role,String newlogin,String nom, String prenom, String mail, String pays) throws NamingException {
+		
 		Ldap ldap = Ldap.getInstance();
-		ldap.getLogin(login);
-		
-		Dictionary resultats = ldap.getLogin(login);
-		try {
-		Enumeration donnee = resultats.elements();
-		Attributes result = (Attributes) donnee.nextElement();
-		Attribute log = result.get("uid");
-		Attribute role = result.get("ou");
-		Attribute nom = result.get("sn");
-		Attribute prenom = result.get("givenName");
-		Attribute mail = result.get("mail");
-		Attribute pays = result.get("st");
-		
-		System.out.println(log.get());
-		System.out.println(role.get());
-		System.out.println(nom.get());
-		System.out.println(prenom.get());
-		System.out.println(mail.get());
-		System.out.println(pays.get());
-		//String titi = (String) log.get();
-		} catch (Exception e){
-			System.out.println("Erreur le login : " + login + " nexiste pas");
-		}
-				
-		ldap.ModifieAttributs(login , newlogin, nom, prenom, "new@mail", pays);
+		ldap.ModifieAttributs(login, role, newlogin, nom, prenom, mail, pays);	
 	}
 
 	/**

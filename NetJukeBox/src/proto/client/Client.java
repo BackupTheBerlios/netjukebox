@@ -453,6 +453,21 @@ public class Client {
 					}
 				}
 				
+				//SUPPRESSION
+				if (ligne.equalsIgnoreCase("suppression")) {
+					System.out.print("login: ");
+					String log = lire();
+					
+					if (clientXML.suppression(log)) {
+							System.err.println("INFO: Utilisateur supprimé");
+						}
+						else System.err.println("WARNING: Suppression impossible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				
+				
 				// RECHERCHERDOCUMENT
 				if  (ligne.equalsIgnoreCase("rechercherDocument")) {
 					if (etatConnecte) {
@@ -583,6 +598,7 @@ public class Client {
 					System.out.println(" listerProgramme : lister les programmes disponibles");
 					System.out.println(" listerCanal : lister les canaux disponibles");
 					System.out.println(" inscription : inscription d'un nouvel utilisateur");
+					System.out.println(" Suppression : suppression d'un utilisateur");
 					System.out.println(" rechercherDocument : rechercher un document");
 					System.out.println(" rechercherProgramme : rechercher un programme");
 					System.out.println(" rechercherCanal : rechercher un canal");

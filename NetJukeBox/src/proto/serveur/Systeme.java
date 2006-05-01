@@ -2,6 +2,7 @@ package proto.serveur;
 
 
 import java.sql.SQLException;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -205,17 +206,17 @@ public class Systeme {
 			//On vérifie que le couple login/pwd existe
 			//if (Utilisateur.verifierPwd(pwd, login)) {
 				
-				//On récupère l'utilisateur depuis la base
-				Utilisateur util = Utilisateur.getByLogin(login);
+			//On récupère l'utilisateur depuis la base
+			Utilisateur util = Utilisateur.getByLogin(login);
 				
-				//On connecte l'utilisateur
-				util.connexion();
+			//On connecte l'utilisateur
+			util.connexion();
 				
-				//On l'ajoute à la liste des utilisateurs connectés au système
-				utilisateurs.put(login, util);
+			//On l'ajoute à la liste des utilisateurs connectés au système
+			utilisateurs.put(login, util);
 				
-				System.out.println("Utilisateur "+login+" connecté");
-				return Boolean.toString(true);
+			System.out.println("Utilisateur "+login+" connecté");
+			return Boolean.toString(true);
 				
 			//}
 			
@@ -277,7 +278,6 @@ public class Systeme {
 		return null;
 	}
 
-	
 	/**
 	 * Inscription d'un utilisateur
 	 * @param String login
@@ -329,6 +329,62 @@ public class Systeme {
 		return Boolean.toString(false);
 	}
 
+	/**
+	 * Suppression d'un compte utilisateur
+	 * @param Login
+	 * @throws NamingException
+	 */
+	public void supprimerUtilisateur(String Login) throws NamingException {
+		
+		System.out.println("Suppression de l'utilisateur "+Login);
+		
+		//Vérification de l'existance du login à supprimer et suppression 
+		if (Utilisateur.verifierLogin(Login)) {
+			Utilisateur.deleteByLogin(Login);
+			System.out.println("Utilisateur '"+Login+"' supprimé");
+		}
+		
+		//Sinon annulation
+		System.out.println("Utilisateur '"+Login+"' non existant. Suppression annulée");
+	}
+
+	/**
+	 * Récupération de l'objet à modifier
+	 * @param login
+	 * @return
+	 * @throws NamingException
+	 */
+	public Utilisateur modifierUtilisateur(String login) throws NamingException {
+		System.out.println("Modification des attributs");
+		
+		if (Utilisateur.verifierLogin(login)) {
+			Utilisateur u = Utilisateur.getByLogin(login);
+			return u;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Modification des attributs d'un utilisateur
+	 * @param Login
+	 * @param newLogin
+	 * @param nom
+	 * @param prenom
+	 * @param mail
+	 * @param pays
+	 * @throws NamingException
+	 */
+	 public void modifierUtil(String login, String newlogin, String nom, String prenom, String mail, String pays) throws NamingException {
+					
+			u.modifierInfos(login, role, newlogin, nom, prenom, mail, pays);
+			
+	}
+	
+	
+	
+	
+	
 	public void suppressionUtilisateur() {
 		// your code here
 	}
@@ -344,24 +400,12 @@ public class Systeme {
 	public void selectionnerUtilisateur(String Login) {
 		// your code here
 	}
-
-	public void supprimerUtilisateur(String Login) {
-		// your code here
-	}
 	
 	public boolean emailValide(String Email) {
 		// your code here
 		return false;
 	}
-
-	public void modifierUtilisateur() {
-		// your code here
-	}
-
-	public void modifierUtil(String Login) {
-		// your code here
-	}
-
+	
 	public void getListePermissions() {
 		// your code here
 	}

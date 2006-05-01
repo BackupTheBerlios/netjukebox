@@ -626,7 +626,35 @@ public class XMLClient {
 		}
 	}
 	
+	/**
+	 * Suppression d'un compte utilisateur
+	 * @param login
+	 * @return
+	 */
+	 public boolean suppression(String login) {
+		if (etatConnecte) {
+			System.err.println("INFO: Suppression du compte ...");
+			try {
+				//Création de la requête
+				Vector params = new Vector();	
+				params.addElement(login);
+				
+				//Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.suppression", params);
+				return Boolean.parseBoolean(result);	
 
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		}
+		else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	
 	/**
 	 * Rechercher un document
 	 * @param String id
