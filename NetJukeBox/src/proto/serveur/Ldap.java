@@ -189,35 +189,33 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 * @throws NamingException 
 	 */
-public boolean ModifieAttributs(String login, String role,String newlogin,String newnom, String newprenom, String newmail, String newpays) throws NamingException {
-		
-	String log=login;
-			if (newlogin!=login){
-				Dictionary resultat = getLogin(newlogin);
-				try {
-					Enumeration donnee = resultat.elements();
-					Attributes result = (Attributes) donnee.nextElement();
-					Attribute l = result.get("uid");
-					System.out.println(l.get());
-					String r =(String) l.get();
-					System.out.println("L'utilisateur : "+ newlogin + " existe déjà! Votre login ne peut être modifié!");
-		    		log=login;
-				}
-				catch (Exception e){
-					System.out.println("L'utilisateur : "+ newlogin + " n'existe pas. Votre login va être modifié!");
-		    		connect.rename("uid=" + login + ",ou=" + role,"uid=" + newlogin + ",ou=" + role );
-		    		log=newlogin;
-					}
+	public boolean ModifieAttributs(String login, String role,String newlogin,String newnom, String newprenom, String newmail, String newpays) throws NamingException {
+		String log=login;
+		if (newlogin!=login){
+			Dictionary resultat = getLogin(newlogin);
+			try {
+				Enumeration donnee = resultat.elements();
+				Attributes result = (Attributes) donnee.nextElement();
+				Attribute l = result.get("uid");
+				System.out.println(l.get());
+				String r =(String) l.get();
+				System.out.println("L'utilisateur : "+ newlogin + " existe déjà! Votre login ne peut être modifié!");
+				log=login;
+			} catch (Exception e){
+				System.out.println("L'utilisateur : "+ newlogin + " n'existe pas. Votre login va être modifié!");
+				connect.rename("uid=" + login + ",ou=" + role,"uid=" + newlogin + ",ou=" + role );
+				log=newlogin;
+			}
 		} 
 					
-			Dictionary attr = getAttributs(log, role);	
-			String requete = "uid=" + log + ",ou=" + role;
-			String nomactuel = (String) attr.get("cn");
-			String prenomactuel = (String) attr.get("givenName");
-			String mailactuel = (String) attr.get("mail");
-			String paysactuel = (String) attr.get("st");
-						
-		    ModificationItem[] mods = new ModificationItem[5];
+		Dictionary attr = getAttributs(log, role);	
+		String requete = "uid=" + log + ",ou=" + role;
+		String nomactuel = (String) attr.get("cn");
+		String prenomactuel = (String) attr.get("givenName");
+		String mailactuel = (String) attr.get("mail");
+		String paysactuel = (String) attr.get("st");
+
+		ModificationItem[] mods = new ModificationItem[5];
 		try{	
 			// Remplace la valeur de l'attribut SN avec la nouvelle valeur
 		    if (newnom!=nomactuel)
@@ -238,37 +236,33 @@ public boolean ModifieAttributs(String login, String role,String newlogin,String
 		    if (newpays!=paysactuel)
 		    mods[3] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("st", newpays));
-		    
-		   String newcn;
-		    // Replace la valeur de l'attribut CN avec la nouvelle valeur
+
+		    String newcn;
+		    // Remplace la valeur de l'attribut CN avec la nouvelle valeur
 		    if (newnom!=nomactuel) {
 				if (newprenom!=prenomactuel) { 
 					newcn=(newnom + " " + newprenom);
 				} else { newcn=(newnom + " " + prenomactuel);
 	 			}
 			} else {
-				if (newprenom!=prenomactuel) { newcn=(nomactuel + " " + newprenom);
+				if (newprenom!=prenomactuel) {
+					newcn=(nomactuel + " " + newprenom);
 				} else { newcn=(nomactuel+ " " + prenomactuel);
+				}
 			}
-			}
-		    mods[4] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-					new BasicAttribute("cn", newcn));
+		    mods[4] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("cn", newcn));
 
-		    // Perform the requested modifications on the named object
+		    // Modifie les attributs de l'objet
 		    connect.modifyAttributes(requete, mods);
 	
-		    // Check attributes
 		    System.out.println("**** Nouveau attributs *****");
-		    GetattrsAll.printAttrs(connect.getAttributes(requete));
-
-		   
+		
 		    if (attr == null)
-				return false;
-			else 
-				System.out.println( "Les modifications sont faites! ");
-				return true;
-		}
-	   catch (NamingException e) {
+		    	return false;
+				else 
+					System.out.println( "Les modifications sont faites! ");
+					return true;
+		} catch (NamingException e) {
 			System.err.println("Les modifications ont échoué. " + e);
 			return false;
 		}
@@ -348,7 +342,7 @@ public boolean ModifieAttributs(String login, String role,String newlogin,String
 	}
 	
 	/**
-	 * 
+	 * Vérification de la présence du login dans l'annuaire
 	 * @param log
 	 * @return
 	 */
@@ -392,7 +386,6 @@ public boolean ModifieAttributs(String login, String role,String newlogin,String
 		}
 	}
 	
-	
 	/**
 	 * Récupère les attributs d'un utilisateur
 	 * @param login
@@ -411,35 +404,37 @@ public boolean ModifieAttributs(String login, String role,String newlogin,String
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Récupère les attributs d'un utilisateur
 	 * @param attrs
 	 * @return
 	 */
-	
 	@SuppressWarnings("unchecked")
 	private Dictionary printAttrs(Attributes attrs) {
 		Dictionary ligne = new Hashtable();
 		if (attrs == null) {
-    		System.out.println("No attributes");
-    	} else {
-    		try {
-    			for (NamingEnumeration ae = attrs.getAll();
+			System.out.println("No attributes");
+		} else {
+			try {
+				for (NamingEnumeration ae = attrs.getAll();
 	    			ae.hasMore();) {
-    				Attribute attr = (Attribute)ae.next();
+					Attribute attr = (Attribute)ae.next();
 
-    				for (NamingEnumeration e = attr.getAll(); 
-    					e.hasMore();
-     					ligne.put(attr.getID(), e.next()));
-    			}	
-    			return ligne;
-    		} catch (NamingException e) {
-    			System.out.println("Erreur l'utilisateur n'existe pas");
-    			return null;
-    		}
-    	}
+					for (NamingEnumeration e = attr.getAll(); 
+						e.hasMore();
+	 					ligne.put(attr.getID(), e.next()));
+				}	
+				return ligne;
+			} catch (NamingException e) {
+				System.out.println("Erreur l'utilisateur n'existe pas");
+				return null;
+			}
+		}
 		return ligne;
-	}	
-	
+	}
 }
+
+
+
+
