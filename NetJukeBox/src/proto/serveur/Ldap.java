@@ -156,26 +156,28 @@ public class Ldap {
 	 * @return
 	 * @throws NamingException
 	 */
-	public boolean executeSupprimer(String login, String role) throws NamingException {
-		String requete =  "uid=" + login + ",ou=" + role;
-		Dictionary attr = getAttributs(login, role);
-		if (attr == null) {
-			return false;
-		} else 
-			try {
-				connect.destroySubcontext(requete);
-				System.out.println( "Entrée supprimée " + requete + "." );
-				return true;
-			} catch (NameNotFoundException e) {
-				System.out.println( "Cette entrée" + requete + " n'existe pas dans cette branche.");
+	
+public boolean executeSupprimer(String login) throws NamingException {
+		
+		Dictionary resultat = getLogin(login);
+		try {
+			Enumeration donnee = resultat.elements();
+			Attributes result = (Attributes) donnee.nextElement();
+			Attribute log = result.get("uid");
+			Attribute branche = result.get("ou");
+			String l =(String) log.get();
+			String b =(String) branche.get();
+			System.out.println("L'utilisateur "+ l + " existe bien.");
+			connect.destroySubcontext("uid="+l+",ou="+ b);
+			System.out.println( "L'utilisateur "+l+" référencé en tant que "+ b + " a été supprimé." );
+			return true;
+			
+			}catch (Exception e){
+				System.out.println("L'utilisateur "+ login +" n'existe pas.");
 				return false;
 			} 
-			catch (NamingException e) {
-				System.err.println("Il y a un probleme pour suppression de donnée! " + e);
-				return false;
-			}
-	}
-	
+		}
+
 	/**
 	 * Modifie les attributs d'un utilisateur
 	 * @param nom
