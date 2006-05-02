@@ -346,8 +346,83 @@ public class Document {
 	}
 
 // METHODES DYNAMIQUES
-//********************************************
+//*********************************************
+	
+	/**
+	 * Attribue un nom au fichier
+	 * @param fichier
+	 */
+	public void nommerFichier(String fichier) {
+		// your code here
+	}
 
+	public void selectionner() {
+		// your code here
+	}
+	
+	/**
+	 * Ajoute le programme qui insère le document dans sa liste
+	 * Appel la fonction de pose d'un verrou
+	 * @param Programme prog
+	 */
+	public void ajouterProgramme(Programme prog) {
+		programmes.put(prog.getId(), prog);
+		verrous.addElement(prog.getId());
+		System.out.println("Document verrouillé : " + this.id);
+		System.out.println("Le compteur de verrou = " + verrous.size());
+	}
+
+	/**
+	 * Supprime de sa liste le programme qui supprime le document
+	 * Appel la fonction de déverrouillage
+	 * @param String
+	 */
+	public void retirerProgramme(String idProg) {
+		programmes.remove(idProg);
+		verrous.remove(idProg);
+		System.out.println("Document déverrouillé : " + this.id);
+		System.out.println("Le compteur de verrou = " + verrous.size());
+	}
+	
+	/**
+	 * Modifie les attributs
+	 * @param String titre
+	 * @param int duree
+	 * @param String jour
+	 * @param String mois
+	 * @param String annee
+	 * @param String source
+	 * @param String langue
+	 * @param String genre
+	 * @param String fichier
+	 * @return boolean
+	 */
+	public boolean modifier(String titre, int duree, String jour,
+			String mois, String annee, String source, String langue, String genre,
+			String fichier) {
+		
+		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree + "', date = '"+ 
+			jour +"-"+ mois +"-"+ annee + "', source = '" + source + "', langue = '" + langue +
+			"', genre = '" + langue + "', fichier = '" + fichier + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.titre = titre;
+			this.jour = jour;
+			this.mois = mois;
+			this.annee = annee;
+			this.source = source;
+			this.langue = langue;
+			this.genre = genre;
+			this.fichier = fichier;
+			this.duree = duree;
+		}
+		return nbRows>0;
+	}
+	
 	/**
 	 * Détruit le document et ses infos en base
 	 * @return boolean
@@ -359,13 +434,15 @@ public class Document {
 		Programme p;
 		for (int i=0; i<programmes.size(); i++){
 			p = (Programme)programmes.get(i);
-			p.enleverDocument(id);
+			p.retirerDocument(id);
 		}
 		
 		//On supprime les infos de la base
 		return Document.deleteById(id);
 	}
 
+//#### GETTERS ####
+//#################
 	
 	/**
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
@@ -473,30 +550,6 @@ public class Document {
 			System.out.println("Le document : " + id + " est verrouillé par aucun programme");
 		}
 	}
-
-	/**
-	 * Ajoute le programme qui insère le document dans sa liste
-	 * Appel la fonction de pose d'un verrou
-	 * @param Programme prog
-	 */
-	public void ajouterProgramme(Programme prog) {
-		programmes.put(prog.getId(), prog);
-		verrous.addElement(prog.getId());
-		System.out.println("Document verrouillé : " + this.id);
-		System.out.println("Le compteur de verrou = " + verrous.size());
-	}
-
-	/**
-	 * Supprime de sa liste le programme qui supprime le document
-	 * Appel la fonction de déverrouillage
-	 * @param String
-	 */
-	public void enleverProgramme(String idProg) {
-		programmes.remove(idProg);
-		verrous.remove(idProg);
-		System.out.println("Document déverrouillé : " + this.id);
-		System.out.println("Le compteur de verrou = " + verrous.size());
-	}
 	
 	/**
 	 * Retourne la date de création du document
@@ -508,6 +561,25 @@ public class Document {
 		System.out.println(TD.d);
 		return TD.d;
 	}
+	
+	/**
+	 * Vérifie l'état EN LECTURE
+	 * @return boolean
+	 */
+	public boolean enLecture() {
+		return etat.equalsIgnoreCase("LECTURE");
+	}
+
+	/**
+	 * Vérifie l'état PROFRAMME
+	 * @return boolean
+	 */
+	public boolean estProgramme() {
+		return etat.equalsIgnoreCase("PROGRAMME");
+	}
+	
+//#### SETTERS ####
+//#################
 	
 	/**
 	 * Met à jour l'attribut fichier
@@ -669,72 +741,5 @@ public class Document {
 			this.duree = duree;
 		}
 		return nbRows>0;
-	}
-	
-	/**
-	 * Modifie les attributs
-	 * @param String titre
-	 * @param int duree
-	 * @param String jour
-	 * @param String mois
-	 * @param String annee
-	 * @param String source
-	 * @param String langue
-	 * @param String genre
-	 * @param String fichier
-	 * @return boolean
-	 */
-	public boolean modifier(String titre, int duree, String jour,
-			String mois, String annee, String source, String langue, String genre,
-			String fichier) {
-		
-		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree + "', date = '"+ 
-			jour +"-"+ mois +"-"+ annee + "', source = '" + source + "', langue = '" + langue +
-			"', genre = '" + langue + "', fichier = '" + fichier + "' WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
-		if (nbRows>0) {
-			this.titre = titre;
-			this.jour = jour;
-			this.mois = mois;
-			this.annee = annee;
-			this.source = source;
-			this.langue = langue;
-			this.genre = genre;
-			this.fichier = fichier;
-			this.duree = duree;
-		}
-		return nbRows>0;
-	}
-
-	/**
-	 * Vérifie l'état EN LECTURE
-	 * @return boolean
-	 */
-	public boolean enLecture() {
-		return etat.equalsIgnoreCase("LECTURE");
-	}
-
-	/**
-	 * Vérifie l'état PROFRAMME
-	 * @return boolean
-	 */
-	public boolean estProgramme() {
-		return etat.equalsIgnoreCase("PROGRAMME");
-	}
-	
-	/**
-	 * Attribue un nom au fichier
-	 * @param fichier
-	 */
-	public void nommerFichier(String fichier) {
-		// your code here
-	}
-
-	public void selectionner() {
-		// your code here
 	}
 }

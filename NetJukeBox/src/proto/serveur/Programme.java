@@ -2,6 +2,7 @@ package proto.serveur;
 
 import java.sql.SQLException;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -275,6 +276,102 @@ public class Programme {
 	}
 	
 	/**
+	 * Détruit le programme et ses infos en base
+	 * @return boolean
+	 * @throws SQLException 
+	 */
+	public boolean supprimer() /*throws SQLException*/ {
+		
+		//On supprime les associations programme/document
+		Document d;
+		for (int i=0; i<documents.size(); i++){
+			d = (Document)documents.get(i);
+			d.retirerProgramme(id);
+		}
+		
+		//On supprime les infos de la base
+		return Programme.deleteById(this.id);
+	}
+	
+	/**
+	 * Ajoute un document au programme
+	 * @param Document doc
+	 */
+	public void ajouterDocument(Document doc) {
+		
+		//On ajoute le document au programme
+		String requete = "INSERT INTO programmation (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +(duree+doc.getDuree())+"');";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si l'insertion s'est bien déroulée
+		if (nbRows>0) {
+			
+			//On met à jour le vecteurs d'association
+			documents.put(doc.getId(), doc);
+			
+			//On met à jour la durée du programme
+			this.setDuree(duree+doc.getDuree());
+			
+			//On signale au document cet ajout
+			doc.ajouterProgramme(this);
+		}
+	}
+
+	/**
+	 * Retire un document du programme
+	 * @param String id
+	 * @return boolean
+	 */
+	public boolean retirerDocument(String id) {
+		
+		// On retire le document du programme
+		String requete = "DELETE FROM programmation WHERE id_prog='"+this.id+"' AND id_doc='"+id+"');";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la suppression s'est bien déroulée
+		if (nbRows>0) {
+			
+			//On met à jour le vecteur d'association
+			documents.remove(id);
+			
+			//On signale au document ce retrait
+			//doc.enleverProgramme(this.id);
+			return true;
+		}
+		
+		//Sinon
+		return false;
+	}
+	
+	/**
+	 * Ajoute un programme (ensemble de documents) au programme
+	 * @param Programme prog
+	 */
+	public void ajouterProgramme(Programme prog) {
+		
+		//On récupère la liste des docs du programme à ajouter
+		Enumeration listeDocs = prog.getDocuments().elements();
+		
+		//Pour chaque doc, on l'ajoute au programme courant
+		while (listeDocs.hasMoreElements()) {
+			ajouterDocument((Document)listeDocs.nextElement());
+		}
+	}
+	
+//#### GETTERS ####
+//#################
+	
+	/**
+	 * Retourne la liste des documents associés au programme
+	 * @return Hashtable
+	 */
+	public Hashtable listerDocuments() {
+		return documents;
+	}
+	
+	/**
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */
@@ -316,24 +413,6 @@ public class Programme {
 		}
 		
 		return docs;
-	}
-
-	/**
-	 * Détruit le programme et ses infos en base
-	 * @return boolean
-	 * @throws SQLException 
-	 */
-	public boolean supprimer() /*throws SQLException*/ {
-		
-		//On supprime les associations programme/document
-		Document d;
-		for (int i=0; i<documents.size(); i++){
-			d = (Document)documents.get(i);
-			d.enleverProgramme(id);
-		}
-		
-		//On supprime les infos de la base
-		return Programme.deleteById(this.id);
 	}
 	
 	/**
@@ -383,6 +462,9 @@ public class Programme {
 	public long getDuree() {
 		return duree;
 	}
+	
+//#### SETTERS ####
+//#################
 	
 	/**
 	 * Met à jour l'attribut duree
@@ -438,93 +520,10 @@ public class Programme {
 		return nbRows>0;
 	}
 	
-	/**
-	 * Ajoute un document au programme
-	 * @param Document doc
-	 */
-	public void ajouterDocument(Document doc) {
-		
-		//On ajoute le document au programme
-		String requete = "INSERT INTO programmation (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +(duree+doc.getDuree())+"');";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//Si l'insertion s'est bien déroulée
-		if (nbRows>0) {
-			
-			//On met à jour le vecteurs d'association
-			documents.put(doc.getId(), doc);
-			
-			//On met à jour la durée du programme
-			this.setDuree(duree+doc.getDuree());
-			
-			//On signale au document cet ajout
-			doc.ajouterProgramme(this);
-		}
-	}
-
-	/**
-	 * Retire un document du programme
-	 * @param Document doc
-	 * @return Document
-	 */
-	public Document retirerDocument(Document doc) {
-		
-		// On retire le document du programme
-		//************
-		// => JDBC <=
-		//************
-		
-		//On met à jour le vecteur d'association
-		documents.remove(doc.getId());
-		
-		//On signale au document ce retrait
-		doc.enleverProgramme(this.id);
-		
-		return doc;
-	}
 	
-	/**
-	 * Retire un document du programme
-	 * @param String id
-	 * @return boolean
-	 */
-	public boolean enleverDocument(String id) {
-		
-		//On retire le document du programme
-		//************
-		// => JDBC <=
-		//************
-		
-		documents.remove(id);
-		return true;
-	}
-
-	/**
-	 * Retourne la liste des documents associés au programme
-	 * @return Hashtable
-	 */
-	public Hashtable listerDocuments() {
-		return documents;
-	}
 	
-	/**
-	 * Ajoute un programme (ensemble de documents) au programme
-	 * @param prog
-	 */
-	public void ajouterProgramme(Programme prog) {
-		/*prog.listerDocuments();
-		// System.out.println(Prog.v);
-		int i;
-		String donnee;
-		for (i = 0; i < prog.documents.size(); i++) {
-			donnee = (String) prog.getDocuments().elementAt(i);
-			documents.addElement(donnee);
-			System.out.println("Le document : " + donnee + " du programme : "
-					+ prog.getId() + " a été inséré dans le programme : "
-					+ this.id);
-		}*/
-	}
+	
+	
 
 	// Sauvegarde du vecteur de document si cela n'a pas déjà été fait
 	public void archiver() {

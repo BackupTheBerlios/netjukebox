@@ -653,10 +653,6 @@ public class Systeme {
 		// your code here
 	}
 
-	public void rechercheDocument() {
-		// your code here
-	}
-
 	
 	// PROGRAMME
 	//*******************************************************
@@ -896,10 +892,6 @@ public class Systeme {
 	}
 
 	public void SaisirInfosProgramme(String Id_Prog, String Titre) {
-		// your code here
-	}
-
-	public void RechercherDocument(String Id_Doc) {
 		// your code here
 	}
 
@@ -1299,11 +1291,6 @@ public class Systeme {
 		// your code here
 	}
 
-	public ArrayIndexOutOfBoundsException ListeDocs() {
-		// your code here
-		return null;
-	}
-
 	public void ConfirmerSupprimerCanal(boolean SuppressionCanal) {
 		// your code here
 	}
@@ -1313,10 +1300,6 @@ public class Systeme {
 	}
 
 	public void ConfirmerCreationCanal(boolean Confirmation) {
-		// your code here
-	}
-
-	public void RechercherUnCanal() {
 		// your code here
 	}
 
@@ -1357,10 +1340,6 @@ public class Systeme {
 		// your code here
 	}
 
-	public void AjoutCanal(String Id_Canal) {
-		// your code here
-	}
-
 	public void ValiderCreerProgramme() {
 		// your code here
 	}
@@ -1377,23 +1356,11 @@ public class Systeme {
 		// your code here
 	}
 
-	public void ModifierUnProgramme() {
-		// your code here
-	}
-
-	public void ModifierProgramme(String Id_Prog) {
-		// your code here
-	}
-
 	public void ChoixModification(String Choix) {
 		// your code here
 	}
 
 	public void VerifierDuree(int Duree) {
-		// your code here
-	}
-
-	public void RechercherCanal(String Id_Canal, String NomCanal, int Flux_Max) {
 		// your code here
 	}
 
@@ -1419,10 +1386,6 @@ public class Systeme {
 	}
 
 	public void VerifierJourHeure(java.util.Date Jour, int Heure) {
-		// your code here
-	}
-
-	public void RechercherUnProgramme() {
 		// your code here
 	}
 
