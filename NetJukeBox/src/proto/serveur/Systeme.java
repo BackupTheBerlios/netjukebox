@@ -821,7 +821,7 @@ public class Systeme {
 				//On récupère l'objet document
 				Programme p = (Programme)programmes.get(id);
 
-				//Si le programme a bien été supprimé
+				//On le supprime. Si succés...
 				if (p.supprimer()) {
 					
 					//On le retire de la liste des programmes du système
@@ -974,15 +974,20 @@ public class Systeme {
 				Programme p = (Programme)programmes.get(idProg);
 				
 				//On planifie le programme
-				//c.planifierProgramme(p);
+				if (c.planifierProgramme(p, jour, mois, annee, heure, minute, seconde)) {
 				
-				System.out.println("Programme "+idProg+" planifié sur le canal "+idCanal);
-				return Boolean.toString(true);
+					System.out.println("Programme "+idProg+" planifié sur le canal "+idCanal);
+					return Boolean.toString(true);
+				}
+				else {
+					System.out.println("Programme "+idProg+" non planifié sur le canal "+idCanal);
+					return Boolean.toString(false);
+				}
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le programme "+idProg+" n'a pas été palnifié sur le canal "+idCanal);
+			System.out.println("Le programme "+idProg+" n'a pas été plnifié sur le canal "+idCanal);
 			return Boolean.toString(false);
 		}
 		
