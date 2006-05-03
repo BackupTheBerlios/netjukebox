@@ -669,7 +669,7 @@ public class XMLClient {
 					params.addElement(login);
 					
 					// Adresse la requête et affiche les résultats
-					return (Vector)clientXML.execute("Systeme.modifierUtilisateur", params);
+					return (Vector)clientXML.execute("Systeme.rechercherAttributs", params);
 				} catch (Exception e) {
 					System.err.println("ERREUR : " + e);
 					return null;

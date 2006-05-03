@@ -267,7 +267,7 @@ public class Utilisateur {
 	public void modifierInfos(String login, String role,String newlogin,String nom, String prenom, String mail, String pays) throws NamingException {
 		
 		Ldap ldap = Ldap.getInstance();
-		ldap.ModifieAttributs(login, role, newlogin, nom, prenom, mail, pays);	
+		ldap.ModifieAttributs(login, role, newlogin, nom, prenom, mail, pays);
 	}
 
 	/**
