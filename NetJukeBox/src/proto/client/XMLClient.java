@@ -653,8 +653,75 @@ public class XMLClient {
 			return false;
 		}
 	}
-	
-	
+	 
+	 /**
+	  * Recherche des attributs de l'utilisateur
+	  * @param Login
+	  * @return Vector
+	  */
+	 public Vector rechercherUtilisateur() {
+		 // Si l'utilisateur est connecté au seveur
+			if (etatConnecte) {
+				System.err.println("INFO: Recherche des attributs...");
+				try {
+					// Création de la requête
+					Vector params = new Vector();
+					params.addElement(login);
+					
+					// Adresse la requête et affiche les résultats
+					return (Vector)clientXML.execute("Systeme.modifierUtilisateur", params);
+				} catch (Exception e) {
+					System.err.println("ERREUR : " + e);
+					return null;
+				}
+			//Sinon, non connecté
+			} else {
+				System.err.println("WARNING: Client non connecté au serveur !");
+				return null;
+			}
+	 }
+	  
+	 /**
+	  * Effectue les modifications des attributs de l'utilisateur
+	  * @param Login
+	  * @param newLogin
+	  * @param Nom
+	  * @param Prenom
+	  * @param Email
+	  * @param Pays
+	  * @return boolean
+	  */
+	 public boolean modifierAttributs(String Login, String Nom, String Prenom, String Email, String Pays) {
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Modification des attributs...");
+				try {
+					// Création de la requête
+					Vector params = new Vector();
+					params.addElement(login);
+					params.addElement(Login);
+					params.addElement(Nom);
+					params.addElement(Prenom);
+					params.addElement(Email);
+					params.addElement(Pays);
+					
+					// Adresse la requête et affiche les résultats
+					String result = (String)clientXML.execute("Systeme.modifierAttributs", params);
+
+					return Boolean.parseBoolean(result);
+					
+				} catch (Exception e) {
+					System.err.println("ERREUR : " + e);
+					return false;
+				}
+			
+			//Sinon, non connecté
+			} else {
+				System.err.println("WARNING: Client non connecté au serveur !");
+				return false;
+			}	
+		}
+	 
 	/**
 	 * Rechercher un document
 	 * @param String id

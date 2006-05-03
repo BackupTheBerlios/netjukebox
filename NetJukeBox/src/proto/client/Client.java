@@ -686,6 +686,105 @@ public class Client {
 					}
 				}
 				
+				// RECHERCHERUTILISATEUR
+				if  (ligne.equalsIgnoreCase("rechercherUtilisateur")) {
+					if (etatConnecte) {
+						Vector vUtilisateur = clientXML.rechercherUtilisateur();
+						if (vUtilisateur!=null && vUtilisateur.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary v;
+							for (int i=0; i<vUtilisateur.size(); i++){
+								v = (Dictionary)vUtilisateur.get(i);
+								System.out.println("----------------- Utilisateur -------------------");
+								System.out.println("Id: "+v.get("login"));
+								System.out.println("Titre: "+v.get("nom"));
+								System.out.println("Durée: "+v.get("prenom"));
+								System.out.println("Date: "+v.get("mail"));
+								System.out.println("Genre: "+v.get("pays"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Utilisateur recherché");
+						}
+						else System.err.println("WARNING: Aucune données disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				//MODIFIERUTILISATEUR
+				if  (ligne.equalsIgnoreCase("modifierAttribut")) {
+					if (etatConnecte) {
+											
+						//On affiche ses infos
+						Vector vUtilisateur = clientXML.rechercherUtilisateur();
+						if (vUtilisateur!=null && vUtilisateur.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vUtilisateur.size(); i++){
+								d = (Dictionary)vUtilisateur.get(i);
+								System.out.println("----------------- Utilisateur -------------------");
+								System.out.println("Login: "+d.get("login"));
+								System.out.println("Nom: "+d.get("nom"));
+								System.out.println("Prénom: "+d.get("prenom"));
+								System.out.println("Email: "+d.get("mail"));
+								System.out.println("Pays: "+d.get("pays"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Attributs recherché");
+							
+							
+							System.out.print("Nouveau Login: ");
+							String login = lire();
+							System.out.print("Nouveau Nom: ");
+							String nom = lire();
+							System.out.print("Nouveau Prenom: ");
+							String prenom = lire();
+							System.out.print("Nouveau Mail: ");
+							String mail = lire();
+							System.out.print("Nouveau Pays: ");
+							String pays = lire();
+							
+							boolean modifie = clientXML.modifierAttributs(login, nom, prenom, mail, pays);
+							if (modifie) System.err.println("INFO: Attributs modifiés");
+							else System.err.println("ERREUR: Attributs non modifiés");
+						}
+						else System.err.println("WARNING: Aucun Attributs disponibles");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				// MODIFIERPROGRAMME
 				if  (ligne.equalsIgnoreCase("modifierProgramme")) {
 					if (etatConnecte) {
@@ -785,6 +884,8 @@ public class Client {
 					System.out.println(" listerCanal : lister les canaux disponibles");
 					System.out.println(" inscription : inscription d'un nouvel utilisateur");
 					System.out.println(" Suppression : suppression d'un utilisateur");
+					System.out.println(" rechercherDocument : rechercher vos attributs");
+					System.out.println(" modifierProgramme : modifier vos attributs");
 					System.out.println(" rechercherDocument : rechercher un document");
 					System.out.println(" rechercherProgramme : rechercher un programme");
 					System.out.println(" rechercherCanal : rechercher un canal");
