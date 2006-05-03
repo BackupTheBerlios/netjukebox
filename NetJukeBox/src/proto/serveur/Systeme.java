@@ -351,18 +351,32 @@ public class Systeme {
 	/**
 	 * Récupération de l'objet à modifier
 	 * @param login
-	 * @return
+	 * @return Vector
 	 * @throws NamingException
 	 */
-	public Utilisateur modifierUtilisateur(String login) throws NamingException {
-		System.out.println("Modification des attributs");
-		
-		if (Utilisateur.verifierLogin(login)) {
-			Utilisateur u = Utilisateur.getByLogin(login);
-			return u;
-		} else {
-			return null;
-		}
+	public Vector rechercherAttributs(String login) throws NamingException {
+		System.out.println("Recherche des attributs de l'utilisateur : " + login);
+
+		//On vérifie que l'utilisateur a la permission
+			if (Utilisateur.verifierLogin(login)) {
+				Utilisateur u = Utilisateur.getByLogin(login);
+			
+				//Vecteur d'attributs à retourner
+				Vector vUtilisateur = new Vector();
+
+				vUtilisateur.addElement(u.getLogin());
+				vUtilisateur.addElement(u.getNom());
+				vUtilisateur.addElement(u.getPrenom());
+				vUtilisateur.addElement(u.getMail());
+				vUtilisateur.addElement(u.getPays());
+				vUtilisateur.addElement(u.getRole());
+				
+				return vUtilisateur;
+			} else {
+				// Sinon, création refusée
+				System.out.println("Permission non accordée. Recherche non effectuées");
+				return null;
+			}
 	}
 
 	/**
@@ -375,16 +389,36 @@ public class Systeme {
 	 * @param pays
 	 * @throws NamingException
 	 */
-	 public void modifierUtil(String login, String newlogin, String nom, String prenom, String mail, String pays) throws NamingException {
-					
-			//u.modifierInfos(login, role, newlogin, nom, prenom, mail, pays);
+	 public boolean modifierAttributs(String login, String newlogin, String nom, String prenom, String mail, String pays) throws NamingException {
+
+		//On vérifie que l'utilisateur a la permission
+		if (Utilisateur.verifierLogin(login)) {
 			
+			//On récupère les attributs
+			Utilisateur u = Utilisateur.getByLogin(login);
+			String role = u.getRole();			
+			
+			//On modifie les attributs
+			u.modifierInfos(login, role, newlogin, nom, prenom, mail, pays);
+			System.out.println("Utilisateur '"+login+"' modifié");
+			return true;
+		} else {
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Document non modifié");
+		return false;
+		}
 	}
 	
+	/**
+	 * Changement de role d'un utilisateur
+	 */
 	
-	
-	
-	
+	public void changerPermission(){
+		// your code here
+	}
+	 
+	 
+	 
 	public void suppressionUtilisateur() {
 		// your code here
 	}
