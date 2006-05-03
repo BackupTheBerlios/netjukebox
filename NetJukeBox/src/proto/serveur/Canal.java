@@ -1,6 +1,7 @@
 package proto.serveur;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -61,6 +62,11 @@ public class Canal {
 	 * RTP Server
 	 */
 	private RTPServer RTP = null;
+	
+	/**
+	 * Liste de programmes à diffuser
+	 */
+	private Hashtable programmes;
 
 // CONSTRUCTEUR (créé une instance de la classe : un objet)
 // *************************************************
@@ -76,6 +82,7 @@ public class Canal {
 		this.id = id;
 		this.nom = nom;
 		this.utilMax = utilMax;
+		//this.programmes = getProgrammesPlanifies();
 	}
 
 // METHODES STATIQUES (propres à la classe, inaccessibles depuis un objet)
@@ -261,6 +268,54 @@ public class Canal {
 
 // METHODES DYNAMIQUES (propres à un objet, inaccessibles depuis la classe)
 // *************************************************
+	
+	/**
+	 * Planifie un programme à diffuser
+	 * @param Programme p
+	 * @param String jour
+	 * @param String mois
+	 * @param String mois
+	 * @param String annee
+	 * @param String heure
+	 * @param String minute
+	 * @param String seconde
+	 * @return boolean
+	 */
+	public boolean planifierProgramme(Programme p, int jour, int mois, int annee, int heure, int minute, int seconde) {
+		
+		//Timestamp date = new Timestamp(annee, mois, jour, heure, minute, seconde, 0);
+		
+		
+		return true;
+	}
+	
+	
+	/**
+	 * Retourne la liste des programmes planifiés
+	 * @return Hastable
+	 */
+	private Hashtable getProgrammesPlanifies() {
+		System.out.println("Canal.getProgrammesPlanifies()");
+		
+		//On crée un vecteur pour contenir les objets documents instanciés
+		Hashtable progs = new Hashtable();
+		
+		//On va chercher dans la base la liste des id de tous les programmes
+		String requete = "SELECT id_prog, calage FROM diffuser WHERE id_canal = '"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		System.out.println("Canal.getProgrammesPlanifies() : "+resultats.size()+" programme(s) trouvé(s)");
+		
+		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			String id = String.valueOf((Integer)dico.get("id_prog"));
+			progs.put(id, Programme.getById(id));
+		}
+		
+		return progs;
+	}
 	
 	/**
 	 * Modifie les attributs

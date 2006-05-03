@@ -300,7 +300,7 @@ public class Programme {
 	public void ajouterDocument(Document doc) {
 		
 		//On ajoute le document au programme
-		String requete = "INSERT INTO programmation (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +(duree+doc.getDuree())+"');";
+		String requete = "INSERT INTO composer (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +(duree+doc.getDuree())+"');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -326,7 +326,7 @@ public class Programme {
 	public boolean retirerDocument(String id) {
 		
 		// On retire le document du programme
-		String requete = "DELETE FROM programmation WHERE id_prog='"+this.id+"' AND id_doc='"+id+"');";
+		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND id_doc='"+id+"');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -399,7 +399,7 @@ public class Programme {
 		Hashtable docs = new Hashtable();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
-		String requete = "SELECT id_doc, calage FROM programmation WHERE id_prog = '"+id+"';";
+		String requete = "SELECT id_doc, calage FROM composer WHERE id_prog = '"+id+"';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		

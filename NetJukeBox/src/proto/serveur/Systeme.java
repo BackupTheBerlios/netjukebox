@@ -974,7 +974,7 @@ public class Systeme {
 				Programme p = (Programme)programmes.get(idProg);
 				
 				//On planifie le programme
-				if (c.planifierProgramme(p, jour, mois, annee, heure, minute, seconde)) {
+				if (c.planifierProgramme(p, Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), Integer.parseInt(heure), Integer.parseInt(minute), Integer.parseInt(seconde))) {
 				
 					System.out.println("Programme "+idProg+" planifié sur le canal "+idCanal);
 					return Boolean.toString(true);
