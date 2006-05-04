@@ -1,6 +1,7 @@
 package proto.client;
 
 import java.net.MalformedURLException;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -1066,9 +1067,9 @@ public class XMLClient {
 	/**
 	 * Informations d'un document
 	 * @param String id
-	 * @return Hashtable
+	 * @return Dictionary
 	 */
-	public Hashtable infoDocument(String id) {
+	public Dictionary infoDocument(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -1080,9 +1081,7 @@ public class XMLClient {
 				params.addElement(id);
 				
 				// Adresse la requête et affiche les résultats
-				Hashtable result = (Hashtable)clientXML.execute("Systeme.infoDocument", params);
-
-				return result;
+				return (Dictionary)clientXML.execute("Systeme.infoDocument", params);
 				
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1099,9 +1098,9 @@ public class XMLClient {
 	/**
 	 * Informations d'un programme
 	 * @param String id
-	 * @return Hashtable
+	 * @return Dictionary
 	 */
-	public Hashtable infoProgramme(String id) {
+	public Dictionary infoProgramme(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -1113,9 +1112,7 @@ public class XMLClient {
 				params.addElement(id);
 				
 				// Adresse la requête et affiche les résultats
-				Hashtable result = (Hashtable)clientXML.execute("Systeme.infoProgramme", params);
-
-				return result;
+				return (Dictionary)clientXML.execute("Systeme.infoProgramme", params);
 				
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1132,9 +1129,9 @@ public class XMLClient {
 	/**
 	 * Informations d'un canal
 	 * @param String id
-	 * @return Hashtable
+	 * @return Dictionary
 	 */
-	public Hashtable infoCanal(String id) {
+	public Dictionary infoCanal(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -1146,9 +1143,8 @@ public class XMLClient {
 				params.addElement(id);
 				
 				// Adresse la requête et affiche les résultats
-				Hashtable result = (Hashtable)clientXML.execute("Systeme.infoCanal", params);
+				return (Dictionary)clientXML.execute("Systeme.infoCanal", params);
 
-				return result;
 				
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);

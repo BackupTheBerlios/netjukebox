@@ -678,9 +678,9 @@ public class Systeme {
 	 * Informations sur un document
 	 * @param String login
 	 * @param Strign id
-	 * @return Hashtable
+	 * @return Dictionary
 	 */
-	public Hashtable infoDocument(String login, String id) {
+	public Dictionary infoDocument(String login, String id) {
 		
 		System.out.println("Infos sur un document");
 
@@ -953,9 +953,9 @@ public class Systeme {
 	 * Informations sur un programme
 	 * @param String login
 	 * @param Strign id
-	 * @return Hashtable
+	 * @return Dictionary
 	 */
-	public Hashtable infoProgramme(String login, String id) {
+	public Dictionary infoProgramme(String login, String id) {
 		
 		System.out.println("Infos sur un programme");
 
@@ -1381,9 +1381,9 @@ public class Systeme {
 	 * Informations sur un canal
 	 * @param String login
 	 * @param Strign id
-	 * @return Hashtable
+	 * @return Dictionary
 	 */
-	public Hashtable infoCanal(String login, String id) {
+	public Dictionary infoCanal(String login, String id) {
 		
 		System.out.println("Infos sur un canal");
 

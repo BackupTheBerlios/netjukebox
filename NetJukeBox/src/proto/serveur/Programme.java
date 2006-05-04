@@ -308,7 +308,7 @@ public class Programme {
 		if (nbRows>0) {
 			
 			//On met à jour le vecteurs d'association
-			documents.put(doc.getId(), doc);
+			documents.put(duree+doc.getDuree(), doc);
 			
 			//On met à jour la durée du programme
 			this.setDuree(duree+doc.getDuree());
@@ -323,10 +323,10 @@ public class Programme {
 	 * @param String id
 	 * @return boolean
 	 */
-	public boolean retirerDocument(String id) {
+	public boolean retirerDocument(String calage) {
 		
 		// On retire le document du programme
-		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND id_doc='"+id+"');";
+		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND calage='"+calage+"');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -334,7 +334,7 @@ public class Programme {
 		if (nbRows>0) {
 			
 			//On met à jour le vecteur d'association
-			documents.remove(id);
+			documents.remove(calage);
 			
 			//On signale au document ce retrait
 			//doc.enleverProgramme(this.id);
@@ -385,14 +385,24 @@ public class Programme {
 		dico.put("thematique", thematique);
 		dico.put("nbDocs", documents.size());
 		
-		/*Hashtable dicoDocs = new Hashtable();
+		//Liste des docs
+		/*Vector vDocs = new Vector();
+		Dictionary dicoDoc;
+		Document doc;
+		
 		Enumeration horaires = documents.keys();
 		while (horaires.hasMoreElements()) {
 			long horaire = (Long)horaires.nextElement();
-			dicoDocs.put(horaire, ((Document)documents.get(horaire)).getId());
+			doc = (Document)documents.get(horaire);
+			dicoDoc = new Hashtable();
+			dicoDoc.put("calage", Long.toString(horaire));
+			dicoDoc.put("id", doc.getId());
+			dicoDoc.put("titre", doc.getTitre());
+			dicoDoc.put("duree", Long.toString(doc.getDuree()));
+			vDocs.add(dicoDoc);
 		}
 		
-		dico.put("documents", dicoDocs);*/
+		dico.put("documents", vDocs);*/
 		
 		return dico;
 	}

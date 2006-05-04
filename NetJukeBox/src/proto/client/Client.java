@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.util.Dictionary;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 
@@ -70,6 +71,8 @@ public class Client {
 		
 		//On initialise le client XML
 		initializeXML(ip, port);
+		
+		System.out.println(clientXML.toString());
 		
 		//On démarre le menu
 		menu();
@@ -885,8 +888,19 @@ public class Client {
 							System.out.println("Thématique: "+p.get("thematique"));
 							System.out.println("Durée: "+p.get("duree"));
 							System.out.println("Nb docs: "+p.get("nbDocs"));
-							System.out.println("-----------------------------------------------");
-							System.out.println();
+							System.out.println("------------ Documents programmés ------------");
+							
+							/*Vector vDocs = (Vector)p.get("documents");
+							Dictionary doc;
+							for (int i=0; i<vDocs.size(); i++) {
+								doc = (Dictionary)vDocs.get(i);
+								System.out.println("IdDoc: "+doc.get("id"));
+								System.out.println("Titre: "+doc.get("titre"));
+								System.out.println("Durée: "+doc.get("duree"));
+								System.out.println("Calage: "+doc.get("calage"));
+								System.out.println();
+							}*/
+							System.out.println("-------------------------------------------");
 							System.err.println("INFO: Programme affiché");
 						}
 						else System.err.println("WARNING: Aucun programme disponible");
@@ -910,8 +924,30 @@ public class Client {
 							System.out.println("Nom: "+c.get("nom"));
 							System.out.println("NbMax auditeurs: "+c.get("utilMax"));
 							System.out.println("Nb progs: "+c.get("nbProgs"));
+							System.out.println("----------- Programmes planifiés ----------");
+							
+							Vector vProgs = (Vector)c.get("programmes");
+							Dictionary prog;
+							GregorianCalendar horaire = new GregorianCalendar();
+							String dateHoraire;
+							for (int i=0; i<vProgs.size(); i++) {
+								prog = (Dictionary)vProgs.get(i);
+								horaire.setTimeInMillis((Long)prog.get("calage"));
+								dateHoraire = horaire.get(GregorianCalendar.DATE) + "/" +
+											  horaire.get(GregorianCalendar.MONTH) + "/" +
+											  horaire.get(GregorianCalendar.YEAR) + " - " +
+											  horaire.get(GregorianCalendar.HOUR_OF_DAY) + ":" +
+											  horaire.get(GregorianCalendar.MINUTE) + ":" +
+											  horaire.get(GregorianCalendar.SECOND);
+								
+								System.out.println("IdProg: "+prog.get("id"));
+								System.out.println("Titre: "+prog.get("titre"));
+								System.out.println("Durée: "+prog.get("duree"));
+								System.out.println("Horaire: "+dateHoraire);
+								System.out.println("Calage: "+prog.get("calage"));
+								System.out.println();
+							}
 							System.out.println("-------------------------------------------");
-							System.out.println();
 							System.err.println("INFO: Canal affiché");
 						}
 						else System.err.println("WARNING: Aucun canal disponible");

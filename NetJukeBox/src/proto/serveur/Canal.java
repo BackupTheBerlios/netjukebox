@@ -458,14 +458,24 @@ public class Canal {
 		dico.put("utilMax", utilMax);
 		dico.put("nbProgs", programmes.size());
 		
-		Hashtable dicoProgs = new Hashtable();
+		//Liste des progs
+		/*Vector vProgs = new Vector();
+		Dictionary dicoProg;
+		Programme prog;
+		
 		Enumeration horaires = programmes.keys();
 		while (horaires.hasMoreElements()) {
 			long horaire = (Long)horaires.nextElement();
-			dicoProgs.put(horaire, ((Programme)programmes.get(horaire)).getId());
+			prog = (Programme)programmes.get(horaire);
+			dicoProg = new Hashtable();
+			dicoProg.put("calage", Long.toString(horaire));
+			dicoProg.put("id", prog.getId());
+			dicoProg.put("titre", prog.getTitre());
+			dicoProg.put("duree", prog.getDuree());
+			vProgs.add(dicoProg);
 		}
 		
-		dico.put("programmes", dicoProgs);
+		dico.put("programmes", vProgs);*/
 		
 		return dico;
 	}
