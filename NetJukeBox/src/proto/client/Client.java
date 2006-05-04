@@ -430,7 +430,7 @@ public class Client {
 				}
 				
 				// INSCRIPTION
-				if  (ligne.equalsIgnoreCase("inscription")) {
+				if  (ligne.equalsIgnoreCase("inscrireUtilisateur")) {
 					if (etatConnecte) {
 						System.out.print("prenom: ");
 						String prenom = lire();
@@ -698,6 +698,8 @@ public class Client {
 							//Parcours du vecteur, affichage des infos
 							Dictionary v;
 							for (int i=0; i<vUtilisateur.size(); i++){
+								System.out.println(vUtilisateur.get(i));
+								/**
 								v = (Dictionary)vUtilisateur.get(i);
 								System.out.println("----------------- Utilisateur -------------------");
 								System.out.println("Id: "+v.get("login"));
@@ -707,6 +709,7 @@ public class Client {
 								System.out.println("Genre: "+v.get("pays"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
+								*/
 							}
 							System.err.println("INFO: Utilisateur recherché");
 						}
@@ -727,6 +730,10 @@ public class Client {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
 							for (int i=0; i<vUtilisateur.size(); i++){
+								
+								System.out.println(vUtilisateur.get(i));
+								
+								/**
 								d = (Dictionary)vUtilisateur.get(i);
 								System.out.println("----------------- Utilisateur -------------------");
 								System.out.println("Login: "+d.get("login"));
@@ -735,11 +742,12 @@ public class Client {
 								System.out.println("Email: "+d.get("mail"));
 								System.out.println("Pays: "+d.get("pays"));
 								System.out.println("----------------------------------------------");
-								System.out.println();
-							}
+								System.out.println();*/
+								
+								
+							}						
 							System.err.println("INFO: Attributs recherché");
-							
-							
+														
 							System.out.print("Nouveau Login: ");
 							String login = lire();
 							System.out.print("Nouveau Nom: ");
@@ -974,8 +982,8 @@ public class Client {
 					System.out.println(" listerDocument : lister les documents disponibles");
 					System.out.println(" listerProgramme : lister les programmes disponibles");
 					System.out.println(" listerCanal : lister les canaux disponibles");
-					System.out.println(" inscription : inscription d'un nouvel utilisateur");
-					System.out.println(" Suppression : suppression d'un utilisateur");
+					System.out.println(" inscrireUtilisateur : inscription d'un nouvel utilisateur");
+					System.out.println(" supprimerUtilisateur : suppression d'un utilisateur");
 					System.out.println(" rechercherUtilisateur : rechercher vos attributs");
 					System.out.println(" modifierUtilisateur : modifier vos attributs");
 					System.out.println(" rechercherDocument : rechercher un document");
@@ -1034,7 +1042,8 @@ public class Client {
 		//USAGE : java Client [filename.ini]
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
-		String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
+		//String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
+		String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
 		Preferences prefs = new IniFile(new File(filename));
 		
 		//On démarre le client

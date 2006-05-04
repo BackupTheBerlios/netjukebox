@@ -642,7 +642,7 @@ public class XMLClient {
 				params.addElement(login);
 				
 				//Adresse la requête et affiche les résultats
-				String result = (String)clientXML.execute("Systeme.suppression", params);
+				String result = (String)clientXML.execute("Systeme.supprimerUtilisateur", params);
 				return Boolean.parseBoolean(result);	
 
 			} catch (Exception e) {
@@ -693,7 +693,7 @@ public class XMLClient {
 	  * @param Pays
 	  * @return boolean
 	  */
-	 public boolean modifierUtilisateur(String Login, String Nom, String Prenom, String Email, String Pays) {
+	 public boolean modifierUtilisateur(String newlogin, String Nom, String Prenom, String Email, String Pays) {
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
 			System.err.println("INFO: Modification des attributs...");
@@ -701,7 +701,7 @@ public class XMLClient {
 					// Création de la requête
 					Vector params = new Vector();
 					params.addElement(login);
-					params.addElement(Login);
+					params.addElement(newlogin);
 					params.addElement(Nom);
 					params.addElement(Prenom);
 					params.addElement(Email);
