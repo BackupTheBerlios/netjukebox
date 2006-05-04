@@ -273,10 +273,10 @@ public class RTPServer implements ControllerListener {
 			PushBufferDataSource pbds = (PushBufferDataSource) output;
 			RTPManager rtpMgr = RTPManager.newInstance();
 
-			SessionAddress Canal = new SessionAddress(InetAddress.getLocalHost(), port);
+			SessionAddress canal = new SessionAddress(InetAddress.getLocalHost(), port);
 			SessionAddress destAddr = new SessionAddress(InetAddress.getByName(ip), port);
 			
-			rtpMgr.initialize(Canal);
+			rtpMgr.initialize(canal);
 			rtpMgr.addTarget(destAddr);
 			
 			System.err.println("Created RTP session: " + ip + " " + port);

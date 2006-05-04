@@ -38,17 +38,17 @@ public class Document {
 	/**
 	 * Jour de parution du document
 	 */
-	private String jour;
+	private int jour;
 
 	/**
 	 * Mois de parution du document
 	 */
-	private String mois;
+	private int mois;
 
 	/**
 	 * Année de parution du document
 	 */
-	private String annee;
+	private int annee;
 
 	/**
 	 * Langue du document
@@ -103,8 +103,8 @@ public class Document {
 	 * @param genre
 	 * @param fichier
 	 */
-	public Document(String id, String titre, int duree, String jour,
-			String mois, String annee, String source, String langue, String genre,
+	public Document(String id, String titre, int duree, int jour,
+			int mois, int annee, String source, String langue, String genre,
 			String fichier) {
 
 		this.id = id;
@@ -136,18 +136,19 @@ public class Document {
 	 * @return Document
 	 * @throws SQLException 
 	 */
-	public static Document create(String titre, int duree, String jour,
-			String mois, String annee, String source, String langue, String genre,
+	public static Document create(String titre, int duree, int jour,
+			int mois, int annee, String source, String langue, String genre,
 			String fichier) /*throws SQLException*/ {
 		
 		System.out.println("Document.create()");
 		
 		//On assemble la date
-		String date = jour+"-"+mois+"-"+annee;
+		//String date = jour+"-"+mois+"-"+annee;
+		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
 		
 		//On crée le document dans la base
 		String requete = "INSERT INTO document (titre, duree, date, source, langue, genre, fichier) VALUES ('" +
-			titre + "', '" + duree + "', '" + date + "', '" + source + "', '" + langue + "', '" + genre + "', '" + fichier + "');"; 
+			titre + "', '" + duree + "', '" + date.getTimeInMillis() + "', '" + source + "', '" + langue + "', '" + genre + "', '" + fichier + "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -192,10 +193,17 @@ public class Document {
 			String genre = (String)dico.get("genre");
 			String fichier = (String)dico.get("fichier");
 			
-			String date = (String)dico.get("date");
+			//On assemble la date
+			GregorianCalendar date = new GregorianCalendar();
+			date.setTimeInMillis(Long.valueOf((String)dico.get("date")));
+			int jour = date.get(GregorianCalendar.DATE);
+			int mois = date.get(GregorianCalendar.MONTH);
+			int annee = date.get(GregorianCalendar.YEAR);
+			
+			/*String date = (String)dico.get("date"));
 			String jour = date.substring(0,2); // (String)dico.get("jour");
 			String mois = date.substring(3,5); // (String)dico.get("mois");
-			String annee = date.substring(6,10); // (String)dico.get("annee");
+			String annee = date.substring(6,10); // (String)dico.get("annee");*/
 			
 			System.out.println("-------- Document -----------");
 			System.out.println("Nb de champs: "+dico.size());
@@ -206,7 +214,7 @@ public class Document {
 			System.out.println("Langue: "+langue);
 			System.out.println("Genre: "+genre);
 			System.out.println("Fichier: "+fichier);
-			System.out.println("Date: "+date);
+			System.out.println("Date: "+jour+"/"+mois+"/"+annee);
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
@@ -256,10 +264,18 @@ public class Document {
 			String genre = (String)dico.get("genre");
 			String fichier = (String)dico.get("fichier");
 			
-			String date = (String)dico.get("date");			
+			/*String date = (String)dico.get("date");			
 			String jour = date.substring(0,2); // (String)dico.get("jour");
 			String mois = date.substring(3,5); // (String)dico.get("mois");
-			String annee = date.substring(6,10); // (String)dico.get("annee");
+			String annee = date.substring(6,10); // (String)dico.get("annee");*/
+			
+			//On assemble la date
+			GregorianCalendar date = new GregorianCalendar();
+			date.setTimeInMillis(Long.valueOf((String)dico.get("date")));
+			int jour = date.get(GregorianCalendar.DATE);
+			int mois = date.get(GregorianCalendar.MONTH);
+			int annee = date.get(GregorianCalendar.YEAR);
+			
 			
 			System.out.println("-------- Document -----------");
 			System.out.println("Nb de champs: "+dico.size());
@@ -270,7 +286,7 @@ public class Document {
 			System.out.println("Langue: "+langue);
 			System.out.println("Genre: "+genre);
 			System.out.println("Fichier: "+fichier);
-			System.out.println("Date: "+date);
+			System.out.println("Date: "+jour+"/"+mois+"/"+annee);
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
@@ -397,12 +413,14 @@ public class Document {
 	 * @param String fichier
 	 * @return boolean
 	 */
-	public boolean modifier(String titre, int duree, String jour,
-			String mois, String annee, String source, String langue, String genre,
+	public boolean modifier(String titre, int duree, int jour,
+			int mois, int annee, String source, String langue, String genre,
 			String fichier) {
 		
-		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree + "', date = '"+ 
-			jour +"-"+ mois +"-"+ annee + "', source = '" + source + "', langue = '" + langue +
+		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
+		
+		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree +
+			"', date = '"+ date.getTimeInMillis() + "', source = '" + source + "', langue = '" + langue +
 			"', genre = '" + langue + "', fichier = '" + fichier + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -458,7 +476,7 @@ public class Document {
 		dico.put("genre", genre);
 		dico.put("source", source);
 		dico.put("langue", langue);
-		dico.put("date", (jour+"-"+mois+"-"+annee));
+		dico.put("date", (jour+"/"+mois+"/"+annee));
 		dico.put("fichier", fichier);
 		
 		return dico;
@@ -556,7 +574,7 @@ public class Document {
 	 * @return Date
 	 */
 	public Date getDateCreation() {
-		String date = jour + "-"+ mois + "-" + annee;
+		String date = jour + "/"+ mois + "/" + annee;
 		TransformeDate TD = new TransformeDate(date);
 		System.out.println(TD.d);
 		return TD.d;
@@ -654,18 +672,25 @@ public class Document {
 	}
 	
 	/**
-	 * Met à jour l'attribut annee
-	 * @param String annee
+	 * Met à jour l'attribut date
+	 * @param int jour
+	 * @param int mois
+	 * @param int annee
 	 * @return boolean
 	 * @throws SQLException
 	 */
-	public boolean setAnnee(String annee) /*throws SQLException*/ {
-		String requete = "UPDATE document SET date = '" + jour+"-"+mois+"-"+annee + "' WHERE id = '" + id + "';";
+	public boolean setDate(int jour, int mois, int annee) /*throws SQLException*/ {
+		
+		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
+		
+		String requete = "UPDATE document SET date = '" + date.getTimeInMillis() + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			this.jour = jour;
+			this.mois = mois;
 			this.annee = annee;
 		}
 		return nbRows>0;
@@ -676,8 +701,8 @@ public class Document {
 	 * @param String mois
 	 * @return boolean
 	 * @throws SQLException
-	 */
-	public boolean setMois(String mois) /*throws SQLException*/ {
+	 *
+	public boolean setMois(String mois) /*throws SQLException* {
 		String requete = "UPDATE document SET date = '" + jour+"-"+mois+"-"+annee + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -694,8 +719,8 @@ public class Document {
 	 * @param String jour
 	 * @return boolean
 	 * @throws SQLException
-	 */
-	public boolean setJour(String jour) /*throws SQLException*/ {
+	 *
+	public boolean setJour(String jour) /*throws SQLException* {
 		String requete = "UPDATE document SET date = '" + jour+"-"+mois+"-"+annee + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -705,7 +730,7 @@ public class Document {
 			this.jour = jour;
 		}
 		return nbRows>0;
-	}
+	}*/
 	
 	/**
 	 * Met à jour l'attribut titre

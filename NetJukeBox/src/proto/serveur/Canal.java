@@ -1,10 +1,10 @@
 package proto.serveur;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -82,7 +82,7 @@ public class Canal {
 		this.id = id;
 		this.nom = nom;
 		this.utilMax = utilMax;
-		//this.programmes = getProgrammesPlanifies();
+		this.programmes = getProgrammesPlanifies();
 	}
 
 // METHODES STATIQUES (propres à la classe, inaccessibles depuis un objet)
@@ -270,6 +270,90 @@ public class Canal {
 // *************************************************
 	
 	/**
+	 * Relance la diffusion d'un canal
+	 * @param idCanal
+	 */
+	public void relanceDiffusionCanal(String idCanal) {
+		// your code here
+	}
+	
+	/**
+	 * Vérifie si la tranche horaire est libre pour une planification
+	 * @param jour
+	 * @param heure
+	 * @param idCanal
+	 * @return
+	 */
+	public boolean verifierPlanification(long horaire, long duree) {
+		
+		//Si on a des programmes planifiés
+		if (programmes.size()>0) {
+			
+			//On vérifie lé créneau demandé
+			boolean trouveProgSuivant = false;
+			Programme progPrecedent=null, progSuivant=null, prog;
+			long horairePrecedent=0, horaireSuivant=0;
+			Enumeration horaires = programmes.keys();
+			
+			while (horaires.hasMoreElements() && !trouveProgSuivant) {
+				
+				//On récupère l'horaire
+				long horaireProg = (Long)horaires.nextElement();
+				
+				//On récupère le programme
+				prog = (Programme)programmes.get(horaireProg);
+				
+				//Si l'horaire demandé est déjà occupé
+				if (horaireProg == horaire) {
+					return false;
+				}
+				
+				//Si l'horaire est avant celui demandé
+				else if (horaireProg < horaire) {
+					progPrecedent = prog;
+					horairePrecedent = horaireProg;
+				}
+				
+				//Si l'horaire est après celui demandé
+				else {
+					progSuivant = prog;
+					horaireSuivant = horaireProg;
+					trouveProgSuivant = true;
+				}
+			}//Fin TQ
+			
+			
+			//S'il n'y a pas de prog après l'horaire demandé
+			if (!trouveProgSuivant) {
+				return true;
+			}
+			
+			//S'il y a un prog après
+			else {
+
+				//S'il y a un prog avant
+				if (progPrecedent != null) {
+					
+					//On vérifie que le créneau demandé commence après le précédent et se termine avant le suivant
+					return ((horaire>(progPrecedent.getDuree()+horairePrecedent)) && ((horaire+duree)<horaireSuivant));
+				}
+				
+				//S'il n'y a pas de prog avant
+				else {
+					
+					//On vérifie que le créneau demandé finit avant l'horaire suivant
+					return (horaire+duree)<horaireSuivant;
+				}
+			}
+		}
+		
+		//Sinon, c'est libre
+		else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Planifie un programme à diffuser
 	 * @param Programme p
 	 * @param String jour
@@ -283,10 +367,32 @@ public class Canal {
 	 */
 	public boolean planifierProgramme(Programme p, int jour, int mois, int annee, int heure, int minute, int seconde) {
 		
-		//Timestamp date = new Timestamp(annee, mois, jour, heure, minute, seconde, 0);
+		//On assemble la date
+		GregorianCalendar horaire = new GregorianCalendar(annee, mois, jour, heure, minute, seconde);
 		
+		//Si le créneau est libre
+		if (verifierPlanification(horaire.getTimeInMillis(), p.getDuree())) {
+			
+			//On ajoute le programme au canal
+			String requete = "INSERT INTO diffuser (id_prog, id_canal, calage) VALUES ('" + p.getId() + "', '" + this.id + "', '" +horaire.getTimeInMillis()+"');";
+			Jdbc base = Jdbc.getInstance();
+			int nbRows = base.executeUpdate(requete);
+			
+			//Si l'insertion s'est bien déroulée
+			if (nbRows>0) {
+				
+				//On met à jour le vecteurs d'association
+				programmes.put(horaire.getTimeInMillis(), p);
+				
+				return true;
+			}
+			
+			//Sinon, problème à l'insertion
+			return false;
+		}
 		
-		return true;
+		//Sinon, créneau non libre
+		return false;
 	}
 	
 	
@@ -311,7 +417,8 @@ public class Canal {
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
 			String id = String.valueOf((Integer)dico.get("id_prog"));
-			progs.put(id, Programme.getById(id));
+			long calage = Long.valueOf((Long)dico.get("calage"));
+			progs.put(calage, Programme.getById(id));
 		}
 		
 		return progs;
@@ -349,6 +456,16 @@ public class Canal {
 		dico.put("id", id);
 		dico.put("nom", nom);
 		dico.put("utilMax", utilMax);
+		dico.put("nbProgs", programmes.size());
+		
+		Hashtable dicoProgs = new Hashtable();
+		Enumeration horaires = programmes.keys();
+		while (horaires.hasMoreElements()) {
+			long horaire = (Long)horaires.nextElement();
+			dicoProgs.put(horaire, ((Programme)programmes.get(horaire)).getId());
+		}
+		
+		dico.put("programmes", dicoProgs);
 		
 		return dico;
 	}
@@ -375,6 +492,10 @@ public class Canal {
 		if (this.RTP == null) this.RTP = new RTPServer(ip, port, publicite);
 	}
 	
+	/**
+	 * Vérifie si le serveur RTP est démarré
+	 * @return boolean
+	 */
 	public boolean isRTPstarted() {
 		return RTP != null;
 	}
@@ -442,38 +563,6 @@ public class Canal {
 	public int getUtilMax() {
 		return utilMax;
 	}
-
-	/**
-	 * Insertion d'informations
-	 * @param id
-	 * @param nom
-	 * @param fluxMax
-	 */
-	public void insertionInfos(String id, String nom, int fluxMax) {
-		// your code here
-	}
-
-	/**
-	 * Vérifie si la tranche horaire est libre pour une planification
-	 * @param jour
-	 * @param heure
-	 * @param idCanal
-	 * @return
-	 */
-	public boolean verifierPlanification(Date Jour, int heure, String idCanal) {
-		// your code here
-		return false;
-	}
-
-	/**
-	 * Bloquer (réserver) une plage horaire pour une planification
-	 * @param idProgramme
-	 * @param jour
-	 * @param heure
-	 */
-	public void bloquerPlage(String IdeProgramme, Date jour, int heure) {
-		// your code here
-	}
 	
 	/**
 	 * Diffuser un programme
@@ -506,14 +595,6 @@ public class Canal {
 	}
 
 	/**
-	 * Arrête la diffusion du canal
-	 * @param idCanal
-	 */
-	public void arreterDiffusionCanal(int idCanal) {
-		// your code here
-	}
-
-	/**
 	 * Déconnecter un auditeur du canal
 	 * @param idAuditeur
 	 */
@@ -527,14 +608,6 @@ public class Canal {
 	 */
 	public void connecterAuditeur(String idAuditeur) {
 		if (!auditeurs.contains(idAuditeur)) auditeurs.addElement(idAuditeur);
-	}
-
-	/**
-	 * Relance la diffusion d'un canal
-	 * @param idCanal
-	 */
-	public void relanceDiffusionCanal(String idCanal) {
-		// your code here
 	}
 	
 	/**

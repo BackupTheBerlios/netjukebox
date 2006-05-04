@@ -166,8 +166,8 @@ public class Client {
 						String nom = lire();
 						System.out.print("Nombre maximal d'auditeurs: ");
 						String utilMax = lire();
-						boolean connecte = clientXML.creerCanal(nom, utilMax);
-						if (connecte) System.err.println("INFO: Canal créé");
+						boolean cree = clientXML.creerCanal(nom, utilMax);
+						if (cree) System.err.println("INFO: Canal créé");
 						else System.err.println("ERREUR: Canal non créé");
 					}
 					else {
@@ -182,8 +182,8 @@ public class Client {
 						String titre = lire();
 						System.out.print("Thématique: ");
 						String thematique = lire();
-						boolean connecte = clientXML.creerProgramme(titre, thematique);
-						if (connecte) System.err.println("INFO: Programme créé");
+						boolean cree = clientXML.creerProgramme(titre, thematique);
+						if (cree) System.err.println("INFO: Programme créé");
 						else System.err.println("ERREUR: Programme non créé");
 					}
 					else {
@@ -212,8 +212,8 @@ public class Client {
 						String genre = lire();
 						System.out.print("Fichier: ");
 						String fichier = lire();
-						boolean connecte = clientXML.creerDocument(titre, duree, jour, mois, annee, source, langue, genre, fichier);
-						if (connecte) System.err.println("INFO: Document créé");
+						boolean cree = clientXML.creerDocument(titre, duree, jour, mois, annee, source, langue, genre, fichier);
+						if (cree) System.err.println("INFO: Document créé");
 						else System.err.println("ERREUR: Document non créé");
 					}
 					else {
@@ -228,8 +228,8 @@ public class Client {
 						String idDoc = lire();
 						System.out.print("ID du programme cible: ");
 						String idProg = lire();
-						boolean connecte = clientXML.ajouterDocumentProgramme(idDoc, idProg);
-						if (connecte) System.err.println("INFO: Document ajouté au programme");
+						boolean ajoute = clientXML.ajouterDocumentProgramme(idDoc, idProg);
+						if (ajoute) System.err.println("INFO: Document ajouté au programme");
 						else System.err.println("ERREUR: Document non ajouté au progamme");
 					}
 					else {
@@ -244,8 +244,8 @@ public class Client {
 						String idProg = lire();
 						System.out.print("ID du canal cible: ");
 						String idCanal = lire();
-						boolean connecte = clientXML.diffuserProgramme(idProg, idCanal);
-						if (connecte) System.err.println("INFO: Diffusion du programme lancée sur le canal");
+						boolean diffuse = clientXML.diffuserProgramme(idProg, idCanal);
+						if (diffuse) System.err.println("INFO: Diffusion du programme lancée sur le canal");
 						else System.err.println("ERREUR: Diffusion du programme non lancée sur le canal");
 					}
 					else {
@@ -272,8 +272,8 @@ public class Client {
 						String minute = lire();
 						System.out.print("Seconde: ");
 						String seconde = lire();
-						boolean connecte = clientXML.planifierProgramme(idProg, idCanal, jour, mois, annee, heure, minute, seconde);
-						if (connecte) System.err.println("INFO: Programme planifié sur le canal");
+						boolean planifie = clientXML.planifierProgramme(idProg, idCanal, jour, mois, annee, heure, minute, seconde);
+						if (planifie) System.err.println("INFO: Programme planifié sur le canal");
 						else System.err.println("ERREUR: Programme non planifié");
 					}
 					else {
@@ -413,6 +413,7 @@ public class Client {
 								System.out.println("Id: "+c.get("id"));
 								System.out.println("Nom: "+c.get("nom"));
 								System.out.println("NbMax auditeurs: "+c.get("utilMax"));
+								System.out.println("Nb progs: "+c.get("nbProgs"));
 								System.out.println("-------------------------------------------");
 								System.out.println();
 							}
@@ -758,33 +759,6 @@ public class Client {
 					}
 				}
 				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				// MODIFIERPROGRAMME
 				if  (ligne.equalsIgnoreCase("modifierProgramme")) {
 					if (etatConnecte) {
@@ -865,6 +839,88 @@ public class Client {
 					}
 				}
 				
+				//INFODOCUMENT
+				if  (ligne.equalsIgnoreCase("infoDocument")) {
+					if (etatConnecte) {
+						//ID du doc
+						System.out.print("ID du programme : ");
+						String id = lire();
+						
+						Dictionary d = clientXML.infoDocument(id);
+						
+						if (d != null) {
+							System.out.println("----------------- Document -------------------");
+							System.out.println("Id: "+d.get("id"));
+							System.out.println("Titre: "+d.get("titre"));
+							System.out.println("Durée: "+d.get("duree"));
+							System.out.println("Date: "+d.get("date"));
+							System.out.println("Genre: "+d.get("genre"));
+							System.out.println("Source: "+d.get("source"));
+							System.out.println("Langue: "+d.get("langue"));
+							System.out.println("Fichier: "+d.get("fichier"));
+							System.out.println("----------------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Document affiché");
+						}
+						else System.err.println("WARNING: Aucun document disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// INFOPROGRAMME
+				if  (ligne.equalsIgnoreCase("infoProgramme")) {
+					if (etatConnecte) {
+						//ID du prog
+						System.out.print("ID du programme : ");
+						String id = lire();
+						
+						Dictionary p = clientXML.infoProgramme(id);
+						
+						if (p!=null) {
+							System.out.println("----------------- Programme -------------------");
+							System.out.println("Id: "+p.get("id"));
+							System.out.println("Titre: "+p.get("titre"));
+							System.out.println("Thématique: "+p.get("thematique"));
+							System.out.println("Durée: "+p.get("duree"));
+							System.out.println("Nb docs: "+p.get("nbDocs"));
+							System.out.println("-----------------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Programme affiché");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// INFOCANAL
+				if  (ligne.equalsIgnoreCase("infoCanal")) {
+					if (etatConnecte) {
+						//ID du canal
+						System.out.print("ID du canal : ");
+						String id = lire();
+						
+						Dictionary c = clientXML.infoCanal(id);
+						if (c!=null) {
+							System.out.println("----------------- Canal -------------------");
+							System.out.println("Id: "+c.get("id"));
+							System.out.println("Nom: "+c.get("nom"));
+							System.out.println("NbMax auditeurs: "+c.get("utilMax"));
+							System.out.println("Nb progs: "+c.get("nbProgs"));
+							System.out.println("-------------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Canal affiché");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
 					System.out.println("Commandes disponibles:");
@@ -895,6 +951,9 @@ public class Client {
 					System.out.println(" modifierDocument : modifier un document");
 					System.out.println(" modifierProgramme : modifier un programme");
 					System.out.println(" modifierCanal : modifier un canal");
+					System.out.println(" infoDocument : afficher les informations sur un document");
+					System.out.println(" infoProgramme : afficher les informations sur un programme");
+					System.out.println(" infoCanal : afficher les informations sur un canal");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

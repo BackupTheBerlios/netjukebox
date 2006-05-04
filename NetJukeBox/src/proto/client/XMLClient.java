@@ -1,6 +1,7 @@
 package proto.client;
 
 import java.net.MalformedURLException;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.xmlrpc.XmlRpc;
@@ -1059,6 +1060,105 @@ public class XMLClient {
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
+		}
+	}
+	
+	/**
+	 * Informations d'un document
+	 * @param String id
+	 * @return Hashtable
+	 */
+	public Hashtable infoDocument(String id) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Informations sur un document...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				
+				// Adresse la requête et affiche les résultats
+				Hashtable result = (Hashtable)clientXML.execute("Systeme.infoDocument", params);
+
+				return result;
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Informations d'un programme
+	 * @param String id
+	 * @return Hashtable
+	 */
+	public Hashtable infoProgramme(String id) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Informations sur un programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				
+				// Adresse la requête et affiche les résultats
+				Hashtable result = (Hashtable)clientXML.execute("Systeme.infoProgramme", params);
+
+				return result;
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Informations d'un canal
+	 * @param String id
+	 * @return Hashtable
+	 */
+	public Hashtable infoCanal(String id) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Informations sur un canal...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				
+				// Adresse la requête et affiche les résultats
+				Hashtable result = (Hashtable)clientXML.execute("Systeme.infoCanal", params);
+
+				return result;
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
 		}
 	}
 }

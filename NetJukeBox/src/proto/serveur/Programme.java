@@ -385,6 +385,15 @@ public class Programme {
 		dico.put("thematique", thematique);
 		dico.put("nbDocs", documents.size());
 		
+		/*Hashtable dicoDocs = new Hashtable();
+		Enumeration horaires = documents.keys();
+		while (horaires.hasMoreElements()) {
+			long horaire = (Long)horaires.nextElement();
+			dicoDocs.put(horaire, ((Document)documents.get(horaire)).getId());
+		}
+		
+		dico.put("documents", dicoDocs);*/
+		
 		return dico;
 	}
 	

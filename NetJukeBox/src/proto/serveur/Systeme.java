@@ -474,7 +474,7 @@ public class Systeme {
 			if (Document.getByTitre(titre) == null) {
 				
 				//On crée le document
-				Document d = Document.create(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier);
+				Document d = Document.create(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier);
 				
 				//Si le document a bien été créé
 				if (d != null) {
@@ -654,7 +654,7 @@ public class Systeme {
 				Document d = (Document)documents.get(id);
 				
 				//On modifie le document
-				if (d.modifier(titre, Integer.parseInt(duree), jour, mois, annee, source, langue, genre, fichier)) {
+				if (d.modifier(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier)) {
 				
 					System.out.println("Document '"+id+"' modifié");
 					return Boolean.toString(true);
@@ -672,6 +672,34 @@ public class Systeme {
 		// Sinon, création refusée
 		System.out.println("Permission non accordée. Document non modifié");
 		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Informations sur un document
+	 * @param String login
+	 * @param Strign id
+	 * @return Hashtable
+	 */
+	public Hashtable infoDocument(String login, String id) {
+		
+		System.out.println("Infos sur un document");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "infoDocument")) {
+		
+			//On vérifie que le document existe
+			if (documents.containsKey(id)) {
+				Document d = (Document)documents.get(id);
+				Dictionary infos = d.getAttributesDictionary();
+			}
+			else {
+				System.out.println("Document indisponible");
+				return null;
+			}
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Document non affiché");
+		return null;
 	}
 
 	public void ajouterDocument() {
@@ -919,6 +947,34 @@ public class Systeme {
 		// Sinon, création refusée
 		System.out.println("Permission non accordée. Programme non modifié");
 		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Informations sur un programme
+	 * @param String login
+	 * @param Strign id
+	 * @return Hashtable
+	 */
+	public Hashtable infoProgramme(String login, String id) {
+		
+		System.out.println("Infos sur un programme");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "infoProgramme")) {
+		
+			//On vérifie que le programme existe
+			if (programmes.containsKey(id)) {
+				Programme p = (Programme)programmes.get(id);
+				Dictionary infos = p.getAttributesDictionary();
+			}
+			else {
+				System.out.println("Programme indisponible");
+				return null;
+			}
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Programme non affiché");
+		return null;
 	}
 
 	public void ConfirmerSupprimerProgramme(Boolean SuppressionProgramme) {
@@ -1319,6 +1375,34 @@ public class Systeme {
 		// Sinon, création refusée
 		System.out.println("Permission non accordée. Canal non modifié");
 		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Informations sur un canal
+	 * @param String login
+	 * @param Strign id
+	 * @return Hashtable
+	 */
+	public Hashtable infoCanal(String login, String id) {
+		
+		System.out.println("Infos sur un canal");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "infoCanal")) {
+		
+			//On vérifie que le canal existe
+			if (documents.containsKey(id)) {
+				Canal c = (Canal)canaux.get(id);
+				Dictionary infos = c.getAttributesDictionary();
+			}
+			else {
+				System.out.println("Canal indisponible");
+				return null;
+			}
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Canal non affiché");
+		return null;
 	}
 	
 

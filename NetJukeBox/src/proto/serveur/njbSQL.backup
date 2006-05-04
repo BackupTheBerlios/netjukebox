@@ -1,0 +1,715 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Started on 2006-05-04 18:28:30 CEST
+
+SET client_encoding = 'LATIN1';
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 1566 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'Standard public schema';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 1187 (class 1259 OID 17361)
+-- Dependencies: 5
+-- Name: annuaire; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE annuaire (
+    nom character varying,
+    prenom character varying,
+    tel character varying
+);
+
+
+ALTER TABLE public.annuaire OWNER TO postgres;
+
+--
+-- TOC entry 1177 (class 1259 OID 17231)
+-- Dependencies: 5
+-- Name: attribuer; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE attribuer (
+    id_perm integer NOT NULL,
+    login character(6) NOT NULL
+);
+
+
+ALTER TABLE public.attribuer OWNER TO postgres;
+
+SET default_with_oids = true;
+
+--
+-- TOC entry 1193 (class 1259 OID 17394)
+-- Dependencies: 1512 1513 5
+-- Name: canal; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE canal (
+    id serial NOT NULL,
+    nom character varying NOT NULL,
+    utilmax integer DEFAULT 0
+);
+
+
+ALTER TABLE public.canal OWNER TO postgres;
+
+--
+-- TOC entry 1568 (class 0 OID 0)
+-- Dependencies: 1192
+-- Name: canal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('canal', 'id'), 3, true);
+
+
+--
+-- TOC entry 1194 (class 1259 OID 25574)
+-- Dependencies: 1514 5
+-- Name: composer; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE composer (
+    id_prog integer NOT NULL,
+    id_doc integer NOT NULL,
+    calage bigint DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.composer OWNER TO postgres;
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 1178 (class 1259 OID 17235)
+-- Dependencies: 5
+-- Name: contractant; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE contractant (
+    id_contrat integer NOT NULL,
+    nom_contrat character(30),
+    adr_contrat character(80),
+    date_contrat date,
+    id_doc integer,
+    duree_contrat integer
+);
+
+
+ALTER TABLE public.contractant OWNER TO postgres;
+
+--
+-- TOC entry 1195 (class 1259 OID 25619)
+-- Dependencies: 5
+-- Name: diffuser; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE diffuser (
+    id_prog numeric,
+    id_canal numeric,
+    calage character varying
+);
+
+
+ALTER TABLE public.diffuser OWNER TO postgres;
+
+SET default_with_oids = true;
+
+--
+-- TOC entry 1189 (class 1259 OID 17368)
+-- Dependencies: 1509 5
+-- Name: document; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE document (
+    id serial NOT NULL,
+    titre character varying NOT NULL,
+    duree integer,
+    source character varying,
+    langue character varying,
+    genre character varying,
+    fichier character varying NOT NULL,
+    date character varying
+);
+
+
+ALTER TABLE public.document OWNER TO postgres;
+
+--
+-- TOC entry 1569 (class 0 OID 0)
+-- Dependencies: 1188
+-- Name: document_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('document', 'id'), 6, true);
+
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 1179 (class 1259 OID 17241)
+-- Dependencies: 5
+-- Name: etat; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE etat (
+    id_etat character(2) NOT NULL,
+    lib_etat character(10)
+);
+
+
+ALTER TABLE public.etat OWNER TO postgres;
+
+--
+-- TOC entry 1180 (class 1259 OID 17243)
+-- Dependencies: 5
+-- Name: genre; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE genre (
+    id_genre integer NOT NULL,
+    lib_genre character(30)
+);
+
+
+ALTER TABLE public.genre OWNER TO postgres;
+
+--
+-- TOC entry 1181 (class 1259 OID 17245)
+-- Dependencies: 5
+-- Name: gerer; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE gerer (
+    id_canal character(6) NOT NULL,
+    login character(6) NOT NULL
+);
+
+
+ALTER TABLE public.gerer OWNER TO postgres;
+
+--
+-- TOC entry 1182 (class 1259 OID 17247)
+-- Dependencies: 5
+-- Name: journal; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE journal (
+    id_journal integer NOT NULL,
+    date_journal date
+);
+
+
+ALTER TABLE public.journal OWNER TO postgres;
+
+--
+-- TOC entry 1183 (class 1259 OID 17249)
+-- Dependencies: 5
+-- Name: langue; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE langue (
+    id_langue integer NOT NULL,
+    libel_langue character(30)
+);
+
+
+ALTER TABLE public.langue OWNER TO postgres;
+
+--
+-- TOC entry 1184 (class 1259 OID 17251)
+-- Dependencies: 5
+-- Name: permission; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE permission (
+    id_perm integer NOT NULL,
+    lib_perm character(60)
+);
+
+
+ALTER TABLE public.permission OWNER TO postgres;
+
+SET default_with_oids = true;
+
+--
+-- TOC entry 1191 (class 1259 OID 17386)
+-- Dependencies: 1510 1511 5
+-- Name: programme; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE programme (
+    id serial NOT NULL,
+    titre character varying NOT NULL,
+    thematique character varying,
+    duree bigint DEFAULT 0
+);
+
+
+ALTER TABLE public.programme OWNER TO postgres;
+
+--
+-- TOC entry 1570 (class 0 OID 0)
+-- Dependencies: 1190
+-- Name: programme_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('programme', 'id'), 2, true);
+
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 1185 (class 1259 OID 17255)
+-- Dependencies: 5
+-- Name: protocole; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE protocole (
+    id_proto integer NOT NULL,
+    lib_proto character(30),
+    detail_proto character(30)
+);
+
+
+ALTER TABLE public.protocole OWNER TO postgres;
+
+--
+-- TOC entry 1186 (class 1259 OID 17257)
+-- Dependencies: 5
+-- Name: utilisateur; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE utilisateur (
+    log character(6) NOT NULL,
+    nom character(25),
+    premon character(25),
+    mail character(25),
+    pwd character(6),
+    pays character(25)
+);
+
+
+ALTER TABLE public.utilisateur OWNER TO postgres;
+
+--
+-- TOC entry 1558 (class 0 OID 17361)
+-- Dependencies: 1187
+-- Data for Name: annuaire; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY annuaire (nom, prenom, tel) FROM stdin;
+pipi	pépé	111111
+pipi	pépé	111111
+\.
+
+
+--
+-- TOC entry 1548 (class 0 OID 17231)
+-- Dependencies: 1177
+-- Data for Name: attribuer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY attribuer (id_perm, login) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1561 (class 0 OID 17394)
+-- Dependencies: 1193
+-- Data for Name: canal; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY canal (id, nom, utilmax) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1562 (class 0 OID 25574)
+-- Dependencies: 1194
+-- Data for Name: composer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY composer (id_prog, id_doc, calage) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1549 (class 0 OID 17235)
+-- Dependencies: 1178
+-- Data for Name: contractant; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY contractant (id_contrat, nom_contrat, adr_contrat, date_contrat, id_doc, duree_contrat) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1563 (class 0 OID 25619)
+-- Dependencies: 1195
+-- Data for Name: diffuser; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY diffuser (id_prog, id_canal, calage) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1559 (class 0 OID 17368)
+-- Dependencies: 1189
+-- Data for Name: document; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY document (id, titre, duree, source, langue, genre, fichier, date) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1550 (class 0 OID 17241)
+-- Dependencies: 1179
+-- Data for Name: etat; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY etat (id_etat, lib_etat) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1551 (class 0 OID 17243)
+-- Dependencies: 1180
+-- Data for Name: genre; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY genre (id_genre, lib_genre) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1552 (class 0 OID 17245)
+-- Dependencies: 1181
+-- Data for Name: gerer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY gerer (id_canal, login) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1553 (class 0 OID 17247)
+-- Dependencies: 1182
+-- Data for Name: journal; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY journal (id_journal, date_journal) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1554 (class 0 OID 17249)
+-- Dependencies: 1183
+-- Data for Name: langue; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY langue (id_langue, libel_langue) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1555 (class 0 OID 17251)
+-- Dependencies: 1184
+-- Data for Name: permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY permission (id_perm, lib_perm) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1560 (class 0 OID 17386)
+-- Dependencies: 1191
+-- Data for Name: programme; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY programme (id, titre, thematique, duree) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1556 (class 0 OID 17255)
+-- Dependencies: 1185
+-- Data for Name: protocole; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY protocole (id_proto, lib_proto, detail_proto) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1557 (class 0 OID 17257)
+-- Dependencies: 1186
+-- Data for Name: utilisateur; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY utilisateur (log, nom, premon, mail, pwd, pays) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1540 (class 16386 OID 25629)
+-- Dependencies: 1193 1193
+-- Name: canal_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY canal
+    ADD CONSTRAINT canal_pkey PRIMARY KEY (id);
+
+
+ALTER INDEX public.canal_pkey OWNER TO postgres;
+
+--
+-- TOC entry 1536 (class 16386 OID 25580)
+-- Dependencies: 1189 1189
+-- Name: id_doc; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY document
+    ADD CONSTRAINT id_doc PRIMARY KEY (id);
+
+
+ALTER INDEX public.id_doc OWNER TO postgres;
+
+--
+-- TOC entry 1538 (class 16386 OID 25578)
+-- Dependencies: 1191 1191
+-- Name: id_prog; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY programme
+    ADD CONSTRAINT id_prog PRIMARY KEY (id);
+
+
+ALTER INDEX public.id_prog OWNER TO postgres;
+
+--
+-- TOC entry 1516 (class 16386 OID 17260)
+-- Dependencies: 1177 1177 1177
+-- Name: pk_attribuer; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY attribuer
+    ADD CONSTRAINT pk_attribuer PRIMARY KEY (id_perm, login);
+
+
+ALTER INDEX public.pk_attribuer OWNER TO postgres;
+
+--
+-- TOC entry 1518 (class 16386 OID 17264)
+-- Dependencies: 1178 1178
+-- Name: pk_contractant; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY contractant
+    ADD CONSTRAINT pk_contractant PRIMARY KEY (id_contrat);
+
+
+ALTER INDEX public.pk_contractant OWNER TO postgres;
+
+--
+-- TOC entry 1520 (class 16386 OID 17270)
+-- Dependencies: 1179 1179
+-- Name: pk_etat; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY etat
+    ADD CONSTRAINT pk_etat PRIMARY KEY (id_etat);
+
+
+ALTER INDEX public.pk_etat OWNER TO postgres;
+
+--
+-- TOC entry 1522 (class 16386 OID 17272)
+-- Dependencies: 1180 1180
+-- Name: pk_genre; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY genre
+    ADD CONSTRAINT pk_genre PRIMARY KEY (id_genre);
+
+
+ALTER INDEX public.pk_genre OWNER TO postgres;
+
+--
+-- TOC entry 1524 (class 16386 OID 17274)
+-- Dependencies: 1181 1181 1181
+-- Name: pk_gerer; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY gerer
+    ADD CONSTRAINT pk_gerer PRIMARY KEY (id_canal, login);
+
+
+ALTER INDEX public.pk_gerer OWNER TO postgres;
+
+--
+-- TOC entry 1526 (class 16386 OID 17276)
+-- Dependencies: 1182 1182
+-- Name: pk_journal; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY journal
+    ADD CONSTRAINT pk_journal PRIMARY KEY (id_journal);
+
+
+ALTER INDEX public.pk_journal OWNER TO postgres;
+
+--
+-- TOC entry 1528 (class 16386 OID 17278)
+-- Dependencies: 1183 1183
+-- Name: pk_langue; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY langue
+    ADD CONSTRAINT pk_langue PRIMARY KEY (id_langue);
+
+
+ALTER INDEX public.pk_langue OWNER TO postgres;
+
+--
+-- TOC entry 1530 (class 16386 OID 17280)
+-- Dependencies: 1184 1184
+-- Name: pk_permission; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY permission
+    ADD CONSTRAINT pk_permission PRIMARY KEY (id_perm);
+
+
+ALTER INDEX public.pk_permission OWNER TO postgres;
+
+--
+-- TOC entry 1532 (class 16386 OID 17284)
+-- Dependencies: 1185 1185
+-- Name: pk_protocole; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY protocole
+    ADD CONSTRAINT pk_protocole PRIMARY KEY (id_proto);
+
+
+ALTER INDEX public.pk_protocole OWNER TO postgres;
+
+--
+-- TOC entry 1534 (class 16386 OID 17286)
+-- Dependencies: 1186 1186
+-- Name: pk_utilisateur; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY utilisateur
+    ADD CONSTRAINT pk_utilisateur PRIMARY KEY (log);
+
+
+ALTER INDEX public.pk_utilisateur OWNER TO postgres;
+
+--
+-- TOC entry 1541 (class 16386 OID 17287)
+-- Dependencies: 1177 1184 1529
+-- Name: fk_attribuer_2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY attribuer
+    ADD CONSTRAINT fk_attribuer_2 FOREIGN KEY (id_perm) REFERENCES permission(id_perm);
+
+
+--
+-- TOC entry 1542 (class 16386 OID 17291)
+-- Dependencies: 1177 1186 1533
+-- Name: fk_attribuer_3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY attribuer
+    ADD CONSTRAINT fk_attribuer_3 FOREIGN KEY (login) REFERENCES utilisateur(log);
+
+
+--
+-- TOC entry 1543 (class 16386 OID 17339)
+-- Dependencies: 1181 1186 1533
+-- Name: fk_gerer_2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY gerer
+    ADD CONSTRAINT fk_gerer_2 FOREIGN KEY (login) REFERENCES utilisateur(log);
+
+
+--
+-- TOC entry 1547 (class 16386 OID 25630)
+-- Dependencies: 1195 1193 1539
+-- Name: id_canal; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY diffuser
+    ADD CONSTRAINT id_canal FOREIGN KEY (id_canal) REFERENCES canal(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1545 (class 16386 OID 25585)
+-- Dependencies: 1194 1189 1535
+-- Name: id_doc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY composer
+    ADD CONSTRAINT id_doc FOREIGN KEY (id_doc) REFERENCES document(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1544 (class 16386 OID 25581)
+-- Dependencies: 1194 1191 1537
+-- Name: id_prog; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY composer
+    ADD CONSTRAINT id_prog FOREIGN KEY (id_prog) REFERENCES programme(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1546 (class 16386 OID 25624)
+-- Dependencies: 1195 1191 1537
+-- Name: id_prog; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY diffuser
+    ADD CONSTRAINT id_prog FOREIGN KEY (id_prog) REFERENCES programme(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1567 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2006-05-04 18:28:30 CEST
+
+--
+-- PostgreSQL database dump complete
+--
+

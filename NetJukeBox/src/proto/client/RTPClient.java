@@ -1,85 +1,92 @@
 package proto.client;
 
-import java.io.*;
-import javax.media.*;
-import javax.media.format.*;
-import javax.media.protocol.*;
-
-import proto.serveur.Jdbc;
+import javax.media.ControllerEvent;
+import javax.media.ControllerListener;
+import javax.media.EndOfMediaEvent;
+import javax.media.Manager;
+import javax.media.MediaLocator;
+import javax.media.Player;
 
 /**
  * Classe du Lecteur audio RTP pour le client
  */
-public class RTPClient implements ControllerListener {
+public class RTPClient  implements ControllerListener {
 
-	
-// ATTRIBUTS
-//*******************************************************
-	
+	// ATTRIBUTS
+	// *******************************************************
+
 	/**
 	 * Singleton
 	 */
 	private static RTPClient instance;
-	
+
 	/**
 	 * Lecteur RTP
 	 */
 	private Player p = null;
-	
-	
-// CONSTRUCTEUR
-//*******************************************************
-	
+
+	/**
+	 * URL écoutée
+	 */
+	private String url;
+
+	// CONSTRUCTEUR
+	// *******************************************************
+
 	/**
 	 * Constructeur
 	 */
 	public RTPClient() {
 	}
-	
-	
-// METHODES STATIQUES
-//*******************************************************
-	
+
+	// METHODES STATIQUES
+	// *******************************************************
+
 	/**
-     *	Retourne l'instance du Singleton
-     */
-	public static synchronized RTPClient getInstance(){
+	 * Retourne l'instance du Singleton
+	 */
+	public static synchronized RTPClient getInstance() {
 		if (instance == null)
 			instance = new RTPClient();
 		return instance;
 	}
-	
-// METHODES DYNAMIQUES
-//*******************************************************
-	
+
+	// METHODES DYNAMIQUES
+	// *******************************************************
+
 	/**
 	 * Lance l'écoute d'une URL
-	 * @param String url
+	 * 
+	 * @param String
+	 *            url
 	 */
 	public void start(String url) {
-		
-		//On arrête le player s'il écoute déjà une URL
+
+		// On arrête le player s'il écoute déjà une URL
 		this.stop();
-		
+
+		// On met à jour l'URL
+		this.url = url;
+
 		System.out.println(url);
-		
+
 		try {
 			MediaLocator src = new MediaLocator(url);
-			p = Manager.createPlayer(src);
-			p.addControllerListener(this);
+			 p = Manager.createPlayer(src);
+			//p = Manager.createRealizedPlayer(src);
+			 p.addControllerListener(this);
 			p.start();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 	}
-	
+
 	/**
 	 * Arrête l'écoute d'une URL
 	 */
 	public void stop() {
-		if (p!=null) {
+		if (p != null) {
 			p.stop();
 			p.close();
 			p = null;
@@ -92,9 +99,8 @@ public class RTPClient implements ControllerListener {
 	public synchronized void controllerUpdate(ControllerEvent evt) {
 		if (evt instanceof EndOfMediaEvent) {
 			System.out.println("Fin du média");
-			p.stop();
-		}
-		else {
+			// start(url);
+		} else {
 			System.out.println(evt.toString());
 		}
 	}
