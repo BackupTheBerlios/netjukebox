@@ -670,7 +670,7 @@ public class XMLClient {
 					params.addElement(login);
 					
 					// Adresse la requête et affiche les résultats
-					return (Vector)clientXML.execute("Systeme.rechercherAttributs", params);
+					return (Vector)clientXML.execute("Systeme.rechercherUtilisateur", params);
 				} catch (Exception e) {
 					System.err.println("ERREUR : " + e);
 					return null;
@@ -692,7 +692,7 @@ public class XMLClient {
 	  * @param Pays
 	  * @return boolean
 	  */
-	 public boolean modifierAttributs(String Login, String Nom, String Prenom, String Email, String Pays) {
+	 public boolean modifierUtilisateur(String Login, String Nom, String Prenom, String Email, String Pays) {
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
 			System.err.println("INFO: Modification des attributs...");
@@ -707,7 +707,7 @@ public class XMLClient {
 					params.addElement(Pays);
 					
 					// Adresse la requête et affiche les résultats
-					String result = (String)clientXML.execute("Systeme.modifierAttributs", params);
+					String result = (String)clientXML.execute("Systeme.modifierUtilisateur", params);
 
 					return Boolean.parseBoolean(result);
 					

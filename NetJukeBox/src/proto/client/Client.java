@@ -715,7 +715,7 @@ public class Client {
 				}
 				
 				//MODIFIERUTILISATEUR
-				if  (ligne.equalsIgnoreCase("modifierAttribut")) {
+				if  (ligne.equalsIgnoreCase("modifierUtilisateur")) {
 					if (etatConnecte) {
 											
 						//On affiche ses infos
@@ -748,7 +748,7 @@ public class Client {
 							System.out.print("Nouveau Pays: ");
 							String pays = lire();
 							
-							boolean modifie = clientXML.modifierAttributs(login, nom, prenom, mail, pays);
+							boolean modifie = clientXML.modifierUtilisateur(login, nom, prenom, mail, pays);
 							if (modifie) System.err.println("INFO: Attributs modifiés");
 							else System.err.println("ERREUR: Attributs non modifiés");
 						}
@@ -940,8 +940,8 @@ public class Client {
 					System.out.println(" listerCanal : lister les canaux disponibles");
 					System.out.println(" inscription : inscription d'un nouvel utilisateur");
 					System.out.println(" Suppression : suppression d'un utilisateur");
-					System.out.println(" rechercherDocument : rechercher vos attributs");
-					System.out.println(" modifierProgramme : modifier vos attributs");
+					System.out.println(" rechercherUtilisateur : rechercher vos attributs");
+					System.out.println(" modifierUtilisateur : modifier vos attributs");
 					System.out.println(" rechercherDocument : rechercher un document");
 					System.out.println(" rechercherProgramme : rechercher un programme");
 					System.out.println(" rechercherCanal : rechercher un canal");
