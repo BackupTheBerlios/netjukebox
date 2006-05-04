@@ -2,7 +2,6 @@ package proto.serveur;
 
 import java.io.File;
 import java.util.prefs.Preferences;
-
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.ini4j.IniFile;
@@ -23,7 +22,7 @@ public class Serveur {
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
 		String filename = args.length > 0 ? args[0] : "src/proto/serveur/serveur.ini";
-		//String filename = args.length > 0 ? args[0] : "/home/admindg/workspace/Netjukebox/proto/serveur/serveur.ini";
+		//String filename = args.length > 0 ? args[0] : "/home/admindg/Workspace/NetJukeBox/proto/serveur/serveur.ini";
 		Preferences prefs = new IniFile(new File(filename));
 		
 		try {

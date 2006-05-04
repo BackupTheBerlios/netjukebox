@@ -14,6 +14,12 @@ public class TestClasses {
 		ldap = Ldap.getInstance();
 		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", "admin", "mot2passe", "admin", "dc=netjukebox,dc=com");
 		Utilisateur U1 = Utilisateur.create("Login2", "MotDePasse2", "Nom2", "Prenom2", "dominique.gentaz@tiscali.fr", "Pays", "usager");
+		//U1.verifierLogin("Login2");
+		
+		System.out.println("-------TEST----------------------------");
+		//U1.getByLogin("Login2");
+		U1.modifierInfos("admindg", "admin", "admindg", "domi", "domi", "new@mail", "italie");
+		
 		//new EnvoiMail("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
 		System.out.println("-----------------------------------");
 		//U1.modifierAttributs("Login1", "newLogin","Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "Pays");

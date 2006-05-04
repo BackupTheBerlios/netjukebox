@@ -16,7 +16,7 @@ public class UtilisateurTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		u= new Utilisateur ("login","nom","prenom","mail","pays","role");
+		u= new Utilisateur ("login","pwd","nom","prenom","mail","pays","role");
 	}
 
 	protected void tearDown() throws Exception {

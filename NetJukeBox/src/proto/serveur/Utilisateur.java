@@ -21,7 +21,7 @@ public class Utilisateur {
 	/**
 	 * Mot de passe du compte utilisateur
 	 */
-	//private String pwd;
+	private String pwd;
 
 	/**
 	 * Nom de l'utilisateur
@@ -51,7 +51,7 @@ public class Utilisateur {
 	/**
 	 * #DEFINITION#
 	 */
-	//private Attribuer attribuer;
+	private Attribuer attribuer;
 
 // METHODES STATIQUES
 //*************************************************
@@ -95,15 +95,20 @@ public class Utilisateur {
 			
 			Attributes result = (Attributes) donnee.nextElement();
 			Attribute uid = result.get("uid");
+			Attribute pwd = result.get("userPassword");
 			Attribute ou = result.get("ou");
 			Attribute sn = result.get("sn");
 			Attribute givenName = result.get("givenName");
 			Attribute mail = result.get("mail");
 			Attribute st = result.get("st");
-									
+			
+			byte[] encPassword = (byte[])pwd.get(0);
+			String encStrPassword = new String(encPassword);
+			
 			System.out.println("-------- Utilisateur -----------");
 			System.out.println("Nb de champs: "+result.size());
 			System.out.println("Login : " + uid.get());
+			System.out.println("Mot de passe : " + encStrPassword);
 			System.out.println("Nom : " + sn.get());
 			System.out.println("Prenom : " + givenName.get());
 			System.out.println("Mail : " + mail.get());
@@ -112,7 +117,6 @@ public class Utilisateur {
 			System.out.println("-----------------------------");
 			
 			String login = (String) uid.get();
-			//String passwd = (String) pwd.get();
 			String nom = (String) sn.get();
 			String prenom = (String) givenName.get();
 			String email = (String) mail.get();
@@ -120,7 +124,7 @@ public class Utilisateur {
 			String role = (String) ou.get();
 			
 			//On retourne l'objet
-			return new Utilisateur(login, nom, prenom, email, pays, role);
+			return new Utilisateur(login, encStrPassword, nom, prenom, email, pays, role);
 		}
 		
 		/**
@@ -158,7 +162,9 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	public static boolean verifierLogin(String login) throws NamingException {
-		String log, pwd, r;
+		
+		String log, r, encStrPassword;
+		
 		Ldap ldap = Ldap.getInstance();
 		Dictionary resultats = ldap.getLogin(login);
 		try {
@@ -167,22 +173,66 @@ public class Utilisateur {
 			if (resultats != null && resultats.size()>0) {
 				Attributes result = (Attributes) donnee.nextElement();
 				Attribute uid = result.get("uid");
-				Attribute passwd = result.get("userPassword");
 				Attribute role = result.get("ou");
+				Attribute at = result.get("userPassword");
+				byte[] encPassword = (byte[])at.get(0);
+				encStrPassword = new String(encPassword);
 				log = (String) uid.get();
-				pwd = (String) passwd.get();
 				r = (String) role.get();
-				ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory", "ldap://localhost:389/dc=netjukebox,dc=com", "simple", log, pwd, r, "dc=netjukebox,dc=com");
+				
+				return true;
 				//return log.equalsIgnoreCase(login); 
-			} //else return false;
-			return true;
+			} else {
+				System.out.println("err : " + login + " non présent" );
+				return false;
+			}
 		} catch (Exception e){
-			System.out.println("Erreur le login : " + login + " nexiste pas");
+			System.out.println("Erreur le login : " + login + " n'existe pas");
 			return false;
 		}
 		//return (login.equalsIgnoreCase("toto"));
 	}
-	
+
+	/**
+	 * Verifie le couple login & mot de passe
+	 * @param pwd
+	 * @param login
+	 * @return boolean
+	 */
+	public static boolean verifierPwd(String login, String pwd) {
+		
+		String encStrPassword = null;
+		String log = null;
+		
+		Ldap ldap = Ldap.getInstance();
+		Dictionary resultats = ldap.getLogin(login);
+		try {
+			Enumeration donnee = resultats.elements();
+			// S'il y a un resultat
+			if (resultats != null && resultats.size()>0) {
+				Attributes result = (Attributes) donnee.nextElement();
+				Attribute uid = result.get("uid");
+				Attribute at = result.get("userPassword");
+				byte[] encPassword = (byte[])at.get(0);
+				encStrPassword = new String(encPassword);
+				log = (String) uid.get();
+			}
+			
+			if ((login.equalsIgnoreCase(log)) && (pwd.equalsIgnoreCase(encStrPassword))) {
+				System.out.println(login + " & " + pwd + " correct" );
+				return true;
+				
+				//return log.equalsIgnoreCase(login); 
+				} else {
+					System.out.println("err : " + login + " & " + pwd + " incorrect" );
+					return false;	
+					
+				}
+		} catch (Exception e){
+			System.out.println("Erreur le login : " + login + " n'existe pas");
+			return false;
+		}
+	}
 	
 // CONSTRUCTEURS
 //************************************************	
@@ -196,9 +246,10 @@ public class Utilisateur {
 		/**
 		 * Constructeur complet
 		 */
-		public Utilisateur(String login, String nom, String prenom, String mail, String pays, String role) {
+		public Utilisateur(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
 
 			this.login = login;
+			this.pwd = pwd;
 			this.nom=nom;
 			this.prenom=prenom;
 			this.mail=mail;
@@ -298,6 +349,14 @@ public class Utilisateur {
 		return login;
 	}
 
+	/**
+	 * Retourne le mot de passe de l'utilisateur
+	 * @return String
+	 */
+	public String getPwd() {
+		return pwd;
+	}	
+	
 	/**
 	 * Retourne le nom de l'utilisateur
 	 * @return String
