@@ -41,7 +41,6 @@ public class Systeme {
 	 */
 	private Hashtable utilisateurs = new Hashtable();
 	
-	
 	/**
 	 * Canaux de diffusion
 	 */
@@ -202,32 +201,33 @@ public class Systeme {
 		
 		//On vérifie que l'utilisateur n'est pas déjà connecté
 		if (!utilisateurs.containsKey(login)) {
-		
+
 			//On vérifie que le couple login/pwd existe
-			//if (Utilisateur.verifierPwd(pwd, login)) {
+			if (Utilisateur.verifierPwd(login, pwd)) {
 				
-			//On récupère l'utilisateur depuis la base
-			Utilisateur util = Utilisateur.getByLogin(login);
+				//On récupère l'utilisateur depuis la base
+				Utilisateur util = Utilisateur.getByLogin(login);
 				
-			//On connecte l'utilisateur
-			util.connexion();
+				//On connecte l'utilisateur
+				util.connexion();
 				
-			//On l'ajoute à la liste des utilisateurs connectés au système
-			utilisateurs.put(login, util);
+				//On l'ajoute à la liste des utilisateurs connectés au système
+				utilisateurs.put(login, util);
 				
-			System.out.println("Utilisateur "+login+" connecté");
-			return Boolean.toString(true);
-				
-			//}
+				System.out.println("Utilisateur "+login+" connecté");
+				return Boolean.toString(true);
+			} else {
 			
-			//Sinon, connexion refusée
-			//System.out.println("Utilisateur "+login+" non connecté");
-			//return Boolean.toString(false);
-		}
+				//Sinon, connexion refusée
+				System.out.println("Utilisateur "+login+" non connecté");
+				return Boolean.toString(false);
+			}
+		} else {
 		
-		//Sinon, connexion refusée
-		System.out.println("Utilisateur "+login+" déjà connecté");
-		return Boolean.toString(false);
+			//Sinon, connexion refusée
+			System.out.println("Utilisateur "+login+" déjà connecté");
+			return Boolean.toString(false);
+		}
 	}
 	
 	/**
@@ -302,12 +302,12 @@ public class Systeme {
 			//On vérifie que le login n'existe pas
 			if (!Utilisateur.verifierLogin(log)) {
 				
-				//On crée le document
+				//On crée l'utilisateur
 				Utilisateur u = Utilisateur.create(log, pass, nom, prenom, email, pays, role);
 				
-				//Si le document a bien été créé
+				//Si l'utilisateur a bien été créé
 				if (u != null) {
-					//On l'ajoute à la liste des documents du système
+					//On l'ajoute à la liste des utilisateurs du système
 					utilisateurs.put(u.getLogin(), u);
 					
 					System.out.println("Utilisateur '"+log+"' créé");
@@ -354,7 +354,7 @@ public class Systeme {
 	 * @return Vector
 	 * @throws NamingException
 	 */
-	public Vector rechercherAttributs(String login) throws NamingException {
+	public Vector rechercherUtilisateur(String login) throws NamingException {
 		System.out.println("Recherche des attributs de l'utilisateur : " + login);
 
 		//On vérifie que l'utilisateur a la permission
@@ -365,6 +365,7 @@ public class Systeme {
 				Vector vUtilisateur = new Vector();
 
 				vUtilisateur.addElement(u.getLogin());
+				vUtilisateur.addElement(u.getPwd());
 				vUtilisateur.addElement(u.getNom());
 				vUtilisateur.addElement(u.getPrenom());
 				vUtilisateur.addElement(u.getMail());
@@ -389,7 +390,7 @@ public class Systeme {
 	 * @param pays
 	 * @throws NamingException
 	 */
-	 public boolean modifierAttributs(String login, String newlogin, String nom, String prenom, String mail, String pays) throws NamingException {
+	 public boolean modifierUtilisateur(String login, String newlogin, String nom, String prenom, String mail, String pays) throws NamingException {
 
 		//On vérifie que l'utilisateur a la permission
 		if (Utilisateur.verifierLogin(login)) {
@@ -404,7 +405,7 @@ public class Systeme {
 			return true;
 		} else {
 		// Sinon, création refusée
-		System.out.println("Permission non accordée. Document non modifié");
+		System.out.println("Permission non accordée. Utilisateur non modifié");
 		return false;
 		}
 	}
@@ -427,7 +428,7 @@ public class Systeme {
 		// your code here
 	}
 
-	public void rechercherUtilisateur(String Login) {
+	public void rechercher(String Login) {
 		// your code here
 	}
 
