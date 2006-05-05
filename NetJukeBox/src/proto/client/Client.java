@@ -745,11 +745,13 @@ public class Client {
 								System.out.println();*/
 								
 								
-							}						
-							System.err.println("INFO: Attributs recherché");
-														
+							}		
+							//System.err.print("INFO: Attributs recherché");
+									
 							System.out.print("Nouveau Login: ");
 							String login = lire();
+							System.out.print("Nouveau mot de passe: ");
+							String pwd = lire();
 							System.out.print("Nouveau Nom: ");
 							String nom = lire();
 							System.out.print("Nouveau Prenom: ");
@@ -759,7 +761,7 @@ public class Client {
 							System.out.print("Nouveau Pays: ");
 							String pays = lire();
 							
-							boolean modifie = clientXML.modifierUtilisateur(login, nom, prenom, mail, pays);
+							boolean modifie = clientXML.modifierUtilisateur(login, pwd, nom, prenom, mail, pays);
 							if (modifie) System.err.println("INFO: Attributs modifiés");
 							else System.err.println("ERREUR: Attributs non modifiés");
 						}
@@ -768,8 +770,8 @@ public class Client {
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
-				}
-				
+			}
+							
 				// MODIFIERPROGRAMME
 				if  (ligne.equalsIgnoreCase("modifierProgramme")) {
 					if (etatConnecte) {
