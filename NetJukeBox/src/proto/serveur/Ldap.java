@@ -189,9 +189,10 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 * @throws NamingException 
 	 */
-	public boolean ModifieAttributs(String login, String role,String newlogin,String newnom, String newprenom, String newmail, String newpays) throws NamingException {
+	public boolean ModifieAttributs(String login, String role, String newlogin, String newpwd, String newnom, String newprenom, String newmail, String newpays) throws NamingException {
 		String log=login;
-		if (newlogin!=login){
+		
+		if (!newlogin.equalsIgnoreCase(login)) {
 			Dictionary resultat = getLogin(newlogin);
 			try {
 				Enumeration donnee = resultat.elements();
@@ -214,54 +215,57 @@ public boolean executeSupprimer(String login) throws NamingException {
 		String prenomactuel = (String) attr.get("givenName");
 		String mailactuel = (String) attr.get("mail");
 		String paysactuel = (String) attr.get("st");
-
-		ModificationItem[] mods = new ModificationItem[5];
-		try{	
+		String pwdactuel = (String) attr.get("userPassword");
+		
+		ModificationItem[] mods = new ModificationItem[6];
+		try {
 			// Remplace la valeur de l'attribut SN avec la nouvelle valeur
-		    if (newnom!=nomactuel)
+		    if (!newnom.equalsIgnoreCase(nomactuel))
 		    mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("sn", newnom));
 		    		
 		    // Remplace la valeur de l'attribut MAIL avec la nouvelle valeur
-		    if (newmail!=mailactuel)
+		    if (!newmail.equalsIgnoreCase(mailactuel))
 		    mods[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("mail", newmail));
 		    
-		   // Remplace la valeur de l'attribut GIVENNAME avec la nouvelle valeur
-		    if (newprenom!=prenomactuel)
+		    // Remplace la valeur de l'attribut GIVENNAME avec la nouvelle valeur
+		    if (!newprenom.equalsIgnoreCase(prenomactuel))
 		    mods[2] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("givenName", newprenom));
 		    
 		    // Remplace la valeur de l'attribut ST avec la nouvelle valeur
-		    if (newpays!=paysactuel)
+		    if (!newpays.equalsIgnoreCase(paysactuel))
 		    mods[3] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("st", newpays));
 
+		    // Remplace la valeur de l'attribut ST avec la nouvelle valeur
+		    if (!newpwd.equalsIgnoreCase(pwdactuel))
+		    mods[4] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+			new BasicAttribute("userPassword", newpwd));
+		    
 		    String newcn;
 		    // Remplace la valeur de l'attribut CN avec la nouvelle valeur
-		    if (newnom!=nomactuel) {
-				if (newprenom!=prenomactuel) { 
+		    if (!newnom.equalsIgnoreCase(nomactuel)) {
+				if (!newprenom.equalsIgnoreCase(prenomactuel)) { 
 					newcn=(newnom + " " + newprenom);
 				} else { newcn=(newnom + " " + prenomactuel);
 	 			}
 			} else {
-				if (newprenom!=prenomactuel) {
+				if (!newprenom.equalsIgnoreCase(prenomactuel)) {
 					newcn=(nomactuel + " " + newprenom);
 				} else { newcn=(nomactuel+ " " + prenomactuel);
 				}
 			}
-		    mods[4] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("cn", newcn));
+		    mods[5] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("cn", newcn));
 
+		    System.out.println( "test ");
 		    // Modifie les attributs de l'objet
 		    connect.modifyAttributes(requete, mods);
-	
-		    System.out.println("**** Nouveau attributs *****");
-		
-		    if (attr == null)
-		    	return false;
-				else 
-					System.out.println( "Les modifications sont faites! ");
-					return true;
+
+		    System.out.println( "Les modifications sont faites! ");
+		    
+			return true;
 		} catch (NamingException e) {
 			System.err.println("Les modifications ont échoué. " + e);
 			return false;

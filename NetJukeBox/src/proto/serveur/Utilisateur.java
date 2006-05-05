@@ -149,10 +149,12 @@ public class Utilisateur {
 		
 		//On supprime l'utilisateur de l'annuaire, en partant d'un login
 		Ldap ldap = Ldap.getInstance();
-		ldap.executeSupprimer(login);
-		
 		//On retourne le resultat de l'opération (succès/échec)
-		return true;
+		if (ldap.executeSupprimer(login)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -315,10 +317,11 @@ public class Utilisateur {
 	 * Modifier les informations de l'utilisateur
 	 * @throws NamingException 
 	 */
-	public void modifierInfos(String login, String role,String newlogin,String nom, String prenom, String mail, String pays) throws NamingException {
+	public boolean modifierInfos(String login, String role, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
 		
 		Ldap ldap = Ldap.getInstance();
-		ldap.ModifieAttributs(login, role, newlogin, nom, prenom, mail, pays);
+		ldap.ModifieAttributs(login, role, newlogin, pwd, nom, prenom, mail, pays);
+		return true;
 	}
 
 	/**

@@ -334,18 +334,19 @@ public class Systeme {
 	 * @param Login
 	 * @throws NamingException
 	 */
-	public void supprimerUtilisateur(String Login) throws NamingException {
+	public String supprimerUtilisateur(String Login) throws NamingException {
 		
 		System.out.println("Suppression de l'utilisateur "+Login);
 		
 		//Vérification de l'existance du login à supprimer et suppression 
 		if (Utilisateur.verifierLogin(Login)) {
 			Utilisateur.deleteByLogin(Login);
-			System.out.println("Utilisateur '"+Login+"' supprimé");
-		}
-		
+			
+			return Boolean.toString(true);
+		} else {
 		//Sinon annulation
-		System.out.println("Utilisateur '"+Login+"' non existant. Suppression annulée");
+			return Boolean.toString(false);
+		}
 	}
 
 	/**
@@ -390,23 +391,53 @@ public class Systeme {
 	 * @param pays
 	 * @throws NamingException
 	 */
-	 public boolean modifierUtilisateur(String login, String newlogin, String nom, String prenom, String mail, String pays) throws NamingException {
+	 public String modifierUtilisateur(String login, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
 
 		//On vérifie que l'utilisateur a la permission
 		if (Utilisateur.verifierLogin(login)) {
 			
 			//On récupère les attributs
 			Utilisateur u = Utilisateur.getByLogin(login);
-			String role = u.getRole();			
+			String role = u.getRole();
+			
+			//vérification du nouveau login complété
+			if (newlogin.length() == 0) {
+				newlogin = u.getLogin();
+			}
+			
+			//vérification du nouveau nom complété
+			if (nom.length() == 0) {
+				nom = u.getNom();
+			}
+			
+			//vérification du nouveau prénom complété
+			if (prenom.length() == 0 ) {
+				prenom = u.getPrenom();
+			}
+			
+			//vérification du nouveau mail complété
+			if (mail.length() == 0) {
+				mail = u.getMail();
+			}
+			
+			//vérification du nouveau pays complété
+			if (pays.length() == 0) {
+				pays = u.getPays();
+			}
+			
+			//vérification du nouveau password complété
+			if (pwd.length() == 0) {
+				pwd = u.getPwd();
+			}
 			
 			//On modifie les attributs
-			u.modifierInfos(login, role, newlogin, nom, prenom, mail, pays);
+			u.modifierInfos(login, role, newlogin, pwd, nom, prenom, mail, pays);
 			System.out.println("Utilisateur '"+login+"' modifié");
-			return true;
+			return Boolean.toString(true);
 		} else {
 		// Sinon, création refusée
 		System.out.println("Permission non accordée. Utilisateur non modifié");
-		return false;
+		return Boolean.toString(false);
 		}
 	}
 	
