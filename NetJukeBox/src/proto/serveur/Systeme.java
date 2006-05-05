@@ -136,8 +136,8 @@ public class Systeme {
 		System.err.println("LDAP Login: " + loginldap);
 		System.err.println("LDAP Pwd: " + pwdldap);
 		
-		ldap = Ldap.getInstance();
-		ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, role, baseNameldap);
+		//ldap = Ldap.getInstance();
+		//ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, role, baseNameldap);
 	
 		//Récupération des information du serveur SMTP
 		this.host = prefs.node("smtp").get("host", null);
@@ -195,38 +195,57 @@ public class Systeme {
 	 * @return String
 	 * @throws NamingException 
 	 */
-	public String connexion(String login, String pwd) throws NamingException {
+	public String connexion(String loginldap, String pwd) throws NamingException {
 		
-		System.out.println("Connexion de l'utilisateur "+ login);
+		System.out.println("Connexion de l'utilisateur "+ loginldap);
 		
 		//On vérifie que l'utilisateur n'est pas déjà connecté
-		if (!utilisateurs.containsKey(login)) {
+		if (!utilisateurs.containsKey(loginldap)) {
 
-			//On vérifie que le couple login/pwd existe
-			if (Utilisateur.verifierPwd(login, pwd)) {
+			//On initialise la connection à l'annuaire LDAP
+			String driverldap = prefs.node("ldap").get("driver", null);
+			String typeldap = prefs.node("ldap").get("type", null);
+			String ipldap = prefs.node("ldap").get("ip", null);
+			String portldap = prefs.node("ldap").get("port", null);
+			String baseNameldap = prefs.node("ldap").get("base", null);
+			String authldap = prefs.node("ldap").get("auth", null);
+				//String loginldap = prefs.node("ldap").get("login", null);
+				//String pwdldap = prefs.node("ldap").get("pwd", null);
+				//String role = prefs.node("ldap").get("role", null);
 				
-				//On récupère l'utilisateur depuis la base
-				Utilisateur util = Utilisateur.getByLogin(login);
+			String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
+				
+			System.err.println("LDAP Driver: " + driverldap);
+			System.err.println("LDAP URL: " + urlldap);
+			System.err.println("LDAP Login: " + loginldap);
+			System.err.println("LDAP Pwd: " + pwd);
+				
+			ldap = Ldap.getInstance();
+			ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwd, baseNameldap);
+				
+			if (Utilisateur.verifierPwd(loginldap, pwd)) {
+				Utilisateur util = Utilisateur.getByLogin(loginldap);
 				
 				//On connecte l'utilisateur
 				util.connexion();
 				
 				//On l'ajoute à la liste des utilisateurs connectés au système
-				utilisateurs.put(login, util);
+				utilisateurs.put(loginldap, util);
 				
-				System.out.println("Utilisateur "+login+" connecté");
+				System.out.println("Utilisateur "+loginldap+" connecté");
 				return Boolean.toString(true);
 			} else {
 			
 				//Sinon, connexion refusée
-				System.out.println("Utilisateur "+login+" non connecté");
+				System.out.println("Utilisateur "+loginldap+" non connecté");
 				return Boolean.toString(false);
 			}
 		} else {
 		
 			//Sinon, connexion refusée
-			System.out.println("Utilisateur "+login+" déjà connecté");
+			System.out.println("Utilisateur "+loginldap+" déjà connecté");
 			return Boolean.toString(false);
+		
 		}
 	}
 	

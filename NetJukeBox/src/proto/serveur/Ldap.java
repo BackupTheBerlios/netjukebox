@@ -41,7 +41,7 @@ public class Ldap {
 	/**
 	 * Mode d'authentification à la base
 	 */
-	private String auth; //= "simple";
+	private String auth; // = "simple";
 	
 	/**
 	 * Login d'accès à la base
@@ -56,7 +56,7 @@ public class Ldap {
 	/**
 	 * Role de l'usager
 	 */
-	private String role;
+	private String role; // = "usager";
 	
 	/**
 	 * Nom de l'annuaire ldap
@@ -64,9 +64,14 @@ public class Ldap {
 	private String base;
 	
 	/**
-	 * Connection courante à la base
+	 * Connection courante à l'annuaire
 	 */
-	private static InitialDirContext connect = null;
+	private static InitialDirContext connectanonyme = null;
+	
+	/**
+	 * Connection via login & mot de passe à l'annuaire
+	 */
+	public DirContext connect = null;
 	
 //	 CONSTRUCTEUR
 //	********************************************
@@ -97,7 +102,7 @@ public class Ldap {
      * @param String login
      * @param String pwd
 	 */
-	public boolean openLdap(String driver, String url, String auth, String login, String pwd, String role, String base) {
+	public boolean openLdap(String driver, String url, String auth, String login, String pwd, String base) {
     	this.driver = driver;
     	this.url = url;
     	this.login = login;
@@ -114,17 +119,45 @@ public class Ldap {
 	 * @return boolean
 	 */
 	public boolean openLdap() {
-		String log = "uid=" + login + ",ou=" + role + "," + base;
+		
+		String role = null;
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
-		env.put(DirContext.PROVIDER_URL, url);
-		env.put(Context.SECURITY_AUTHENTICATION, auth);
-		env.put(Context.SECURITY_PRINCIPAL, log);
-		env.put(Context.SECURITY_CREDENTIALS, pwd);
+		env.put(DirContext.PROVIDER_URL, url);	
+		
 	    if (connect == null) {
 	    	try {
-	    		// Connexion à l'annuaire
-	    		connect = new InitialDirContext(env);
+	    		//Connexion à l'annuaire
+	    		connectanonyme = new InitialDirContext(env);
+	    		
+	    		Dictionary resultats = getLogin(login);
+	    		System.out.println(login);
+	    		System.out.println(resultats);
+	    		
+	    		try {
+	    			Enumeration donnee = resultats.elements();
+	    		
+	    			Attributes result = (Attributes) donnee.nextElement();
+	    			Attribute ou = result.get("ou");
+	    			role = (String) ou.get();
+	    		} catch(Exception e) {
+	    			System.out.println(e);
+	    		}
+	    		
+	    		
+	    		
+	    		System.out.println("======================" + role);
+	    		
+	    		
+	    		
+	    		
+	    		String log = "uid=" + login + ",ou=" + role + "," + base;
+	    		
+	      		connect = (DirContext) connectanonyme.lookup("");
+	    		connect.addToEnvironment(Context.SECURITY_AUTHENTICATION, auth);
+	    		connect.addToEnvironment(Context.SECURITY_PRINCIPAL, log);
+	    		connect.addToEnvironment(Context.SECURITY_CREDENTIALS, pwd);
+	    		
 	    		System.out.println("Vous avez été connecté à la base "+ env);
 	    		return true;
 	    	} catch (NamingException e) {
@@ -360,7 +393,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 
 			String filter = "uid=" + login;
 			// Search for objects using filter
-			NamingEnumeration answer = connect.search("", filter, ctls);
+			NamingEnumeration answer = connectanonyme.search("", filter, ctls);
 			//Print the answer
 			Dictionary resultat = printSearchEnumeration(answer);
 			return resultat;
