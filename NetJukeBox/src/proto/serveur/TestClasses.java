@@ -18,7 +18,7 @@ public class TestClasses {
 		
 		System.out.println("-------TEST----------------------------");
 		//U1.getByLogin("Login2");
-		U1.modifierInfos("admindg", "admin", "admindg", "domi", "domi", "new@mail", "italie");
+		U1.modifierInfos("admindg", "admin", "admindg", "edguy", "domi", "domi", "new@mail", "italie");
 		
 		//new EnvoiMail("Login1", "Nom1" ,"Prenom1" ,"dominique.gentaz@tiscali.fr", "MotDePasse", "Pays");
 		System.out.println("-----------------------------------");
