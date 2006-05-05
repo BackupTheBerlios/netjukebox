@@ -72,8 +72,6 @@ public class Client {
 		//On initialise le client XML
 		initializeXML(ip, port);
 		
-		System.out.println(clientXML.toString());
-		
 		//On démarre le menu
 		menu();
 	}
@@ -770,8 +768,8 @@ public class Client {
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
-			}
-							
+				}
+				
 				// MODIFIERPROGRAMME
 				if  (ligne.equalsIgnoreCase("modifierProgramme")) {
 					if (etatConnecte) {
@@ -900,7 +898,7 @@ public class Client {
 							System.out.println("Nb docs: "+p.get("nbDocs"));
 							System.out.println("------------ Documents programmés ------------");
 							
-							/*Vector vDocs = (Vector)p.get("documents");
+							Vector vDocs = (Vector)p.get("documents");
 							Dictionary doc;
 							for (int i=0; i<vDocs.size(); i++) {
 								doc = (Dictionary)vDocs.get(i);
@@ -909,7 +907,7 @@ public class Client {
 								System.out.println("Durée: "+doc.get("duree"));
 								System.out.println("Calage: "+doc.get("calage"));
 								System.out.println();
-							}*/
+							}
 							System.out.println("-------------------------------------------");
 							System.err.println("INFO: Programme affiché");
 						}
@@ -942,7 +940,7 @@ public class Client {
 							String dateHoraire;
 							for (int i=0; i<vProgs.size(); i++) {
 								prog = (Dictionary)vProgs.get(i);
-								horaire.setTimeInMillis((Long)prog.get("calage"));
+								horaire.setTimeInMillis(Long.parseLong((String)prog.get("calage")));
 								dateHoraire = horaire.get(GregorianCalendar.DATE) + "/" +
 											  horaire.get(GregorianCalendar.MONTH) + "/" +
 											  horaire.get(GregorianCalendar.YEAR) + " - " +
@@ -1044,8 +1042,8 @@ public class Client {
 		//USAGE : java Client [filename.ini]
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
-		//String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
-		String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
+		String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
+		//String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
 		Preferences prefs = new IniFile(new File(filename));
 		
 		//On démarre le client

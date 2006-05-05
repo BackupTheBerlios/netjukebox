@@ -741,14 +741,14 @@ public class Systeme {
 			//On vérifie que le document existe
 			if (documents.containsKey(id)) {
 				Document d = (Document)documents.get(id);
-				Dictionary infos = d.getAttributesDictionary();
+				return d.getAttributesDictionary();
 			}
 			else {
 				System.out.println("Document indisponible");
 				return null;
 			}
 		}
-		// Sinon, création refusée
+		// Sinon, refusé
 		System.out.println("Permission non accordée. Document non affiché");
 		return null;
 	}
@@ -1016,14 +1016,15 @@ public class Systeme {
 			//On vérifie que le programme existe
 			if (programmes.containsKey(id)) {
 				Programme p = (Programme)programmes.get(id);
-				Dictionary infos = p.getAttributesDictionary();
+				return p.getAttributesDictionary();
 			}
 			else {
 				System.out.println("Programme indisponible");
 				return null;
 			}
 		}
-		// Sinon, création refusée
+		
+		// Sinon, refusé
 		System.out.println("Permission non accordée. Programme non affiché");
 		return null;
 	}
@@ -1442,16 +1443,16 @@ public class Systeme {
 		if (verifPermission(login, "infoCanal")) {
 		
 			//On vérifie que le canal existe
-			if (documents.containsKey(id)) {
+			if (canaux.containsKey(id)) {
 				Canal c = (Canal)canaux.get(id);
-				Dictionary infos = c.getAttributesDictionary();
+				return c.getAttributesDictionary();
 			}
 			else {
 				System.out.println("Canal indisponible");
 				return null;
 			}
 		}
-		// Sinon, création refusée
+		// Sinon, refusé
 		System.out.println("Permission non accordée. Canal non affiché");
 		return null;
 	}

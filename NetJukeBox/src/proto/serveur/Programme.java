@@ -383,10 +383,10 @@ public class Programme {
 		dico.put("titre", titre);
 		dico.put("duree", Long.toString(duree));
 		dico.put("thematique", thematique);
-		dico.put("nbDocs", documents.size());
+		//dico.put("nbDocs", documents.size());
 		
 		//Liste des docs
-		/*Vector vDocs = new Vector();
+		Vector vDocs = new Vector();
 		Dictionary dicoDoc;
 		Document doc;
 		
@@ -402,8 +402,8 @@ public class Programme {
 			vDocs.add(dicoDoc);
 		}
 		
-		dico.put("documents", vDocs);*/
-		
+		dico.put("documents", vDocs);
+		dico.put("nbDocs", vDocs.size());
 		return dico;
 	}
 	
@@ -428,7 +428,8 @@ public class Programme {
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
 			String id = String.valueOf((Integer)dico.get("id_doc"));
-			docs.put(id, Document.getById(id));
+			long calage = (Long)dico.get("calage");
+			docs.put(calage, Document.getById(id));
 		}
 		
 		return docs;
