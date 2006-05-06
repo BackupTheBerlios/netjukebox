@@ -121,7 +121,7 @@
     --> 
          
     <!-- Define the top level container in our container hierarchy -->
-    <Engine name="Catalina" defaultHost="localhost">
+    <Engine name="Catalina" defaultHost="192.168.0.2">
 
       <!-- The request dumper valve dumps useful debugging information about
            the request headers and cookies that were received, and the response
@@ -188,7 +188,7 @@
       <!-- Define the default virtual host
            Note: XML Schema validation will not work with Xerces 2.2.
        -->
-      <Host name="localhost" appBase="webapps"
+      <Host name="192.168.0.2" appBase="webapps"
        unpackWARs="true" autoDeploy="true"
        xmlValidation="false" xmlNamespaceAware="false">
 
@@ -356,8 +356,6 @@
                  directory="logs"  prefix="localhost_access_log." suffix=".txt"
                  pattern="common" resolveHosts="false"/>
         -->
-
-
 
 <Context path="/ServletTomcat" reloadable="true" docBase="/home/admindg/Workspace/ServletTomcat" workDir="/home/admindg/Workspace/ServletTomcat/work" />
 
