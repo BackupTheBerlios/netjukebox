@@ -407,7 +407,7 @@ public class Canal {
 		Hashtable progs = new Hashtable();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
-		String requete = "SELECT id_prog, calage FROM diffuser WHERE id_canal = '"+id+"';";
+		String requete = "SELECT id_prog, calage FROM diffuser WHERE id_canal = '"+this.id+"';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
@@ -417,7 +417,7 @@ public class Canal {
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
 			String id = String.valueOf((Integer)dico.get("id_prog"));
-			long calage = Long.valueOf((Long)dico.get("calage"));
+			long calage = (Long)dico.get("calage");
 			progs.put(calage, Programme.getById(id));
 		}
 		
@@ -459,7 +459,7 @@ public class Canal {
 		dico.put("nbProgs", programmes.size());
 		
 		//Liste des progs
-		/*Vector vProgs = new Vector();
+		Vector vProgs = new Vector();
 		Dictionary dicoProg;
 		Programme prog;
 		
@@ -471,11 +471,11 @@ public class Canal {
 			dicoProg.put("calage", Long.toString(horaire));
 			dicoProg.put("id", prog.getId());
 			dicoProg.put("titre", prog.getTitre());
-			dicoProg.put("duree", prog.getDuree());
+			dicoProg.put("duree", Long.toString(prog.getDuree()));
 			vProgs.add(dicoProg);
 		}
 		
-		dico.put("programmes", vProgs);*/
+		dico.put("programmes", vProgs);
 		
 		return dico;
 	}

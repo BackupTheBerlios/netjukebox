@@ -81,7 +81,7 @@ public class Programme {
 		
 		System.out.println("Programme.create()");
 		
-		String requete = "INSERT INTO programme (titre, thematique) VALUES ('" + titre + "', '" + thematique + "');";
+		String requete = "INSERT INTO programme (titre, thematique, duree) VALUES ('" + titre + "', '" + thematique + "', '0');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -300,7 +300,7 @@ public class Programme {
 	public void ajouterDocument(Document doc) {
 		
 		//On ajoute le document au programme
-		String requete = "INSERT INTO composer (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +(duree+doc.getDuree())+"');";
+		String requete = "INSERT INTO composer (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +duree+"');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -308,7 +308,7 @@ public class Programme {
 		if (nbRows>0) {
 			
 			//On met à jour le vecteurs d'association
-			documents.put(duree+doc.getDuree(), doc);
+			documents.put(duree, doc);
 			
 			//On met à jour la durée du programme
 			this.setDuree(duree+doc.getDuree());
@@ -326,18 +326,25 @@ public class Programme {
 	public boolean retirerDocument(String calage) {
 		
 		// On retire le document du programme
-		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND calage='"+calage+"');";
+		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND calage='"+calage+"';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
 		//Si la suppression s'est bien déroulée
 		if (nbRows>0) {
 			
-			//On met à jour le vecteur d'association
-			documents.remove(calage);
+			//On récupère le doc
+			Document doc = (Document)documents.get(Long.parseLong(calage));
+			
+			//On met à jour la durée du programme
+			this.setDuree(duree-doc.getDuree());
 			
 			//On signale au document ce retrait
-			//doc.enleverProgramme(this.id);
+			doc.retirerProgramme(this.id);
+			
+			//On met à jour le vecteur d'association
+			documents.remove(Long.parseLong(calage));
+			
 			return true;
 		}
 		

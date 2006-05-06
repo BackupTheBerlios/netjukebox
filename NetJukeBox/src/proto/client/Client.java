@@ -238,6 +238,22 @@ public class Client {
 					}
 				}
 				
+				// RETIRERDOCUMENTPROGRAMME
+				if  (ligne.equalsIgnoreCase("retirerDocumentProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme source: ");
+						String idProg = lire();
+						System.out.print("Document calé au temps : ");
+						String calage = lire();
+						boolean retire = clientXML.retirerDocumentProgramme(idProg, calage);
+						if (retire) System.err.println("INFO: Document retiré du programme");
+						else System.err.println("ERREUR: Document non retiré du progamme");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// DIFFUSERPROGRAMME
 				if  (ligne.equalsIgnoreCase("diffuserProgramme")) {
 					if (etatConnecte) {
@@ -974,6 +990,7 @@ public class Client {
 					System.out.println(" creerProgramme : créer un programme");
 					System.out.println(" creerDocument : créer un document");
 					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
+					System.out.println(" retirerDocumentProgramme : retirer un document d'un programme");
 					System.out.println(" diffuserProgramme : diffuser un programme sur un canal");
 					System.out.println(" startCanal : lancer la diffusion d'un canal");
 					System.out.println(" stopCanal : stopper la diffusion d'un canal");

@@ -323,6 +323,41 @@ public class XMLClient {
 	}
 	
 	/**
+	 * Retirer un document d'un programme
+	 * @param String idDoc
+	 * @param String idProg
+	 * @return boolean
+	 */
+	public boolean retirerDocumentProgramme(String idProg, String calage) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Retirer un document du programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(idProg);
+				params.addElement(calage);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.retirerDocumentProgramme", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
 	 * Diffuser un programme sur un canal
 	 * @param String idProg
 	 * @param String idCanal

@@ -382,8 +382,17 @@ public class Document {
 	 * @param Programme prog
 	 */
 	public void ajouterProgramme(Programme prog) {
-		programmes.put(prog.getId(), prog);
+		
+		//S'il n'y a pas de verrous pour le programme
+		if (!verrous.contains(prog.getId())) {
+			
+			//On ajoute le prog à la liste des programmes associés
+			programmes.put(prog.getId(), prog);
+		}
+		
+		//On pose un verrou pour le programme
 		verrous.addElement(prog.getId());
+		
 		System.out.println("Document verrouillé : " + this.id);
 		System.out.println("Le compteur de verrou = " + verrous.size());
 	}
@@ -394,8 +403,18 @@ public class Document {
 	 * @param String
 	 */
 	public void retirerProgramme(String idProg) {
-		programmes.remove(idProg);
+		
+		//On enlève un verrou pour le programme
 		verrous.remove(idProg);
+		
+		//S'il n'y a plus de verrous pour le programme
+		if (!verrous.contains(idProg)) {
+			
+			//Le document n'est plus dans ce programme.
+			//On le retire de la liste des progs associés
+			programmes.remove(idProg);
+		}
+		
 		System.out.println("Document déverrouillé : " + this.id);
 		System.out.println("Le compteur de verrou = " + verrous.size());
 	}

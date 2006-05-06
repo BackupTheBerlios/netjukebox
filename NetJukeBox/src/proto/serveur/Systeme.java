@@ -846,6 +846,43 @@ public class Systeme {
 	}
 	
 	/**
+	 * Retirer un document d'un programme
+	 * @param String login
+	 * @param String idDoc
+	 * @param String idProg
+	 * @return String
+	 * @throws SQLException 
+	 */
+	public String retirerDocumentProgramme(String login, String idProg, String calage) throws SQLException {
+		System.out.println("Retirer du programme "+idProg+ " le document calé à "+calage);
+		
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "retirerDocumentProgramme")) {
+		
+			//On vérifie que le programme
+			if (programmes.containsKey(idProg)) {
+				
+				//On récupère les objets
+				Programme p = (Programme)programmes.get(idProg);
+				
+				//On ajoute le document au programme
+				p.retirerDocument(calage);
+				
+				System.out.println("Document retiré du programme "+idProg);
+				return Boolean.toString(true);
+				
+			}
+			
+			//Sinon, ajout refusé
+			System.out.println("Le document n'a pas été retiré au programme "+idProg);
+			return Boolean.toString(false);
+		}
+		//Sinon, ajout refusé
+		System.out.println("Permission non accordée. Le document non retiré");
+		return Boolean.toString(false);
+	}
+	
+	/**
 	 * Lister les programmes disponibles
 	 * @param String login
 	 * @return Vector
