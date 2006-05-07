@@ -440,6 +440,41 @@ public class XMLClient {
 	}
 	
 	/**
+	 * Déplanifier un programme sur un canal
+	 * @param String idCanal
+	 * @param String calage
+	 * @return boolean
+	 */
+	public boolean deplanifierProgramme(String idCanal, String calage) {
+		
+		//Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Déplanification du programme...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(idCanal);
+				params.addElement(calage);
+				
+				// Adresse la requête et affiche les résultats
+				String result = (String)clientXML.execute("Systeme.deplanifierProgramme", params);
+
+				return Boolean.parseBoolean(result);
+				
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+		
+		//Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
 	 * Ecouter un canal
 	 * @param String idCanal
 	 * @return String

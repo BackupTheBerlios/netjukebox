@@ -298,6 +298,23 @@ public class Client {
 					}
 				}
 				
+				// DEPLANIFIERPROGRAMME
+				if  (ligne.equalsIgnoreCase("deplanifierProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal: ");
+						String idCanal = lire();
+						System.out.print("Programme calé au temps: ");
+						String calage = lire();
+						String seconde = lire();
+						boolean planifie = clientXML.deplanifierProgramme(idCanal, calage);
+						if (planifie) System.err.println("INFO: Programme déplanifié sur le canal");
+						else System.err.println("ERREUR: Programme non déplanifié");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 				// STARTCANAL
 				if  (ligne.equalsIgnoreCase("startCanal")) {
 					if (etatConnecte) {
@@ -1015,6 +1032,8 @@ public class Client {
 					System.out.println(" infoDocument : afficher les informations sur un document");
 					System.out.println(" infoProgramme : afficher les informations sur un programme");
 					System.out.println(" infoCanal : afficher les informations sur un canal");
+					System.out.println(" planifierProgramme : palnifie la diffusion d'un programme sur un canal");
+					System.out.println(" deplanifierProgramme : déplanifier la diffusion d'un programme sur un canal");
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

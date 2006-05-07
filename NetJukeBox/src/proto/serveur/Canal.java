@@ -74,6 +74,11 @@ public class Canal {
 	 * Timer
 	 */
 	private Timer timer;
+	
+	/**
+	 * Threads de diffusion
+	 */
+	private Hashtable tasks;
 
 // CONSTRUCTEUR (créé une instance de la classe : un objet)
 // *************************************************
@@ -91,6 +96,7 @@ public class Canal {
 		this.utilMax = utilMax;
 		this.programmes = getProgrammesPlanifies();
 		this.timer = new Timer(true);
+		this.tasks = new Hashtable();
 	}
 
 // METHODES STATIQUES (propres à la classe, inaccessibles depuis un objet)
@@ -403,6 +409,21 @@ public class Canal {
 		return false;
 	}
 	
+	/**
+	 * Annuler la planification d'un programme
+	 * @param long calage
+	 * @return boolean
+	 */
+	public boolean annulerPlanification(long calage) {
+		if (tasks.containsKey(calage)) {
+			DiffusionTask task = (DiffusionTask)tasks.get(calage);
+			task.cancel();
+			tasks.remove(calage);
+			programmes.remove(calage);
+			return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * Retourne la liste des programmes planifiés
@@ -539,6 +560,7 @@ public class Canal {
 				horaire.setTimeInMillis(calage);
 			    DiffusionTask task = new DiffusionTask(p, this);
 			    timer.schedule(task, horaire.getTime());
+			    tasks.put(calage, task);
 			}	
 		    
 		    //On lance le RTPServer

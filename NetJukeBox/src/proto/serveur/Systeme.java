@@ -1176,6 +1176,49 @@ public class Systeme {
 	}
 	
 	/**
+	 * Déplanifier un programme sur un canal
+	 * @param String login
+	 * @param String idCanal
+	 * @param String calage
+	 * @return String
+	 */
+	public String deplanifierProgramme(String login, String idCanal, String calage) {
+
+		System.out.println("Déplanification d'un programme sur le canal "+idCanal);
+		
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "deplanifierCanal")) {
+		
+			//On vérifie que le canal et le programme existent
+			if (canaux.containsKey(idCanal)) {
+				
+				//On récupère les objets
+				Canal c = (Canal)canaux.get(idCanal);
+				
+				//On deplanifie le programme
+				if (c.annulerPlanification(Long.parseLong(calage))) {
+				
+					System.out.println("Programme déplanifié du canal "+idCanal);
+					return Boolean.toString(true);
+				}
+				else {
+					System.out.println("Programme non déplanifié du le canal "+idCanal);
+					return Boolean.toString(false);
+				}
+				
+			}
+			
+			//Sinon, ajout refusé
+			System.out.println("Le programme n'a pas été déplanifié sur le canal "+idCanal);
+			return Boolean.toString(false);
+		}
+		
+		//Sinon, ajout refusé
+		System.out.println("Permission non accordée. Programme non déplanifié");
+		return Boolean.toString(false);
+	}
+	
+	/**
 	 * Diffuser un programme sur un canal
 	 * @param String login
 	 * @param String idProg
