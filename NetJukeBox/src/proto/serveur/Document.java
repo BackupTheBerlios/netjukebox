@@ -144,7 +144,7 @@ public class Document {
 		
 		//On assemble la date
 		//String date = jour+"-"+mois+"-"+annee;
-		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
+		GregorianCalendar date = new GregorianCalendar(annee, mois-1, jour);
 		
 		//On crée le document dans la base
 		String requete = "INSERT INTO document (titre, duree, date, source, langue, genre, fichier) VALUES ('" +

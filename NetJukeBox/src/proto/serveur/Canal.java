@@ -6,6 +6,8 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 /**
@@ -67,6 +69,11 @@ public class Canal {
 	 * Liste de programmes à diffuser
 	 */
 	private Hashtable programmes;
+	
+	/**
+	 * Timer
+	 */
+	private Timer timer;
 
 // CONSTRUCTEUR (créé une instance de la classe : un objet)
 // *************************************************
@@ -83,6 +90,7 @@ public class Canal {
 		this.nom = nom;
 		this.utilMax = utilMax;
 		this.programmes = getProgrammesPlanifies();
+		this.timer = new Timer(true);
 	}
 
 // METHODES STATIQUES (propres à la classe, inaccessibles depuis un objet)
@@ -368,7 +376,7 @@ public class Canal {
 	public boolean planifierProgramme(Programme p, int jour, int mois, int annee, int heure, int minute, int seconde) {
 		
 		//On assemble la date
-		GregorianCalendar horaire = new GregorianCalendar(annee, mois, jour, heure, minute, seconde);
+		GregorianCalendar horaire = new GregorianCalendar(annee, mois-1, jour, heure, minute, seconde);
 		
 		//Si le créneau est libre
 		if (verifierPlanification(horaire.getTimeInMillis(), p.getDuree())) {
@@ -515,8 +523,27 @@ public class Canal {
 	 */
 	public void startDiffusion() {
 		
-		//Si le RTPServer existe, on le stoppe
-		if (this.RTP != null) this.RTP.diffuser();
+		//Si le RTPServer existe
+		if (this.RTP != null) {
+			
+			//On le stoppe
+			this.RTP.stop();
+			
+			//On programme les diffusions
+			Enumeration calages = programmes.keys();
+			GregorianCalendar horaire = new GregorianCalendar();
+			
+			while (calages.hasMoreElements()) {
+				Long calage = (Long)calages.nextElement();
+				Programme p = (Programme)programmes.get(calage);
+				horaire.setTimeInMillis(calage);
+			    DiffusionTask task = new DiffusionTask(p, this);
+			    timer.schedule(task, horaire.getTime());
+			}	
+		    
+		    //On lance le RTPServer
+		    this.RTP.diffuser();
+		}
 	}
 	
 	/**
@@ -592,7 +619,7 @@ public class Canal {
 		
 		if (RTP!=null) {
 			RTP.programmer(medias);
-			RTP.diffuser();
+			//RTP.diffuser();
 		}
 	} 
 	
@@ -654,5 +681,40 @@ public class Canal {
 			this.utilMax = utilmax;
 		}
 		return nbRows>0;
+	}
+}
+
+/**
+ * Thread de diffusion
+ */
+class DiffusionTask extends TimerTask {
+	
+	private Programme programme;
+	private Canal canal;
+	
+	public DiffusionTask(Programme p, Canal c) {
+		System.err.println("TIMER: Programmation de la tâche "+p.getId());
+		this.programme = p;
+		this.canal = c;
+	}
+	
+	public void run() {
+		System.err.println("TIMER: Lancement de la tâche "+programme.getId());
+				
+		canal.diffuserProgramme(programme);
+		
+		/*
+		Vector medias = new Vector();
+		Enumeration cles = programme.getDocuments().keys();
+		
+		for(int i = 0; i < programme.getDocuments().size(); i++) {
+			medias.addElement(((Document)programme.getDocuments().get(cles.nextElement())).getFichier());
+		}
+		if (RTP!=null) {
+			System.err.println("TIMER: On programme le RTP pour la tâche "+programme.getId());
+			RTP.programmer(medias);
+			RTP.diffuser();
+		}
+		*/
 	}
 }

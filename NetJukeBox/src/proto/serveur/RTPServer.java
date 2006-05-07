@@ -162,7 +162,27 @@ public class RTPServer implements ControllerListener {
 	 * @param medias
 	 */
 	public void programmer(Vector medias) {
-		this.medias = medias;
+		
+		//Si on a encore des médias à diffuser
+		if (cDiffuse && medias.size()>0 && mediaEnCours<medias.size()) {
+			
+			//On ajoute les nouveaux médias à la liste actuelle
+			this.medias.addAll(medias);
+		}
+		
+		//Si on ne diffuse rien actuellement
+		else {
+			
+			//On stoppe la pub
+			stop();
+			
+			//On définit la liste de médias à diffuser
+			this.medias = medias;
+			this.mediaEnCours = 0;
+			
+			//On lance la diffusion
+			diffuser();
+		}
 	}
 	
 	/**
