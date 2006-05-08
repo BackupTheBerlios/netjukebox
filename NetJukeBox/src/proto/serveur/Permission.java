@@ -1,59 +1,67 @@
 package proto.serveur;
 
-
-
 /**
- * <p></p>
- * 
+ * Permission
  */
 public class Permission {
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public int Id_Perm;
+// ATTRIBUTS
+//**********************************
+	
+	/**
+	 * Identifiant
+	 */
+	private int id;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public char Lib_Perm;
-/**
- * <p></p>
- * 
- */
-    public Attribuer attribuer;
+	/**
+	 * Libellé
+	 */
+	private String libelle;
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void Ajouter() {        
-        // your code here
-    } 
+	/**
+	 * 
+	 */
+	private Attribuer attribuer;
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void Supprimer() {        
-        // your code here
-    } 
+// CONSTRUCTEUR
+//**********************************
+	
+	public Permission() {
+		
+	}
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void Modifier() {        
-        // your code here
-    } 
+// METHODES STATIQUES
+//**********************************
+	
+	
+// METHODES DYNAMIQUES
+//**********************************
+	
+	/**
+	 * 
+	 */
+	public void ajouter() {
+		// your code here
+	}
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void GetPerm() {        
-        // your code here
-    } 
- }
+	/**
+	 * 
+	 */
+	public void supprimer() {
+		// your code here
+	}
+
+	/**
+	 * 
+	 */
+	public void modifier() {
+		// your code here
+	}
+
+	/**
+	 * 
+	 */
+	public void getPerm() {
+		// your code here
+	}
+}

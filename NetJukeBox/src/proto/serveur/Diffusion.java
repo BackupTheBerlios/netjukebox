@@ -17,7 +17,7 @@ public class Diffusion {
  * <p></p>
  * 
  */
-    public Journal_Diffusion jOURNAL_DIFFUSION;
+    public JournalDiffusion jOURNAL_DIFFUSION;
 /**
  * <p></p>
  * 

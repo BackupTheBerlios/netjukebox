@@ -1,15 +1,31 @@
 package proto.serveur;
 
-
 /**
- * <p></p>
- * 
+ * Artiste
  */
 public class Artiste extends Contractant {
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String nom_groupe;
- }
+// ATTRIBUTS
+//*******************************
+
+	/**
+	 * Nom du groupe
+	 */
+	private String nomGroupe;
+	
+	
+// CONSTRUCTEUR	
+//*******************************
+
+	public Artiste() {
+		
+	}
+	
+// METHODES STATIQUES
+//*******************************
+	
+// METHODES DYNAMIQUES
+//*******************************
+	
+	
+}

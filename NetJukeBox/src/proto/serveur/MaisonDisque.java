@@ -1,33 +1,24 @@
 package proto.serveur;
 
 /**
- * Document audio
+ * Maison de disque
  */
-public class Audio extends Document {
+public class MaisonDisque extends Contractant {
 
 // ATTRIBUTS
 //************************************
 	
 	/**
-	 * Artiste
+	 * Nom de la maison
 	 */
-	private String artiste;
-
-	/**
-	 * Interprète
-	 */
-	private String interprete;
-
-	/**
-	 * Compositeur
-	 */
-	private String compositeur;
-
+	private String nomMaison;
+	
+	
 // CONSTRUCTEUR
 //************************************
 	
-	public Audio() {
-		super();
+	public MaisonDisque() {
+		
 	}
 	
 // METHODES STATIQUES
@@ -35,5 +26,6 @@ public class Audio extends Document {
 	
 // METHODES DYNAMIQUES
 //************************************
+	
 	
 }

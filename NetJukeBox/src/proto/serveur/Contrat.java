@@ -1,59 +1,65 @@
 package proto.serveur;
 
-
+import java.util.Date;
 
 /**
- * <p></p>
- * 
- * {durée_contrat=date_expiration-date_signature}
+ * Contrat {durée_contrat=date_expiration-date_signature}
  */
 public abstract class Contrat {
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public java.util.Date date_signature;
+	/**
+	 * Date de signature
+	 */
+	private Date dateSignature;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public java.util.Date date_expiration;
+	/**
+	 * Date d'expiration
+	 */
+	private Date dateExpiration;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String signataire;
+	/**
+	 * Signataire
+	 */
+	private String signataire;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String Mode_Reglement;
+	/**
+	 * Mode de règlement
+	 */
+	private String modeReglement;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String type_contrat;
+	/**
+	 * Type de contrat
+	 */
+	private String type;
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void durée_contrat() {        
-        // your code here
-    } 
-/**
- * <p></p>
- * 
- */
-    public Document dOCUMENT;
-/**
- * <p></p>
- * 
- */
-    public Contractant cONTRACTANT;
- }
+	/**
+	 * Document
+	 */
+	private Document document;
+
+	/**
+	 * Contractant
+	 */
+	private Contractant contractant;
+
+// CONSTRUCTEUR
+//***************************************
+	
+	public Contrat() {
+		
+	}
+	
+// METHODES STATIQUES
+//***************************************
+	
+// METHODES DYNAMIQUES
+//***************************************
+	
+	/**
+	 * Calcule la durée du contrat
+	 */
+	public void dureeContrat() {
+		// your code here
+	}
+
+}

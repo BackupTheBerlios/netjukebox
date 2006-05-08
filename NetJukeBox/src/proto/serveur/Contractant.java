@@ -1,87 +1,91 @@
 package proto.serveur;
 
-
-
 /**
- * <p></p>
- * 
+ * Contractant
  */
 public class Contractant {
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public int id_contractant;
+// ATTRIBUTS
+// ************************
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String nom_contractant;
+	/**
+	 * Identifiant
+	 */
+	private int id;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String adr_contractant;
+	/**
+	 * Nom
+	 */
+	private String nom;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public int cp_contactant;
+	/**
+	 * Adresse
+	 */
+	private String adresse;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String ville_contractant;
+	/**
+	 * Code Postal
+	 */
+	private String codePostal;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public long tel_contractant;
+	/**
+	 * Ville
+	 */
+	private String ville;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public long fax_contractant;
+	/**
+	 * Numéro de téléphone
+	 */
+	private String telephone;
 
-/**
- * <p>Represents ...</p>
- * 
- */
-    public String mail_contractant;
-/**
- * <p></p>
- * 
- */
-    public Contrat contrat;
+	/**
+	 * Numéro de fax
+	 */
+	private String fax;
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void ajouter() {        
-        // your code here
-    } 
+	/**
+	 * Adresse email
+	 */
+	private String mail;
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void supprimer() {        
-        // your code here
-    } 
+	/**
+	 * Contrat
+	 */
+	private Contrat contrat;
 
-/**
- * <p>Does ...</p>
- * 
- */
-    public void modifier() {        
-        // your code here
-    } 
- }
+// METHODES STATIQUES
+//******************************************
+	
+	
+// CONSTRUCTEUR
+//******************************************
+	
+	
+	public Contractant() {
+		
+	}
+	
+// METHODES DYNAMIQUES
+//******************************************
+	
+	/**
+	 * 
+	 */
+	public void ajouter() {
+		// your code here
+	}
+
+	/**
+	 * 
+	 */
+	public void supprimer() {
+		// your code here
+	}
+
+	/**
+	 * 
+	 */
+	public void modifier() {
+		// your code here
+	}
+}
