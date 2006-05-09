@@ -33,6 +33,7 @@ public class Systeme {
 	/**
 	 * Port du serveur XML
 	 */
+	@SuppressWarnings("unused")
 	private int portXML;
 	
 	
@@ -124,10 +125,9 @@ public class Systeme {
 		String ipldap = prefs.node("ldap").get("ip", null);
 		String portldap = prefs.node("ldap").get("port", null);
 		String baseNameldap = prefs.node("ldap").get("base", null);
-		String authldap = prefs.node("ldap").get("auth", null);
 		String loginldap = prefs.node("ldap").get("login", null);
 		String pwdldap = prefs.node("ldap").get("pwd", null);
-		String role = prefs.node("ldap").get("role", null);
+		@SuppressWarnings("unused") String role = prefs.node("ldap").get("role", null);
 		
 		String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
 		
@@ -195,6 +195,7 @@ public class Systeme {
 	 * @return String
 	 * @throws NamingException 
 	 */
+	@SuppressWarnings("unchecked")
 	public String connexion(String loginldap, String pwd) throws NamingException {
 		
 		System.out.println("Connexion de l'utilisateur "+ loginldap);
@@ -311,6 +312,7 @@ public class Systeme {
 	 * @throws MessagingException 
 	 * @throws AddressException 
 	 */
+	@SuppressWarnings("unchecked")
 	public String inscription(String login, String log, String pass, String role, String email, String nom, String prenom, String pays) throws NamingException, AddressException, MessagingException {
 		
 		System.out.println("Inscription de l'utilisateur "+log);
@@ -374,6 +376,7 @@ public class Systeme {
 	 * @return Vector
 	 * @throws NamingException
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector rechercherUtilisateur(String login) throws NamingException {
 		System.out.println("Recherche des attributs de l'utilisateur : " + login);
 
@@ -514,6 +517,7 @@ public class Systeme {
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
 	 */
+	@SuppressWarnings("unchecked")
 	public String creerDocument(String login, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) throws NumberFormatException, SQLException {
 
 		System.out.println("Création du document "+titre);
@@ -555,6 +559,7 @@ public class Systeme {
 	 * @param String login
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector listerDocuments(String login) {
 
 		System.out.println("Liste des documents disponibles");
@@ -596,6 +601,7 @@ public class Systeme {
 	 * @param String fichier
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector rechercherDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
 
 		System.out.println("Recherche d'un document");
@@ -726,6 +732,37 @@ public class Systeme {
 	}
 	
 	/**
+     * Recherche du mot de passe d'un utilisateur
+     * @param Login
+     * @return String
+     * @throws NamingException
+     * @throws MessagingException
+     * @throws AddressException
+     */
+    public String rechercherpwd(String login) throws NamingException, AddressException, MessagingException {
+        //On vérifie que l'utilisateur a la permission
+        if (Utilisateur.verifierLogin(login)) {
+           
+            //On récupère les attributs
+            Utilisateur u = Utilisateur.getByLogin(login);
+           
+            String nom = u.getNom();
+            String prenom = u.getPrenom();
+            String email = u.getMail();
+            String pass = u.getPwd();
+            String pays = u.getPays();
+                   
+            new EnvoiMail(host, port, from, login, nom, prenom, email, pass, pays);
+            return Boolean.toString(true);
+           
+        } else {
+            // Sinon, création refusée
+            System.out.println("Permission non accordée. Mail non envoyé");
+            return Boolean.toString(false);
+            }
+    }
+	
+	/**
 	 * Informations sur un document
 	 * @param String login
 	 * @param Strign id
@@ -778,6 +815,7 @@ public class Systeme {
 	 * @return String
 	 * @throws SQLException 
 	 */
+	@SuppressWarnings("unchecked")
 	public String creerProgramme(String login, String titre, String thematique) throws SQLException {
 
 		System.out.println("Création du programme "+titre);
@@ -887,6 +925,7 @@ public class Systeme {
 	 * @param String login
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector listerProgrammes(String login) {
 
 		System.out.println("Liste des programmes disponibles");
@@ -921,6 +960,7 @@ public class Systeme {
 	 * @param String thematique
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector rechercherProgramme(String login, String id, String titre, String thematique) {
 
 		System.out.println("Recherche d'un programme");
@@ -1095,6 +1135,7 @@ public class Systeme {
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
 	 */
+	@SuppressWarnings("unchecked")
 	public String creerCanal(String login, String nom, String utilMax) throws NumberFormatException, SQLException {
 
 		System.out.println("Création du canal "+nom);
@@ -1360,6 +1401,7 @@ public class Systeme {
 	 * @param String login
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector listerCanaux(String login) {
 
 		System.out.println("Liste des canaux disponibles");
@@ -1394,6 +1436,7 @@ public class Systeme {
 	 * @param String utilMax
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector rechercherCanal(String login, String id, String nom, String utilMax) {
 
 		System.out.println("Recherche d'un canal");
