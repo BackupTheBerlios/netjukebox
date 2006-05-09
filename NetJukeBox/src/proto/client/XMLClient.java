@@ -2,7 +2,6 @@ package proto.client;
 
 import java.net.MalformedURLException;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.xmlrpc.XmlRpc;
@@ -78,6 +77,7 @@ public class XMLClient {
 	 * @param String ip
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean testConnectXML(String ip) {
 		
 			System.err.println("INFO: Tentative de connexion au serveur XML...");
@@ -103,6 +103,7 @@ public class XMLClient {
 	 * @param String pwd
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean connexion(String login, String pwd) {
 		
 		//Si l'utilisateur n'est pas connecté au seveur
@@ -139,6 +140,7 @@ public class XMLClient {
 	 * @param String pwd
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean deconnexion() {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -174,6 +176,7 @@ public class XMLClient {
 	 * @param String utilMax
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean creerCanal(String nom, String utilMax) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -209,6 +212,7 @@ public class XMLClient {
 	 * @param String thematique
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean creerProgramme(String titre, String thematique) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -251,6 +255,7 @@ public class XMLClient {
 	 * @param String fichier
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean creerDocument(String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -293,6 +298,7 @@ public class XMLClient {
 	 * @param String idProg
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean ajouterDocumentProgramme(String idDoc, String idProg) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -328,6 +334,7 @@ public class XMLClient {
 	 * @param String idProg
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean retirerDocumentProgramme(String idProg, String calage) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -363,6 +370,7 @@ public class XMLClient {
 	 * @param String idCanal
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean diffuserProgramme(String idProg, String idCanal) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -404,6 +412,7 @@ public class XMLClient {
 	 * @param String seconde 
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean planifierProgramme(String idProg, String idCanal, String jour, String mois, String annee, String heure, String minute, String seconde) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -445,6 +454,7 @@ public class XMLClient {
 	 * @param String calage
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean deplanifierProgramme(String idCanal, String calage) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -479,6 +489,7 @@ public class XMLClient {
 	 * @param String idCanal
 	 * @return String
 	 */
+	@SuppressWarnings("unchecked")
 	public String ecouterCanal(String idCanal) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -510,6 +521,7 @@ public class XMLClient {
 	 * @param String idCanal
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean startCanal(String idCanal) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -542,6 +554,7 @@ public class XMLClient {
 	 * @param String idCanal
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean stopCanal(String idCanal) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -573,6 +586,7 @@ public class XMLClient {
 	 * Lister les documents disponibles sur le serveur
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector listerDocuments() {
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -601,6 +615,7 @@ public class XMLClient {
 	 * Lister les programmes disponibles sur le serveur
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector listerProgrammes() {
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -629,6 +644,7 @@ public class XMLClient {
 	 * Lister les canaux disponibles sur le serveur
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector listerCanaux() {
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -664,6 +680,7 @@ public class XMLClient {
 	 * @param String pays
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean inscription(String log, String pass, String role, String email, String nom, String prenom, String pays) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -703,7 +720,8 @@ public class XMLClient {
 	 * @param login
 	 * @return
 	 */
-	 public boolean supprimerUtilisateur(String login) {
+	 @SuppressWarnings("unchecked")
+	public boolean supprimerUtilisateur(String login) {
 		if (etatConnecte) {
 			System.err.println("INFO: Suppression du compte ...");
 			try {
@@ -731,7 +749,8 @@ public class XMLClient {
 	  * @param Login
 	  * @return Vector
 	  */
-	 public Vector rechercherUtilisateur() {
+	 @SuppressWarnings("unchecked")
+	public Vector rechercherUtilisateur() {
 		 // Si l'utilisateur est connecté au seveur
 			if (etatConnecte) {
 				System.err.println("INFO: Recherche des attributs...");
@@ -763,7 +782,8 @@ public class XMLClient {
 	  * @param Pays
 	  * @return boolean
 	  */
-	 public boolean modifierUtilisateur(String newlogin, String pwd, String Nom, String Prenom, String Email, String Pays) {
+	 @SuppressWarnings("unchecked")
+	public boolean modifierUtilisateur(String newlogin, String pwd, String Nom, String Prenom, String Email, String Pays) {
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
 			System.err.println("INFO: Modification des attributs...");
@@ -810,6 +830,7 @@ public class XMLClient {
 	 * @param String fichier
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector rechercherDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
 
 		// Si l'utilisateur est connecté au seveur
@@ -852,6 +873,7 @@ public class XMLClient {
 	 * @param String thematique
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector rechercherProgramme(String id, String titre, String thematique) {
 
 		// Si l'utilisateur est connecté au seveur
@@ -887,6 +909,7 @@ public class XMLClient {
 	 * @param String utilMax
 	 * @return Vector
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector rechercherCanal(String id, String nom, String utilMax) {
 
 		// Si l'utilisateur est connecté au seveur
@@ -920,6 +943,7 @@ public class XMLClient {
 	 * @param String id
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean supprimerDocument(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -952,6 +976,7 @@ public class XMLClient {
 	 * @param String id
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean supprimerProgramme(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -984,6 +1009,7 @@ public class XMLClient {
 	 * @param String id
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean supprimerCanal(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -1025,6 +1051,7 @@ public class XMLClient {
 	 * @param String fichier
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean modifierDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -1069,6 +1096,7 @@ public class XMLClient {
 	 * @param String thematique
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean modifierProgramme(String id, String titre, String thematique) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -1106,6 +1134,7 @@ public class XMLClient {
 	 * @param String utilMax
 	 * @return boolean
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean modifierCanal(String id, String nom, String utilMax) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -1141,6 +1170,7 @@ public class XMLClient {
 	 * @param String id
 	 * @return Dictionary
 	 */
+	@SuppressWarnings("unchecked")
 	public Dictionary infoDocument(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -1172,6 +1202,7 @@ public class XMLClient {
 	 * @param String id
 	 * @return Dictionary
 	 */
+	@SuppressWarnings("unchecked")
 	public Dictionary infoProgramme(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -1203,6 +1234,7 @@ public class XMLClient {
 	 * @param String id
 	 * @return Dictionary
 	 */
+	@SuppressWarnings("unchecked")
 	public Dictionary infoCanal(String id) {
 		
 		//Si l'utilisateur est connecté au seveur
@@ -1229,4 +1261,38 @@ public class XMLClient {
 			return null;
 		}
 	}
+	
+    /**
+     * Recherche du mot de passe de l'utilisateur
+     * @param String login
+     * @return boolean
+     */
+    @SuppressWarnings("unchecked")
+	public boolean recherchepwd(String login) {
+       
+        //Si l'utilisateur est connecté au seveur
+        if (etatConnecte) {
+            System.err.println("INFO: Recherche du mot de passe...");
+            try {
+                // Création de la requête
+                Vector params = new Vector();
+                params.addElement(login);
+               
+                // Adresse la requête et affiche les résultats
+                String result = (String)clientXML.execute("Systeme.rechercherpwd", params);
+
+                return Boolean.parseBoolean(result);
+               
+            } catch (Exception e) {
+                System.err.println("ERREUR : " + e);
+                return false;
+            }
+       
+        //Sinon, non connecté
+        } else {
+            System.err.println("WARNING: Client non connecté au serveur !");
+            return false;
+        }
+    }
 }
+
