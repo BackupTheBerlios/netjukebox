@@ -2,6 +2,8 @@ package proto.serveur;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
+
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -49,9 +51,9 @@ public class Utilisateur {
 	private String role;
 
 	/**
-	 * #DEFINITION#
+	 * Permissions
 	 */
-	private Attribuer attribuer;
+	private Hashtable permissions;
 
 // METHODES STATIQUES
 //*************************************************

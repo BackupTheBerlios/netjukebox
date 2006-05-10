@@ -253,10 +253,14 @@ public class XMLClient {
 	 * @param String langue
 	 * @param String genre
 	 * @param String fichier
+	 * @param String artiste
+	 * @param String interprete
+	 * @param String compositeur
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerDocument(String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+	public boolean creerDocument(String titre, String duree, String jour, String mois, String annee, String source,
+			String langue, String genre, String fichier, String artiste, String interprete, String compositeur) {
 		
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -274,6 +278,9 @@ public class XMLClient {
 				params.addElement(langue);
 				params.addElement(genre);
 				params.addElement(fichier);
+				params.addElement(artiste);
+				params.addElement(interprete);
+				params.addElement(compositeur);
 				
 				// Adresse la requête et affiche les résultats
 				String result = (String)clientXML.execute("Systeme.creerDocument", params);
@@ -828,10 +835,13 @@ public class XMLClient {
 	 * @param String langue
 	 * @param String genre
 	 * @param String fichier
+	 * @param String artiste
+	 * @param String interprete
+	 * @param String compositeur
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+	public Vector rechercherDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur) {
 
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -850,6 +860,9 @@ public class XMLClient {
 				params.addElement(langue);
 				params.addElement(genre);
 				params.addElement(fichier);
+				params.addElement(artiste);
+				params.addElement(interprete);
+				params.addElement(compositeur);
 				
 				// Adresse la requête et affiche les résultats
 				return (Vector)clientXML.execute("Systeme.rechercherDocument", params);
@@ -1049,10 +1062,13 @@ public class XMLClient {
 	 * @param String langue
 	 * @param String genre
 	 * @param String fichier
+	 * @param String artiste
+	 * @param String interprete
+	 * @param String compositeur
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+	public boolean modifierDocument(String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur) {
 		
 		//Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -1071,6 +1087,9 @@ public class XMLClient {
 				params.addElement(langue);
 				params.addElement(genre);
 				params.addElement(fichier);
+				params.addElement(artiste);
+				params.addElement(interprete);
+				params.addElement(compositeur);
 				
 				// Adresse la requête et affiche les résultats
 				String result = (String)clientXML.execute("Systeme.modifierDocument", params);

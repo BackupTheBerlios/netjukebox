@@ -86,6 +86,21 @@ public class Document {
 	 */
 	private Contrat contrat;
 	
+	/**
+	 * Artiste
+	 */
+	private String artiste;
+
+	/**
+	 * Interprète
+	 */
+	private String interprete;
+
+	/**
+	 * Compositeur
+	 */
+	private String compositeur;
+	
 	
 // CONSTRUCTEUR
 //********************************************
@@ -102,10 +117,14 @@ public class Document {
 	 * @param langue
 	 * @param genre
 	 * @param fichier
+	 * 
+	 * @param String artiste
+	 * @param String interprete
+	 * @param String compositeur
 	 */
 	public Document(String id, String titre, int duree, int jour,
 			int mois, int annee, String source, String langue, String genre,
-			String fichier) {
+			String fichier, String artiste, String interprete, String compositeur) {
 
 		this.id = id;
 		this.titre = titre;
@@ -117,6 +136,10 @@ public class Document {
 		this.genre = genre;
 		this.fichier = fichier;
 		this.duree = duree;
+		
+		this.artiste = artiste;
+		this.interprete = interprete;
+		this.compositeur = compositeur;
 	}
 
 // METHODES STATIQUES
@@ -138,7 +161,7 @@ public class Document {
 	 */
 	public static Document create(String titre, int duree, int jour,
 			int mois, int annee, String source, String langue, String genre,
-			String fichier) /*throws SQLException*/ {
+			String fichier, String artiste, String interprete, String compositeur) /*throws SQLException*/ {
 		
 		System.out.println("Document.create()");
 		
@@ -147,8 +170,9 @@ public class Document {
 		GregorianCalendar date = new GregorianCalendar(annee, mois-1, jour);
 		
 		//On crée le document dans la base
-		String requete = "INSERT INTO document (titre, duree, date, source, langue, genre, fichier) VALUES ('" +
-			titre + "', '" + duree + "', '" + date.getTimeInMillis() + "', '" + source + "', '" + langue + "', '" + genre + "', '" + fichier + "');"; 
+		String requete = "INSERT INTO document (titre, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur) VALUES ('" +
+			titre + "', '" + duree + "', '" + date.getTimeInMillis() + "', '" + source + "', '" +langue + "', '" +
+			genre + "', '" + fichier + "', '"+ artiste + "', '"+ interprete + "', '" + compositeur + "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -200,10 +224,9 @@ public class Document {
 			int mois = date.get(GregorianCalendar.MONTH);
 			int annee = date.get(GregorianCalendar.YEAR);
 			
-			/*String date = (String)dico.get("date"));
-			String jour = date.substring(0,2); // (String)dico.get("jour");
-			String mois = date.substring(3,5); // (String)dico.get("mois");
-			String annee = date.substring(6,10); // (String)dico.get("annee");*/
+			String artiste = (String)dico.get("artiste");
+			String interprete = (String)dico.get("interprete");
+			String compositeur = (String)dico.get("compositeur");
 			
 			System.out.println("-------- Document -----------");
 			System.out.println("Nb de champs: "+dico.size());
@@ -215,10 +238,13 @@ public class Document {
 			System.out.println("Genre: "+genre);
 			System.out.println("Fichier: "+fichier);
 			System.out.println("Date: "+jour+"/"+mois+"/"+annee);
+			System.out.println("Artiste: "+artiste);
+			System.out.println("Interprète: "+interprete);
+			System.out.println("Compositeur: "+compositeur);
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
-			return new Document(id, titreDoc, duree, jour, mois, annee, source, langue, genre, fichier);
+			return new Document(id, titreDoc, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 		}
 
 		/*
@@ -264,10 +290,9 @@ public class Document {
 			String genre = (String)dico.get("genre");
 			String fichier = (String)dico.get("fichier");
 			
-			/*String date = (String)dico.get("date");			
-			String jour = date.substring(0,2); // (String)dico.get("jour");
-			String mois = date.substring(3,5); // (String)dico.get("mois");
-			String annee = date.substring(6,10); // (String)dico.get("annee");*/
+			String artiste = (String)dico.get("artiste");
+			String interprete = (String)dico.get("interprete");
+			String compositeur = (String)dico.get("compositeur");
 			
 			//On assemble la date
 			GregorianCalendar date = new GregorianCalendar();
@@ -287,10 +312,13 @@ public class Document {
 			System.out.println("Genre: "+genre);
 			System.out.println("Fichier: "+fichier);
 			System.out.println("Date: "+jour+"/"+mois+"/"+annee);
+			System.out.println("Artiste: "+artiste);
+			System.out.println("Interprète: "+interprete);
+			System.out.println("Compositeur: "+compositeur);
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
-			return new Document(idDoc, titre, duree, jour, mois, annee, source, langue, genre, fichier);
+			return new Document(idDoc, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 		}
 
 		/*
@@ -434,13 +462,14 @@ public class Document {
 	 */
 	public boolean modifier(String titre, int duree, int jour,
 			int mois, int annee, String source, String langue, String genre,
-			String fichier) {
+			String fichier, String artiste, String interprete, String compositeur) {
 		
 		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
 		
 		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree +
 			"', date = '"+ date.getTimeInMillis() + "', source = '" + source + "', langue = '" + langue +
-			"', genre = '" + langue + "', fichier = '" + fichier + "' WHERE id = '" + id + "';";
+			"', genre = '" + langue + "', fichier = '" + fichier + "', artiste = '"+ artiste +
+			"', interprete = '" + interprete + "', compositeur = '"+ compositeur + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -456,6 +485,10 @@ public class Document {
 			this.genre = genre;
 			this.fichier = fichier;
 			this.duree = duree;
+			
+			this.artiste = artiste;
+			this.compositeur = compositeur;
+			this.interprete = interprete;
 		}
 		return nbRows>0;
 	}
@@ -497,6 +530,10 @@ public class Document {
 		dico.put("langue", langue);
 		dico.put("date", (jour+"/"+mois+"/"+annee));
 		dico.put("fichier", fichier);
+		
+		dico.put("artiste", artiste);
+		dico.put("interprete", interprete);
+		dico.put("compositeur", compositeur);
 		
 		return dico;
 	}
@@ -615,8 +652,72 @@ public class Document {
 		return etat.equalsIgnoreCase("PROGRAMME");
 	}
 	
+	/**
+	 * @return Renvoie artiste.
+	 */
+	public String getArtiste() {
+		return artiste;
+	}
+
+	/**
+	 * @return Renvoie compositeur.
+	 */
+	public String getCompositeur() {
+		return compositeur;
+	}
+
+	/**
+	 * @return Renvoie interprete.
+	 */
+	public String getInterprete() {
+		return interprete;
+	}
+	
 //#### SETTERS ####
 //#################
+	
+	/**
+	 * @param compositeur compositeur à définir.
+	 */
+	public boolean setCompositeur(String compositeur) {
+		String requete = "UPDATE document SET compositeur = '" + compositeur + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.compositeur = compositeur;
+		}
+		return nbRows>0;
+	}
+	/**
+	 * @param artiste artiste à définir.
+	 */
+	public boolean setArtiste(String artiste) {
+		String requete = "UPDATE document SET artiste = '" + artiste + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.artiste = artiste;
+		}
+		return nbRows>0;
+	}
+	/**
+	 * @param interprete interprete à définir.
+	 */
+	public boolean setInterprete(String interprete) {
+		String requete = "UPDATE document SET interprete = '" + interprete + "' WHERE id = '" + id + "';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.interprete = interprete;
+		}
+		return nbRows>0;
+	}
 	
 	/**
 	 * Met à jour l'attribut fichier
@@ -714,42 +815,6 @@ public class Document {
 		}
 		return nbRows>0;
 	}
-	
-	/**
-	 * Met à jour l'attibut mois
-	 * @param String mois
-	 * @return boolean
-	 * @throws SQLException
-	 *
-	public boolean setMois(String mois) /*throws SQLException* {
-		String requete = "UPDATE document SET date = '" + jour+"-"+mois+"-"+annee + "' WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
-		if (nbRows>0) {
-			this.mois = mois;
-		}
-		return nbRows>0;
-	}
-	
-	/**
-	 * Met à jour l'attribut jour
-	 * @param String jour
-	 * @return boolean
-	 * @throws SQLException
-	 *
-	public boolean setJour(String jour) /*throws SQLException* {
-		String requete = "UPDATE document SET date = '" + jour+"-"+mois+"-"+annee + "' WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
-		if (nbRows>0) {
-			this.jour = jour;
-		}
-		return nbRows>0;
-	}*/
 	
 	/**
 	 * Met à jour l'attribut titre

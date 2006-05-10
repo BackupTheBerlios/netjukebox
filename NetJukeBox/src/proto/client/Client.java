@@ -213,7 +213,13 @@ public class Client {
 						String genre = lire();
 						System.out.print("Fichier: ");
 						String fichier = lire();
-						boolean cree = clientXML.creerDocument(titre, duree, jour, mois, annee, source, langue, genre, fichier);
+						System.out.print("Artiste: ");
+						String artiste = lire();
+						System.out.print("Interprète: ");
+						String interprete = lire();
+						System.out.print("Compositeur: ");
+						String compositeur = lire();
+						boolean cree = clientXML.creerDocument(titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 						if (cree) System.err.println("INFO: Document créé");
 						else System.err.println("ERREUR: Document non créé");
 					}
@@ -395,6 +401,9 @@ public class Client {
 								System.out.println("Source: "+d.get("source"));
 								System.out.println("Langue: "+d.get("langue"));
 								System.out.println("Fichier: "+d.get("fichier"));
+								System.out.println("Artiste: "+d.get("artiste"));
+								System.out.println("Interprète: "+d.get("interprete"));
+								System.out.println("Compositeur: "+d.get("compositeur"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
 							}
@@ -528,7 +537,13 @@ public class Client {
 						String genre = lire();
 						System.out.print("Fichier: ");
 						String fichier = lire();
-						Vector vDocuments = clientXML.rechercherDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier);
+						System.out.print("Artiste: ");
+						String artiste = lire();
+						System.out.print("Interprète: ");
+						String interprete = lire();
+						System.out.print("Compositeur: ");
+						String compositeur = lire();
+						Vector vDocuments = clientXML.rechercherDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 						if (vDocuments!=null && vDocuments.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -543,6 +558,9 @@ public class Client {
 								System.out.println("Source: "+d.get("source"));
 								System.out.println("Langue: "+d.get("langue"));
 								System.out.println("Fichier: "+d.get("fichier"));
+								System.out.println("Artiste: "+d.get("artiste"));
+								System.out.println("Interprète: "+d.get("interprete"));
+								System.out.println("Compositeur: "+d.get("compositeur"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
 							}
@@ -671,7 +689,7 @@ public class Client {
 						String id = lire();
 						
 						//On affiche ses infos
-						Vector vDocuments = clientXML.rechercherDocument(id, "", "", "", "", "", "", "", "", "");
+						Vector vDocuments = clientXML.rechercherDocument(id, "", "", "", "", "", "", "", "", "", "", "", "");
 						if (vDocuments!=null && vDocuments.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -686,6 +704,9 @@ public class Client {
 								System.out.println("Source: "+d.get("source"));
 								System.out.println("Langue: "+d.get("langue"));
 								System.out.println("Fichier: "+d.get("fichier"));
+								System.out.println("Artiste: "+d.get("artiste"));
+								System.out.println("Interprète: "+d.get("interprete"));
+								System.out.println("Compositeur: "+d.get("compositeur"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
 							}
@@ -710,7 +731,13 @@ public class Client {
 							String genre = lire();
 							System.out.print("Fichier: ");
 							String fichier = lire();
-							boolean modifie = clientXML.modifierDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier);
+							System.out.print("Artiste: ");
+							String artiste = lire();
+							System.out.print("Interprète: ");
+							String interprete = lire();
+							System.out.print("Compositeur: ");
+							String compositeur = lire();
+							boolean modifie = clientXML.modifierDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 							if (modifie) System.err.println("INFO: Document modifié");
 							else System.err.println("ERREUR: Document non modifié");
 						}
@@ -887,7 +914,7 @@ public class Client {
 				if  (ligne.equalsIgnoreCase("infoDocument")) {
 					if (etatConnecte) {
 						//ID du doc
-						System.out.print("ID du programme : ");
+						System.out.print("ID du document : ");
 						String id = lire();
 						
 						Dictionary d = clientXML.infoDocument(id);
@@ -902,6 +929,9 @@ public class Client {
 							System.out.println("Source: "+d.get("source"));
 							System.out.println("Langue: "+d.get("langue"));
 							System.out.println("Fichier: "+d.get("fichier"));
+							System.out.println("Artiste: "+d.get("artiste"));
+							System.out.println("Interprète: "+d.get("interprete"));
+							System.out.println("Compositeur: "+d.get("compositeur"));
 							System.out.println("----------------------------------------------");
 							System.out.println();
 							System.err.println("INFO: Document affiché");

@@ -52,7 +52,7 @@ public class Canal {
 	/**
 	 * Historisation
 	 */
-	private Journal_Canal journal;
+	private JournalCanal journal;
 	
 	
 	/**

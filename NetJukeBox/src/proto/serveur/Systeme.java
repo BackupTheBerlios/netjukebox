@@ -513,12 +513,16 @@ public class Systeme {
 	 * @param String langue
 	 * @param String genre
 	 * @param String fichier
+	 * @param String artiste
+	 * @param String interprete
+	 * @param String compositeur
 	 * @return String
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
 	 */
 	@SuppressWarnings("unchecked")
-	public String creerDocument(String login, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) throws NumberFormatException, SQLException {
+	public String creerDocument(String login, String titre, String duree, String jour, String mois, String annee,
+			String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur)throws NumberFormatException, SQLException {
 
 		System.out.println("Création du document "+titre);
 
@@ -529,7 +533,7 @@ public class Systeme {
 			if (Document.getByTitre(titre) == null) {
 				
 				//On crée le document
-				Document d = Document.create(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier);
+				Document d = Document.create(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier, artiste, interprete, compositeur);
 				
 				//Si le document a bien été créé
 				if (d != null) {
@@ -599,10 +603,13 @@ public class Systeme {
 	 * @param String langue
 	 * @param String genre
 	 * @param String fichier
+	 * @param String artiste
+	 * @param String interprete
+	 * @param Styring compositeur
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) {
+	public Vector rechercherDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur) {
 
 		System.out.println("Recherche d'un document");
 
@@ -625,7 +632,10 @@ public class Systeme {
 					|| (fichier.length()>0 && d.getFichier().contains(fichier))
 					|| (source.length()>0 && d.getSource().contains(source))
 					|| (langue.length()>0 && d.getLangue().contains(langue))
-					|| (duree.length()>0 && Integer.toString(d.getDuree()).contains(duree))) {
+					|| (duree.length()>0 && Integer.toString(d.getDuree()).contains(duree))
+					|| (artiste.length()>0 && d.getArtiste().contains(artiste))
+					|| (interprete.length()>0 && d.getInterprete().contains(interprete))
+					|| (compositeur.length()>0 && d.getCompositeur().contains(compositeur))) {
 					
 					vDocuments.addElement(d.getAttributesDictionary());
 				}
@@ -693,11 +703,14 @@ public class Systeme {
 	 * @param String langue
 	 * @param String genre
 	 * @param String fichier
+	 * @param String artiste
+	 * @param String interprete
+	 * @param String compositeur
 	 * @return String
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
 	 */
-	public String modifierDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier) throws NumberFormatException, SQLException {
+	public String modifierDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur) throws NumberFormatException, SQLException {
 
 		System.out.println("Modification du document "+id);
 
@@ -711,7 +724,7 @@ public class Systeme {
 				Document d = (Document)documents.get(id);
 				
 				//On modifie le document
-				if (d.modifier(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier)) {
+				if (d.modifier(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier, artiste, interprete, compositeur)) {
 				
 					System.out.println("Document '"+id+"' modifié");
 					return Boolean.toString(true);
