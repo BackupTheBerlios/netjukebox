@@ -165,7 +165,7 @@ public class Utilisateur {
 	 * @param login
 	 * @throws NamingException 
 	 */
-	public static boolean verifierLogin(String login) throws NamingException {
+	public static /*@ pure @*/ boolean verifierLogin(String login) throws NamingException {
 		
 		String log, r, encStrPassword;
 		
@@ -203,7 +203,7 @@ public class Utilisateur {
 	 * @param login
 	 * @return boolean
 	 */
-	public static boolean verifierPwd(String login, String pwd) {
+	public static /*@ pure @*/ boolean verifierPwd(String login, String pwd) {
 		
 		String encStrPassword = null;
 		String log = null;
@@ -341,7 +341,7 @@ public class Utilisateur {
 	 * Vérification de l'état de connexion de l'utilisateur
 	 * @return
 	 */
-	public boolean verifConnecte() {
+	public /*@ pure @*/boolean verifConnecte() {
 		// your code here
 		return false;
 	}
@@ -350,7 +350,7 @@ public class Utilisateur {
 	 * Retourne le login de l'utilisateur
 	 * @return String
 	 */
-	public String getLogin() {
+	public /*@ pure @*/ String getLogin() {
 		return login;
 	}
 
@@ -358,7 +358,7 @@ public class Utilisateur {
 	 * Retourne le mot de passe de l'utilisateur
 	 * @return String
 	 */
-	public String getPwd() {
+	public /*@ pure @*/ String getPwd() {
 		return pwd;
 	}	
 	
@@ -366,7 +366,7 @@ public class Utilisateur {
 	 * Retourne le nom de l'utilisateur
 	 * @return String
 	 */
-	public String getNom() {
+	public /*@ pure @*/ String getNom() {
 		return nom;
 	}
 
@@ -374,7 +374,7 @@ public class Utilisateur {
 	 * Retourne le prénom de l'utilisateur
 	 * @return String
 	 */
-	public String getPrenom() {
+	public /*@ pure @*/ String getPrenom() {
 		return prenom;
 	}
 
@@ -382,7 +382,7 @@ public class Utilisateur {
 	 * Retourne l'adresse email de l'utilisateur
 	 * @return String
 	 */
-	public String getMail() {
+	public /*@ pure @*/ String getMail() {
 		return mail;
 	}
 
@@ -390,7 +390,7 @@ public class Utilisateur {
 	 * Retourne le pays de l'utilisateur
 	 * @return String
 	 */
-	public String getPays() {
+	public /*@ pure @*/String getPays() {
 		return pays;
 	}
 	
@@ -398,7 +398,7 @@ public class Utilisateur {
 	 * Retourne le role de l'utilisateur
 	 * @return String
 	 */
-	public String getRole() {
+	public /*@ pure @*/ String getRole() {
 		return role;
 	}
 
@@ -406,7 +406,7 @@ public class Utilisateur {
 	 * Vérification de l'état de connexion de l'utilisateur
 	 * @return
 	 */
-	public boolean estConnecte() {
+	public /*@ pure @*/ boolean estConnecte() {
 		return false;
 	}
 
@@ -448,7 +448,7 @@ public class Utilisateur {
 	/**
 	 * Retourne les permissions attribuées à l'utilisateur
 	 */
-	public void getPermissions() {
+	public /*@ pure @*/ void getPermissions() {
 		// your code here
 	}
 
@@ -489,7 +489,7 @@ public class Utilisateur {
 	 * @param String perm
 	 * @return boolean
 	 */
-	public boolean verifPermission(String perm) {
+	public /*@ pure @*/ boolean verifPermission(String perm) {
 
 		//if (permssions.containsKey(perm)) return permssions.get(perm);
 		//else return false;
