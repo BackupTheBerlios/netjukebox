@@ -58,6 +58,16 @@ public class Systeme {
 	private Hashtable programmes = new Hashtable();
 	
 	/**
+	 * Contrats
+	 */
+	private Hashtable contrats = new Hashtable();
+	
+	/**
+	 * Contractants
+	 */
+	private Hashtable contractants = new Hashtable();
+	
+	/**
 	 * Connexion à la base de données
 	 */
 	private Jdbc base;
@@ -152,6 +162,8 @@ public class Systeme {
 		this.canaux = Canal.getAll();
 		this.programmes = Programme.getAll();
 		this.documents = Document.getAll();
+		this.contractants = Contractant.getAll();
+		this.contrats = Contrat.getAll();
 	}
 	
 // METHODES DU SYSTEME
@@ -1706,5 +1718,486 @@ public class Systeme {
 
 	public void AjouterDocumentProgramme() {
 		// your code here
+	}
+	
+// CONTRAT
+//*******************************************************
+
+	/**
+	 * Création d'un contrat
+	 * @param String login
+	 * @param String jourSignature
+	 * @param String moisSignature
+	 * @param String anneeSignature
+	 * @param String jourExpiration
+	 * @param String moisExpiration
+	 * @param String anneeExpiration
+	 * @param String signataire
+	 * @param String modeReglement
+	 * @param String type
+	 * @return String
+	 * @throws SQLException
+	 */
+	@SuppressWarnings("unchecked")
+	public String creerContrat(String login, String titre, String jourSignature, String moisSignature,
+			String anneeSignature, String jourExpiration, String moisExpiration, String anneeExpiration,
+			String signataire, String modeReglement, String type) throws SQLException {
+
+		System.out.println("Création du contrat");
+		
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "creerContrat")) {
+		
+			//On vérifie que le canal n'existe pas
+			if (Contrat.getByTitre(titre) == null) {
+				
+				//On crée le canal
+				Contrat c = Contrat.create(titre, Integer.parseInt(jourSignature), Integer.parseInt(moisSignature),
+						Integer.parseInt(anneeSignature), Integer.parseInt(jourExpiration), Integer.parseInt(moisExpiration),
+						Integer.parseInt(anneeExpiration), signataire, modeReglement, type);
+				
+				//On l'ajoute à la liste des contrats du système
+				contrats.put(c.getId(), c);
+				
+				System.out.println("Contrat créé");
+				return Boolean.toString(true);
+				
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Contrat non créé");
+			return Boolean.toString(false);
+		}
+		//Sinon, création refusée
+		System.out.println("Permission non accordée. Contrat non créé");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Lister les contrats disponibles
+	 * @param String login
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector listerContrats(String login) {
+
+		System.out.println("Liste des contrats disponibles");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "listerContrats")) {
+		
+			//On crée le vecteur
+			Vector vContrats = new Vector();
+			
+			//On récupère la liste des documents
+			Enumeration listeContrats = contrats.elements();
+			Contrat c;
+			
+			while (listeContrats.hasMoreElements()) {
+				c = (Contrat)listeContrats.nextElement();
+				vContrats.addElement(c.getAttributesDictionary());
+			}
+			
+			return vContrats;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Contrats non listés");
+		return null;
+	}
+	
+	/**
+	 * Informations sur un contrat
+	 * @param String login
+	 * @param Strign id
+	 * @return Dictionary
+	 */
+	public Dictionary infoContrat(String login, String id) {
+		
+		System.out.println("Infos sur un contrat");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "infoContrat")) {
+		
+			//On vérifie que le canal existe
+			if (contrats.containsKey(id)) {
+				Contrat c = (Contrat)contrats.get(id);
+				return c.getAttributesDictionary();
+			}
+			else {
+				System.out.println("Contrat indisponible");
+				return null;
+			}
+		}
+		// Sinon, refusé
+		System.out.println("Permission non accordée. Contrat non affiché");
+		return null;
+	}
+	
+	/**
+	 * Suppression d'un contrat
+	 * @param String login
+	 * @param String id
+	 * @return String
+	 */
+	public String supprimerContrat(String login, String id) {
+		System.out.println("Suppression du contrat "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "supprimerContrat")) {
+		
+			//On vérifie que le canal existe
+			if (contrats.containsKey(id)) {
+				
+				//On récupère l'objet canal
+				Contrat c = (Contrat)contrats.get(id);
+
+				//Si le document a bien été supprimé
+				if (c.supprimer()) {
+					
+					//On le retire de la liste des canaux du système
+					contrats.remove(id);
+					
+					System.out.println("Contrat '"+id+"' supprimé");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, suppression échouée
+				System.out.println("Contrat '"+id+"' non supprimé");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, canal introuvable
+			System.out.println("Contrat '"+id+"' introuvable");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Contrat non supprimé");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Modification d'un contrat
+	 * @param String login
+	 * @param String id
+	 * @param String titre
+	 * @param String jourSignature
+	 * @param String moisSignature
+	 * @param String anneeSignature
+	 * @param String jourExpiration
+	 * @param String moisExpiration
+	 * @param String anneeExpiration
+	 * @param String signataire
+	 * @param String modeReglement
+	 * @param String type
+	 * @return String
+	 */
+	public String modifierContrat(String login, String id, String titre, String jourSignature, String moisSignature, String anneeSignature,
+			String jourExpiration, String moisExpiration, String anneeExpiration, String signataire, String modeReglement, String type) throws NumberFormatException, SQLException {
+
+		System.out.println("Modification du contrat "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "modifierContrat")) {
+		
+			//On vérifie que le canal existe
+			if (contractants.containsKey(id)) {
+				
+				//On récupère le canal
+				Contrat c = (Contrat)contrats.get(id);
+				
+				//On modifie le canal
+				if (c.modifier(titre, Integer.parseInt(jourSignature), Integer.parseInt(moisSignature), Integer.parseInt(anneeSignature),
+						Integer.parseInt(jourExpiration), Integer.parseInt(moisExpiration), Integer.parseInt(anneeExpiration),
+						signataire, modeReglement, type)) {
+				
+					System.out.println("Contrat '"+id+"' modifié");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, création a échoué
+				System.out.println("Contrat '"+id+"' non modifié");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Contrat '"+id+"' non trouvé");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Contrat non modifié");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Ajoute un contractant dans un contrat
+	 * @param String login
+	 * @param String idContrat
+	 * @param String idContractant
+	 * @return String
+	 * @throws SQLException 
+	 */
+	public String ajouterContractantContrat(String login, String idContrat, String idContractant) throws SQLException {
+		System.out.println("Ajout du contractant "+idContractant+" au contrat "+idContrat);
+		
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "ajouterContractantContrat")) {
+		
+			//On vérifie que le contrat et le contractant existent
+			if (contrats.containsKey(idContrat) && contractants.containsKey(idContractant)) {
+				
+				//On récupère les objets
+				Contrat c = (Contrat)contrats.get(idContrat);
+				Contractant ct = (Contractant)contractants.get(idContractant);
+				
+				//On ajoute le contractant au contrat
+				c.ajouterContractant(ct);
+				
+				System.out.println("Contractant "+idContractant+" ajouté au contrat "+idContrat);
+				return Boolean.toString(true);
+				
+			}
+			
+			//Sinon, ajout refusé
+			System.out.println("Le contractant "+idContractant+" n'a pas été ajouté au contrat "+idContrat);
+			return Boolean.toString(false);
+		}
+		//Sinon, ajout refusé
+		System.out.println("Permission non accordée. Contractant non ajouté");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Retirer un contractant d'un contrat
+	 * @param String login
+	 * @param String idContrat
+	 * @param String idContractant
+	 * @return String
+	 * @throws SQLException 
+	 */
+	public String retirerContractantContrat(String login, String idContrat, String idContractant) throws SQLException {
+		System.out.println("Retirer le contractant "+idContractant+ " du contrat "+idContrat);
+		
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "retirerContractantContrat")) {
+		
+			//On vérifie que le programme et le contractant existent
+			if (contrats.containsKey(idContrat) && contractants.containsKey(idContractant)) {
+				
+				//On récupère les objets
+				Contrat c = (Contrat)contrats.get(idContrat);
+				
+				//On ajoute le document au programme
+				c.retirerContractant(idContractant);
+				
+				System.out.println("Contractant retiré du contrat "+idContrat);
+				return Boolean.toString(true);
+				
+			}
+			
+			//Sinon, ajout refusé
+			System.out.println("Le contractant n'a pas été retiré du contrat "+idContrat);
+			return Boolean.toString(false);
+		}
+		//Sinon, ajout refusé
+		System.out.println("Permission non accordée. Contractant non retiré");
+		return Boolean.toString(false);
+	}
+	
+//	 CONTRACTANT
+//*******************************************************
+
+	/**
+	 * Création d'un contractant
+	 * @param String nom
+	 * @param String adresse
+	 * @param String codePostal
+	 * @param String ville
+	 * @param String telephone
+	 * @param String fax
+	 * @param String mail
+	 * @param String type
+	 * @return String
+	 * @throws SQLException
+	 */
+	@SuppressWarnings("unchecked")
+	public String creerContractant(String login, String nom, String adresse, String codePostal,
+			String ville, String telephone, String fax, String mail, String type) throws SQLException {
+
+		System.out.println("Création du contractant");
+		
+		// On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "creerContractant")) {
+		
+			//On vérifie que le canal n'existe pas
+			if (Contractant.getByNom(nom) == null) {
+				
+				//On crée le canal
+				Contractant c = Contractant.create(nom, adresse, codePostal, ville, telephone, fax, mail, type);
+				
+				//On l'ajoute à la liste des contractants du système
+				contractants.put(c.getId(), c);
+				
+				System.out.println("Contractant créé");
+				return Boolean.toString(true);
+				
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Contractant non créé");
+			return Boolean.toString(false);
+		}
+		//Sinon, création refusée
+		System.out.println("Permission non accordée. Contractant non créé");
+		return Boolean.toString(false);
+	}	
+	
+	/**
+	 * Lister les contractants disponibles
+	 * @param String login
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector listerContractants(String login) {
+
+		System.out.println("Liste des contractants disponibles");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "listerContractants")) {
+		
+			//On crée le vecteur
+			Vector vContractants = new Vector();
+			
+			//On récupère la liste des documents
+			Enumeration listeContractants = contractants.elements();
+			Contractant c;
+			
+			while (listeContractants.hasMoreElements()) {
+				c = (Contractant)listeContractants.nextElement();
+				vContractants.addElement(c.getAttributesDictionary());
+			}
+			
+			return vContractants;
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Contractants non listés");
+		return null;
+	}
+	
+	/**
+	 * Informations sur un contractant
+	 * @param String login
+	 * @param Strign id
+	 * @return Dictionary
+	 */
+	public Dictionary infoContractant(String login, String id) {
+		
+		System.out.println("Infos sur un contractant");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "infoContractant")) {
+		
+			//On vérifie que le canal existe
+			if (contractants.containsKey(id)) {
+				Contractant c = (Contractant)contractants.get(id);
+				return c.getAttributesDictionary();
+			}
+			else {
+				System.out.println("Contractant indisponible");
+				return null;
+			}
+		}
+		// Sinon, refusé
+		System.out.println("Permission non accordée. Contractant non affiché");
+		return null;
+	}
+	
+	/**
+	 * Suppression d'un contractant
+	 * @param String login
+	 * @param String id
+	 * @return String
+	 */
+	public String supprimerContractant(String login, String id) {
+		System.out.println("Suppression du contractant "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "supprimerContractant")) {
+		
+			//On vérifie que le canal existe
+			if (contractants.containsKey(id)) {
+				
+				//On récupère l'objet canal
+				Contractant c = (Contractant)contractants.get(id);
+
+				//Si le document a bien été supprimé
+				if (c.supprimer()) {
+					
+					//On le retire de la liste des canaux du système
+					contractants.remove(id);
+					
+					System.out.println("Contractant '"+id+"' supprimé");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, suppression échouée
+				System.out.println("Contractant '"+id+"' non supprimé");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, canal introuvable
+			System.out.println("Contractant '"+id+"' introuvable");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Contractant non supprimé");
+		return Boolean.toString(false);
+	}
+	
+	/**
+	 * Modification d'un contractant
+	 * @param String login
+	 * @param String id
+	 * @param String nom
+	 * @param String adresse
+	 * @param String codePostal
+	 * @param String ville
+	 * @param String telephone
+	 * @param String fax
+	 * @param String type
+	 * @return String
+	 */
+	public String modifierContractant(String login, String id, String nom, String adresse, String codePostal,
+			String ville, String telephone, String fax, String mail, String type) throws NumberFormatException, SQLException {
+
+		System.out.println("Modification du contractant "+id);
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "modifierContractant")) {
+		
+			//On vérifie que le canal existe
+			if (contractants.containsKey(id)) {
+				
+				//On récupère le canal
+				Contractant c = (Contractant)contractants.get(id);
+				
+				//On modifie le canal
+				if (c.modifier(nom, adresse, codePostal, ville, telephone, fax, mail, type)) {
+				
+					System.out.println("Contractant '"+id+"' modifié");
+					return Boolean.toString(true);
+				}
+				
+				//Sinon, création a échoué
+				System.out.println("Contractant '"+id+"' non modifié");
+				return Boolean.toString(false);
+			}
+			
+			//Sinon, création refusée
+			System.out.println("Contractant '"+id+"' non trouvé");
+			return Boolean.toString(false);
+		}
+		// Sinon, création refusée
+		System.out.println("Permission non accordée. Contractant non modifié");
+		return Boolean.toString(false);
 	}
 }

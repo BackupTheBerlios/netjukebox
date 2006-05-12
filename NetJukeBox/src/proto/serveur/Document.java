@@ -36,19 +36,9 @@ public class Document {
 	private int duree;
 
 	/**
-	 * Jour de parution du document
+	 * Date de parution du document
 	 */
-	private int jour;
-
-	/**
-	 * Mois de parution du document
-	 */
-	private int mois;
-
-	/**
-	 * Année de parution du document
-	 */
-	private int annee;
+	private GregorianCalendar dateParution;
 
 	/**
 	 * Langue du document
@@ -110,9 +100,7 @@ public class Document {
 	 * @param id
 	 * @param titre
 	 * @param duree
-	 * @param jour
-	 * @param mois
-	 * @param annee
+	 * @param GregorianCalendar dateParution
 	 * @param source
 	 * @param langue
 	 * @param genre
@@ -122,15 +110,12 @@ public class Document {
 	 * @param String interprete
 	 * @param String compositeur
 	 */
-	public Document(String id, String titre, int duree, int jour,
-			int mois, int annee, String source, String langue, String genre,
-			String fichier, String artiste, String interprete, String compositeur) {
+	public Document(String id, String titre, int duree, GregorianCalendar dateParution, String source,
+			String langue, String genre, String fichier, String artiste, String interprete, String compositeur) {
 
 		this.id = id;
 		this.titre = titre;
-		this.jour = jour;
-		this.mois = mois;
-		this.annee = annee;
+		this.dateParution = dateParution;
 		this.source = source;
 		this.langue = langue;
 		this.genre = genre;
@@ -244,7 +229,7 @@ public class Document {
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
-			return new Document(id, titreDoc, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
+			return new Document(id, titreDoc, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur);
 		}
 
 		/*
@@ -318,7 +303,7 @@ public class Document {
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
-			return new Document(idDoc, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
+			return new Document(idDoc, titre, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur);
 		}
 
 		/*
@@ -477,9 +462,7 @@ public class Document {
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
 			this.titre = titre;
-			this.jour = jour;
-			this.mois = mois;
-			this.annee = annee;
+			this.dateParution = date;
 			this.source = source;
 			this.langue = langue;
 			this.genre = genre;
@@ -519,6 +502,10 @@ public class Document {
 	 * @return Dictionary
 	 */
 	public Dictionary getAttributesDictionary() {
+		
+		int jour = dateParution.get(GregorianCalendar.DATE);
+		int mois = dateParution.get(GregorianCalendar.MONTH);
+		int annee = dateParution.get(GregorianCalendar.YEAR);
 		
 		Dictionary dico = new Hashtable();
 		
@@ -630,6 +617,10 @@ public class Document {
 	 * @return Date
 	 */
 	public Date getDateCreation() {
+		int jour = dateParution.get(GregorianCalendar.DATE);
+		int mois = dateParution.get(GregorianCalendar.MONTH);
+		int annee = dateParution.get(GregorianCalendar.YEAR);
+
 		String date = jour + "/"+ mois + "/" + annee;
 		TransformeDate TD = new TransformeDate(date);
 		System.out.println(TD.d);
@@ -809,9 +800,7 @@ public class Document {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
-			this.jour = jour;
-			this.mois = mois;
-			this.annee = annee;
+			this.dateParution = date;
 		}
 		return nbRows>0;
 	}

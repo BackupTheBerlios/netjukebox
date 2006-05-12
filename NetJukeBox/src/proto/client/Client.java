@@ -131,6 +131,8 @@ public class Client {
 				System.out.println();
 				System.out.print("> ");
 				ligne = reader.readLine();
+
+//### CONNEXION ###				
 				
 				// CONNEXION
 				if  (ligne.equalsIgnoreCase("connexion")) {
@@ -159,38 +161,8 @@ public class Client {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
 				}
-				
-				// CREERCANAL
-				if  (ligne.equalsIgnoreCase("creerCanal")) {
-					if (etatConnecte) {
-						System.out.print("Nom du canal: ");
-						String nom = lire();
-						System.out.print("Nombre maximal d'auditeurs: ");
-						String utilMax = lire();
-						boolean cree = clientXML.creerCanal(nom, utilMax);
-						if (cree) System.err.println("INFO: Canal créé");
-						else System.err.println("ERREUR: Canal non créé");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// CREERPROGRAMME
-				if  (ligne.equalsIgnoreCase("creerProgramme")) {
-					if (etatConnecte) {
-						System.out.print("Titre du programme: ");
-						String titre = lire();
-						System.out.print("Thématique: ");
-						String thematique = lire();
-						boolean cree = clientXML.creerProgramme(titre, thematique);
-						if (cree) System.err.println("INFO: Programme créé");
-						else System.err.println("ERREUR: Programme non créé");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
+			
+//### DOCUMENT ###	
 				
 				// CREERDOCUMENT
 				if  (ligne.equalsIgnoreCase("creerDocument")) {
@@ -222,161 +194,6 @@ public class Client {
 						boolean cree = clientXML.creerDocument(titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 						if (cree) System.err.println("INFO: Document créé");
 						else System.err.println("ERREUR: Document non créé");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// AJOUTERDOCUMENTPROGRAMME
-				if  (ligne.equalsIgnoreCase("ajouterDocumentProgramme")) {
-					if (etatConnecte) {
-						System.out.print("ID du document source: ");
-						String idDoc = lire();
-						System.out.print("ID du programme cible: ");
-						String idProg = lire();
-						boolean ajoute = clientXML.ajouterDocumentProgramme(idDoc, idProg);
-						if (ajoute) System.err.println("INFO: Document ajouté au programme");
-						else System.err.println("ERREUR: Document non ajouté au progamme");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// RETIRERDOCUMENTPROGRAMME
-				if  (ligne.equalsIgnoreCase("retirerDocumentProgramme")) {
-					if (etatConnecte) {
-						System.out.print("ID du programme source: ");
-						String idProg = lire();
-						System.out.print("Document calé au temps : ");
-						String calage = lire();
-						boolean retire = clientXML.retirerDocumentProgramme(idProg, calage);
-						if (retire) System.err.println("INFO: Document retiré du programme");
-						else System.err.println("ERREUR: Document non retiré du progamme");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// DIFFUSERPROGRAMME
-				if  (ligne.equalsIgnoreCase("diffuserProgramme")) {
-					if (etatConnecte) {
-						System.out.print("ID du programme source: ");
-						String idProg = lire();
-						System.out.print("ID du canal cible: ");
-						String idCanal = lire();
-						boolean diffuse = clientXML.diffuserProgramme(idProg, idCanal);
-						if (diffuse) System.err.println("INFO: Diffusion du programme lancée sur le canal");
-						else System.err.println("ERREUR: Diffusion du programme non lancée sur le canal");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// PLANIFIERPROGRAMME
-				if  (ligne.equalsIgnoreCase("planifierProgramme")) {
-					if (etatConnecte) {
-						System.out.print("ID du programme source: ");
-						String idProg = lire();
-						System.out.print("ID du canal cible: ");
-						String idCanal = lire();
-						System.out.print("Jour de planification: ");
-						String jour = lire();
-						System.out.print("Mois: ");
-						String mois = lire();
-						System.out.print("Année: ");
-						String annee = lire();
-						System.out.print("Heure: ");
-						String heure = lire();
-						System.out.print("Minute: ");
-						String minute = lire();
-						System.out.print("Seconde: ");
-						String seconde = lire();
-						boolean planifie = clientXML.planifierProgramme(idProg, idCanal, jour, mois, annee, heure, minute, seconde);
-						if (planifie) System.err.println("INFO: Programme planifié sur le canal");
-						else System.err.println("ERREUR: Programme non planifié");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// DEPLANIFIERPROGRAMME
-				if  (ligne.equalsIgnoreCase("deplanifierProgramme")) {
-					if (etatConnecte) {
-						System.out.print("ID du canal: ");
-						String idCanal = lire();
-						System.out.print("Programme calé au temps: ");
-						String calage = lire();
-						String seconde = lire();
-						boolean planifie = clientXML.deplanifierProgramme(idCanal, calage);
-						if (planifie) System.err.println("INFO: Programme déplanifié sur le canal");
-						else System.err.println("ERREUR: Programme non déplanifié");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// STARTCANAL
-				if  (ligne.equalsIgnoreCase("startCanal")) {
-					if (etatConnecte) {
-						System.out.print("ID du canal source: ");
-						String idCanal = lire();
-						if (clientXML.startCanal(idCanal)) {
-							System.err.println("INFO: Diffusion du canal lancée");
-						}
-						else System.err.println("ERREUR: Diffusion du canal non lancée");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// STOPCANAL
-				if  (ligne.equalsIgnoreCase("stopCanal")) {
-					if (etatConnecte) {
-						System.out.print("ID du canal source: ");
-						String idCanal = lire();
-						if (clientXML.stopCanal(idCanal)) {
-							System.err.println("INFO: Canal arrété");
-						}
-						else System.err.println("ERREUR: Canal non stoppé");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// STARTPLAYER
-				if  (ligne.equalsIgnoreCase("startPlayer")) {
-					if (etatConnecte) {
-						System.out.print("ID du canal source: ");
-						String idCanal = lire();
-						String urlPlayer = clientXML.ecouterCanal(idCanal);
-						if (urlPlayer != null) {
-							//RTPClient player = RTPClient.getInstance();
-							RTPClient2 player = RTPClient2.getInstance();
-							player.start(urlPlayer);
-							System.err.println("INFO: Ecoute du canal lancée");
-						}
-						else System.err.println("ERREUR: Ecoute du canal non lancée");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// STOPPLAYER
-				if  (ligne.equalsIgnoreCase("stopPlayer")) {
-					if (etatConnecte) {
-						//RTPClient player = RTPClient.getInstance();
-						RTPClient2 player = RTPClient2.getInstance();
-						player.stop();
-						System.err.println("INFO: Player arrété");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
@@ -415,104 +232,6 @@ public class Client {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
 				}
-				
-				// LISTERPROGRAMME
-				if  (ligne.equalsIgnoreCase("listerProgramme")) {
-					if (etatConnecte) {
-						Vector vProgrammes = clientXML.listerProgrammes();
-						if (vProgrammes!=null && vProgrammes.size()>0) {
-							//Parcours du vecteur, affichage des infos
-							Dictionary p;
-							for (int i=0; i<vProgrammes.size(); i++){
-								p = (Dictionary)vProgrammes.get(i);
-								System.out.println("----------------- Programme -------------------");
-								System.out.println("Id: "+p.get("id"));
-								System.out.println("Titre: "+p.get("titre"));
-								System.out.println("Thématique: "+p.get("thematique"));
-								System.out.println("Durée: "+p.get("duree"));
-								System.out.println("Nb docs: "+p.get("nbDocs"));
-								System.out.println("-----------------------------------------------");
-								System.out.println();
-							}
-							System.err.println("INFO: Programmes listés");
-						}
-						else System.err.println("WARNING: Aucun programme disponible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// LISTERCANAL
-				if  (ligne.equalsIgnoreCase("listerCanal")) {
-					if (etatConnecte) {
-						Vector vCanaux = clientXML.listerCanaux();
-						if (vCanaux!=null && vCanaux.size()>0) {
-							//Parcours du vecteur, affichage des infos
-							Dictionary c;
-							for (int i=0; i<vCanaux.size(); i++){
-								c = (Dictionary)vCanaux.get(i);
-								System.out.println("----------------- Canal -------------------");
-								System.out.println("Id: "+c.get("id"));
-								System.out.println("Nom: "+c.get("nom"));
-								System.out.println("NbMax auditeurs: "+c.get("utilMax"));
-								System.out.println("Nb progs: "+c.get("nbProgs"));
-								System.out.println("-------------------------------------------");
-								System.out.println();
-							}
-							System.err.println("INFO: Programmes listés");
-						}
-						else System.err.println("WARNING: Aucun canal disponible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// INSCRIPTION
-				if  (ligne.equalsIgnoreCase("inscrireUtilisateur")) {
-					if (etatConnecte) {
-						System.out.print("prenom: ");
-						String prenom = lire();
-						System.out.print("nom: ");
-						String nom = lire();
-						System.out.print("login: ");
-						String log = lire();
-						System.out.print("password: ");
-						String pass = lire();
-						System.out.print("email: ");
-						String email = lire();
-						System.out.print("role: ");
-						String role = lire();
-						System.out.print("pays: ");
-						String pays = lire();
-						
-						if (clientXML.inscription(log, pass, role, email, nom, prenom, pays)) {
-							System.err.println("INFO: Utilisateur inscrit");
-						}
-						else System.err.println("WARNING: Inscription impossible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				//SUPPRIMERUTILISATEUR
-				if (ligne.equalsIgnoreCase("supprimerUtilisateur")) {
-					if (etatConnecte) {
-						System.out.print("login: ");
-						String log = lire();
-						
-						if (clientXML.supprimerUtilisateur(log)) {
-							System.err.println("INFO: Utilisateur supprimé");
-						}
-						else System.err.println("WARNING: Suppression impossible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
 				
 				// RECHERCHERDOCUMENT
 				if  (ligne.equalsIgnoreCase("rechercherDocument")) {
@@ -573,68 +292,6 @@ public class Client {
 					}
 				}
 				
-				// RECHERCHERPROGRAMME
-				if  (ligne.equalsIgnoreCase("rechercherProgramme")) {
-					if (etatConnecte) {
-						System.out.print("ID du programme: ");
-						String id = lire();
-						System.out.print("Titre: ");
-						String titre = lire();
-						System.out.print("Thématique: ");
-						String thematique = lire();
-						Vector vProgrammes = clientXML.rechercherProgramme(id, titre, thematique);
-						if (vProgrammes!=null && vProgrammes.size()>0) {
-							//Parcours du vecteur, affichage des infos
-							Dictionary d;
-							for (int i=0; i<vProgrammes.size(); i++){
-								d = (Dictionary)vProgrammes.get(i);
-								System.out.println("----------------- Programme -------------------");
-								System.out.println("Id: "+d.get("id"));
-								System.out.println("Titre: "+d.get("titre"));
-								System.out.println("Thématique: "+d.get("thematique"));
-								System.out.println("----------------------------------------------");
-								System.out.println();
-							}
-							System.err.println("INFO: Programme recherché");
-						}
-						else System.err.println("WARNING: Aucun programme disponible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// RECHERCHERCANAL
-				if  (ligne.equalsIgnoreCase("rechercherCanal")) {
-					if (etatConnecte) {
-						System.out.print("ID du canal: ");
-						String id = lire();
-						System.out.print("Nom: ");
-						String nom = lire();
-						System.out.print("NbMax d'auditeurs: ");
-						String utilMax = lire();
-						Vector vCanaux = clientXML.rechercherCanal(id, nom, utilMax);
-						if (vCanaux!=null && vCanaux.size()>0) {
-							//Parcours du vecteur, affichage des infos
-							Dictionary d;
-							for (int i=0; i<vCanaux.size(); i++){
-								d = (Dictionary)vCanaux.get(i);
-								System.out.println("----------------- Canal -------------------");
-								System.out.println("Id: "+d.get("id"));
-								System.out.println("Nom: "+d.get("nom"));
-								System.out.println("NbMax d'auditeurs: "+d.get("utilMax"));
-								System.out.println("----------------------------------------------");
-								System.out.println();
-							}
-							System.err.println("INFO: Canal recherché");
-						}
-						else System.err.println("WARNING: Aucun canal disponible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
 				// SUPPRIMERDOCUMENT
 				if  (ligne.equalsIgnoreCase("supprimerDocument")) {
 					if (etatConnecte) {
@@ -644,36 +301,6 @@ public class Client {
 							System.err.println("INFO: Document supprimé");
 						}
 						else System.err.println("ERREUR: Suppression du document échouée");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// SUPPRIMERPROGRAMME
-				if  (ligne.equalsIgnoreCase("supprimerProgramme")) {
-					if (etatConnecte) {
-						System.out.print("ID du progamme ");
-						String id = lire();
-						if (clientXML.supprimerProgramme(id)) {
-							System.err.println("INFO: Programme supprimé");
-						}
-						else System.err.println("ERREUR: Suppression du programme échouée");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// SUPPRIMERCANAL
-				if  (ligne.equalsIgnoreCase("supprimerCanal")) {
-					if (etatConnecte) {
-						System.out.print("ID du canal ");
-						String id = lire();
-						if (clientXML.supprimerCanal(id)) {
-							System.err.println("INFO: Canal supprimé");
-						}
-						else System.err.println("ERREUR: Suppression du canal échouée");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
@@ -742,6 +369,586 @@ public class Client {
 							else System.err.println("ERREUR: Document non modifié");
 						}
 						else System.err.println("WARNING: Aucun document disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// INFODOCUMENT
+				if  (ligne.equalsIgnoreCase("infoDocument")) {
+					if (etatConnecte) {
+						//ID du doc
+						System.out.print("ID du document : ");
+						String id = lire();
+						
+						Dictionary d = clientXML.infoDocument(id);
+						
+						if (d != null) {
+							System.out.println("----------------- Document -------------------");
+							System.out.println("Id: "+d.get("id"));
+							System.out.println("Titre: "+d.get("titre"));
+							System.out.println("Durée: "+d.get("duree"));
+							System.out.println("Date: "+d.get("date"));
+							System.out.println("Genre: "+d.get("genre"));
+							System.out.println("Source: "+d.get("source"));
+							System.out.println("Langue: "+d.get("langue"));
+							System.out.println("Fichier: "+d.get("fichier"));
+							System.out.println("Artiste: "+d.get("artiste"));
+							System.out.println("Interprète: "+d.get("interprete"));
+							System.out.println("Compositeur: "+d.get("compositeur"));
+							System.out.println("----------------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Document affiché");
+						}
+						else System.err.println("WARNING: Aucun document disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+//### PROGRAMME ###				
+				
+				// CREERPROGRAMME
+				if  (ligne.equalsIgnoreCase("creerProgramme")) {
+					if (etatConnecte) {
+						System.out.print("Titre du programme: ");
+						String titre = lire();
+						System.out.print("Thématique: ");
+						String thematique = lire();
+						boolean cree = clientXML.creerProgramme(titre, thematique);
+						if (cree) System.err.println("INFO: Programme créé");
+						else System.err.println("ERREUR: Programme non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERPROGRAMME
+				if  (ligne.equalsIgnoreCase("listerProgramme")) {
+					if (etatConnecte) {
+						Vector vProgrammes = clientXML.listerProgrammes();
+						if (vProgrammes!=null && vProgrammes.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary p;
+							for (int i=0; i<vProgrammes.size(); i++){
+								p = (Dictionary)vProgrammes.get(i);
+								System.out.println("----------------- Programme -------------------");
+								System.out.println("Id: "+p.get("id"));
+								System.out.println("Titre: "+p.get("titre"));
+								System.out.println("Thématique: "+p.get("thematique"));
+								System.out.println("Durée: "+p.get("duree"));
+								System.out.println("Nb docs: "+p.get("nbDocs"));
+								System.out.println("-----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programmes listés");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RECHERCHERPROGRAMME
+				if  (ligne.equalsIgnoreCase("rechercherProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme: ");
+						String id = lire();
+						System.out.print("Titre: ");
+						String titre = lire();
+						System.out.print("Thématique: ");
+						String thematique = lire();
+						Vector vProgrammes = clientXML.rechercherProgramme(id, titre, thematique);
+						if (vProgrammes!=null && vProgrammes.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vProgrammes.size(); i++){
+								d = (Dictionary)vProgrammes.get(i);
+								System.out.println("----------------- Programme -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Titre: "+d.get("titre"));
+								System.out.println("Thématique: "+d.get("thematique"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programme recherché");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERPROGRAMME
+				if  (ligne.equalsIgnoreCase("supprimerProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du progamme ");
+						String id = lire();
+						if (clientXML.supprimerProgramme(id)) {
+							System.err.println("INFO: Programme supprimé");
+						}
+						else System.err.println("ERREUR: Suppression du programme échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERPROGRAMME
+				if  (ligne.equalsIgnoreCase("modifierProgramme")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID du programme à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vProgrammes = clientXML.rechercherProgramme(id, "", "");
+						if (vProgrammes!=null && vProgrammes.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vProgrammes.size(); i++){
+								d = (Dictionary)vProgrammes.get(i);
+								System.out.println("----------------- Programme -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Titre: "+d.get("titre"));
+								System.out.println("Thématique: "+d.get("thematique"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programme recherché");
+							
+							//Si le prog existe, on le modifie
+							System.out.print("Nouveau titre: ");
+							String titre = lire();
+							System.out.print("Thématique: ");
+							String thematique = lire();
+							boolean modifie = clientXML.modifierProgramme(id, titre, thematique);
+							if (modifie) System.err.println("INFO: Programme modifié");
+							else System.err.println("ERREUR: Programme non modifié");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// INFOPROGRAMME
+				if  (ligne.equalsIgnoreCase("infoProgramme")) {
+					if (etatConnecte) {
+						//ID du prog
+						System.out.print("ID du programme : ");
+						String id = lire();
+						
+						Dictionary p = clientXML.infoProgramme(id);
+						
+						if (p!=null) {
+							System.out.println("----------------- Programme -------------------");
+							System.out.println("Id: "+p.get("id"));
+							System.out.println("Titre: "+p.get("titre"));
+							System.out.println("Thématique: "+p.get("thematique"));
+							System.out.println("Durée: "+p.get("duree"));
+							System.out.println("Nb docs: "+p.get("nbDocs"));
+							System.out.println("------------ Documents programmés ------------");
+							
+							Vector vDocs = (Vector)p.get("documents");
+							Dictionary doc;
+							for (int i=0; i<vDocs.size(); i++) {
+								doc = (Dictionary)vDocs.get(i);
+								System.out.println("IdDoc: "+doc.get("id"));
+								System.out.println("Titre: "+doc.get("titre"));
+								System.out.println("Durée: "+doc.get("duree"));
+								System.out.println("Calage: "+doc.get("calage"));
+								System.out.println();
+							}
+							System.out.println("-------------------------------------------");
+							System.err.println("INFO: Programme affiché");
+						}
+						else System.err.println("WARNING: Aucun programme disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// AJOUTERDOCUMENTPROGRAMME
+				if  (ligne.equalsIgnoreCase("ajouterDocumentProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du document source: ");
+						String idDoc = lire();
+						System.out.print("ID du programme cible: ");
+						String idProg = lire();
+						boolean ajoute = clientXML.ajouterDocumentProgramme(idDoc, idProg);
+						if (ajoute) System.err.println("INFO: Document ajouté au programme");
+						else System.err.println("ERREUR: Document non ajouté au progamme");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RETIRERDOCUMENTPROGRAMME
+				if  (ligne.equalsIgnoreCase("retirerDocumentProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme source: ");
+						String idProg = lire();
+						System.out.print("Document calé au temps : ");
+						String calage = lire();
+						boolean retire = clientXML.retirerDocumentProgramme(idProg, calage);
+						if (retire) System.err.println("INFO: Document retiré du programme");
+						else System.err.println("ERREUR: Document non retiré du progamme");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+//### CANAL ###				
+				
+				// CREERCANAL
+				if  (ligne.equalsIgnoreCase("creerCanal")) {
+					if (etatConnecte) {
+						System.out.print("Nom du canal: ");
+						String nom = lire();
+						System.out.print("Nombre maximal d'auditeurs: ");
+						String utilMax = lire();
+						boolean cree = clientXML.creerCanal(nom, utilMax);
+						if (cree) System.err.println("INFO: Canal créé");
+						else System.err.println("ERREUR: Canal non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERCANAL
+				if  (ligne.equalsIgnoreCase("listerCanal")) {
+					if (etatConnecte) {
+						Vector vCanaux = clientXML.listerCanaux();
+						if (vCanaux!=null && vCanaux.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vCanaux.size(); i++){
+								c = (Dictionary)vCanaux.get(i);
+								System.out.println("----------------- Canal -------------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Nom: "+c.get("nom"));
+								System.out.println("NbMax auditeurs: "+c.get("utilMax"));
+								System.out.println("Nb progs: "+c.get("nbProgs"));
+								System.out.println("-------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Programmes listés");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RECHERCHERCANAL
+				if  (ligne.equalsIgnoreCase("rechercherCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal: ");
+						String id = lire();
+						System.out.print("Nom: ");
+						String nom = lire();
+						System.out.print("NbMax d'auditeurs: ");
+						String utilMax = lire();
+						Vector vCanaux = clientXML.rechercherCanal(id, nom, utilMax);
+						if (vCanaux!=null && vCanaux.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vCanaux.size(); i++){
+								d = (Dictionary)vCanaux.get(i);
+								System.out.println("----------------- Canal -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Nom: "+d.get("nom"));
+								System.out.println("NbMax d'auditeurs: "+d.get("utilMax"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Canal recherché");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERCANAL
+				if  (ligne.equalsIgnoreCase("supprimerCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal ");
+						String id = lire();
+						if (clientXML.supprimerCanal(id)) {
+							System.err.println("INFO: Canal supprimé");
+						}
+						else System.err.println("ERREUR: Suppression du canal échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERCANAL
+				if  (ligne.equalsIgnoreCase("modifierCanal")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID du canal à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vCanaux = clientXML.rechercherCanal(id, "", "");
+						if (vCanaux!=null && vCanaux.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vCanaux.size(); i++){
+								d = (Dictionary)vCanaux.get(i);
+								System.out.println("----------------- Canal -------------------");
+								System.out.println("Id: "+d.get("id"));
+								System.out.println("Nom: "+d.get("nom"));
+								System.out.println("NbMax d'auditeurs: "+d.get("utilMax"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Canal recherché");
+							
+							//Si le prog existe, on le modifie
+							System.out.print("Nouveau nom: ");
+							String nom = lire();
+							System.out.print("NbMax d'auditeurs: ");
+							String utilMax = lire();
+							boolean modifie = clientXML.modifierCanal(id, nom, utilMax);
+							if (modifie) System.err.println("INFO: Canal modifié");
+							else System.err.println("ERREUR: Canal non modifié");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// INFOCANAL
+				if  (ligne.equalsIgnoreCase("infoCanal")) {
+					if (etatConnecte) {
+						//ID du canal
+						System.out.print("ID du canal : ");
+						String id = lire();
+						
+						Dictionary c = clientXML.infoCanal(id);
+						if (c!=null) {
+							System.out.println("----------------- Canal -------------------");
+							System.out.println("Id: "+c.get("id"));
+							System.out.println("Nom: "+c.get("nom"));
+							System.out.println("NbMax auditeurs: "+c.get("utilMax"));
+							System.out.println("Nb progs: "+c.get("nbProgs"));
+							System.out.println("----------- Programmes planifiés ----------");
+							
+							Vector vProgs = (Vector)c.get("programmes");
+							Dictionary prog;
+							GregorianCalendar horaire = new GregorianCalendar();
+							String dateHoraire;
+							for (int i=0; i<vProgs.size(); i++) {
+								prog = (Dictionary)vProgs.get(i);
+								horaire.setTimeInMillis(Long.parseLong((String)prog.get("calage")));
+								dateHoraire = horaire.get(GregorianCalendar.DATE) + "/" +
+											  horaire.get(GregorianCalendar.MONTH) + "/" +
+											  horaire.get(GregorianCalendar.YEAR) + " - " +
+											  horaire.get(GregorianCalendar.HOUR_OF_DAY) + ":" +
+											  horaire.get(GregorianCalendar.MINUTE) + ":" +
+											  horaire.get(GregorianCalendar.SECOND);
+								
+								System.out.println("IdProg: "+prog.get("id"));
+								System.out.println("Titre: "+prog.get("titre"));
+								System.out.println("Durée: "+prog.get("duree"));
+								System.out.println("Horaire: "+dateHoraire);
+								System.out.println("Calage: "+prog.get("calage"));
+								System.out.println();
+							}
+							System.out.println("-------------------------------------------");
+							System.err.println("INFO: Canal affiché");
+						}
+						else System.err.println("WARNING: Aucun canal disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// STARTCANAL
+				if  (ligne.equalsIgnoreCase("startCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal source: ");
+						String idCanal = lire();
+						if (clientXML.startCanal(idCanal)) {
+							System.err.println("INFO: Diffusion du canal lancée");
+						}
+						else System.err.println("ERREUR: Diffusion du canal non lancée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// STOPCANAL
+				if  (ligne.equalsIgnoreCase("stopCanal")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal source: ");
+						String idCanal = lire();
+						if (clientXML.stopCanal(idCanal)) {
+							System.err.println("INFO: Canal arrété");
+						}
+						else System.err.println("ERREUR: Canal non stoppé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// STARTPLAYER
+				if  (ligne.equalsIgnoreCase("startPlayer")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal source: ");
+						String idCanal = lire();
+						String urlPlayer = clientXML.ecouterCanal(idCanal);
+						if (urlPlayer != null) {
+							//RTPClient player = RTPClient.getInstance();
+							RTPClient2 player = RTPClient2.getInstance();
+							player.start(urlPlayer);
+							System.err.println("INFO: Ecoute du canal lancée");
+						}
+						else System.err.println("ERREUR: Ecoute du canal non lancée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// STOPPLAYER
+				if  (ligne.equalsIgnoreCase("stopPlayer")) {
+					if (etatConnecte) {
+						//RTPClient player = RTPClient.getInstance();
+						RTPClient2 player = RTPClient2.getInstance();
+						player.stop();
+						System.err.println("INFO: Player arrété");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// DIFFUSERPROGRAMME
+				if  (ligne.equalsIgnoreCase("diffuserProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme source: ");
+						String idProg = lire();
+						System.out.print("ID du canal cible: ");
+						String idCanal = lire();
+						boolean diffuse = clientXML.diffuserProgramme(idProg, idCanal);
+						if (diffuse) System.err.println("INFO: Diffusion du programme lancée sur le canal");
+						else System.err.println("ERREUR: Diffusion du programme non lancée sur le canal");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// PLANIFIERPROGRAMME
+				if  (ligne.equalsIgnoreCase("planifierProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du programme source: ");
+						String idProg = lire();
+						System.out.print("ID du canal cible: ");
+						String idCanal = lire();
+						System.out.print("Jour de planification: ");
+						String jour = lire();
+						System.out.print("Mois: ");
+						String mois = lire();
+						System.out.print("Année: ");
+						String annee = lire();
+						System.out.print("Heure: ");
+						String heure = lire();
+						System.out.print("Minute: ");
+						String minute = lire();
+						System.out.print("Seconde: ");
+						String seconde = lire();
+						boolean planifie = clientXML.planifierProgramme(idProg, idCanal, jour, mois, annee, heure, minute, seconde);
+						if (planifie) System.err.println("INFO: Programme planifié sur le canal");
+						else System.err.println("ERREUR: Programme non planifié");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// DEPLANIFIERPROGRAMME
+				if  (ligne.equalsIgnoreCase("deplanifierProgramme")) {
+					if (etatConnecte) {
+						System.out.print("ID du canal: ");
+						String idCanal = lire();
+						System.out.print("Programme calé au temps: ");
+						String calage = lire();
+						String seconde = lire();
+						boolean planifie = clientXML.deplanifierProgramme(idCanal, calage);
+						if (planifie) System.err.println("INFO: Programme déplanifié sur le canal");
+						else System.err.println("ERREUR: Programme non déplanifié");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+	
+//### UTILISATEUR ###				
+				
+				// INSCRIPTION
+				if  (ligne.equalsIgnoreCase("inscrireUtilisateur")) {
+					if (etatConnecte) {
+						System.out.print("prenom: ");
+						String prenom = lire();
+						System.out.print("nom: ");
+						String nom = lire();
+						System.out.print("login: ");
+						String log = lire();
+						System.out.print("password: ");
+						String pass = lire();
+						System.out.print("email: ");
+						String email = lire();
+						System.out.print("role: ");
+						String role = lire();
+						System.out.print("pays: ");
+						String pays = lire();
+						
+						if (clientXML.inscription(log, pass, role, email, nom, prenom, pays)) {
+							System.err.println("INFO: Utilisateur inscrit");
+						}
+						else System.err.println("WARNING: Inscription impossible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				//SUPPRIMERUTILISATEUR
+				if (ligne.equalsIgnoreCase("supprimerUtilisateur")) {
+					if (etatConnecte) {
+						System.out.print("login: ");
+						String log = lire();
+						
+						if (clientXML.supprimerUtilisateur(log)) {
+							System.err.println("INFO: Utilisateur supprimé");
+						}
+						else System.err.println("WARNING: Suppression impossible");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
@@ -830,203 +1037,442 @@ public class Client {
 					}
 				}
 				
-				// MODIFIERPROGRAMME
-				if  (ligne.equalsIgnoreCase("modifierProgramme")) {
+//### CONTRAT ###
+				
+				// CREERCONTRAT
+				if  (ligne.equalsIgnoreCase("creerContrat")) {
 					if (etatConnecte) {
-						
-						//ID du doc à modifier
-						System.out.print("ID du programme à modifier : ");
-						String id = lire();
-						
-						//On affiche ses infos
-						Vector vProgrammes = clientXML.rechercherProgramme(id, "", "");
-						if (vProgrammes!=null && vProgrammes.size()>0) {
+						System.out.print("Titre: ");
+						String titre = lire();
+						System.out.print("Jour (Signature): ");
+						String jourSignature = lire();
+						System.out.print("Mois (Signature): ");
+						String moisSignature = lire();
+						System.out.print("Année (Signature): ");
+						String anneeSignature = lire();
+						System.out.print("Jour (Expiration): ");
+						String jourExpiration = lire();
+						System.out.print("Mois (Expiration): ");
+						String moisExpiration = lire();
+						System.out.print("Année (Expiration): ");
+						String anneeExpiration = lire();
+						System.out.print("Signataire: ");
+						String signataire = lire();
+						System.out.print("Mode de règlement: ");
+						String modeReglement = lire();
+						System.out.print("Type: ");
+						String type = lire();
+						boolean cree = clientXML.creerContrat(titre, jourSignature, moisSignature, anneeSignature, jourExpiration, moisExpiration, anneeExpiration, signataire, modeReglement, type);
+						if (cree) System.err.println("INFO: Contrat créé");
+						else System.err.println("ERREUR: Contrat non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERCONTRATS
+				if  (ligne.equalsIgnoreCase("listerContrat")) {
+					if (etatConnecte) {
+						Vector vContrats = clientXML.listerContrats();
+						if (vContrats!=null && vContrats.size()>0) {
 							//Parcours du vecteur, affichage des infos
-							Dictionary d;
-							for (int i=0; i<vProgrammes.size(); i++){
-								d = (Dictionary)vProgrammes.get(i);
-								System.out.println("----------------- Programme -------------------");
-								System.out.println("Id: "+d.get("id"));
-								System.out.println("Titre: "+d.get("titre"));
-								System.out.println("Thématique: "+d.get("thematique"));
+							Dictionary c;
+							for (int i=0; i<vContrats.size(); i++){
+								c = (Dictionary)vContrats.get(i);
+								System.out.println("----------------- Contrat -------------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Titre: "+c.get("titre"));
+								System.out.println("Signature: "+c.get("dateSignature"));
+								System.out.println("Expiration: "+c.get("dateExpiration"));
+								System.out.println("Signataire: "+c.get("signataire"));
+								System.out.println("Règlement: "+c.get("modeReglement"));
+								System.out.println("Type: "+c.get("type"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
 							}
-							System.err.println("INFO: Programme recherché");
+							System.err.println("INFO: Contrats listés");
+						}
+						else System.err.println("WARNING: Aucun contrat disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RECHERCHERCONTRAT
+				if  (ligne.equalsIgnoreCase("rechercherContrat")) {
+					if (etatConnecte) {
+						System.out.print("ID du contrat: ");
+						String id = lire();
+						System.out.print("Titre: ");
+						String titre = lire();
+						System.out.print("Jour (Signature): ");
+						String jourSignature = lire();
+						System.out.print("Mois (Signature): ");
+						String moisSignature = lire();
+						System.out.print("Année (Signature): ");
+						String anneeSignature = lire();
+						System.out.print("Jour (Expiration): ");
+						String jourExpiration = lire();
+						System.out.print("Mois (Expiration): ");
+						String moisExpiration = lire();
+						System.out.print("Année (Expiration): ");
+						String anneeExpiration = lire();
+						System.out.print("Signataire: ");
+						String signataire = lire();
+						System.out.print("Mode de règlement: ");
+						String modeReglement = lire();
+						System.out.print("Type: ");
+						String type = lire();
+						Vector vContrats = clientXML.rechercherContrat(id, titre, jourSignature, moisSignature, anneeSignature,
+								jourExpiration, moisExpiration, anneeExpiration, signataire, modeReglement, type);
+						
+						if (vContrats!=null && vContrats.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vContrats.size(); i++){
+								c = (Dictionary)vContrats.get(i);
+								System.out.println("----------------- Contrat -------------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Titre: "+c.get("titre"));
+								System.out.println("Signature: "+c.get("dateSignature"));
+								System.out.println("Expiration: "+c.get("dateExpiration"));
+								System.out.println("Signataire: "+c.get("signataire"));
+								System.out.println("Règlement: "+c.get("modeReglement"));
+								System.out.println("Type: "+c.get("type"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Contrat recherché");
+						}
+						else System.err.println("WARNING: Aucun contrat disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERCONTRAT
+				if  (ligne.equalsIgnoreCase("supprimerContrat")) {
+					if (etatConnecte) {
+						System.out.print("ID du contrat ");
+						String id = lire();
+						if (clientXML.supprimerContrat(id)) {
+							System.err.println("INFO: Contrat supprimé");
+						}
+						else System.err.println("ERREUR: Suppression du contrat échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERCONTRAT
+				if  (ligne.equalsIgnoreCase("modifierContrat")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID du contrat à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vContrats = clientXML.rechercherContrat(id, "", "", "", "", "", "", "", "", "", "");
+						if (vContrats!=null && vContrats.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vContrats.size(); i++){
+								c = (Dictionary)vContrats.get(i);
+								System.out.println("----------------- Contrat -------------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Titre: "+c.get("titre"));
+								System.out.println("Signature: "+c.get("dateSignature"));
+								System.out.println("Expiration: "+c.get("dateExpiration"));
+								System.out.println("Signataire: "+c.get("signataire"));
+								System.out.println("Règlement: "+c.get("modeReglement"));
+								System.out.println("Type: "+c.get("type"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Contrat recherché");
 							
-							//Si le prog existe, on le modifie
+							//Si le doc existe, on le modifie
 							System.out.print("Nouveau titre: ");
 							String titre = lire();
-							System.out.print("Thématique: ");
-							String thematique = lire();
-							boolean modifie = clientXML.modifierProgramme(id, titre, thematique);
-							if (modifie) System.err.println("INFO: Programme modifié");
-							else System.err.println("ERREUR: Programme non modifié");
+							System.out.print("Jour (Signature): ");
+							String jourSignature = lire();
+							System.out.print("Mois (Signature): ");
+							String moisSignature = lire();
+							System.out.print("Année (Signature): ");
+							String anneeSignature = lire();
+							System.out.print("Jour (Expiration): ");
+							String jourExpiration = lire();
+							System.out.print("Mois (Expiration): ");
+							String moisExpiration = lire();
+							System.out.print("Année (Expiration): ");
+							String anneeExpiration = lire();
+							System.out.print("Signataire: ");
+							String signataire = lire();
+							System.out.print("Mode de règlement: ");
+							String modeReglement = lire();
+							System.out.print("Type: ");
+							String type = lire();
+							boolean modifie = clientXML.modifierContrat(id, titre, jourSignature, moisSignature, anneeSignature,
+									jourExpiration, moisExpiration, anneeExpiration, signataire, modeReglement, type);
+							if (modifie) System.err.println("INFO: Contrat modifié");
+							else System.err.println("ERREUR: Contrat non modifié");
 						}
-						else System.err.println("WARNING: Aucun programme disponible");
+						else System.err.println("WARNING: Aucun contrat disponible");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
 				}
 				
-				// MODIFIERCANAL
-				if  (ligne.equalsIgnoreCase("modifierCanal")) {
+				// INFOCONTRAT
+				if  (ligne.equalsIgnoreCase("infoContrat")) {
 					if (etatConnecte) {
-						
-						//ID du doc à modifier
-						System.out.print("ID du canal à modifier : ");
+						//ID du doc
+						System.out.print("ID du contrat : ");
 						String id = lire();
 						
-						//On affiche ses infos
-						Vector vCanaux = clientXML.rechercherCanal(id, "", "");
-						if (vCanaux!=null && vCanaux.size()>0) {
+						Dictionary c = clientXML.infoContrat(id);
+						
+						if (c != null) {
+							System.out.println("----------------- Contrat -------------------");
+							System.out.println("Id: "+c.get("id"));
+							System.out.println("Titre: "+c.get("titre"));
+							System.out.println("Signature: "+c.get("dateSignature"));
+							System.out.println("Expiration: "+c.get("dateExpiration"));
+							System.out.println("Signataire: "+c.get("signataire"));
+							System.out.println("Règlement: "+c.get("modeReglement"));
+							System.out.println("Type: "+c.get("type"));
+							System.out.println("----------------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Contrat affiché");
+						}
+						else System.err.println("WARNING: Aucun contrat disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+//### CONTRACTANT ###
+				
+				// CREERCONTRACTANT
+				if  (ligne.equalsIgnoreCase("creerContractant")) {
+					if (etatConnecte) {
+						System.out.print("Nom du contractant: ");
+						String nom = lire();
+						System.out.print("Adresse: ");
+						String adresse = lire();
+						System.out.print("Code Postal: ");
+						String codePostal = lire();
+						System.out.print("Ville: ");
+						String ville = lire();
+						System.out.print("Téléphone: ");
+						String telephone = lire();
+						System.out.print("Fax: ");
+						String fax = lire();
+						System.out.print("Email: ");
+						String mail = lire();
+						System.out.print("Type: ");
+						String type = lire();
+						boolean cree = clientXML.creerContractant(nom, adresse, codePostal, ville, telephone, fax, mail, type);
+						if (cree) System.err.println("INFO: Contractant créé");
+						else System.err.println("ERREUR: Contractant non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERCONTRACTANTS
+				if  (ligne.equalsIgnoreCase("listerContractant")) {
+					if (etatConnecte) {
+						Vector vContractants = clientXML.listerContractants();
+						if (vContractants!=null && vContractants.size()>0) {
 							//Parcours du vecteur, affichage des infos
-							Dictionary d;
-							for (int i=0; i<vCanaux.size(); i++){
-								d = (Dictionary)vCanaux.get(i);
-								System.out.println("----------------- Canal -------------------");
-								System.out.println("Id: "+d.get("id"));
-								System.out.println("Nom: "+d.get("nom"));
-								System.out.println("NbMax d'auditeurs: "+d.get("utilMax"));
+							Dictionary c;
+							for (int i=0; i<vContractants.size(); i++){
+								c = (Dictionary)vContractants.get(i);
+								System.out.println("--------------- Contractant -----------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Nom: "+c.get("nom"));
+								System.out.println("Adresse: "+c.get("adresse"));
+								System.out.println("Code postal: "+c.get("codePostal"));
+								System.out.println("Ville: "+c.get("ville"));
+								System.out.println("Téléphone: "+c.get("telephone"));
+								System.out.println("Fax: "+c.get("fax"));
+								System.out.println("Mail: "+c.get("mail"));
+								System.out.println("Type: "+c.get("type"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
 							}
-							System.err.println("INFO: Canal recherché");
+							System.err.println("INFO: Contractants listés");
+						}
+						else System.err.println("WARNING: Aucun contractant disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RECHERCHERCONTRACTANT
+				if  (ligne.equalsIgnoreCase("rechercherContractant")) {
+					if (etatConnecte) {
+						System.out.print("ID du contractant: ");
+						String id = lire();
+						System.out.print("Nom: ");
+						String nom = lire();
+						System.out.print("Adresse: ");
+						String adresse = lire();
+						System.out.print("Code postal: ");
+						String codePostal = lire();
+						System.out.print("Ville: ");
+						String ville = lire();
+						System.out.print("Téléphone: ");
+						String telephone = lire();
+						System.out.print("Fax: ");
+						String fax = lire();
+						System.out.print("Email: ");
+						String mail = lire();
+						System.out.print("Type: ");
+						String type = lire();
+						Vector vContractants = clientXML.rechercherContractant(id, nom, adresse, codePostal, ville, telephone, fax, mail, type);
+						if (vContractants!=null && vContractants.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vContractants.size(); i++){
+								c = (Dictionary)vContractants.get(i);
+								System.out.println("--------------- Contractant -----------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Nom: "+c.get("nom"));
+								System.out.println("Adresse: "+c.get("adresse"));
+								System.out.println("Code postal: "+c.get("codePostal"));
+								System.out.println("Ville: "+c.get("ville"));
+								System.out.println("Téléphone: "+c.get("telephone"));
+								System.out.println("Fax: "+c.get("fax"));
+								System.out.println("Mail: "+c.get("mail"));
+								System.out.println("Type: "+c.get("type"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Contractant recherché");
+						}
+						else System.err.println("WARNING: Aucun contractant disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERCONTRACTANT
+				if  (ligne.equalsIgnoreCase("supprimerContractant")) {
+					if (etatConnecte) {
+						System.out.print("ID du contractant ");
+						String id = lire();
+						if (clientXML.supprimerContractant(id)) {
+							System.err.println("INFO: Contractant supprimé");
+						}
+						else System.err.println("ERREUR: Suppression du contractant échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERCONTRACTANT
+				if  (ligne.equalsIgnoreCase("modifierContractant")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID du contractant à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vContractants = clientXML.rechercherContractant(id, "", "", "", "", "", "", "", "");
+						if (vContractants!=null && vContractants.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vContractants.size(); i++){
+								c = (Dictionary)vContractants.get(i);
+								System.out.println("--------------- Contractant -----------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Nom: "+c.get("nom"));
+								System.out.println("Adresse: "+c.get("adresse"));
+								System.out.println("Code postal: "+c.get("codePostal"));
+								System.out.println("Ville: "+c.get("ville"));
+								System.out.println("Téléphone: "+c.get("telephone"));
+								System.out.println("Fax: "+c.get("fax"));
+								System.out.println("Mail: "+c.get("mail"));
+								System.out.println("Type: "+c.get("type"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Contractant recherché");
 							
-							//Si le prog existe, on le modifie
+							//Si le doc existe, on le modifie
 							System.out.print("Nouveau nom: ");
 							String nom = lire();
-							System.out.print("NbMax d'auditeurs: ");
-							String utilMax = lire();
-							boolean modifie = clientXML.modifierCanal(id, nom, utilMax);
-							if (modifie) System.err.println("INFO: Canal modifié");
-							else System.err.println("ERREUR: Canal non modifié");
+							System.out.print("Adresse: ");
+							String adresse = lire();
+							System.out.print("Code Postal: ");
+							String codePostal = lire();
+							System.out.print("Ville: ");
+							String ville = lire();
+							System.out.print("Téléphone: ");
+							String telephone = lire();
+							System.out.print("Fax: ");
+							String fax = lire();
+							System.out.print("Email: ");
+							String mail = lire();
+							System.out.print("Type: ");
+							String type = lire();
+							boolean modifie = clientXML.modifierContractant(id, nom, adresse, codePostal, ville, telephone, fax, mail, type);
+							if (modifie) System.err.println("INFO: Contractant modifié");
+							else System.err.println("ERREUR: Contractant non modifié");
 						}
-						else System.err.println("WARNING: Aucun canal disponible");
+						else System.err.println("WARNING: Aucun contractant disponible");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
 				}
 				
-				//INFODOCUMENT
-				if  (ligne.equalsIgnoreCase("infoDocument")) {
+				// INFOCONTRACTANT
+				if  (ligne.equalsIgnoreCase("infoContractant")) {
 					if (etatConnecte) {
 						//ID du doc
-						System.out.print("ID du document : ");
+						System.out.print("ID du contractant : ");
 						String id = lire();
 						
-						Dictionary d = clientXML.infoDocument(id);
+						Dictionary c = clientXML.infoContractant(id);
 						
-						if (d != null) {
-							System.out.println("----------------- Document -------------------");
-							System.out.println("Id: "+d.get("id"));
-							System.out.println("Titre: "+d.get("titre"));
-							System.out.println("Durée: "+d.get("duree"));
-							System.out.println("Date: "+d.get("date"));
-							System.out.println("Genre: "+d.get("genre"));
-							System.out.println("Source: "+d.get("source"));
-							System.out.println("Langue: "+d.get("langue"));
-							System.out.println("Fichier: "+d.get("fichier"));
-							System.out.println("Artiste: "+d.get("artiste"));
-							System.out.println("Interprète: "+d.get("interprete"));
-							System.out.println("Compositeur: "+d.get("compositeur"));
-							System.out.println("----------------------------------------------");
-							System.out.println();
-							System.err.println("INFO: Document affiché");
-						}
-						else System.err.println("WARNING: Aucun document disponible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// INFOPROGRAMME
-				if  (ligne.equalsIgnoreCase("infoProgramme")) {
-					if (etatConnecte) {
-						//ID du prog
-						System.out.print("ID du programme : ");
-						String id = lire();
-						
-						Dictionary p = clientXML.infoProgramme(id);
-						
-						if (p!=null) {
-							System.out.println("----------------- Programme -------------------");
-							System.out.println("Id: "+p.get("id"));
-							System.out.println("Titre: "+p.get("titre"));
-							System.out.println("Thématique: "+p.get("thematique"));
-							System.out.println("Durée: "+p.get("duree"));
-							System.out.println("Nb docs: "+p.get("nbDocs"));
-							System.out.println("------------ Documents programmés ------------");
-							
-							Vector vDocs = (Vector)p.get("documents");
-							Dictionary doc;
-							for (int i=0; i<vDocs.size(); i++) {
-								doc = (Dictionary)vDocs.get(i);
-								System.out.println("IdDoc: "+doc.get("id"));
-								System.out.println("Titre: "+doc.get("titre"));
-								System.out.println("Durée: "+doc.get("duree"));
-								System.out.println("Calage: "+doc.get("calage"));
-								System.out.println();
-							}
-							System.out.println("-------------------------------------------");
-							System.err.println("INFO: Programme affiché");
-						}
-						else System.err.println("WARNING: Aucun programme disponible");
-					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
-					}
-				}
-				
-				// INFOCANAL
-				if  (ligne.equalsIgnoreCase("infoCanal")) {
-					if (etatConnecte) {
-						//ID du canal
-						System.out.print("ID du canal : ");
-						String id = lire();
-						
-						Dictionary c = clientXML.infoCanal(id);
-						if (c!=null) {
-							System.out.println("----------------- Canal -------------------");
+						if (c != null) {
+							System.out.println("--------------- Contractant -----------------");
 							System.out.println("Id: "+c.get("id"));
 							System.out.println("Nom: "+c.get("nom"));
-							System.out.println("NbMax auditeurs: "+c.get("utilMax"));
-							System.out.println("Nb progs: "+c.get("nbProgs"));
-							System.out.println("----------- Programmes planifiés ----------");
-							
-							Vector vProgs = (Vector)c.get("programmes");
-							Dictionary prog;
-							GregorianCalendar horaire = new GregorianCalendar();
-							String dateHoraire;
-							for (int i=0; i<vProgs.size(); i++) {
-								prog = (Dictionary)vProgs.get(i);
-								horaire.setTimeInMillis(Long.parseLong((String)prog.get("calage")));
-								dateHoraire = horaire.get(GregorianCalendar.DATE) + "/" +
-											  horaire.get(GregorianCalendar.MONTH) + "/" +
-											  horaire.get(GregorianCalendar.YEAR) + " - " +
-											  horaire.get(GregorianCalendar.HOUR_OF_DAY) + ":" +
-											  horaire.get(GregorianCalendar.MINUTE) + ":" +
-											  horaire.get(GregorianCalendar.SECOND);
-								
-								System.out.println("IdProg: "+prog.get("id"));
-								System.out.println("Titre: "+prog.get("titre"));
-								System.out.println("Durée: "+prog.get("duree"));
-								System.out.println("Horaire: "+dateHoraire);
-								System.out.println("Calage: "+prog.get("calage"));
-								System.out.println();
-							}
-							System.out.println("-------------------------------------------");
-							System.err.println("INFO: Canal affiché");
+							System.out.println("Adresse: "+c.get("adresse"));
+							System.out.println("Code postal: "+c.get("codePostal"));
+							System.out.println("Ville: "+c.get("ville"));
+							System.out.println("Téléphone: "+c.get("telephone"));
+							System.out.println("Fax: "+c.get("fax"));
+							System.out.println("Mail: "+c.get("mail"));
+							System.out.println("Type: "+c.get("type"));
+							System.out.println("----------------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Contractant affiché");
 						}
-						else System.err.println("WARNING: Aucun canal disponible");
+						else System.err.println("WARNING: Aucun contractant disponible");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
 				}
+				
+//### MENU ###
 				
 				// HELP
 				if (ligne.equalsIgnoreCase("help")) {
