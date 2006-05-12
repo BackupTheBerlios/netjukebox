@@ -18,11 +18,19 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Interface la base ldap avec JNDI
  */
 public class Ldap {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Ldap.class);
+
 	/**
 	 * Singleton
 	 */
@@ -108,7 +116,7 @@ public class Ldap {
     	this.login = login;
     	this.pwd = pwd;
     	this.auth = auth;
-    	this.role = role;
+    	//this.role = role;
     	this.base = base;
     	
     	return this.openLdap();
@@ -119,6 +127,12 @@ public class Ldap {
 	 * @return boolean
 	 */
 	public boolean openLdap() {
+		
+		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: openLdap");
+		}
 		
 		String role = null;
 		Hashtable<String,String> env = new Hashtable<String,String>();
@@ -131,40 +145,47 @@ public class Ldap {
 	    		connectanonyme = new InitialDirContext(env);
 	    		
 	    		Dictionary resultats = getLogin(login);
-	    		System.out.println(login);
-	    		System.out.println(resultats);
-	    		
+				logger.error("login :"+ login);
+				//logger.error(resultats);
+					    		
 	    		try {
 	    			Enumeration donnee = resultats.elements();
-	    		
 	    			Attributes result = (Attributes) donnee.nextElement();
 	    			Attribute ou = result.get("ou");
 	    			role = (String) ou.get();
 	    		} catch(Exception e) {
-	    			System.out.println(e);
-	    		}
-	    		
-	    		
-	    		
-	    		System.out.println("======================" + role);
-	    		
-	    		
-	    		
-	    		
+					logger.error("openLdap :", e);
+
+					}
+
+				logger.error("role: "+ role);
+			
 	    		String log = "uid=" + login + ",ou=" + role + "," + base;
 	    		
 	      		connect = (DirContext) connectanonyme.lookup("");
 	    		connect.addToEnvironment(Context.SECURITY_AUTHENTICATION, auth);
 	    		connect.addToEnvironment(Context.SECURITY_PRINCIPAL, log);
 	    		connect.addToEnvironment(Context.SECURITY_CREDENTIALS, pwd);
-	    		
-	    		System.out.println("Vous avez été connecté à la base "+ env);
+	    
+				logger.error("Vous avez été connecté à la base " + env);
+				
+				if (logger.isDebugEnabled()) {
+					logger.debug("Arrêt: openLdap");
+				}
 	    		return true;
 	    	} catch (NamingException e) {
-	    		e.printStackTrace();
+				logger.error("openLdap: ", e.printStackTrace());			
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("Arrêt: openLdap");
+				}
 	    		return false;
 	    	}
 	    }
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("Arrêt: openLdap");
+		}
 	    return false;
 	}
 	
@@ -174,11 +195,23 @@ public class Ldap {
 	 * @throws NamingException
 	 */
 	public boolean closeldap() throws NamingException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: closeldap");
+		}		
 		if (connect != null) {
 			connect.close();
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: closeldap");
+			}
 			return true;
 		}
-    	System.out.println("Vous avez été déconnecté de la base.");
+		
+		logger.error("Vous avez été déconnecté de la base.");
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("Arrêt: closeldap");
+		}
 		return false;
 	}
 	
@@ -191,6 +224,9 @@ public class Ldap {
 	 */
 	
 public boolean executeSupprimer(String login) throws NamingException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: executeSupprimer");
+		}
 		
 		Dictionary resultat = getLogin(login);
 		try {
@@ -200,13 +236,19 @@ public boolean executeSupprimer(String login) throws NamingException {
 			Attribute branche = result.get("ou");
 			String l =(String) log.get();
 			String b =(String) branche.get();
-			System.out.println("L'utilisateur "+ l + " existe bien.");
-			connect.destroySubcontext("uid="+l+",ou="+ b);
-			System.out.println( "L'utilisateur "+l+" référencé en tant que "+ b + " a été supprimé." );
+			logger.error("L'utilisateur " + l + " existe bien.");
+						connect.destroySubcontext("uid="+l+",ou="+ b);
+			logger.error("L'utilisateur " + l + " référencé en tant que " + b + " a été supprimé.");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: executeSupprimer");
+			}
 			return true;
 			
 			}catch (Exception e){
-				System.out.println("L'utilisateur "+ login +" n'existe pas.");
+			logger.error("L'utilisateur "+ login + " n'existe pas.");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: executeSupprimer");
+			}
 				return false;
 			} 
 		}
@@ -223,6 +265,9 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @throws NamingException 
 	 */
 	public boolean ModifieAttributs(String login, String role, String newlogin, String newpwd, String newnom, String newprenom, String newmail, String newpays) throws NamingException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: ModifieAttributs");
+		}
 		String log=login;
 		
 		if (!newlogin.equalsIgnoreCase(login)) {
@@ -231,12 +276,12 @@ public boolean executeSupprimer(String login) throws NamingException {
 				Enumeration donnee = resultat.elements();
 				Attributes result = (Attributes) donnee.nextElement();
 				Attribute l = result.get("uid");
-				System.out.println(l.get());
+				logger.error(l.get());				
 				String r =(String) l.get();
-				System.out.println("L'utilisateur : "+ newlogin + " existe déjà! Votre login ne peut être modifié!");
+				logger.error("L'utilisateur : "+ newlogin+ " existe déjà! Votre login ne peut être modifié!");
 				log=login;
 			} catch (Exception e){
-				System.out.println("L'utilisateur : "+ newlogin + " n'existe pas. Votre login va être modifié!");
+				logger.error("L'utilisateur : "+ newlogin+ " n'existe pas. Votre login va être modifié!");
 				connect.rename("uid=" + login + ",ou=" + role,"uid=" + newlogin + ",ou=" + role );
 				log=newlogin;
 			}
@@ -291,16 +336,20 @@ public boolean executeSupprimer(String login) throws NamingException {
 				}
 			}
 		    mods[5] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("cn", newcn));
-
-		    System.out.println( "test ");
+			
+			logger.error("test");
 		    // Modifie les attributs de l'objet
 		    connect.modifyAttributes(requete, mods);
-
-		    System.out.println( "Les modifications sont faites! ");
-		    
+			logger.error("Les modifications sont faites! ");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: ModifieAttributs");
+			}
 			return true;
 		} catch (NamingException e) {
-			System.err.println("Les modifications ont échoué. " + e);
+			logger.error(" Les modifications ont échoué. ");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: ModifieAttributs");
+			}
 			return false;
 		}
 	}
@@ -317,6 +366,9 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 */
 	public boolean executeCreer(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: executeCreer");
+		}
 		// entry's DN
 		String entryDN = "uid=" + login + ",ou=" + role;
 		String personne = nom + " " + prenom;
@@ -350,10 +402,16 @@ public boolean executeSupprimer(String login) throws NamingException {
     		entry.put(oc);
     		// Add the entry
     		connect.createSubcontext(entryDN, entry);
-    		System.out.println( "L'utilisateur "+ uid +" est crée sous "+entryDN+"!");
+			logger.error("L'utilisateur "+ login + " est crée. Il appartient au groupe " + role + "!");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: executeCreer");
+			}
     		return true ;
     	} catch (NamingException e) {
-    		System.err.println("Erreur pour la création de l'utilisateur "+ uid +"!"+ e);
+			logger.error("L'utilisateur "+ login + " n'a pas pu être créé!");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: executeCreer");
+			}
     		return false;
     	}
 	}
@@ -366,14 +424,23 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 */
 	public boolean changerRole(String login, String ancienrole, String nouveaurole){
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: changerRole");
+		}
 		String ancien = "uid=" + login + ", ou=" + ancienrole;
 		String nouveau = "uid=" + login + ", ou=" + nouveaurole;
 		try {
 			connect.rename(ancien, nouveau);
 			//System.out.println(connect.lookup(nouveau));
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: changerRole");
+			}
 		    return true;
 		} catch (NamingException e) {
-			System.out.println("Erreur l'utilisateur n'existe pas");
+			logger.error("L'utilisateur n'existe pas");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: changerRole");
+			}
 		    return false;
 		}
 	}
@@ -384,6 +451,9 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 */
 	public Dictionary getLogin(String login){
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: getLogin");
+		}
 		try {
 			// Specify the ids of the attributes to return
 			String[] attr = {"uid", "userPassword", "sn", "givenName", "cn", "mail", "st", "ou"};
@@ -396,9 +466,15 @@ public boolean executeSupprimer(String login) throws NamingException {
 			NamingEnumeration answer = connectanonyme.search("", filter, ctls);
 			//Print the answer
 			Dictionary resultat = printSearchEnumeration(answer);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: getLogin");
+			}
 			return resultat;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("getLogin: ", e.printStackTrace());
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: getLogin");
+			}
 			return null;
 		}
 	}
@@ -418,7 +494,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 		    }
 		    return resultat;
 		} catch (NamingException e) {
-		    e.printStackTrace();
+			logger.error("printSearchEnumeration: ", e.printStackTrace());
 		    return  null;
 		}
 	}
@@ -431,16 +507,26 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 */
 	
 	public Dictionary getAttributs(String login, String role) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Démarrage: getAttributs");
+		}
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
 			Attributes answer = connect.getAttributes(requete);
 			Dictionary ligne = printAttrs(answer);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: getAttributs");
+			}
 			return ligne;
 		} catch (Exception e) {
-			System.out.println("Erreur l'utilisateur : "+ login + " n'existe pas");
+			logger.error("L'utilisateur : "+ login + " n'existe pas");
+			}
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arrêt: getAttributs");
+			}
 			return null;
 		}
-	}
+	
 
 	/**
 	 * Récupère les attributs d'un utilisateur
@@ -451,7 +537,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 	private Dictionary printAttrs(Attributes attrs) {
 		Dictionary ligne = new Hashtable();
 		if (attrs == null) {
-			System.out.println("No attributes");
+			logger.error("Pas d'attributs à afficher!");
 		} else {
 			try {
 				for (NamingEnumeration ae = attrs.getAll();
@@ -464,14 +550,10 @@ public boolean executeSupprimer(String login) throws NamingException {
 				}	
 				return ligne;
 			} catch (NamingException e) {
-				System.out.println("Erreur l'utilisateur n'existe pas");
+				logger.error("L'utilisateur n'existe pas!");
 				return null;
 			}
 		}
 		return ligne;
 	}
 }
-
-
-
-
