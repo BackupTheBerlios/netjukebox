@@ -174,7 +174,7 @@ public class Ldap {
 				}
 	    		return true;
 	    	} catch (NamingException e) {
-				logger.error("openLdap: ", e.printStackTrace());			
+				logger.error("openLdap: "+ e);			
 
 				if (logger.isDebugEnabled()) {
 					logger.debug("Arrêt: openLdap");
@@ -471,7 +471,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 			}
 			return resultat;
 		} catch (Exception e) {
-			logger.error("getLogin: ", e.printStackTrace());
+			logger.error("getLogin: "+ e);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Arrêt: getLogin");
 			}
@@ -494,7 +494,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 		    }
 		    return resultat;
 		} catch (NamingException e) {
-			logger.error("printSearchEnumeration: ", e.printStackTrace());
+			logger.error("printSearchEnumeration: ", e);
 		    return  null;
 		}
 	}
