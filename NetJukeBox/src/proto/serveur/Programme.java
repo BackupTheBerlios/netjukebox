@@ -1,5 +1,8 @@
 package proto.serveur;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -10,6 +13,10 @@ import java.util.Vector;
  * Programme de diffusion
  */
 public class Programme {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Programme.class);
 
 // ATTRIBUTS DU PROGRAMME
 //*********************************************************
@@ -78,9 +85,12 @@ public class Programme {
 	 * @throws SQLException 
 	 */
 	public static Programme create(String titre, String thematique) /*throws SQLException*/ {
+		//PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
+		//PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
 		
-		System.out.println("Programme.create()");
+		logger.debug("Démarrage: Programme.create");
 		
+				
 		String requete = "INSERT INTO programme (titre, thematique, duree) VALUES ('" + titre + "', '" + thematique + "', '0');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -88,10 +98,12 @@ public class Programme {
 		//Si l'insertion s'est bien déroulée
 		if (nbRows>0) {
 			//On retourne ensuite un objet pour ce programme
+			logger.debug("Arrêt: Programme.create");
 			return Programme.getByTitre(titre);
 		}
 		
 		//Sinon, retourne un objet vide
+		logger.debug("Arrêt: Programme.create");
 		return null;
 	}
 	
@@ -102,8 +114,8 @@ public class Programme {
 	 * @throws SQLException 
 	 */
 	public static Programme getByTitre(String titre) /*throws SQLException*/ {
-		
-		System.out.println("Programme.getByTitre("+titre+")");
+		logger.debug("Démarrage: Programme.getByTitre");
+		logger.info ("Programme.getByTitre("+titre+")");
 		
 		String requete = "SELECT * FROM programme WHERE titre = '" + titre + "';";
 		Jdbc base = Jdbc.getInstance();
@@ -130,6 +142,7 @@ public class Programme {
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
+			logger.debug("Arrêt: Programme.getByTitre");
 			return new Programme(id, titreProg, thematique, duree);
 		}
 		
@@ -143,6 +156,7 @@ public class Programme {
 		*/
 		
 		//Sinon, on retourne un objet vide
+		logger.debug("Arrêt: Programme.getByTitre");
 		return null;
 	}
 	
@@ -153,8 +167,8 @@ public class Programme {
 	 * @throws SQLException 
 	 */
 	public static Programme getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("Programme.getById("+id+")");
+		logger.debug("Démarrage: Programme.getById");
+		logger.info("Programme.getById("+id+")");
 		
 		String requete = "SELECT * FROM programme WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
@@ -181,6 +195,7 @@ public class Programme {
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
+			logger.debug("Arrêt: Programme.getById");
 			return new Programme(idProg, titre, thematique, duree);
 		}
 		
@@ -194,6 +209,7 @@ public class Programme {
 		*/
 		
 		//Sinon, on retourne un objet vide
+		logger.debug("Arrêt: Programme.getById");
 		return null;
 	}
 	
@@ -203,9 +219,8 @@ public class Programme {
 	 * @throws SQLException 
 	 */
 	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("Programme.getAll()");
-		
+		logger.debug("Démarrage: getAll");
+				
 		//On crée un vecteur pour contenir les objets programmes instanciés
 		Hashtable programmes = new Hashtable();
 		
@@ -214,7 +229,7 @@ public class Programme {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Programme.getAll() : "+resultats.size()+" programme(s) trouvé(s)");
+		logger.info("Programme.getAll() : "+resultats.size()+" programme(s) trouvé(s)");
 		
 		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -230,6 +245,7 @@ public class Programme {
 		*/
 		
 		//On retourne le vecteur contenant les objets programmes instanciés
+		logger.debug("Arrêt: getAll");
 		return programmes;
 	}
 	
@@ -240,13 +256,14 @@ public class Programme {
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: deleteById");
 		//On supprime le programme de la base, en partant d'un id
 		String requete = "DELETE FROM programme WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
+		logger.debug("Arrêt: deleteById");
 		return nbRows>0;
 	}
 	
@@ -261,7 +278,7 @@ public class Programme {
 	 * @return boolean
 	 */
 	public boolean modifier(String titre, String thematique) {
-		
+		logger.debug("Démarrage: modifier");
 		String requete = "UPDATE programme SET titre = '" + titre + "', thematique = '" + thematique + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -271,7 +288,9 @@ public class Programme {
 		if (nbRows>0) {
 			this.titre = titre;
 			this.thematique = thematique;
+			logger.debug("Arrêt: modifier");
 		}
+		logger.debug("Arrêt: modifier");
 		return nbRows>0;
 	}
 	
@@ -281,7 +300,7 @@ public class Programme {
 	 * @throws SQLException 
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: supprimer");
 		//On supprime les associations programme/document
 		Document d;
 		for (int i=0; i<documents.size(); i++){
@@ -290,6 +309,7 @@ public class Programme {
 		}
 		
 		//On supprime les infos de la base
+		logger.debug("Arrêt: supprimer");
 		return Programme.deleteById(this.id);
 	}
 	
@@ -298,7 +318,7 @@ public class Programme {
 	 * @param Document doc
 	 */
 	public void ajouterDocument(Document doc) {
-		
+		logger.debug("Démarrage: ajouterDocument");
 		//On ajoute le document au programme
 		String requete = "INSERT INTO composer (id_prog, id_doc, calage) VALUES ('" + id + "', '" + doc.getId() + "', '" +duree+"');";
 		Jdbc base = Jdbc.getInstance();
@@ -315,6 +335,7 @@ public class Programme {
 			
 			//On signale au document cet ajout
 			doc.ajouterProgramme(this);
+			logger.debug("Arrêt: ajouterDocument");
 		}
 	}
 
@@ -324,7 +345,7 @@ public class Programme {
 	 * @return boolean
 	 */
 	public boolean retirerDocument(String calage) {
-		
+		logger.debug("Démarrage: retirerDocument");
 		// On retire le document du programme
 		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND calage='"+calage+"';";
 		Jdbc base = Jdbc.getInstance();
@@ -345,10 +366,12 @@ public class Programme {
 			//On met à jour le vecteur d'association
 			documents.remove(Long.parseLong(calage));
 			
+			logger.debug("Arrêt: retirerDocument");			
 			return true;
 		}
 		
 		//Sinon
+		logger.debug("Arrêt: retirerDocument");
 		return false;
 	}
 	
@@ -357,7 +380,7 @@ public class Programme {
 	 * @param Programme prog
 	 */
 	public void ajouterProgramme(Programme prog) {
-		
+		logger.debug("Démarrage: ajouterProgramme");
 		//On récupère la liste des docs du programme à ajouter
 		Enumeration listeDocs = prog.getDocuments().elements();
 		
@@ -365,6 +388,7 @@ public class Programme {
 		while (listeDocs.hasMoreElements()) {
 			ajouterDocument((Document)listeDocs.nextElement());
 		}
+		logger.debug("Arrêt: ajouterProgramme");
 	}
 	
 //#### GETTERS ####
@@ -374,7 +398,7 @@ public class Programme {
 	 * Retourne la liste des documents associés au programme
 	 * @return Hashtable
 	 */
-	public Hashtable listerDocuments() {
+	public /*pure*/ Hashtable listerDocuments() {
 		return documents;
 	}
 	
@@ -382,7 +406,7 @@ public class Programme {
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */
-	public Dictionary getAttributesDictionary() {
+	public /*pure*/ Dictionary getAttributesDictionary() {
 		
 		Dictionary dico = new Hashtable();
 		
@@ -418,8 +442,8 @@ public class Programme {
 	 * Retourne la liste des documents programmés
 	 * @return Hastable
 	 */
-	private Hashtable getDocumentsProgrammes() {
-		System.out.println("Programme.getDocumentsProgrammes()");
+	private /*pure*/ Hashtable getDocumentsProgrammes() {
+		logger.info("Programme.getDocumentsProgrammes()");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable docs = new Hashtable();
@@ -429,7 +453,7 @@ public class Programme {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Programme.getDocumentsProgrammes() : "+resultats.size()+" docment(s) trouvé(s)");
+		logger.info("Programme.getDocumentsProgrammes() : "+resultats.size()+" docment(s) trouvé(s)");
 		
 		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -446,7 +470,7 @@ public class Programme {
 	 * Retourne l'identifiant du programme
 	 * @return String
 	 */
-	public String getId() {
+	public /*pure*/ String getId() {
 		return id;
 	}
 
@@ -454,7 +478,7 @@ public class Programme {
 	 * Retourne le titre du programme
 	 * @return String
 	 */
-	public String getTitre() {
+	public /*pure*/ String getTitre() {
 		return titre;
 	}
 
@@ -462,7 +486,7 @@ public class Programme {
 	 * Retourne la thématique du programme
 	 * @return String
 	 */
-	public String getThematique() {
+	public /*pure*/ String getThematique() {
 		return thematique;
 	}
 	
@@ -470,7 +494,7 @@ public class Programme {
 	 * Retourne les documents associés au programme
 	 * @return Vector of Document
 	 */
-	public Hashtable getDocuments() {
+	public /*pure*/ Hashtable getDocuments() {
 		return documents;
 	}
 
@@ -478,7 +502,7 @@ public class Programme {
 	 * Retourne l'état du programme
 	 * @return boolean
 	 */
-	public boolean getEtat() {
+	public /*pure*/ boolean getEtat() {
 		return etat;
 	}
 	
@@ -486,7 +510,7 @@ public class Programme {
 	 * Retourne la durée du programme
 	 * @return long
 	 */
-	public long getDuree() {
+	public /*pure*/ long getDuree() {
 		return duree;
 	}
 	
@@ -500,6 +524,7 @@ public class Programme {
 	 * @throws SQLException
 	 */
 	public boolean setDuree(long duree) /*throws SQLException*/ {
+		logger.debug("Démarrage: setDuree");
 		String requete = "UPDATE programme SET duree = '" + duree + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -507,7 +532,9 @@ public class Programme {
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
 			this.duree = duree;
+			logger.debug("Arrêt: setDuree");
 		}
+		logger.debug("Arrêt: setDuree");
 		return nbRows>0;
 	}
 
@@ -518,6 +545,7 @@ public class Programme {
 	 * @throws SQLException
 	 */
 	public boolean setTitre(String titre) /*throws SQLException*/ {
+		logger.debug("Démarrage: setTitre");
 		String requete = "UPDATE programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -525,7 +553,9 @@ public class Programme {
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
 			this.titre = titre;
+			logger.debug("Arrêt: setTitre");
 		}
+		logger.debug("Arrêt: setTitre");
 		return nbRows>0;
 	}
 	
@@ -536,6 +566,7 @@ public class Programme {
 	 * @throws SQLException
 	 */
 	public boolean setThematique(String thematique) /*throws SQLException*/ {
+		logger.debug("Démarrage: setThematique");
 		String requete = "UPDATE programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -543,7 +574,9 @@ public class Programme {
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
 			this.thematique = thematique;
+			logger.debug("Arrêt: setThematique");
 		}
+		logger.debug("Arrêt: setThematique");
 		return nbRows>0;
 	}
 	
@@ -587,7 +620,7 @@ public class Programme {
 	// A quoi ça sert ???
 	///// ==> public Diffusion dIFFUSION; ==> A DECOMMENTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-	public boolean enDiffusion() {
+	public /*pure*/ boolean enDiffusion() {
 		return false;
 	}
 
