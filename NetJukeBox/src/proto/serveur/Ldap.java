@@ -130,10 +130,8 @@ public class Ldap {
 		
 		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: openLdap");
-		}
-		
+		logger.debug("Démarrage: openLdap");
+				
 		String role = null;
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
@@ -168,25 +166,18 @@ public class Ldap {
 	    		connect.addToEnvironment(Context.SECURITY_CREDENTIALS, pwd);
 	    
 				logger.error("Vous avez été connecté à la base " + env);
+								
+				logger.debug("Arrêt: openLdap");
 				
-				if (logger.isDebugEnabled()) {
-					logger.debug("Arrêt: openLdap");
-				}
 	    		return true;
 	    	} catch (NamingException e) {
 				logger.error("openLdap: "+ e);			
-
-				if (logger.isDebugEnabled()) {
-					logger.debug("Arrêt: openLdap");
-				}
-	    		return false;
+				logger.debug("Arrêt: openLdap");
+				return false;
 	    	}
 	    }
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("Arrêt: openLdap");
-		}
-	    return false;
+		logger.debug("Arrêt: openLdap");
+		return false;
 	}
 	
 	/**
@@ -195,23 +186,16 @@ public class Ldap {
 	 * @throws NamingException
 	 */
 	public boolean closeldap() throws NamingException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: closeldap");
-		}		
+		logger.debug("Démarrage: closeldap");
+	
 		if (connect != null) {
 			connect.close();
-
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: closeldap");
-			}
+			logger.debug("Arrêt: closeldap");
 			return true;
 		}
 		
 		logger.error("Vous avez été déconnecté de la base.");
-		
-		if (logger.isDebugEnabled()) {
-			logger.debug("Arrêt: closeldap");
-		}
+		logger.debug("Arrêt: closeldap");
 		return false;
 	}
 	
@@ -224,10 +208,8 @@ public class Ldap {
 	 */
 	
 public boolean executeSupprimer(String login) throws NamingException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: executeSupprimer");
-		}
-		
+		logger.debug("Démarrage: executeSupprimer");
+			
 		Dictionary resultat = getLogin(login);
 		try {
 			Enumeration donnee = resultat.elements();
@@ -239,17 +221,13 @@ public boolean executeSupprimer(String login) throws NamingException {
 			logger.error("L'utilisateur " + l + " existe bien.");
 						connect.destroySubcontext("uid="+l+",ou="+ b);
 			logger.error("L'utilisateur " + l + " référencé en tant que " + b + " a été supprimé.");
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: executeSupprimer");
-			}
+			logger.debug("Arrêt: executeSupprimer");
 			return true;
 			
 			}catch (Exception e){
 			logger.error("L'utilisateur "+ login + " n'existe pas.");
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: executeSupprimer");
-			}
-				return false;
+			logger.debug("Arrêt: executeSupprimer");
+			return false;
 			} 
 		}
 
@@ -265,9 +243,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @throws NamingException 
 	 */
 	public boolean ModifieAttributs(String login, String role, String newlogin, String newpwd, String newnom, String newprenom, String newmail, String newpays) throws NamingException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: ModifieAttributs");
-		}
+		logger.debug("Démarrage: ModifieAttributs");
 		String log=login;
 		
 		if (!newlogin.equalsIgnoreCase(login)) {
@@ -341,15 +317,11 @@ public boolean executeSupprimer(String login) throws NamingException {
 		    // Modifie les attributs de l'objet
 		    connect.modifyAttributes(requete, mods);
 			logger.error("Les modifications sont faites! ");
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: ModifieAttributs");
-			}
+			logger.debug("Arrêt: ModifieAttributs");
 			return true;
 		} catch (NamingException e) {
 			logger.error(" Les modifications ont échoué. ");
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: ModifieAttributs");
-			}
+			logger.debug("Arrêt: ModifieAttributs");
 			return false;
 		}
 	}
@@ -366,9 +338,8 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 */
 	public boolean executeCreer(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: executeCreer");
-		}
+		logger.debug("Démarrage: executeCreer");
+	
 		// entry's DN
 		String entryDN = "uid=" + login + ",ou=" + role;
 		String personne = nom + " " + prenom;
@@ -403,16 +374,12 @@ public boolean executeSupprimer(String login) throws NamingException {
     		// Add the entry
     		connect.createSubcontext(entryDN, entry);
 			logger.error("L'utilisateur "+ login + " est crée. Il appartient au groupe " + role + "!");
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: executeCreer");
-			}
-    		return true ;
+			logger.debug("Arrêt: executeCreer");
+			return true ;
     	} catch (NamingException e) {
 			logger.error("L'utilisateur "+ login + " n'a pas pu être créé!");
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: executeCreer");
-			}
-    		return false;
+			logger.debug("Arrêt: executeCreer");
+			return false;
     	}
 	}
 	
@@ -424,24 +391,18 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 */
 	public boolean changerRole(String login, String ancienrole, String nouveaurole){
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: changerRole");
-		}
+		logger.debug("Démarrage: changerRole");
 		String ancien = "uid=" + login + ", ou=" + ancienrole;
 		String nouveau = "uid=" + login + ", ou=" + nouveaurole;
 		try {
 			connect.rename(ancien, nouveau);
 			//System.out.println(connect.lookup(nouveau));
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: changerRole");
-			}
-		    return true;
+			logger.debug("Arrêt: changerRole");
+			return true;
 		} catch (NamingException e) {
 			logger.error("L'utilisateur n'existe pas");
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: changerRole");
-			}
-		    return false;
+			logger.debug("Arrêt: changerRole");
+			return false;
 		}
 	}
 	
@@ -451,9 +412,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * @return
 	 */
 	public Dictionary getLogin(String login){
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: getLogin");
-		}
+		logger.debug("Démarrage: getLogin");
 		try {
 			// Specify the ids of the attributes to return
 			String[] attr = {"uid", "userPassword", "sn", "givenName", "cn", "mail", "st", "ou"};
@@ -466,15 +425,11 @@ public boolean executeSupprimer(String login) throws NamingException {
 			NamingEnumeration answer = connectanonyme.search("", filter, ctls);
 			//Print the answer
 			Dictionary resultat = printSearchEnumeration(answer);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: getLogin");
-			}
+			logger.debug("Arrêt: getLogin");
 			return resultat;
 		} catch (Exception e) {
 			logger.error("getLogin: "+ e);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: getLogin");
-			}
+			logger.debug("Arrêt: getLogin");
 			return null;
 		}
 	}
@@ -507,23 +462,17 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 */
 	
 	public Dictionary getAttributs(String login, String role) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Démarrage: getAttributs");
-		}
+		logger.debug("Démarrage: getAttributs");
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
 			Attributes answer = connect.getAttributes(requete);
 			Dictionary ligne = printAttrs(answer);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: getAttributs");
-			}
+			logger.debug("Arrêt: getAttributs");
 			return ligne;
 		} catch (Exception e) {
 			logger.error("L'utilisateur : "+ login + " n'existe pas");
 			}
-			if (logger.isDebugEnabled()) {
-				logger.debug("Arrêt: getAttributs");
-			}
+			logger.debug("Arrêt: getAttributs");
 			return null;
 		}
 	
