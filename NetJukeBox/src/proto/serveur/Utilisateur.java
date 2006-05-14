@@ -1,5 +1,7 @@
 package proto.serveur;
 
+import org.apache.log4j.Logger;
+
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -8,10 +10,18 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 /**
  * Utlisateur du Net-JukeBox
  */
 public class Utilisateur {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Utilisateur.class);
 
 // ATTRIBUTS
 //**********************************************
@@ -72,14 +82,20 @@ public class Utilisateur {
 	 */
 	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays, String role) throws NamingException {
 		
+	    //PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
+		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
+		logger.debug("Démarrage: Utilisateur.create");
+				
 		Ldap ldap = Ldap.getInstance();
 		ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
+		
+		logger.debug("Arrêt: Utilisateur.create");
 		
 		//On retourne un objet configuré avec les infos issues de LDAP
 		return Utilisateur.getByLogin(login);
 		
 	}
-	 
+
 	/**
 	 * Insancie un objet utilisateur après avoir récupéré ces infos depuis LDAP à partir de son login
 	 * @param login
@@ -87,6 +103,7 @@ public class Utilisateur {
 	 */
 	@SuppressWarnings("static-access")
 	public static Utilisateur getByLogin(String log) throws NamingException {
+		logger.debug("Démarrage: Utilisateur.getByLogin");
 		
 		Ldap ldap = Ldap.getInstance();
 		Dictionary resultats = ldap.getLogin(log);
@@ -125,9 +142,11 @@ public class Utilisateur {
 			String pays = (String) st.get();
 			String role = (String) ou.get();
 			
+			logger.debug("Arrêt: Utilisateur.GetByLogin");
+			
 			//On retourne l'objet
 			return new Utilisateur(login, encStrPassword, nom, prenom, email, pays, role);
-		}
+		}			
 		
 		/**
 		if (log.equalsIgnoreCase("toto")) {
@@ -148,13 +167,16 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	public static boolean deleteByLogin(String login) throws NamingException {
-		
+
+		logger.debug("Démarrage: deleteByLogin");				
 		//On supprime l'utilisateur de l'annuaire, en partant d'un login
 		Ldap ldap = Ldap.getInstance();
 		//On retourne le resultat de l'opération (succès/échec)
 		if (ldap.executeSupprimer(login)) {
+			logger.debug("Arrêt: deleteByLogin");
 			return true;
 		} else {
+			logger.debug("Arrêt: deleteByLogin");
 			return false;
 		}
 	}
@@ -166,6 +188,8 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	public static /*@ pure @*/ boolean verifierLogin(String login) throws NamingException {
+		
+		logger.debug("Démarrage: verifierLogin");
 		
 		String log, r, encStrPassword;
 		
@@ -184,14 +208,18 @@ public class Utilisateur {
 				log = (String) uid.get();
 				r = (String) role.get();
 				
+
+				logger.debug("Arrêt: verifierLogin");
 				return true;
 				//return log.equalsIgnoreCase(login); 
 			} else {
-				System.out.println("err : " + login + " non présent" );
+				logger.info("err : " + login + " non présent" );
+				logger.debug("Arrêt: verifierLogin");
 				return false;
 			}
 		} catch (Exception e){
-			System.out.println("Erreur le login : " + login + " n'existe pas");
+			logger.fatal("Erreur le login : " + login + " n'existe pas");
+			logger.fatal("Arrêt: verifierLogin");
 			return false;
 		}
 		//return (login.equalsIgnoreCase("toto"));
@@ -204,6 +232,7 @@ public class Utilisateur {
 	 * @return boolean
 	 */
 	public static /*@ pure @*/ boolean verifierPwd(String login, String pwd) {
+		logger.debug("Démarrage: verifierPwd");
 		
 		String encStrPassword = null;
 		String log = null;
@@ -223,17 +252,20 @@ public class Utilisateur {
 			}
 			
 			if ((login.equalsIgnoreCase(log)) && (pwd.equalsIgnoreCase(encStrPassword))) {
-				System.out.println(login + " & " + pwd + " correct" );
+				logger.info(login + " & " + pwd + " correct" );
+				logger.debug("Arrêt: verifierPwd");
 				return true;
 				
 				//return log.equalsIgnoreCase(login); 
 				} else {
-					System.out.println("err : " + login + " & " + pwd + " incorrect" );
+					logger.info("err : " + login + " & " + pwd + " incorrect" );
+					logger.debug("Arrêt: verifierPwd");
 					return false;	
 					
 				}
 		} catch (Exception e){
-			System.out.println("Erreur le login : " + login + " n'existe pas");
+			logger.fatal("Erreur le login : " + login + " n'existe pas");
+			logger.fatal("Arrêt: verifierPwd");
 			return false;
 		}
 	}
@@ -270,11 +302,14 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	public boolean supprimer() throws NamingException {
+		logger.debug("Démarrage: supprimer");
 		
 		//On déconnecte l'utilisateur
 		this.deconnecter();
 		
 		//On supprime ses infos de l'annuaire
+		boolean returnboolean = Utilisateur.deleteByLogin(this.login);
+		logger.debug("Arrêt: supprimer");
 		return Utilisateur.deleteByLogin(this.login);
 	}	
 		
@@ -285,6 +320,7 @@ public class Utilisateur {
 	 */
 	public boolean deconnecter() {
 		// your code here
+		
 		return false;
 	}
 
@@ -321,8 +357,10 @@ public class Utilisateur {
 	 */
 	public boolean modifierInfos(String login, String role, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
 		
+		logger.debug("Démarrage: modifierInfos");
 		Ldap ldap = Ldap.getInstance();
 		ldap.ModifieAttributs(login, role, newlogin, pwd, nom, prenom, mail, pays);
+		logger.debug("Arrêt: modifierInfos");
 		return true;
 	}
 
@@ -459,8 +497,11 @@ public class Utilisateur {
 	 */
 	@SuppressWarnings("static-access")
 	public void ajouterPermission(String login, String ancienrole, String nouveaurole) {
+		
+		logger.debug("Démarrage: ajouterPermission");
 		Ldap ldap = Ldap.getInstance();
 		ldap.changerRole(login, ancienrole, nouveaurole);
+		logger.debug("Arrêt: ajouterPermission");
 	}
 
 	/**
