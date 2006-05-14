@@ -213,7 +213,7 @@ public class Utilisateur {
 				return true;
 				//return log.equalsIgnoreCase(login); 
 			} else {
-				logger.info("err : " + login + " non présent" );
+				logger.info("Err: " + login + " non présent" );
 				logger.debug("Arrêt: verifierLogin");
 				return false;
 			}
@@ -308,7 +308,6 @@ public class Utilisateur {
 		this.deconnecter();
 		
 		//On supprime ses infos de l'annuaire
-		boolean returnboolean = Utilisateur.deleteByLogin(this.login);
 		logger.debug("Arrêt: supprimer");
 		return Utilisateur.deleteByLogin(this.login);
 	}	
