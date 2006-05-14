@@ -128,8 +128,10 @@ public class Ldap {
 	 */
 	public boolean openLdap() {
 		
-		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
+		//PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
+		PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
 
+		
 		logger.debug("Démarrage: openLdap");
 				
 		String role = null;

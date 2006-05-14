@@ -94,191 +94,192 @@ public class Canal {
 		this.id = id;
 		this.nom = nom;
 		this.utilMax = utilMax;
-		this.programmes = getProgrammesPlanifies();
 		this.timer = new Timer(true);
 		this.tasks = new Hashtable();
+		
+		//this.programmes = getProgrammesPlanifies();
 	}
 
 // METHODES STATIQUES (propres à la classe, inaccessibles depuis un objet)
 // *************************************************
 	
-	/**
-	 * Création du canal en base
-	 * @param String nom
-	 * @param int utilmax
-	 * @return Canal
-	 * @throws SQLException 
-	 */
-	public static Canal create(String nom, int utilmax) /*throws SQLException*/ {
-		
-		System.out.println("Canal.create()");
-		
-		String requete = "INSERT INTO canal (nom, utilmax) VALUES ('" + nom + "', '" + utilmax + "');";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//Si l'insertion s'est bien déroulée
-		if (nbRows>0) {
-			//On retourne ensuite un objet pour ce canal
-			return Canal.getByNom(nom);
-		}
-		
-		//Sinon, retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un nom
-	 * @param String nom
-	 * @return Canal
-	 * @throws SQLException 
-	 */
-	public static Canal getByNom(String nom) /*throws SQLException*/ {
-		
-		System.out.println("Canal.getByNom("+nom+")");
-		
-		//On va chercher les infos depuis la base, en partant d'un nom
-		String requete = "SELECT * FROM canal WHERE nom = '" + nom + "';";
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		// S'il y a un resultat
-		if (resultats != null && resultats.size()>0) {
-			
-			//On prend le 1er élément
-			Dictionary dico = (Dictionary) resultats.firstElement();
-			
-			//On mappe les champs
-			String id = String.valueOf((Integer)dico.get("id"));
-			String nomCanal = (String)dico.get("nom");
-			int utilMax = (int)(Integer)dico.get("utilmax");
-			
-			System.out.println("-------- Canal -----------");
-			System.out.println("Nb de champs: "+dico.size());
-			System.out.println("ID: "+id);
-			System.out.println("Nom: "+nomCanal);
-			System.out.println("Nb max d'auditeurs: "+utilMax);
-			System.out.println("-----------------------------");
-			
-			//On retourne l'objet
-			return new Canal(id, nomCanal, utilMax);
-		}
-		
-		/*
-		//------------ TEST SANS JDBC ---------------
-		if (nom.equalsIgnoreCase("classic")) {
-			//On retourne un objet canal configuré
-			return new Canal("1", "classic", 10);
-		}
-		//-------------------------------------------
-		*/
-		
-		//Sinon, on retourne un objet vide
-		return null;
-		
-	}
-	
-	/**
-	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un id
-	 * @param String id
-	 * @return Canal
-	 * @throws SQLException 
-	 */
-	public static Canal getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("Canal.getById("+id+")");
-		
-		//On va chercher les infos depuis la base, en partant d'un id
-		String requete = "SELECT * FROM canal WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		// S'il y a un resultat
-		if (resultats != null && resultats.size()>0) {
-			
-			//On prend le 1er élément
-			Dictionary dico = (Dictionary) resultats.firstElement();
-			
-			//On mappe les champs
-			String idCanal = String.valueOf((Integer)dico.get("id"));
-			String nom = (String)dico.get("nom");
-			int utilMax = (int)(Integer)dico.get("utilmax");
-			
-			System.out.println("-------- Canal -----------");
-			System.out.println("Nb de champs: "+dico.size());
-			System.out.println("ID: "+idCanal);
-			System.out.println("Nom: "+nom);
-			System.out.println("Nb max d'auditeurs: "+utilMax);
-			System.out.println("-----------------------------");
-			
-			//On retourne l'objet
-			return new Canal(idCanal, nom, utilMax);
-		}
-		
-		/*
-		//------------ TEST SANS JDBC ---------------
-		if (id.equalsIgnoreCase("1")) {
-			//On retourne un objet canal configuré
-			return new Canal("1", "classic", 10);
-		}
-		//-------------------------------------------
-		*/
-		
-		//Sinon, on retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
-	 * @return Hashtable
-	 * @throws SQLException 
-	 */
-	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("Canal.getAll()");
-		
-		//On crée un vecteur pour contenir les objets canaux instanciés
-		Hashtable canaux = new Hashtable();
-		
-		String requete = "SELECT * FROM canal;";
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		System.out.println("Canal.getAll() : "+resultats.size()+" canal(canaux) trouvé(s)");
-		
-		// Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			String id = String.valueOf((Integer)dico.get("id"));
-			canaux.put(id, Canal.getById(id));
-		}
-		
-		/*
-		//-------- TEST SANS JDBC -------------
-		canaux.put("1", Canal.getById("1"));
-		//-------------------------------------
-		*/
-		
-		//On retourne le vecteur contenant les objets canaux instanciés
-		return canaux;
-	}
-	
-	/**
-	 * Détruit les infos d'un canal contenues dans la base
-	 * @param String id
-	 * @return boolean
-	 * @throws SQLException 
-	 */
-	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
-		//On supprime le canal de la base, en partant d'un id
-		String requete = "DELETE FROM canal WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//On retourne le resultat de l'opération (succès/échec)
-		return nbRows>0;
-	}
+//	/**
+//	 * Création du canal en base
+//	 * @param String nom
+//	 * @param int utilmax
+//	 * @return Canal
+//	 * @throws SQLException 
+//	 */
+//	public static Canal create(String nom, int utilmax) /*throws SQLException*/ {
+//		
+//		System.out.println("Canal.create()");
+//		
+//		String requete = "INSERT INTO canal (nom, utilmax) VALUES ('" + nom + "', '" + utilmax + "');";
+//		Jdbc base = Jdbc.getInstance();
+//		int nbRows = base.executeUpdate(requete);
+//		
+//		//Si l'insertion s'est bien déroulée
+//		if (nbRows>0) {
+//			//On retourne ensuite un objet pour ce canal
+//			return Canal.getByNom(nom);
+//		}
+//		
+//		//Sinon, retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un nom
+//	 * @param String nom
+//	 * @return Canal
+//	 * @throws SQLException 
+//	 */
+//	public static Canal getByNom(String nom) /*throws SQLException*/ {
+//		
+//		System.out.println("Canal.getByNom("+nom+")");
+//		
+//		//On va chercher les infos depuis la base, en partant d'un nom
+//		String requete = "SELECT * FROM canal WHERE nom = '" + nom + "';";
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		// S'il y a un resultat
+//		if (resultats != null && resultats.size()>0) {
+//			
+//			//On prend le 1er élément
+//			Dictionary dico = (Dictionary) resultats.firstElement();
+//			
+//			//On mappe les champs
+//			String id = String.valueOf((Integer)dico.get("id"));
+//			String nomCanal = (String)dico.get("nom");
+//			int utilMax = (int)(Integer)dico.get("utilmax");
+//			
+//			System.out.println("-------- Canal -----------");
+//			System.out.println("Nb de champs: "+dico.size());
+//			System.out.println("ID: "+id);
+//			System.out.println("Nom: "+nomCanal);
+//			System.out.println("Nb max d'auditeurs: "+utilMax);
+//			System.out.println("-----------------------------");
+//			
+//			//On retourne l'objet
+//			return new Canal(id, nomCanal, utilMax);
+//		}
+//		
+//		/*
+//		//------------ TEST SANS JDBC ---------------
+//		if (nom.equalsIgnoreCase("classic")) {
+//			//On retourne un objet canal configuré
+//			return new Canal("1", "classic", 10);
+//		}
+//		//-------------------------------------------
+//		*/
+//		
+//		//Sinon, on retourne un objet vide
+//		return null;
+//		
+//	}
+//	
+//	/**
+//	 * Créé et remplit un objet avec les infos issues de la base, à partir d'un id
+//	 * @param String id
+//	 * @return Canal
+//	 * @throws SQLException 
+//	 */
+//	public static Canal getById(String id) /*throws SQLException*/ {
+//		
+//		System.out.println("Canal.getById("+id+")");
+//		
+//		//On va chercher les infos depuis la base, en partant d'un id
+//		String requete = "SELECT * FROM canal WHERE id = '" + id + "';";
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		// S'il y a un resultat
+//		if (resultats != null && resultats.size()>0) {
+//			
+//			//On prend le 1er élément
+//			Dictionary dico = (Dictionary) resultats.firstElement();
+//			
+//			//On mappe les champs
+//			String idCanal = String.valueOf((Integer)dico.get("id"));
+//			String nom = (String)dico.get("nom");
+//			int utilMax = (int)(Integer)dico.get("utilmax");
+//			
+//			System.out.println("-------- Canal -----------");
+//			System.out.println("Nb de champs: "+dico.size());
+//			System.out.println("ID: "+idCanal);
+//			System.out.println("Nom: "+nom);
+//			System.out.println("Nb max d'auditeurs: "+utilMax);
+//			System.out.println("-----------------------------");
+//			
+//			//On retourne l'objet
+//			return new Canal(idCanal, nom, utilMax);
+//		}
+//		
+//		/*
+//		//------------ TEST SANS JDBC ---------------
+//		if (id.equalsIgnoreCase("1")) {
+//			//On retourne un objet canal configuré
+//			return new Canal("1", "classic", 10);
+//		}
+//		//-------------------------------------------
+//		*/
+//		
+//		//Sinon, on retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Retourne un vecteur d'objets canaux instanciés à partir de toutes les infos de la base 
+//	 * @return Hashtable
+//	 * @throws SQLException 
+//	 */
+//	public static Hashtable getAll() /*throws SQLException*/ {
+//		
+//		System.out.println("Canal.getAll()");
+//		
+//		//On crée un vecteur pour contenir les objets canaux instanciés
+//		Hashtable canaux = new Hashtable();
+//		
+//		String requete = "SELECT * FROM canal;";
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		System.out.println("Canal.getAll() : "+resultats.size()+" canal(canaux) trouvé(s)");
+//		
+//		// Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
+//		for (int j = 0; j < resultats.size(); j++) {
+//			Dictionary dico = (Dictionary) resultats.elementAt(j);
+//			String id = String.valueOf((Integer)dico.get("id"));
+//			canaux.put(id, Canal.getById(id));
+//		}
+//		
+//		/*
+//		//-------- TEST SANS JDBC -------------
+//		canaux.put("1", Canal.getById("1"));
+//		//-------------------------------------
+//		*/
+//		
+//		//On retourne le vecteur contenant les objets canaux instanciés
+//		return canaux;
+//	}
+//	
+//	/**
+//	 * Détruit les infos d'un canal contenues dans la base
+//	 * @param String id
+//	 * @return boolean
+//	 * @throws SQLException 
+//	 */
+//	public static boolean deleteById(String id) /*throws SQLException*/ {
+//		
+//		//On supprime le canal de la base, en partant d'un id
+//		String requete = "DELETE FROM canal WHERE id = '" + id + "';";
+//		Jdbc base = Jdbc.getInstance();
+//		int nbRows = base.executeUpdate(requete);
+//		
+//		//On retourne le resultat de l'opération (succès/échec)
+//		return nbRows>0;
+//	}
 
 // METHODES DYNAMIQUES (propres à un objet, inaccessibles depuis la classe)
 // *************************************************
@@ -415,21 +416,38 @@ public class Canal {
 	 * @return boolean
 	 */
 	public boolean annulerPlanification(long calage) {
-		if (tasks.containsKey(calage)) {
-			DiffusionTask task = (DiffusionTask)tasks.get(calage);
-			task.cancel();
-			tasks.remove(calage);
-			programmes.remove(calage);
-			return true;
+		if (programmes.containsKey(calage)) {
+			
+			//On retire le programme du canal
+			String requete = "DELETE FROM diffuser WHERE id_canal='"+id+"' AND calage='"+calage+"';";
+			Jdbc base = Jdbc.getInstance();
+			int nbRows = base.executeUpdate(requete);
+			
+			//Si la suppression s'est bien déroulée
+			if (nbRows>0) {
+				
+				//Si une tâche est programmée
+				if (tasks.containsKey(calage)) {
+					//On annule la tâche
+					DiffusionTask task = (DiffusionTask)tasks.get(calage);
+					task.cancel();
+					tasks.remove(calage);
+				}
+				
+				//On dissocie le programme
+				programmes.remove(calage);
+				return true;
+			}
+			//Sinon
+			return false;
 		}
 		return false;
 	}
 	
 	/**
-	 * Retourne la liste des programmes planifiés
-	 * @return Hastable
+	 * Définit la liste des programmes planifiés
 	 */
-	private Hashtable getProgrammesPlanifies() {
+	public void setProgrammesPlanifies() {
 		System.out.println("Canal.getProgrammesPlanifies()");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
@@ -447,10 +465,10 @@ public class Canal {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
 			String id = String.valueOf((Integer)dico.get("id_prog"));
 			long calage = (Long)dico.get("calage");
-			progs.put(calage, Programme.getById(id));
+			progs.put(calage, ProgrammeFactory.getById(id));
 		}
 		
-		return progs;
+		programmes = progs;
 	}
 	
 	/**
@@ -588,7 +606,7 @@ public class Canal {
 		this.stopDiffusion();
 		
 		//On supprime les infos de la base
-		return Canal.deleteById(this.id);
+		return CanalFactory.deleteById(this.id);
 	}
 
 	/**

@@ -2,6 +2,7 @@ package proto.serveur;
 
 import java.sql.SQLException;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -57,7 +58,7 @@ public class Contractant {
 	/**
 	 * Contrats
 	 */
-	private Hashtable contrats;
+	private Hashtable contrats = new Hashtable();
 	
 	/**
 	 * Type (artiste | maison de disque)
@@ -91,202 +92,230 @@ public class Contractant {
 		this.fax = fax;
 		this.mail = mail;
 		this.type = type;
+		
+		//this.contrats = getContratsAssocies();
 	}
 	
 	
 // METHODES STATIQUES
 //******************************************
 	
-	/**
-	 * Création du contractant en base
-	 * @param String nom
-	 * @param String adresse
-	 * @param String codePostal
-	 * @param String ville
-	 * @param String telephone
-	 * @param String fax
-	 * @param String mail
-	 * @param String type
-	 * @return Contractant
-	 */
-	public static Contractant create(String nom, String adresse, String codePostal,
-			String ville, String telephone, String fax, String mail, String type) /*throws SQLException*/ {
-		
-		System.out.println("Contractant.create()");
-		
-		//On crée le contractant dans la base
-		String requete = "INSERT INTO contractant (nom, adresse, codePostal, ville, telephone, fax, mail, type) VALUES ('" +
-			nom + "', '" + adresse + "', '" + codePostal + "', '" + ville + "', '" +telephone + "', '" +
-			fax + "', '" + mail + "', '"+ type + "');"; 
-		
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//Si l'insertion s'est bien déroulée
-		if (nbRows>0) {
-			//On retourne ensuite un objet pour ce contractant
-			return Contractant.getByNom(nom);
-		}
-		
-		//Sinon on retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Instancie un objet contractant après avoir récupéré ces infos depuis la base à partir de son id
-	 * @param String id
-	 * @return Contractant
-	 */
-	public static Contractant getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("Contractant.getById("+id+")");
-		
-		String requete = "SELECT * FROM contractant WHERE id = '" + id + "';";
+//	/**
+//	 * Création du contractant en base
+//	 * @param String nom
+//	 * @param String adresse
+//	 * @param String codePostal
+//	 * @param String ville
+//	 * @param String telephone
+//	 * @param String fax
+//	 * @param String mail
+//	 * @param String type
+//	 * @return Contractant
+//	 */
+//	public static Contractant create(String nom, String adresse, String codePostal,
+//			String ville, String telephone, String fax, String mail, String type) /*throws SQLException*/ {
+//		
+//		System.out.println("Contractant.create()");
+//		
+//		//On crée le contractant dans la base
+//		String requete = "INSERT INTO contractant (nom, adresse, cp, ville, telephone, fax, mail, type) VALUES ('" +
+//			nom + "', '" + adresse + "', '" + codePostal + "', '" + ville + "', '" +telephone + "', '" +
+//			fax + "', '" + mail + "', '"+ type + "');"; 
+//		
+//		Jdbc base = Jdbc.getInstance();
+//		int nbRows = base.executeUpdate(requete);
+//		
+//		//Si l'insertion s'est bien déroulée
+//		if (nbRows>0) {
+//			//On retourne ensuite un objet pour ce contractant
+//			return Contractant.getByNom(nom);
+//		}
+//		
+//		//Sinon on retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Instancie un objet contractant après avoir récupéré ces infos depuis la base à partir de son id
+//	 * @param String id
+//	 * @return Contractant
+//	 */
+//	public static Contractant getById(String id) /*throws SQLException*/ {
+//		
+//		System.out.println("Contractant.getById("+id+")");
+//		
+//		String requete = "SELECT * FROM contractant WHERE id = '" + id + "';";
+//
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		//S'il y a un resultat
+//		if (resultats!=null && resultats.size()>0) {
+//			
+//			//On prend le 1er élément
+//			Dictionary dico = (Dictionary) resultats.firstElement();
+//			
+//			//On mappe les champs
+//			String idCon = String.valueOf((Integer)dico.get("id"));
+//			String nom = (String)dico.get("nom");
+//			String adresse = (String)dico.get("adresse");
+//			String codePostal = (String)dico.get("cp");
+//			String ville = (String)dico.get("ville");
+//			String telephone = (String)dico.get("telephone");
+//			String fax = (String)dico.get("fax");
+//			String mail = (String)dico.get("mail");
+//			String type = (String)dico.get("type");
+//			
+//			System.out.println("-------- Contractant -----------");
+//			System.out.println("Nb de champs: "+dico.size());
+//			System.out.println("ID: "+idCon);
+//			System.out.println("Nom: "+nom);
+//			System.out.println("Adresse: "+adresse);
+//			System.out.println("CP: "+codePostal);
+//			System.out.println("Ville: "+ville);
+//			System.out.println("Téléphone: "+telephone);
+//			System.out.println("Fax: "+fax);
+//			System.out.println("eMail: "+mail);
+//			System.out.println("Type: "+type);
+//			System.out.println("-----------------------------");
+//			
+//			//On retourne l'objet
+//			return new Contractant(idCon, nom, adresse, codePostal, ville, telephone, fax, mail, type);
+//		}
+//		
+//		//Sinon, on retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Instancie un objet contractant après avoir récupéré ces infos depuis la base à partir de son nom
+//	 * @param String nom
+//	 * @return Contractant
+//	 */
+//	public static Contractant getByNom(String nom) /*throws SQLException*/ {
+//		
+//		System.out.println("Contractant.getByNom("+nom+")");
+//		
+//		String requete = "SELECT * FROM contractant WHERE nom = '" + nom + "';";
+//
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		//S'il y a un resultat
+//		if (resultats!=null && resultats.size()>0) {
+//			
+//			//On prend le 1er élément
+//			Dictionary dico = (Dictionary) resultats.firstElement();
+//			
+//			//On mappe les champs
+//			String id = String.valueOf((Integer)dico.get("id"));
+//			String nomCon = (String)dico.get("nom");
+//			String adresse = (String)dico.get("adresse");
+//			String codePostal = (String)dico.get("cp");
+//			String ville = (String)dico.get("ville");
+//			String telephone = (String)dico.get("telephone");
+//			String fax = (String)dico.get("fax");
+//			String mail = (String)dico.get("mail");
+//			String type = (String)dico.get("type");
+//			
+//			System.out.println("-------- Contractant -----------");
+//			System.out.println("Nb de champs: "+dico.size());
+//			System.out.println("ID: "+id);
+//			System.out.println("Nom: "+nomCon);
+//			System.out.println("Adresse: "+adresse);
+//			System.out.println("CP: "+codePostal);
+//			System.out.println("Ville: "+ville);
+//			System.out.println("Téléphone: "+telephone);
+//			System.out.println("Fax: "+fax);
+//			System.out.println("eMail: "+mail);
+//			System.out.println("Type: "+type);
+//			System.out.println("-----------------------------");
+//			
+//			//On retourne l'objet
+//			return new Contractant(id, nomCon, adresse, codePostal, ville, telephone, fax, mail, type);
+//		}
+//		
+//		//Sinon, on retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Retourne un vecteur d'objets contractants instanciés à partir de toutes les infos de la base
+//	 * @return Hashtable
+//	 * @throws SQLException 
+//	 */
+//
+//	public static Hashtable getAll() /*throws SQLException*/ {
+//		
+//		System.out.println("Contractant.getAll()");
+//		
+//		//On crée un vecteur pour contenir les objets documents instanciés
+//		Hashtable contractants = new Hashtable();
+//		
+//		//On va chercher dans la liste des id de tous les documents
+//		String requete = "SELECT id FROM contractant;";
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		System.out.println("Contractant.getAll() : "+resultats.size()+" contractant(s) trouvé(s)");
+//		
+//		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
+//		for (int j = 0; j < resultats.size(); j++) {
+//			Dictionary dico = (Dictionary) resultats.elementAt(j);
+//			String id = String.valueOf((Integer)dico.get("id"));
+//			contractants.put(id, Contractant.getById(id));
+//		}
+//		
+//		//On retourne le vecteur contenant les objets contractants instanciés
+//		return contractants;
+//	}
+//	
+//	/**
+//	 * Détruit les infos d'un contractant contenues dans la base
+//	 * @param id
+//	 * @return
+//	 * @throws SQLException 
+//	 */
+//	public static boolean deleteById(String id) /*throws SQLException*/ {
+//		
+//		//On supprime le contractant de la base, en partant d'un id
+//		String requete = "DELETE FROM contractant WHERE id = '" + id + "';";
+//		Jdbc base = Jdbc.getInstance();
+//		int nbRows = base.executeUpdate(requete);
+//		
+//		//On retourne le resultat de l'opération (succès/échec)
+//		return nbRows>0;
+//	}
 
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		//S'il y a un resultat
-		if (resultats!=null && resultats.size()>0) {
-			
-			//On prend le 1er élément
-			Dictionary dico = (Dictionary) resultats.firstElement();
-			
-			//On mappe les champs
-			String idCon = String.valueOf((Integer)dico.get("id"));
-			String nom = (String)dico.get("nom");
-			String adresse = (String)dico.get("adresse");
-			String codePostal = (String)dico.get("codePostal");
-			String ville = (String)dico.get("ville");
-			String telephone = (String)dico.get("telephone");
-			String fax = (String)dico.get("fax");
-			String mail = (String)dico.get("mail");
-			String type = (String)dico.get("type");
-			
-			System.out.println("-------- Contractant -----------");
-			System.out.println("Nb de champs: "+dico.size());
-			System.out.println("ID: "+idCon);
-			System.out.println("Nom: "+nom);
-			System.out.println("Adresse: "+adresse);
-			System.out.println("CP: "+codePostal);
-			System.out.println("Ville: "+ville);
-			System.out.println("Téléphone: "+telephone);
-			System.out.println("Fax: "+fax);
-			System.out.println("eMail: "+mail);
-			System.out.println("Type: "+type);
-			System.out.println("-----------------------------");
-			
-			//On retourne l'objet
-			return new Contractant(idCon, nom, adresse, codePostal, ville, telephone, fax, mail, type);
-		}
-		
-		//Sinon, on retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Instancie un objet contractant après avoir récupéré ces infos depuis la base à partir de son nom
-	 * @param String nom
-	 * @return Contractant
-	 */
-	public static Contractant getByNom(String nom) /*throws SQLException*/ {
-		
-		System.out.println("Contractant.getByNom("+nom+")");
-		
-		String requete = "SELECT * FROM contractant WHERE nom = '" + nom + "';";
-
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		//S'il y a un resultat
-		if (resultats!=null && resultats.size()>0) {
-			
-			//On prend le 1er élément
-			Dictionary dico = (Dictionary) resultats.firstElement();
-			
-			//On mappe les champs
-			String id = String.valueOf((Integer)dico.get("id"));
-			String nomCon = (String)dico.get("nom");
-			String adresse = (String)dico.get("adresse");
-			String codePostal = (String)dico.get("codePostal");
-			String ville = (String)dico.get("ville");
-			String telephone = (String)dico.get("telephone");
-			String fax = (String)dico.get("fax");
-			String mail = (String)dico.get("mail");
-			String type = (String)dico.get("type");
-			
-			System.out.println("-------- Contractant -----------");
-			System.out.println("Nb de champs: "+dico.size());
-			System.out.println("ID: "+id);
-			System.out.println("Nom: "+nomCon);
-			System.out.println("Adresse: "+adresse);
-			System.out.println("CP: "+codePostal);
-			System.out.println("Ville: "+ville);
-			System.out.println("Téléphone: "+telephone);
-			System.out.println("Fax: "+fax);
-			System.out.println("eMail: "+mail);
-			System.out.println("Type: "+type);
-			System.out.println("-----------------------------");
-			
-			//On retourne l'objet
-			return new Contractant(id, nomCon, adresse, codePostal, ville, telephone, fax, mail, type);
-		}
-		
-		//Sinon, on retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Retourne un vecteur d'objets contractants instanciés à partir de toutes les infos de la base
-	 * @return Hashtable
-	 * @throws SQLException 
-	 */
-
-	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("Contractant.getAll()");
-		
-		//On crée un vecteur pour contenir les objets documents instanciés
-		Hashtable contractants = new Hashtable();
-		
-		//On va chercher dans la liste des id de tous les documents
-		String requete = "SELECT id FROM contractant;";
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		System.out.println("Contractant.getAll() : "+resultats.size()+" contractant(s) trouvé(s)");
-		
-		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			String id = String.valueOf((Integer)dico.get("id"));
-			contractants.put(id, Contractant.getById(id));
-		}
-		
-		//On retourne le vecteur contenant les objets contractants instanciés
-		return contractants;
-	}
-	
-	/**
-	 * Détruit les infos d'un contractant contenues dans la base
-	 * @param id
-	 * @return
-	 * @throws SQLException 
-	 */
-	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
-		//On supprime le contractant de la base, en partant d'un id
-		String requete = "DELETE FROM contractant WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//On retourne le resultat de l'opération (succès/échec)
-		return nbRows>0;
-	}
-	
 	
 // METHODES DYNAMIQUES
 //******************************************
+	
+	/**
+	 * Retourne la liste des contrats associés à ce contrat
+	 * @return Hastable
+	 */
+	public void setContratsAssocies() {
+		System.out.println("Contractant.setContratsAssocies()");
+		
+		//On crée un vecteur pour contenir les objets contrats instanciés
+		Hashtable contrats = new Hashtable();
+		
+		//On va chercher dans la base la liste des id de tous les programmes
+		String requete = "SELECT id FROM contrat WHERE id_contractant = '"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		System.out.println("Contractant.getContratAssocies() : "+resultats.size()+" contrat(s) trouvé(s)");
+		
+		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			String id = String.valueOf((Integer)dico.get("id"));
+			contrats.put(id, ContratFactory.getById(id));
+		}
+		this.contrats = contrats;
+	}
 
 	/**
 	 * Ajoute le programme qui insère le contrat dans sa liste
@@ -332,7 +361,7 @@ public class Contractant {
 			String telephone, String fax, String mail, String type) {
 
 		String requete = "UPDATE contractant SET nom = '" + nom + "', adresse = '" + adresse +
-			"', codePostal = '"+ codePostal + "', ville = '" + ville + "', telephone = '" + telephone +
+			"', cp = '"+ codePostal + "', ville = '" + ville + "', telephone = '" + telephone +
 			"', fax = '" + fax + "', mail = '" + mail + "', type = '"+ type + "' WHERE id = '" + id + "';";
 		
 		Jdbc base = Jdbc.getInstance();
@@ -368,7 +397,7 @@ public class Contractant {
 		}
 		
 		//On supprime les infos de la base
-		return Contractant.deleteById(id);
+		return ContratFactory.deleteById(id);
 	}
 
 //#### GETTERS ####
@@ -391,6 +420,18 @@ public class Contractant {
 		dico.put("fax", fax);
 		dico.put("mail", mail);
 		dico.put("type", type);
+		
+		//Liste des contrats
+		Vector vContrats = new Vector();
+		Enumeration listeContrats = contrats.elements();
+		while (listeContrats.hasMoreElements()) {
+			Contrat c = (Contrat)listeContrats.nextElement();
+			Dictionary dicoContrat = new Hashtable();
+			dicoContrat.put("id", c.getId());
+			dicoContrat.put("titre", c.getTitre());
+			vContrats.add(dicoContrat);
+		}
+		dico.put("contrats", vContrats);
 		
 		return dico;
 	}
@@ -497,7 +538,7 @@ public class Contractant {
 	 * @param codePostal codePostal à définir.
 	 */
 	public boolean setCodePostal(String codePostal) {
-		String requete = "UPDATE contractant SET codePostal = '" + codePostal + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET cp = '" + codePostal + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		

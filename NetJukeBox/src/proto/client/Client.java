@@ -561,11 +561,7 @@ public class Client {
 							Dictionary doc;
 							for (int i=0; i<vDocs.size(); i++) {
 								doc = (Dictionary)vDocs.get(i);
-								System.out.println("IdDoc: "+doc.get("id"));
-								System.out.println("Titre: "+doc.get("titre"));
-								System.out.println("Durée: "+doc.get("duree"));
-								System.out.println("Calage: "+doc.get("calage"));
-								System.out.println();
+								System.out.println("Doc: "+doc);
 							}
 							System.out.println("-------------------------------------------");
 							System.err.println("INFO: Programme affiché");
@@ -769,12 +765,7 @@ public class Client {
 											  horaire.get(GregorianCalendar.MINUTE) + ":" +
 											  horaire.get(GregorianCalendar.SECOND);
 								
-								System.out.println("IdProg: "+prog.get("id"));
-								System.out.println("Titre: "+prog.get("titre"));
-								System.out.println("Durée: "+prog.get("duree"));
-								System.out.println("Horaire: "+dateHoraire);
-								System.out.println("Calage: "+prog.get("calage"));
-								System.out.println();
+								System.out.println("Prog: {id="+prog.get("id")+", titre="+prog.get("titre")+", duree="+prog.get("duree")+", horaire="+dateHoraire+", calage="+prog.get("calage")+"}");
 							}
 							System.out.println("-------------------------------------------");
 							System.err.println("INFO: Canal affiché");
@@ -899,7 +890,6 @@ public class Client {
 						String idCanal = lire();
 						System.out.print("Programme calé au temps: ");
 						String calage = lire();
-						String seconde = lire();
 						boolean planifie = clientXML.deplanifierProgramme(idCanal, calage);
 						if (planifie) System.err.println("INFO: Programme déplanifié sur le canal");
 						else System.err.println("ERREUR: Programme non déplanifié");
@@ -1056,13 +1046,13 @@ public class Client {
 						String moisExpiration = lire();
 						System.out.print("Année (Expiration): ");
 						String anneeExpiration = lire();
-						System.out.print("Signataire: ");
-						String signataire = lire();
+						System.out.print("ID Contractant: ");
+						String idContractant = lire();
 						System.out.print("Mode de règlement: ");
 						String modeReglement = lire();
 						System.out.print("Type: ");
 						String type = lire();
-						boolean cree = clientXML.creerContrat(titre, jourSignature, moisSignature, anneeSignature, jourExpiration, moisExpiration, anneeExpiration, signataire, modeReglement, type);
+						boolean cree = clientXML.creerContrat(titre, jourSignature, moisSignature, anneeSignature, jourExpiration, moisExpiration, anneeExpiration, idContractant, modeReglement, type);
 						if (cree) System.err.println("INFO: Contrat créé");
 						else System.err.println("ERREUR: Contrat non créé");
 					}
@@ -1085,7 +1075,7 @@ public class Client {
 								System.out.println("Titre: "+c.get("titre"));
 								System.out.println("Signature: "+c.get("dateSignature"));
 								System.out.println("Expiration: "+c.get("dateExpiration"));
-								System.out.println("Signataire: "+c.get("signataire"));
+								System.out.println("Contractant: "+c.get("contractant"));
 								System.out.println("Règlement: "+c.get("modeReglement"));
 								System.out.println("Type: "+c.get("type"));
 								System.out.println("----------------------------------------------");
@@ -1119,14 +1109,14 @@ public class Client {
 						String moisExpiration = lire();
 						System.out.print("Année (Expiration): ");
 						String anneeExpiration = lire();
-						System.out.print("Signataire: ");
-						String signataire = lire();
+						System.out.print("ID Contractant: ");
+						String idContractant = lire();
 						System.out.print("Mode de règlement: ");
 						String modeReglement = lire();
 						System.out.print("Type: ");
 						String type = lire();
 						Vector vContrats = clientXML.rechercherContrat(id, titre, jourSignature, moisSignature, anneeSignature,
-								jourExpiration, moisExpiration, anneeExpiration, signataire, modeReglement, type);
+								jourExpiration, moisExpiration, anneeExpiration, idContractant, modeReglement, type);
 						
 						if (vContrats!=null && vContrats.size()>0) {
 							//Parcours du vecteur, affichage des infos
@@ -1138,7 +1128,7 @@ public class Client {
 								System.out.println("Titre: "+c.get("titre"));
 								System.out.println("Signature: "+c.get("dateSignature"));
 								System.out.println("Expiration: "+c.get("dateExpiration"));
-								System.out.println("Signataire: "+c.get("signataire"));
+								System.out.println("Contractant: "+c.get("contractant"));
 								System.out.println("Règlement: "+c.get("modeReglement"));
 								System.out.println("Type: "+c.get("type"));
 								System.out.println("----------------------------------------------");
@@ -1188,7 +1178,7 @@ public class Client {
 								System.out.println("Titre: "+c.get("titre"));
 								System.out.println("Signature: "+c.get("dateSignature"));
 								System.out.println("Expiration: "+c.get("dateExpiration"));
-								System.out.println("Signataire: "+c.get("signataire"));
+								System.out.println("Contractant: "+c.get("contractant"));
 								System.out.println("Règlement: "+c.get("modeReglement"));
 								System.out.println("Type: "+c.get("type"));
 								System.out.println("----------------------------------------------");
@@ -1211,14 +1201,14 @@ public class Client {
 							String moisExpiration = lire();
 							System.out.print("Année (Expiration): ");
 							String anneeExpiration = lire();
-							System.out.print("Signataire: ");
-							String signataire = lire();
+							System.out.print("ID Contractant: ");
+							String idContractant = lire();
 							System.out.print("Mode de règlement: ");
 							String modeReglement = lire();
 							System.out.print("Type: ");
 							String type = lire();
 							boolean modifie = clientXML.modifierContrat(id, titre, jourSignature, moisSignature, anneeSignature,
-									jourExpiration, moisExpiration, anneeExpiration, signataire, modeReglement, type);
+									jourExpiration, moisExpiration, anneeExpiration, idContractant, modeReglement, type);
 							if (modifie) System.err.println("INFO: Contrat modifié");
 							else System.err.println("ERREUR: Contrat non modifié");
 						}
@@ -1244,14 +1234,54 @@ public class Client {
 							System.out.println("Titre: "+c.get("titre"));
 							System.out.println("Signature: "+c.get("dateSignature"));
 							System.out.println("Expiration: "+c.get("dateExpiration"));
-							System.out.println("Signataire: "+c.get("signataire"));
+							System.out.println("Contractant: "+c.get("contractant"));
 							System.out.println("Règlement: "+c.get("modeReglement"));
 							System.out.println("Type: "+c.get("type"));
+							System.out.println("------------ Documents associés -------------");
+							
+							Vector vDocs = (Vector)c.get("documents");
+							Dictionary doc;
+							for (int i=0; i<vDocs.size(); i++) {
+								doc = (Dictionary)vDocs.get(i);
+								System.out.println("Doc: "+doc);
+							}
 							System.out.println("----------------------------------------------");
 							System.out.println();
 							System.err.println("INFO: Contrat affiché");
 						}
 						else System.err.println("WARNING: Aucun contrat disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// AJOUTERDOCUMENTCONTRAT
+				if  (ligne.equalsIgnoreCase("ajouterDocumentContrat")) {
+					if (etatConnecte) {
+						System.out.print("ID du document source: ");
+						String idDoc = lire();
+						System.out.print("ID du contrat cible: ");
+						String idContrat = lire();
+						boolean ajoute = clientXML.ajouterDocumentContrat(idContrat, idDoc);
+						if (ajoute) System.err.println("INFO: Document ajouté au contrat");
+						else System.err.println("ERREUR: Document non ajouté au contrat");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RETIRERDOCUMENTCONTRAT
+				if  (ligne.equalsIgnoreCase("retirerDocumentContrat")) {
+					if (etatConnecte) {
+						System.out.print("ID du contrat source: ");
+						String idContrat = lire();
+						System.out.print("ID du document à retirer : ");
+						String idDoc = lire();
+						boolean retire = clientXML.retirerDocumentContrat(idContrat, idDoc);
+						if (retire) System.err.println("INFO: Document retiré du contrat");
+						else System.err.println("ERREUR: Document non retiré du contrat");
 					}
 					else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
@@ -1461,6 +1491,14 @@ public class Client {
 							System.out.println("Fax: "+c.get("fax"));
 							System.out.println("Mail: "+c.get("mail"));
 							System.out.println("Type: "+c.get("type"));
+							System.out.println("------------- Contrats associés --------------");
+							
+							Vector vContrats = (Vector)c.get("contrats");
+							Dictionary contrat;
+							for (int i=0; i<vContrats.size(); i++) {
+								contrat = (Dictionary)vContrats.get(i);
+								System.out.println("Contrat: "+contrat);
+							}
 							System.out.println("----------------------------------------------");
 							System.out.println();
 							System.err.println("INFO: Contractant affiché");
@@ -1479,37 +1517,58 @@ public class Client {
 					System.out.println("Commandes disponibles:");
 					System.out.println(" connexion : ouvrir une session sur le serveur");
 					System.out.println(" deconnexion : fermer la session");
+					
 					System.out.println(" creerCanal : créer un canal");
+					System.out.println(" modifierCanal : modifier un canal");
+					System.out.println(" supprimerCanal : supprimer un canal");
+					System.out.println(" rechercherCanal : rechercher un canal");
+					System.out.println(" listerCanal : lister les canaux disponibles");
+					System.out.println(" infoCanal : afficher les informations sur un canal");
+					System.out.println(" startCanal : lancer la diffusion d'un canal");
+					System.out.println(" stopCanal : stopper la diffusion d'un canal");
+					System.out.println(" planifierProgramme : palnifie la diffusion d'un programme sur un canal");
+					System.out.println(" deplanifierProgramme : déplanifier la diffusion d'un programme sur un canal");
+					System.out.println(" startPlayer : lancer l'écoute un canal");
+					System.out.println(" stopPlayer : stopper l'écoute d'un canal");
+					
 					System.out.println(" creerProgramme : créer un programme");
-					System.out.println(" creerDocument : créer un document");
+					System.out.println(" modifierProgramme : modifier un programme");
+					System.out.println(" supprimerProgramme : supprimer un programme");
+					System.out.println(" rechercherProgramme : rechercher un programme");
+					System.out.println(" listerProgramme : lister les programmes disponibles");
+					System.out.println(" infoProgramme : afficher les informations sur un programme");
 					System.out.println(" ajouterDocumentProgramme : ajouter un document à un programme");
 					System.out.println(" retirerDocumentProgramme : retirer un document d'un programme");
 					System.out.println(" diffuserProgramme : diffuser un programme sur un canal");
-					System.out.println(" startCanal : lancer la diffusion d'un canal");
-					System.out.println(" stopCanal : stopper la diffusion d'un canal");
-					System.out.println(" startPlayer : lancer l'écoute un canal");
-					System.out.println(" stopPlayer : stopper l'écoute d'un canal");
+					
+					System.out.println(" creerDocument : créer un document");
+					System.out.println(" modifierDocument : modifier un document");
+					System.out.println(" supprimerDocument : supprimer un document");
+					System.out.println(" rechercherDocument : rechercher un document");
 					System.out.println(" listerDocument : lister les documents disponibles");
-					System.out.println(" listerProgramme : lister les programmes disponibles");
-					System.out.println(" listerCanal : lister les canaux disponibles");
+					System.out.println(" infoDocument : afficher les informations sur un document");
+					
 					System.out.println(" inscrireUtilisateur : inscription d'un nouvel utilisateur");
+					System.out.println(" modifierUtilisateur : modifier vos attributs");
 					System.out.println(" supprimerUtilisateur : suppression d'un utilisateur");
 					System.out.println(" rechercherUtilisateur : rechercher vos attributs");
-					System.out.println(" modifierUtilisateur : modifier vos attributs");
-					System.out.println(" rechercherDocument : rechercher un document");
-					System.out.println(" rechercherProgramme : rechercher un programme");
-					System.out.println(" rechercherCanal : rechercher un canal");
-					System.out.println(" supprimerDocument : supprimer un document");
-					System.out.println(" supprimerProgramme : supprimer un programme");
-					System.out.println(" supprimerCanal : supprimer un canal");
-					System.out.println(" modifierDocument : modifier un document");
-					System.out.println(" modifierProgramme : modifier un programme");
-					System.out.println(" modifierCanal : modifier un canal");
-					System.out.println(" infoDocument : afficher les informations sur un document");
-					System.out.println(" infoProgramme : afficher les informations sur un programme");
-					System.out.println(" infoCanal : afficher les informations sur un canal");
-					System.out.println(" planifierProgramme : palnifie la diffusion d'un programme sur un canal");
-					System.out.println(" deplanifierProgramme : déplanifier la diffusion d'un programme sur un canal");
+					
+					System.out.println(" creerContractant : créer un contractant");
+					System.out.println(" modifierContractant : modifier un contractant");
+					System.out.println(" supprimerContractant : supprimer un contractant");
+					System.out.println(" rechercherContractant : rechercher un contractant");
+					System.out.println(" listerContractant : lister les contractants disponibles");
+					System.out.println(" infoContractant : afficher les informations sur un contractant");
+					
+					System.out.println(" creerContrat : créer un contrat");
+					System.out.println(" modifierContrat : modifier un contrat");
+					System.out.println(" supprimerContrat : supprimer un contrat");
+					System.out.println(" rechercherContrat : rechercher un contrat");
+					System.out.println(" listerContrat : lister les contrats disponibles");
+					System.out.println(" infoContrat : afficher les informations sur un contrat");
+					System.out.println(" ajouterDocumentContrat : ajouter un document à un contrat");
+					System.out.println(" retirerDocumentContrat : retirer un document d'un contrat");
+
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");
 				}

@@ -45,27 +45,27 @@ public class Systeme {
 	/**
 	 * Canaux de diffusion
 	 */
-	private Hashtable canaux = new Hashtable();
+	//private Hashtable canaux = new Hashtable();
 	
 	/**
 	 * Documents
 	 */
-	private Hashtable documents = new Hashtable();
+	//private Hashtable documents = new Hashtable();
 	
 	/**
 	 * Programmes
 	 */
-	private Hashtable programmes = new Hashtable();
+	//private Hashtable programmes = new Hashtable();
 	
 	/**
 	 * Contrats
 	 */
-	private Hashtable contrats = new Hashtable();
+	//private Hashtable contrats = new Hashtable();
 	
 	/**
 	 * Contractants
 	 */
-	private Hashtable contractants = new Hashtable();
+	//private Hashtable contractants = new Hashtable();
 	
 	/**
 	 * Connexion à la base de données
@@ -159,11 +159,11 @@ public class Systeme {
 		System.err.println("Mail envoyeur depuis le serveur SMTP : " + from);
 		
 		//On initialise les listes de canaux, programmes, documents
-		this.canaux = Canal.getAll();
-		this.programmes = Programme.getAll();
-		this.documents = Document.getAll();
-		this.contractants = Contractant.getAll();
-		this.contrats = Contrat.getAll();
+		/*this.canaux = */CanalFactory.getAll();
+		/*this.programmes = */ProgrammeFactory.getAll();
+		/*this.documents = */DocumentFactory.getAll();
+		/*this.contractants = */ContractantFactory.getAll();
+		/*this.contrats = */ContratFactory.getAll();
 	}
 	
 // METHODES DU SYSTEME
@@ -542,15 +542,15 @@ public class Systeme {
 		if (verifPermission(login, "creerDocument")) {
 		
 			//On vérifie que le document n'existe pas
-			if (Document.getByTitre(titre) == null) {
+			if (DocumentFactory.getByTitre(titre) == null) {
 				
 				//On crée le document
-				Document d = Document.create(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier, artiste, interprete, compositeur);
+				Document d = DocumentFactory.create(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier, artiste, interprete, compositeur);
 				
 				//Si le document a bien été créé
 				if (d != null) {
 					//On l'ajoute à la liste des documents du système
-					documents.put(d.getId(), d);
+					//documents.put(d.getId(), d);
 					
 					System.out.println("Document '"+titre+"' créé");
 					return Boolean.toString(true);
@@ -587,7 +587,7 @@ public class Systeme {
 			Vector vDocuments = new Vector();
 			
 			//On récupère la liste des documents
-			Enumeration listeDocs = documents.elements();
+			Enumeration listeDocs = DocumentFactory.getInstances().elements();
 			Document d;
 			
 			while (listeDocs.hasMoreElements()) {
@@ -632,7 +632,7 @@ public class Systeme {
 			Vector vDocuments = new Vector();
 		
 			//On récupère la liste des documents
-			Enumeration listeDocs = documents.elements();
+			Enumeration listeDocs = DocumentFactory.getInstances().elements();
 			Document d;
 			
 			while (listeDocs.hasMoreElements()) {
@@ -673,16 +673,16 @@ public class Systeme {
 		if (verifPermission(login, "supprimerDocument")) {
 		
 			//On vérifie que le document existe
-			if (documents.containsKey(id)) {
+			if (DocumentFactory.containsId(id)) {
 				
 				//On récupère l'objet document
-				Document d = (Document)documents.get(id);
+				Document d = (Document)DocumentFactory.getById(id);
 
 				//Si le document a bien été supprimé
 				if (d.supprimer()) {
 					
 					//On le retire de la liste des documents du système
-					documents.remove(id);
+					//documents.remove(id);
 					
 					System.out.println("Document '"+id+"' supprimé");
 					return Boolean.toString(true);
@@ -730,10 +730,10 @@ public class Systeme {
 		if (verifPermission(login, "modifierDocument")) {
 		
 			//On vérifie que le document existe
-			if (documents.containsKey(id)) {
+			if (DocumentFactory.containsId(id)) {
 				
 				//On récupère le doc
-				Document d = (Document)documents.get(id);
+				Document d = (Document)DocumentFactory.getById(id);
 				
 				//On modifie le document
 				if (d.modifier(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier, artiste, interprete, compositeur)) {
@@ -801,8 +801,8 @@ public class Systeme {
 		if (verifPermission(login, "infoDocument")) {
 		
 			//On vérifie que le document existe
-			if (documents.containsKey(id)) {
-				Document d = (Document)documents.get(id);
+			if (DocumentFactory.containsId(id)) {
+				Document d = (Document)DocumentFactory.getById(id);
 				return d.getAttributesDictionary();
 			}
 			else {
@@ -849,13 +849,13 @@ public class Systeme {
 		if (verifPermission(login, "creerProgramme")) {
 		
 			//On vérifie que le programme n'existe pas
-			if (Programme.getByTitre(titre) == null) {
+			if (ProgrammeFactory.getByTitre(titre) == null) {
 				
 				//On crée le programme
-				Programme p = Programme.create(titre, thematique);
+				Programme p = ProgrammeFactory.create(titre, thematique);
 				
 				//On l'ajoute à la liste des programmes du système
-				programmes.put(p.getId(), p);
+				//programmes.put(p.getId(), p);
 				
 				System.out.println("Programme '"+titre+"' créé");
 				return Boolean.toString(true);
@@ -885,11 +885,11 @@ public class Systeme {
 		if (verifPermission(login, "ajouterDocumentProgramme")) {
 		
 			//On vérifie que le programme et le document existent
-			if (programmes.containsKey(idProg) && documents.containsKey(idDoc)) {
+			if (ProgrammeFactory.containsId(idProg) && DocumentFactory.containsId(idDoc)) {
 				
 				//On récupère les objets
-				Document d = (Document)documents.get(idDoc);
-				Programme p = (Programme)programmes.get(idProg);
+				Document d = (Document)DocumentFactory.getById(idDoc);
+				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
 				//On ajoute le document au programme
 				p.ajouterDocument(d);
@@ -923,10 +923,10 @@ public class Systeme {
 		if (verifPermission(login, "retirerDocumentProgramme")) {
 		
 			//On vérifie que le programme
-			if (programmes.containsKey(idProg)) {
+			if (ProgrammeFactory.containsId(idProg)) {
 				
 				//On récupère les objets
-				Programme p = (Programme)programmes.get(idProg);
+				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
 				//On ajoute le document au programme
 				p.retirerDocument(calage);
@@ -962,7 +962,7 @@ public class Systeme {
 			Vector vProgrammes = new Vector();
 			
 			//On récupère la liste des documents
-			Enumeration listeProgrammes = programmes.elements();
+			Enumeration listeProgrammes = ProgrammeFactory.getInstances().elements();
 			Programme p = null;
 			
 			while (listeProgrammes.hasMoreElements()) {
@@ -997,7 +997,7 @@ public class Systeme {
 			Vector vProgrammes = new Vector();
 		
 			//On récupère la liste des programmes
-			Enumeration listeProgs = programmes.elements();
+			Enumeration listeProgs = ProgrammeFactory.getInstances().elements();
 			Programme p;
 			
 			while (listeProgs.hasMoreElements()) {
@@ -1031,16 +1031,16 @@ public class Systeme {
 		if (verifPermission(login, "supprimerProgramme")) {
 		
 			//On vérifie que le programme existe
-			if (programmes.containsKey(id)) {
+			if (ProgrammeFactory.containsId(id)) {
 				
 				//On récupère l'objet document
-				Programme p = (Programme)programmes.get(id);
+				Programme p = (Programme)ProgrammeFactory.getById(id);
 
 				//On le supprime. Si succés...
 				if (p.supprimer()) {
 					
 					//On le retire de la liste des programmes du système
-					programmes.remove(id);
+					//programmes.remove(id);
 					
 					System.out.println("Programme '"+id+"' supprimé");
 					return Boolean.toString(true);
@@ -1076,10 +1076,10 @@ public class Systeme {
 		if (verifPermission(login, "modifierProgramme")) {
 		
 			//On vérifie que le programme existe
-			if (programmes.containsKey(id)) {
+			if (ProgrammeFactory.containsId(id)) {
 				
 				//On récupère le prog
-				Programme p = (Programme)programmes.get(id);
+				Programme p = (Programme)ProgrammeFactory.getById(id);
 				
 				//On modifie le programme
 				if (p.modifier(titre, thematique)) {
@@ -1116,8 +1116,8 @@ public class Systeme {
 		if (verifPermission(login, "infoProgramme")) {
 		
 			//On vérifie que le programme existe
-			if (programmes.containsKey(id)) {
-				Programme p = (Programme)programmes.get(id);
+			if (ProgrammeFactory.containsId(id)) {
+				Programme p = (Programme)ProgrammeFactory.getById(id);
 				return p.getAttributesDictionary();
 			}
 			else {
@@ -1169,13 +1169,13 @@ public class Systeme {
 		if (verifPermission(login, "creerCanal")) {
 		
 			//On vérifie que le canal n'existe pas
-			if (Canal.getByNom(nom) == null) {
+			if (CanalFactory.getByNom(nom) == null) {
 				
 				//On crée le canal
-				Canal c = Canal.create(nom, Integer.parseInt(utilMax));
+				Canal c = CanalFactory.create(nom, Integer.parseInt(utilMax));
 				
 				//On l'ajoute à la liste des canaux du système
-				canaux.put(c.getId(), c);
+				//canaux.put(c.getId(), c);
 				
 				System.out.println("Canal '"+nom+"' créé");
 				return Boolean.toString(true);
@@ -1212,11 +1212,11 @@ public class Systeme {
 		if (verifPermission(login, "planifierCanal")) {
 		
 			//On vérifie que le canal et le programme existent
-			if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+			if (CanalFactory.containsId(idCanal) && ProgrammeFactory.containsId(idProg)) {
 				
 				//On récupère les objets
-				Canal c = (Canal)canaux.get(idCanal);
-				Programme p = (Programme)programmes.get(idProg);
+				Canal c = (Canal)CanalFactory.getById(idCanal);
+				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
 				//On planifie le programme
 				if (c.planifierProgramme(p, Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), Integer.parseInt(heure), Integer.parseInt(minute), Integer.parseInt(seconde))) {
@@ -1256,10 +1256,10 @@ public class Systeme {
 		if (verifPermission(login, "deplanifierCanal")) {
 		
 			//On vérifie que le canal et le programme existent
-			if (canaux.containsKey(idCanal)) {
+			if (CanalFactory.containsId(idCanal)) {
 				
 				//On récupère les objets
-				Canal c = (Canal)canaux.get(idCanal);
+				Canal c = (Canal)CanalFactory.getById(idCanal);
 				
 				//On deplanifie le programme
 				if (c.annulerPlanification(Long.parseLong(calage))) {
@@ -1299,11 +1299,11 @@ public class Systeme {
 		if (verifPermission(login, "diffuserProgramme")) {
 		
 			//On vérifie que le canal et le programme existent
-			if (canaux.containsKey(idCanal) && programmes.containsKey(idProg)) {
+			if (CanalFactory.containsId(idCanal) && ProgrammeFactory.containsId(idProg)) {
 				
 				//On récupère les objets
-				Canal c = (Canal)canaux.get(idCanal);
-				Programme p = (Programme)programmes.get(idProg);
+				Canal c = (Canal)CanalFactory.getById(idCanal);
+				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
 				//On diffuse le programme
 				if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
@@ -1337,10 +1337,10 @@ public class Systeme {
 		if (verifPermission(login, "ecouterCanal")) {
 		
 			//On vérifie que le canal et le programme existent
-			if (canaux.containsKey(idCanal)) {
+			if (CanalFactory.containsId(idCanal)) {
 				
 				//On récupère l'objet canal
-				Canal c = (Canal)canaux.get(idCanal);
+				Canal c = (Canal)CanalFactory.getById(idCanal);
 				System.out.println("Construction de l'url du canal "+idCanal);
 				String url = c.getUrlStreaming();
 				System.out.println("URL: "+url);
@@ -1370,10 +1370,10 @@ public class Systeme {
 		if (verifPermission(login, "ecouterCanal")) {
 		
 			//On vérifie que le canal et le programme existent
-			if (canaux.containsKey(idCanal)) {
+			if (CanalFactory.containsId(idCanal)) {
 				
 				//On récupère l'objet canal
-				Canal c = (Canal)canaux.get(idCanal);
+				Canal c = (Canal)CanalFactory.getById(idCanal);
 				if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
 				c.startDiffusion();
 				return Boolean.toString(true);
@@ -1403,10 +1403,10 @@ public class Systeme {
 		if (verifPermission(login, "ecouterCanal")) {
 		
 			//On vérifie que le canal et le programme existent
-			if (canaux.containsKey(idCanal)) {
+			if (CanalFactory.containsId(idCanal)) {
 				
 				//On récupère l'objet canal
-				Canal c = (Canal)canaux.get(idCanal);
+				Canal c = (Canal)CanalFactory.getById(idCanal);
 				c.stopDiffusion();
 				return Boolean.toString(true);
 			}
@@ -1438,7 +1438,7 @@ public class Systeme {
 			Vector vCanaux = new Vector();
 			
 			//On récupère la liste des documents
-			Enumeration listeCanaux = canaux.elements();
+			Enumeration listeCanaux = CanalFactory.getInstances().elements();
 			Canal c;
 			
 			while (listeCanaux.hasMoreElements()) {
@@ -1473,7 +1473,7 @@ public class Systeme {
 			Vector vCanaux = new Vector();
 		
 			//On récupère la liste des programmes
-			Enumeration listeCanx = canaux.elements();
+			Enumeration listeCanx = CanalFactory.getInstances().elements();
 			Canal c;
 			
 			while (listeCanx.hasMoreElements()) {
@@ -1506,16 +1506,16 @@ public class Systeme {
 		if (verifPermission(login, "supprimerCanal")) {
 		
 			//On vérifie que le canal existe
-			if (canaux.containsKey(id)) {
+			if (CanalFactory.containsId(id)) {
 				
 				//On récupère l'objet canal
-				Canal c = (Canal)canaux.get(id);
+				Canal c = (Canal)CanalFactory.getById(id);
 
 				//Si le document a bien été supprimé
 				if (c.supprimer()) {
 					
 					//On le retire de la liste des canaux du système
-					canaux.remove(id);
+					//canaux.remove(id);
 					
 					System.out.println("Canal '"+id+"' supprimé");
 					return Boolean.toString(true);
@@ -1551,10 +1551,10 @@ public class Systeme {
 		if (verifPermission(login, "modifierCanal")) {
 		
 			//On vérifie que le canal existe
-			if (canaux.containsKey(id)) {
+			if (CanalFactory.containsId(id)) {
 				
 				//On récupère le canal
-				Canal c = (Canal)canaux.get(id);
+				Canal c = (Canal)CanalFactory.getById(id);
 				
 				//On modifie le canal
 				if (c.modifier(nom, Integer.valueOf(utilMax))) {
@@ -1591,8 +1591,8 @@ public class Systeme {
 		if (verifPermission(login, "infoCanal")) {
 		
 			//On vérifie que le canal existe
-			if (canaux.containsKey(id)) {
-				Canal c = (Canal)canaux.get(id);
+			if (CanalFactory.containsId(id)) {
+				Canal c = (Canal)CanalFactory.getById(id);
 				return c.getAttributesDictionary();
 			}
 			else {
@@ -1749,15 +1749,15 @@ public class Systeme {
 		if (verifPermission(login, "creerContrat")) {
 		
 			//On vérifie que le canal n'existe pas
-			if (Contrat.getByTitre(titre) == null) {
+			if (ContratFactory.getByTitre(titre) == null) {
 				
 				//On crée le canal
-				Contrat c = Contrat.create(titre, Integer.parseInt(jourSignature), Integer.parseInt(moisSignature),
+				Contrat c = ContratFactory.create(titre, Integer.parseInt(jourSignature), Integer.parseInt(moisSignature),
 						Integer.parseInt(anneeSignature), Integer.parseInt(jourExpiration), Integer.parseInt(moisExpiration),
 						Integer.parseInt(anneeExpiration), signataire, modeReglement, type);
 				
 				//On l'ajoute à la liste des contrats du système
-				contrats.put(c.getId(), c);
+				//contrats.put(c.getId(), c);
 				
 				System.out.println("Contrat créé");
 				return Boolean.toString(true);
@@ -1790,7 +1790,7 @@ public class Systeme {
 			Vector vContrats = new Vector();
 			
 			//On récupère la liste des documents
-			Enumeration listeContrats = contrats.elements();
+			Enumeration listeContrats = ContratFactory.getInstances().elements();
 			Contrat c;
 			
 			while (listeContrats.hasMoreElements()) {
@@ -1819,8 +1819,8 @@ public class Systeme {
 		if (verifPermission(login, "infoContrat")) {
 		
 			//On vérifie que le canal existe
-			if (contrats.containsKey(id)) {
-				Contrat c = (Contrat)contrats.get(id);
+			if (ContratFactory.containsId(id)) {
+				Contrat c = (Contrat)ContratFactory.getById(id);
 				return c.getAttributesDictionary();
 			}
 			else {
@@ -1846,16 +1846,16 @@ public class Systeme {
 		if (verifPermission(login, "supprimerContrat")) {
 		
 			//On vérifie que le canal existe
-			if (contrats.containsKey(id)) {
+			if (ContratFactory.containsId(id)) {
 				
 				//On récupère l'objet canal
-				Contrat c = (Contrat)contrats.get(id);
+				Contrat c = (Contrat)ContratFactory.getById(id);
 
 				//Si le document a bien été supprimé
 				if (c.supprimer()) {
 					
 					//On le retire de la liste des canaux du système
-					contrats.remove(id);
+					//contrats.remove(id);
 					
 					System.out.println("Contrat '"+id+"' supprimé");
 					return Boolean.toString(true);
@@ -1900,10 +1900,10 @@ public class Systeme {
 		if (verifPermission(login, "modifierContrat")) {
 		
 			//On vérifie que le canal existe
-			if (contractants.containsKey(id)) {
+			if (ContratFactory.containsId(id)) {
 				
 				//On récupère le canal
-				Contrat c = (Contrat)contrats.get(id);
+				Contrat c = (Contrat)ContratFactory.getById(id);
 				
 				//On modifie le canal
 				if (c.modifier(titre, Integer.parseInt(jourSignature), Integer.parseInt(moisSignature), Integer.parseInt(anneeSignature),
@@ -1929,77 +1929,77 @@ public class Systeme {
 	}
 	
 	/**
-	 * Ajoute un contractant dans un contrat
+	 * Ajoute un document dans un contrat
 	 * @param String login
 	 * @param String idContrat
-	 * @param String idContractant
+	 * @param String idDoc
 	 * @return String
 	 * @throws SQLException 
 	 */
-	public String ajouterContractantContrat(String login, String idContrat, String idContractant) throws SQLException {
-		System.out.println("Ajout du contractant "+idContractant+" au contrat "+idContrat);
+	public String ajouterDocumentContrat(String login, String idContrat, String idDoc) throws SQLException {
+		System.out.println("Ajout du document "+idDoc+" au contrat "+idContrat);
 		
 		// On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "ajouterContractantContrat")) {
+		if (verifPermission(login, "ajouterDocumentContrat")) {
 		
-			//On vérifie que le contrat et le contractant existent
-			if (contrats.containsKey(idContrat) && contractants.containsKey(idContractant)) {
+			//On vérifie que le contrat et le document existent
+			if (ContratFactory.containsId(idContrat) && DocumentFactory.containsId(idDoc)) {
 				
 				//On récupère les objets
-				Contrat c = (Contrat)contrats.get(idContrat);
-				Contractant ct = (Contractant)contractants.get(idContractant);
+				Contrat c = (Contrat)ContratFactory.getById(idContrat);
+				Document d = (Document)DocumentFactory.getById(idDoc);
 				
 				//On ajoute le contractant au contrat
-				c.ajouterContractant(ct);
+				c.ajouterDocument(d);
 				
-				System.out.println("Contractant "+idContractant+" ajouté au contrat "+idContrat);
+				System.out.println("Document "+idDoc+" ajouté au contrat "+idContrat);
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le contractant "+idContractant+" n'a pas été ajouté au contrat "+idContrat);
+			System.out.println("Le document "+idDoc+" n'a pas été ajouté au contrat "+idContrat);
 			return Boolean.toString(false);
 		}
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Contractant non ajouté");
+		System.out.println("Permission non accordée. Document non ajouté");
 		return Boolean.toString(false);
 	}
 	
 	/**
-	 * Retirer un contractant d'un contrat
+	 * Retirer un document d'un contrat
 	 * @param String login
 	 * @param String idContrat
-	 * @param String idContractant
+	 * @param String idDoc
 	 * @return String
 	 * @throws SQLException 
 	 */
-	public String retirerContractantContrat(String login, String idContrat, String idContractant) throws SQLException {
-		System.out.println("Retirer le contractant "+idContractant+ " du contrat "+idContrat);
+	public String retirerDocumentContrat(String login, String idContrat, String idDoc) throws SQLException {
+		System.out.println("Retirer le document "+idDoc+ " du contrat "+idContrat);
 		
 		// On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "retirerContractantContrat")) {
+		if (verifPermission(login, "retirerDocumentContrat")) {
 		
-			//On vérifie que le programme et le contractant existent
-			if (contrats.containsKey(idContrat) && contractants.containsKey(idContractant)) {
+			//On vérifie que le programme et le document existent
+			if (ContratFactory.containsId(idContrat) && DocumentFactory.containsId(idDoc)) {
 				
 				//On récupère les objets
-				Contrat c = (Contrat)contrats.get(idContrat);
+				Contrat c = (Contrat)ContratFactory.getById(idContrat);
 				
-				//On ajoute le document au programme
-				c.retirerContractant(idContractant);
+				//On retire le document du contrat
+				c.retirerDocument(idDoc);
 				
-				System.out.println("Contractant retiré du contrat "+idContrat);
+				System.out.println("Document retiré du contrat "+idContrat);
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le contractant n'a pas été retiré du contrat "+idContrat);
+			System.out.println("Le document n'a pas été retiré du contrat "+idContrat);
 			return Boolean.toString(false);
 		}
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Contractant non retiré");
+		System.out.println("Permission non accordée. Document non retiré");
 		return Boolean.toString(false);
 	}
 	
@@ -2029,13 +2029,13 @@ public class Systeme {
 		if (verifPermission(login, "creerContractant")) {
 		
 			//On vérifie que le canal n'existe pas
-			if (Contractant.getByNom(nom) == null) {
+			if (ContractantFactory.getByNom(nom) == null) {
 				
 				//On crée le canal
-				Contractant c = Contractant.create(nom, adresse, codePostal, ville, telephone, fax, mail, type);
+				Contractant c = ContractantFactory.create(nom, adresse, codePostal, ville, telephone, fax, mail, type);
 				
 				//On l'ajoute à la liste des contractants du système
-				contractants.put(c.getId(), c);
+				//contractants.put(c.getId(), c);
 				
 				System.out.println("Contractant créé");
 				return Boolean.toString(true);
@@ -2068,11 +2068,10 @@ public class Systeme {
 			Vector vContractants = new Vector();
 			
 			//On récupère la liste des documents
-			Enumeration listeContractants = contractants.elements();
-			Contractant c;
+			Enumeration listeContractants = ContractantFactory.getInstances().elements();
 			
 			while (listeContractants.hasMoreElements()) {
-				c = (Contractant)listeContractants.nextElement();
+				Contractant c = (Contractant)listeContractants.nextElement();
 				vContractants.addElement(c.getAttributesDictionary());
 			}
 			
@@ -2097,8 +2096,8 @@ public class Systeme {
 		if (verifPermission(login, "infoContractant")) {
 		
 			//On vérifie que le canal existe
-			if (contractants.containsKey(id)) {
-				Contractant c = (Contractant)contractants.get(id);
+			if (ContractantFactory.containsId(id)) {
+				Contractant c = (Contractant)ContractantFactory.getById(id);
 				return c.getAttributesDictionary();
 			}
 			else {
@@ -2124,16 +2123,16 @@ public class Systeme {
 		if (verifPermission(login, "supprimerContractant")) {
 		
 			//On vérifie que le canal existe
-			if (contractants.containsKey(id)) {
+			if (ContractantFactory.containsId(id)) {
 				
 				//On récupère l'objet canal
-				Contractant c = (Contractant)contractants.get(id);
+				Contractant c = (Contractant)ContractantFactory.getById(id);
 
 				//Si le document a bien été supprimé
 				if (c.supprimer()) {
 					
 					//On le retire de la liste des canaux du système
-					contractants.remove(id);
+					//contractants.remove(id);
 					
 					System.out.println("Contractant '"+id+"' supprimé");
 					return Boolean.toString(true);
@@ -2175,10 +2174,10 @@ public class Systeme {
 		if (verifPermission(login, "modifierContractant")) {
 		
 			//On vérifie que le canal existe
-			if (contractants.containsKey(id)) {
+			if (ContractantFactory.containsId(id)) {
 				
 				//On récupère le canal
-				Contractant c = (Contractant)contractants.get(id);
+				Contractant c = (Contractant)ContractantFactory.getById(id);
 				
 				//On modifie le canal
 				if (c.modifier(nom, adresse, codePostal, ville, telephone, fax, mail, type)) {

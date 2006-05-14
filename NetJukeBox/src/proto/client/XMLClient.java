@@ -1384,7 +1384,7 @@ public class XMLClient {
 	 * @param String jourExpiration
 	 * @param String moisExpiration
 	 * @param String anneeExpiration
-	 * @param String signataire
+	 * @param String idContractant
 	 * @param String modeReglement
 	 * @param String type
 	 * @return boolean
@@ -1392,7 +1392,7 @@ public class XMLClient {
 	@SuppressWarnings("unchecked")
 	public boolean creerContrat(String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration,
-			String anneeExpiration, String signataire, String modeReglement, String type) {
+			String anneeExpiration, String idContractant, String modeReglement, String type) {
 
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -1408,7 +1408,7 @@ public class XMLClient {
 				params.addElement(jourExpiration);
 				params.addElement(moisExpiration);
 				params.addElement(anneeExpiration);
-				params.addElement(signataire);
+				params.addElement(idContractant);
 				params.addElement(modeReglement);
 				params.addElement(type);
 
@@ -1503,7 +1503,7 @@ public class XMLClient {
 	 * @param String jourExpiration
 	 * @param String moisExpiration
 	 * @param String anneeExpiration
-	 * @param String signataire
+	 * @param String idContractant
 	 * @param String modeReglement
 	 * @param String type
 	 * @return Vector
@@ -1511,7 +1511,7 @@ public class XMLClient {
 	@SuppressWarnings("unchecked")
 	public Vector rechercherContrat(String id, String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration, String anneeExpiration,
-			String signataire, String modeReglement, String type) {
+			String idContractant, String modeReglement, String type) {
 
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
@@ -1528,7 +1528,7 @@ public class XMLClient {
 				params.addElement(jourExpiration);
 				params.addElement(moisExpiration);
 				params.addElement(anneeExpiration);
-				params.addElement(signataire);
+				params.addElement(idContractant);
 				params.addElement(modeReglement);
 				params.addElement(type);
 
@@ -1639,27 +1639,27 @@ public class XMLClient {
 	}
 	
 	/**
-	 * Ajouter un contractant à un contrat
+	 * Ajouter un document à un contrat
 	 * @param String idContrat
-	 * @param String idContractant
+	 * @param String idDoc
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean ajouterContractantContrat(String idContrat, String idContractant) {
+	public boolean ajouterDocumentContrat(String idContrat, String idDoc) {
 
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			System.err.println("INFO: Ajout du contractant au contrat...");
+			System.err.println("INFO: Ajout du document au contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 				params.addElement(idContrat);
-				params.addElement(idContractant);
+				params.addElement(idDoc);
 
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
-						"Systeme.ajouterContractantContrat", params);
+						"Systeme.ajouterDocumentContrat", params);
 
 				return Boolean.parseBoolean(result);
 
@@ -1676,27 +1676,27 @@ public class XMLClient {
 	}
 
 	/**
-	 * Retirer un contractant d'un contrat
+	 * Retirer un document d'un contrat
 	 * @param String idContrat
-	 * @param String idContractant
+	 * @param String idDoc
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean retirerContractantContrat(String idContrat, String idContractant) {
+	public boolean retirerDocumentContrat(String idContrat, String idDoc) {
 
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			System.err.println("INFO: Retirer un document du programme...");
+			System.err.println("INFO: Retirer un document du contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 				params.addElement(idContrat);
-				params.addElement(idContractant);
+				params.addElement(idDoc);
 
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
-						"Systeme.retirerContractantContrat", params);
+						"Systeme.retirerDocumentContrat", params);
 
 				return Boolean.parseBoolean(result);
 

@@ -3,6 +3,7 @@ package proto.serveur;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -33,11 +34,6 @@ public class Contrat {
 	private GregorianCalendar dateExpiration;
 
 	/**
-	 * Signataire
-	 */
-	private String signataire;
-
-	/**
 	 * Mode de règlement
 	 */
 	private String modeReglement;
@@ -50,12 +46,12 @@ public class Contrat {
 	/**
 	 * Documents
 	 */
-	private Hashtable documents;
+	private Hashtable documents = new Hashtable();
 
 	/**
-	 * Contractants
+	 * Contractant
 	 */
-	private Hashtable contractants;
+	private Contractant contractant;
 
 // CONSTRUCTEUR
 //***************************************
@@ -66,264 +62,327 @@ public class Contrat {
 	 * @param String titre
 	 * @param Date dateSignatare
 	 * @param Date dateExpiration
-	 * @param String signataire
+	 * @param String idContractant
 	 * @param String modeReglement
 	 * @param String type
 	 */
-	public Contrat(String id, String titre, GregorianCalendar dateSignature, GregorianCalendar dateExpiration, String signataire, String modeReglement, String type) {
+	public Contrat(String id, String titre, GregorianCalendar dateSignature, GregorianCalendar dateExpiration, String idContractant, String modeReglement, String type) {
 		this.id = id;
 		this.titre = titre;
 		this.dateSignature = dateSignature;
 		this.dateExpiration = dateExpiration;
-		this.signataire = signataire;
 		this.modeReglement = modeReglement;
 		this.type = type;
+		
+		this.contractant = (Contractant)ContractantFactory.getById(idContractant);
+		//this.documents = getDocumentsAssocies();
 	}
 	
 // METHODES STATIQUES
 //***************************************
 	
-	/**
-	 * Création du contrat en base
-	 * @param String titre
-	 * @param int jourSignature
-	 * @param int moisSignature
-	 * @param int anneeSignature
-	 * @param int jourExpiration
-	 * @param int moisExpiration
-	 * @param int anneExpiration
-	 * @param String signataire
-	 * @param String modeReglement
-	 * @param String type
-	 * @return Contrat
-	 */
-	public static Contrat create(String titre, int jourSignature, int moisSignature, int anneeSignature,
-			int jourExpiration, int moisExpiration, int anneeExpiration, String signataire,
-			String modeReglement, String type) /*throws SQLException*/ {
-		
-		System.out.println("Contrat.create()");
-		
-		//On assemble la date de signature
-		GregorianCalendar dateSignature = new GregorianCalendar(anneeSignature, moisSignature-1, jourSignature);
-		
-		//On assemble la date d'expiration
-		GregorianCalendar dateExpiration = new GregorianCalendar(anneeExpiration, moisExpiration-1, jourExpiration);
-		
-		//On crée le contractant dans la base
-		String requete = "INSERT INTO contrat (titre, dateSignature, dateExpiration, signataire, modeReglement, type) VALUES ('" +
-			titre + "', '" + dateSignature.getTimeInMillis() + "', '" + dateExpiration.getTimeInMillis() +
-			"', '" + signataire + "', '" + modeReglement + "', '" + type + "');"; 
-		
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//Si l'insertion s'est bien déroulée
-		if (nbRows>0) {
-			//On retourne ensuite un objet pour ce contractant
-			//return Contrat.getByNom(nom);
-		}
-		
-		//Sinon on retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Instancie un objet contrat après avoir récupéré ces infos depuis la base à partir de son id
-	 * @param String id
-	 * @return Contrat
-	 */
-	public static Contrat getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("Contrat.getById("+id+")");
-		
-		String requete = "SELECT * FROM contrat WHERE id = '" + id + "';";
-
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		//S'il y a un resultat
-		if (resultats!=null && resultats.size()>0) {
-			
-			//On prend le 1er élément
-			Dictionary dico = (Dictionary) resultats.firstElement();
-			
-			//On mappe les champs
-			String idCon = String.valueOf((Integer)dico.get("id"));
-			String titre = String.valueOf((Integer)dico.get("titre"));
-			String signataire = (String)dico.get("signataire");
-			String modeReglement = (String)dico.get("modeReglement");
-			String type = (String)dico.get("type");
-			
-			//On assemble la date de signature
-			GregorianCalendar dateSignature = new GregorianCalendar();
-			dateSignature.setTimeInMillis(Long.valueOf((String)dico.get("dateSignature")));
-			int jourSignature = dateSignature.get(GregorianCalendar.DATE);
-			int moisSignature = dateSignature.get(GregorianCalendar.MONTH);
-			int anneeSignature = dateSignature.get(GregorianCalendar.YEAR);
-			
-			//On assemble la date d'expiration
-			GregorianCalendar dateExpiration = new GregorianCalendar();
-			dateExpiration.setTimeInMillis(Long.valueOf((String)dico.get("dateExpiration")));
-			int jourExpiration = dateExpiration.get(GregorianCalendar.DATE);
-			int moisExpiration = dateExpiration.get(GregorianCalendar.MONTH);
-			int anneeExpiration = dateExpiration.get(GregorianCalendar.YEAR);
-			
-			System.out.println("-------- Contractant -----------");
-			System.out.println("Nb de champs: "+dico.size());
-			System.out.println("ID: "+idCon);
-			System.out.println("Titre: "+titre);
-			System.out.println("Signature: "+jourSignature+"/"+moisSignature+"/"+anneeSignature);
-			System.out.println("Expiration: "+jourExpiration+"/"+moisExpiration+"/"+anneeExpiration);
-			System.out.println("Signataire: "+signataire);
-			System.out.println("Mode de règlement: "+modeReglement);
-			System.out.println("Type: "+type);
-			System.out.println("-----------------------------");
-			
-			//On retourne l'objet
-			return new Contrat(idCon, titre, dateSignature, dateExpiration, signataire, modeReglement, type);
-		}
-		
-		//Sinon, on retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Instancie un objet contrat après avoir récupéré ces infos depuis la base à partir de son titre
-	 * @param String id
-	 * @return Contrat
-	 */
-	public static Contrat getByTitre(String titre) /*throws SQLException*/ {
-		
-		System.out.println("Contrat.getByTitre("+titre+")");
-		
-		String requete = "SELECT * FROM contrat WHERE titre = '" + titre + "';";
-
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		//S'il y a un resultat
-		if (resultats!=null && resultats.size()>0) {
-			
-			//On prend le 1er élément
-			Dictionary dico = (Dictionary) resultats.firstElement();
-			
-			//On mappe les champs
-			String id = String.valueOf((Integer)dico.get("id"));
-			String titreCon = String.valueOf((Integer)dico.get("titre"));
-			String signataire = (String)dico.get("signataire");
-			String modeReglement = (String)dico.get("modeReglement");
-			String type = (String)dico.get("type");
-			
-			//On assemble la date de signature
-			GregorianCalendar dateSignature = new GregorianCalendar();
-			dateSignature.setTimeInMillis(Long.valueOf((String)dico.get("dateSignature")));
-			int jourSignature = dateSignature.get(GregorianCalendar.DATE);
-			int moisSignature = dateSignature.get(GregorianCalendar.MONTH);
-			int anneeSignature = dateSignature.get(GregorianCalendar.YEAR);
-			
-			//On assemble la date d'expiration
-			GregorianCalendar dateExpiration = new GregorianCalendar();
-			dateExpiration.setTimeInMillis(Long.valueOf((String)dico.get("dateExpiration")));
-			int jourExpiration = dateExpiration.get(GregorianCalendar.DATE);
-			int moisExpiration = dateExpiration.get(GregorianCalendar.MONTH);
-			int anneeExpiration = dateExpiration.get(GregorianCalendar.YEAR);
-			
-			System.out.println("-------- Contractant -----------");
-			System.out.println("Nb de champs: "+dico.size());
-			System.out.println("ID: "+id);
-			System.out.println("Titre: "+titreCon);
-			System.out.println("Signature: "+jourSignature+"/"+moisSignature+"/"+anneeSignature);
-			System.out.println("Expiration: "+jourExpiration+"/"+moisExpiration+"/"+anneeExpiration);
-			System.out.println("Signataire: "+signataire);
-			System.out.println("Mode de règlement: "+modeReglement);
-			System.out.println("Type: "+type);
-			System.out.println("-----------------------------");
-			
-			//On retourne l'objet
-			return new Contrat(id, titreCon, dateSignature, dateExpiration, signataire, modeReglement, type);
-		}
-		
-		//Sinon, on retourne un objet vide
-		return null;
-	}
-	
-	/**
-	 * Retourne un vecteur d'objets contrat instanciés à partir de toutes les infos de la base
-	 * @return Hashtable
-	 * @throws SQLException 
-	 */
-
-	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("Contrat.getAll()");
-		
-		//On crée un vecteur pour contenir les objets documents instanciés
-		Hashtable contrats = new Hashtable();
-		
-		//On va chercher dans la liste des id de tous les documents
-		String requete = "SELECT id FROM contrat;";
-		Jdbc base = Jdbc.getInstance();
-		Vector resultats = base.executeQuery(requete);
-		
-		System.out.println("Contrat.getAll() : "+resultats.size()+" contrat(s) trouvé(s)");
-		
-		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
-		for (int j = 0; j < resultats.size(); j++) {
-			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			String id = String.valueOf((Integer)dico.get("id"));
-			contrats.put(id, Contrat.getById(id));
-		}
-		
-		//On retourne le vecteur contenant les objets contractants instanciés
-		return contrats;
-	}
-	
-	/**
-	 * Détruit les infos d'un contrat contenues dans la base
-	 * @param id
-	 * @return
-	 * @throws SQLException 
-	 */
-	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
-		//On supprime le contractant de la base, en partant d'un id
-		String requete = "DELETE FROM contrat WHERE id = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//On retourne le resultat de l'opération (succès/échec)
-		return nbRows>0;
-	}
+//	/**
+//	 * Création du contrat en base
+//	 * @param String titre
+//	 * @param int jourSignature
+//	 * @param int moisSignature
+//	 * @param int anneeSignature
+//	 * @param int jourExpiration
+//	 * @param int moisExpiration
+//	 * @param int anneExpiration
+//	 * @param String idContractant
+//	 * @param String modeReglement
+//	 * @param String type
+//	 * @return Contrat
+//	 */
+//	public static Contrat create(String titre, int jourSignature, int moisSignature, int anneeSignature,
+//			int jourExpiration, int moisExpiration, int anneeExpiration, String idContractant,
+//			String modeReglement, String type) /*throws SQLException*/ {
+//		
+//		System.out.println("Contrat.create()");
+//		
+//		//On assemble la date de signature
+//		GregorianCalendar dateSignature = new GregorianCalendar(anneeSignature, moisSignature-1, jourSignature);
+//		
+//		//On assemble la date d'expiration
+//		GregorianCalendar dateExpiration = new GregorianCalendar(anneeExpiration, moisExpiration-1, jourExpiration);
+//		
+//		//On crée le contractant dans la base
+//		String requete = "INSERT INTO contrat (titre, signature, expiration, id_contractant, reglement, type) VALUES ('" +
+//			titre + "', '" + dateSignature.getTimeInMillis() + "', '" + dateExpiration.getTimeInMillis() +
+//			"', '" + idContractant + "', '" + modeReglement + "', '" + type + "');"; 
+//		
+//		Jdbc base = Jdbc.getInstance();
+//		int nbRows = base.executeUpdate(requete);
+//		
+//		//Si l'insertion s'est bien déroulée
+//		if (nbRows>0) {
+//			
+//			//On instancie l'objet correspondant
+//			Contrat c = Contrat.getByTitre(titre);
+//			
+//			//On informe le contractant de la création du contrat
+//			Contractant ct = c.getContractant();
+//			ct.ajouterContrat(c);
+//			
+//			//On retourne ensuite un objet pour ce contrat
+//			return c;
+//		}
+//		
+//		//Sinon on retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Instancie un objet contrat après avoir récupéré ces infos depuis la base à partir de son id
+//	 * @param String id
+//	 * @return Contrat
+//	 */
+//	public static Contrat getById(String id) /*throws SQLException*/ {
+//		
+//		System.out.println("Contrat.getById("+id+")");
+//		
+//		String requete = "SELECT * FROM contrat WHERE id = '" + id + "';";
+//
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		//S'il y a un resultat
+//		if (resultats!=null && resultats.size()>0) {
+//			
+//			//On prend le 1er élément
+//			Dictionary dico = (Dictionary) resultats.firstElement();
+//			
+//			//On mappe les champs
+//			String idCon = String.valueOf((Integer)dico.get("id"));
+//			String titre = (String)dico.get("titre");
+//			String idContractant = (String)dico.get("id_contractant");
+//			String modeReglement = (String)dico.get("reglement");
+//			String type = (String)dico.get("type");
+//			
+//			//On assemble la date de signature
+//			GregorianCalendar dateSignature = new GregorianCalendar();
+//			dateSignature.setTimeInMillis(Long.valueOf((String)dico.get("signature")));
+//			int jourSignature = dateSignature.get(GregorianCalendar.DATE);
+//			int moisSignature = dateSignature.get(GregorianCalendar.MONTH);
+//			int anneeSignature = dateSignature.get(GregorianCalendar.YEAR);
+//			
+//			//On assemble la date d'expiration
+//			GregorianCalendar dateExpiration = new GregorianCalendar();
+//			dateExpiration.setTimeInMillis(Long.valueOf((String)dico.get("expiration")));
+//			int jourExpiration = dateExpiration.get(GregorianCalendar.DATE);
+//			int moisExpiration = dateExpiration.get(GregorianCalendar.MONTH);
+//			int anneeExpiration = dateExpiration.get(GregorianCalendar.YEAR);
+//			
+//			System.out.println("-------- Contrat -----------");
+//			System.out.println("Nb de champs: "+dico.size());
+//			System.out.println("ID: "+idCon);
+//			System.out.println("Titre: "+titre);
+//			System.out.println("Signature: "+jourSignature+"/"+moisSignature+"/"+anneeSignature);
+//			System.out.println("Expiration: "+jourExpiration+"/"+moisExpiration+"/"+anneeExpiration);
+//			System.out.println("Contractant: "+idContractant);
+//			System.out.println("Mode de règlement: "+modeReglement);
+//			System.out.println("Type: "+type);
+//			System.out.println("-----------------------------");
+//			
+//			//On retourne l'objet
+//			return new Contrat(idCon, titre, dateSignature, dateExpiration, idContractant, modeReglement, type);
+//		}
+//		
+//		//Sinon, on retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Instancie un objet contrat après avoir récupéré ces infos depuis la base à partir de son titre
+//	 * @param String id
+//	 * @return Contrat
+//	 */
+//	public static Contrat getByTitre(String titre) /*throws SQLException*/ {
+//		
+//		System.out.println("Contrat.getByTitre("+titre+")");
+//		
+//		String requete = "SELECT * FROM contrat WHERE titre = '" + titre + "';";
+//
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		//S'il y a un resultat
+//		if (resultats!=null && resultats.size()>0) {
+//			
+//			//On prend le 1er élément
+//			Dictionary dico = (Dictionary) resultats.firstElement();
+//			
+//			//On mappe les champs
+//			String id = String.valueOf((Integer)dico.get("id"));
+//			String titreCon = (String)dico.get("titre");
+//			String idContractant = (String)dico.get("id_contractant");
+//			String modeReglement = (String)dico.get("reglement");
+//			String type = (String)dico.get("type");
+//			
+//			//On assemble la date de signature
+//			GregorianCalendar dateSignature = new GregorianCalendar();
+//			dateSignature.setTimeInMillis(Long.valueOf((String)dico.get("signature")));
+//			int jourSignature = dateSignature.get(GregorianCalendar.DATE);
+//			int moisSignature = dateSignature.get(GregorianCalendar.MONTH);
+//			int anneeSignature = dateSignature.get(GregorianCalendar.YEAR);
+//			
+//			//On assemble la date d'expiration
+//			GregorianCalendar dateExpiration = new GregorianCalendar();
+//			dateExpiration.setTimeInMillis(Long.valueOf((String)dico.get("expiration")));
+//			int jourExpiration = dateExpiration.get(GregorianCalendar.DATE);
+//			int moisExpiration = dateExpiration.get(GregorianCalendar.MONTH);
+//			int anneeExpiration = dateExpiration.get(GregorianCalendar.YEAR);
+//			
+//			System.out.println("-------- Contrat -----------");
+//			System.out.println("Nb de champs: "+dico.size());
+//			System.out.println("ID: "+id);
+//			System.out.println("Titre: "+titreCon);
+//			System.out.println("Signature: "+jourSignature+"/"+moisSignature+"/"+anneeSignature);
+//			System.out.println("Expiration: "+jourExpiration+"/"+moisExpiration+"/"+anneeExpiration);
+//			System.out.println("Contractant: "+idContractant);
+//			System.out.println("Mode de règlement: "+modeReglement);
+//			System.out.println("Type: "+type);
+//			System.out.println("-----------------------------");
+//			
+//			//On retourne l'objet
+//			return new Contrat(id, titreCon, dateSignature, dateExpiration, idContractant, modeReglement, type);
+//		}
+//		
+//		//Sinon, on retourne un objet vide
+//		return null;
+//	}
+//	
+//	/**
+//	 * Retourne un vecteur d'objets contrat instanciés à partir de toutes les infos de la base
+//	 * @return Hashtable
+//	 * @throws SQLException 
+//	 */
+//
+//	public static Hashtable getAll() /*throws SQLException*/ {
+//		
+//		System.out.println("Contrat.getAll()");
+//		
+//		//On crée un vecteur pour contenir les objets documents instanciés
+//		Hashtable contrats = new Hashtable();
+//		
+//		//On va chercher dans la liste des id de tous les documents
+//		String requete = "SELECT id FROM contrat;";
+//		Jdbc base = Jdbc.getInstance();
+//		Vector resultats = base.executeQuery(requete);
+//		
+//		System.out.println("Contrat.getAll() : "+resultats.size()+" contrat(s) trouvé(s)");
+//		
+//		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
+//		for (int j = 0; j < resultats.size(); j++) {
+//			Dictionary dico = (Dictionary) resultats.elementAt(j);
+//			String id = String.valueOf((Integer)dico.get("id"));
+//			contrats.put(id, Contrat.getById(id));
+//		}
+//		
+//		//On retourne le vecteur contenant les objets contractants instanciés
+//		return contrats;
+//	}
+//	
+//	/**
+//	 * Détruit les infos d'un contrat contenues dans la base
+//	 * @param id
+//	 * @return
+//	 * @throws SQLException 
+//	 */
+//	public static boolean deleteById(String id) /*throws SQLException*/ {
+//		
+//		//On supprime le contractant de la base, en partant d'un id
+//		String requete = "DELETE FROM contrat WHERE id = '" + id + "';";
+//		Jdbc base = Jdbc.getInstance();
+//		int nbRows = base.executeUpdate(requete);
+//		
+//		//On retourne le resultat de l'opération (succès/échec)
+//		return nbRows>0;
+//	}
 	
 // METHODES DYNAMIQUES
 //***************************************
 	
 	/**
-	 * Ajoute un contractant
-	 * @param Programme prog
+	 * Retourne la liste des documents associés à ce contrat
+	 * @return Hastable
 	 */
-	public void ajouterContractant(Contractant contractant) {
+	public void setDocumentsAssocies() {
+		System.out.println("Contrat.setDocumentsAssocies()");
 		
-		//Si le contrat n'est pas déjà associé
-		if (!contractants.containsKey(contractant.getId())) {
-			
-			//On associe le contrat
-			contractants.put(contractant.getId(), contractant);
+		//On crée un vecteur pour contenir les objets documents instanciés
+		Hashtable docs = new Hashtable();
+		
+		//On va chercher dans la base la liste des id de tous les programmes
+		String requete = "SELECT id_doc FROM contratdoc WHERE id_contrat = '"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		System.out.println("Contrat.getDocumentsAssocies() : "+resultats.size()+" document(s) trouvé(s)");
+		
+		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			String id = (String)dico.get("id_doc");
+			docs.put(id, DocumentFactory.getById(id));
 		}
 		
-		System.out.println("Contractant ajouté");
+		this.documents=docs;
+	}
+	
+	/**
+	 * Ajoute un document
+	 * @param Programme prog
+	 */
+	public void ajouterDocument(Document doc) {
+		
+		//On ajoute le document au contrat
+		String requete = "INSERT INTO contratdoc (id_contrat, id_doc) VALUES ('" + id + "', '" + doc.getId() + "');";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si l'insertion s'est bien déroulée
+		if (nbRows>0) {
+			
+			//On met à jour le vecteurs d'association
+			documents.put(doc.getId(), doc);
+			
+			//On signale au document cet ajout
+			doc.ajouterContrat(this);
+		}
+		
+		System.out.println("Document ajouté");
 	}
 
 	/**
-	 * Supprime de sa liste le contractant
-	 * @param String
+	 * Supprime de sa liste le document
+	 * @param boolean
 	 */
-	public void retirerContractant(String idCon) {
+	public boolean retirerDocument(String idDoc) {
 		
-		//On enlève le contrat
-		contractants.remove(idCon);
+		// On retire le document du CONTRAT
+		String requete = "DELETE FROM contratdoc WHERE id_contrat='"+this.id+"' AND id_doc='"+idDoc+"';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
 		
-		System.out.println("Contractant retiré");
+		//Si la suppression s'est bien déroulée
+		if (nbRows>0) {
+			
+			//On récupère le doc
+			Document doc = (Document)documents.get(idDoc);
+			
+			//On signale au document ce retrait
+			doc.retirerContrat(this.id);
+			
+			//On met à jour le vecteur d'association
+			documents.remove(idDoc);
+			
+			return true;
+		}
+		
+		//Sinon
+		return false;
 	}
 
 	/**
@@ -335,13 +394,13 @@ public class Contrat {
 	 * @param int jourExpiration
 	 * @param int moisExpiration
 	 * @param int anneExpiration
-	 * @param String signataire
+	 * @param String idContractant
 	 * @param String modeReglement
 	 * @param String type
 	 * @return boolean
 	 */
 	public boolean modifier(String titre, int jourSignature, int moisSignature, int anneeSignature,
-			int jourExpiration, int moisExpiration, int anneeExpiration, String signataire,
+			int jourExpiration, int moisExpiration, int anneeExpiration, String idContractant,
 			String modeReglement, String type) {
 
 		
@@ -351,8 +410,8 @@ public class Contrat {
 		//On assemble la date d'expiration
 		GregorianCalendar dateExpiration = new GregorianCalendar(anneeExpiration, moisExpiration-1, jourExpiration);
 		
-		String requete = "UPDATE contrat SET dateSignature = '" + dateSignature.getTimeInMillis() + "', dateExpiration = '" + dateExpiration.getTimeInMillis() +
-			"', signataire = '"+ signataire + "', modeReglement = '" + modeReglement + "', type = '" + type + "', titre = '" + titre + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contrat SET signature = '" + dateSignature.getTimeInMillis() + "', expiration = '" + dateExpiration.getTimeInMillis() +
+			"', id_contractant = '"+ idContractant + "', reglement = '" + modeReglement + "', type = '" + type + "', titre = '" + titre + "' WHERE id = '" + id + "';";
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -363,7 +422,7 @@ public class Contrat {
 			this.titre = titre;
 			this.dateSignature = dateSignature;
 			this.dateExpiration = dateExpiration;
-			this.signataire = signataire;
+			this.contractant = (Contractant)ContractantFactory.getById(idContractant);
 			this.modeReglement = modeReglement;
 			this.type = type;
 		}
@@ -377,15 +436,17 @@ public class Contrat {
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
 		
-		//On supprime les associations contrat/contractant
-		Contrat c;
-		for (int i=0; i<contractants.size(); i++){
-			c = (Contrat)contractants.get(i);
-			c.supprimer();
+		//On supprime les associations contrat/document
+		for (int i=0; i<documents.size(); i++){
+			Document d = (Document)documents.get(i);
+			d.retirerContrat(this.id);
 		}
 		
+		//On supprime l'association contrat/contractant
+		contractant.retirerContrat(this.id);
+		
 		//On supprime les infos de la base
-		return Contrat.deleteById(id);
+		return ContractantFactory.deleteById(id);
 	}
 	
 //#### GETTERS ####
@@ -411,18 +472,32 @@ public class Contrat {
 		dico.put("titre", titre);
 		dico.put("dateSignature", dateSignature.get(GregorianCalendar.DAY_OF_MONTH)+"/"+dateSignature.get(GregorianCalendar.MONTH)+"/"+dateSignature.get(GregorianCalendar.YEAR));
 		dico.put("dateExpiration", dateExpiration.get(GregorianCalendar.DAY_OF_MONTH)+"/"+dateExpiration.get(GregorianCalendar.MONTH)+"/"+dateExpiration.get(GregorianCalendar.YEAR));
-		dico.put("signataire", signataire);
 		dico.put("modeReglement", modeReglement);
 		dico.put("type", type);
 		
+		//Liste des docs
+		Vector vDocs = new Vector();
+		Dictionary dicoDoc;
+		Document doc;
+		Enumeration listeDocs = documents.elements();
+		while (listeDocs.hasMoreElements()) {
+			doc = (Document)listeDocs.nextElement();
+			dicoDoc = new Hashtable();
+			dicoDoc.put("id", doc.getId());
+			dicoDoc.put("titre", doc.getTitre());
+			vDocs.add(dicoDoc);
+		}
+		dico.put("documents", vDocs);
+		dico.put("nbDocs", vDocs.size());
+		
+		//Signataire
+		Dictionary dicoContractant = new Hashtable();
+		dicoContractant.put("id", contractant.getId());
+		dicoContractant.put("nom", contractant.getNom());
+		dicoContractant.put("type", contractant.getType());
+		dico.put("contractant", dicoContractant);
+		
 		return dico;
-	}
-
-	/**
-	 * @return Renvoie contractants.
-	 */
-	public Hashtable getContractants() {
-		return contractants;
 	}
 	
 	/**
@@ -468,10 +543,10 @@ public class Contrat {
 	}
 
 	/**
-	 * @return Renvoie signataire.
+	 * @return Renvoie le contractant.
 	 */
-	public String getSignataire() {
-		return signataire;
+	public Contractant getContractant() {
+		return contractant;
 	}
 
 	/**
@@ -490,7 +565,7 @@ public class Contrat {
 	public boolean setDateExpiration(int jour, int mois, int annee) {
 		GregorianCalendar date = new GregorianCalendar(annee, mois-1, jour);
 		
-		String requete = "UPDATE contrat SET dateExpiration = '" + date.getTimeInMillis() + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contrat SET expiration = '" + date.getTimeInMillis() + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -507,7 +582,7 @@ public class Contrat {
 	public boolean setDateSignature(int jour, int mois, int annee) {
 		GregorianCalendar date = new GregorianCalendar(annee, mois-1, jour);
 		
-		String requete = "UPDATE contrat SET dateSignature = '" + date.getTimeInMillis() + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contrat SET signature = '" + date.getTimeInMillis() + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -522,7 +597,7 @@ public class Contrat {
 	 * @param modeReglement modeReglement à définir.
 	 */
 	public boolean setModeReglement(String modeReglement) {
-		String requete = "UPDATE contrat SET modeReglement = '" + modeReglement + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contrat SET reglement = '" + modeReglement + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -536,14 +611,14 @@ public class Contrat {
 	/**
 	 * @param signataire signataire à définir.
 	 */
-	public boolean setSignataire(String signataire) {
-		String requete = "UPDATE contrat SET signataire = '" + signataire + "' WHERE id = '" + id + "';";
+	public boolean setContractant(String idContractant) {
+		String requete = "UPDATE contrat SET id_contractant = '" + idContractant + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
-			this.signataire = signataire;
+			this.contractant = (Contractant)ContractantFactory.getById(idContractant);
 		}
 		return nbRows>0;
 	}
