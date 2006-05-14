@@ -7,6 +7,9 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 /**
  * Document mis à disposition dans le NetJukeBox
  */
@@ -15,6 +18,11 @@ public class Document {
 // ATTRIBUTS DU DOCUMENT
 //********************************************
 
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Document.class);
+	
 	/**
 	 * Identifiant du document
 	 */
@@ -148,7 +156,9 @@ public class Document {
 			int mois, int annee, String source, String langue, String genre,
 			String fichier, String artiste, String interprete, String compositeur) /*throws SQLException*/ {
 		
-		System.out.println("Document.create()");
+	
+		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
+		logger.debug("Démarrage : Document.create");				
 		
 		//On assemble la date
 		//String date = jour+"-"+mois+"-"+annee;
@@ -165,10 +175,11 @@ public class Document {
 		//Si l'insertion s'est bien déroulée
 		if (nbRows>0) {
 			//On retourne ensuite un objet pour ce document
+			logger.debug("Arrêt: Document.create");
 			return Document.getByTitre(titre);
 		}
-		
 		//Sinon on retourne un objet vide
+		logger.debug("Arrêt: Document.create");
 		return null;
 	}
 	
@@ -179,8 +190,8 @@ public class Document {
 	 * @throws SQLException 
 	 */
 	public static Document getByTitre(String titre) /*throws SQLException*/ {
-		
-		System.out.println("Document.getByTitre("+titre+")");
+		logger.debug("Démarrage: Doument.getByTitre");
+		logger.info("Document.getByTitre("+titre+")");
 		
 		String requete = "SELECT * FROM document WHERE titre = '" + titre + "';";
 
@@ -229,9 +240,12 @@ public class Document {
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
+
+			logger.debug("Arrêt: Document.getByTitre");	
 			return new Document(id, titreDoc, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur);
 		}
 
+	
 		/*
 		//----------- TEST SANS JDBC---------------------
 		if (titre.equalsIgnoreCase("Rhapsody in Blue")) {
@@ -242,6 +256,7 @@ public class Document {
 		*/
 		
 		//Sinon, on retourne un objet vide
+		logger.debug("Arrêt: Document.getByTitre");
 		return null;
 	}
 	
@@ -252,8 +267,8 @@ public class Document {
 	 * @throws SQLException 
 	 */
 	public static Document getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("Document.getById("+id+")");
+		logger.debug("Démarrage: Document.getById");
+		logger.info("Document.getById("+id+")");
 		
 		String requete = "SELECT * FROM document WHERE id = '" + id + "';";
 
@@ -303,7 +318,10 @@ public class Document {
 			System.out.println("-----------------------------");
 			
 			//On retourne l'objet
+
+			logger.debug("Arrêt: Document.getById");
 			return new Document(idDoc, titre, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur);
+
 		}
 
 		/*
@@ -316,6 +334,7 @@ public class Document {
 		*/
 		
 		//Sinon, on retourne un objet vide
+		logger.debug("Arrêt: Document.getById");
 		return null;
 	}
 	
@@ -327,8 +346,7 @@ public class Document {
 	 */
 
 	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("Document.getAll()");
+		logger.debug("Démarrage: getAll");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable documents = new Hashtable();
@@ -338,7 +356,7 @@ public class Document {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Document.getAll() : "+resultats.size()+" document(s) trouvé(s)");
+		logger.info("Document.getAll() : "+resultats.size()+" document(s) trouvé(s)");
 		
 		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -354,6 +372,8 @@ public class Document {
 		*/
 		
 		//On retourne le vecteur contenant les objets documents instanciés
+
+		logger.debug("Arrêt: getAll");
 		return documents;
 	}
 	
@@ -364,6 +384,7 @@ public class Document {
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) /*throws SQLException*/ {
+		logger.debug("Démarrage: deleteById");
 		
 		//On supprime le document de la base, en partant d'un id
 		String requete = "DELETE FROM document WHERE id = '" + id + "';";
@@ -371,7 +392,8 @@ public class Document {
 		int nbRows = base.executeUpdate(requete);
 		
 		//On retourne le resultat de l'opération (succès/échec)
-		return nbRows>0;
+		logger.debug("Arrêt: deleteById");
+		return nbRows > 0;
 	}
 
 // METHODES DYNAMIQUES
@@ -395,6 +417,7 @@ public class Document {
 	 * @param Programme prog
 	 */
 	public void ajouterProgramme(Programme prog) {
+		logger.debug("Démarrage: ajouterProgramme");
 		
 		//S'il n'y a pas de verrous pour le programme
 		if (!verrous.contains(prog.getId())) {
@@ -406,8 +429,9 @@ public class Document {
 		//On pose un verrou pour le programme
 		verrous.addElement(prog.getId());
 		
-		System.out.println("Document verrouillé : " + this.id);
-		System.out.println("Le compteur de verrou = " + verrous.size());
+		logger.info("Document verrouillé : " + this.id);
+		logger.info("Le compteur de verrou = " + verrous.size());
+		logger.debug("Arrêt: ajouterProgramme");
 	}
 
 	/**
@@ -416,7 +440,8 @@ public class Document {
 	 * @param String
 	 */
 	public void retirerProgramme(String idProg) {
-		
+		logger.debug("Démarrage: retirerProgramme");
+				
 		//On enlève un verrou pour le programme
 		verrous.remove(idProg);
 		
@@ -428,8 +453,9 @@ public class Document {
 			programmes.remove(idProg);
 		}
 		
-		System.out.println("Document déverrouillé : " + this.id);
-		System.out.println("Le compteur de verrou = " + verrous.size());
+		logger.info("Document déverrouillé : " + this.id);
+		logger.info("Le compteur de verrou = " + verrous.size());
+		logger.debug("Arrêt: retirerProgramme");
 	}
 	
 	/**
@@ -449,6 +475,8 @@ public class Document {
 			int mois, int annee, String source, String langue, String genre,
 			String fichier, String artiste, String interprete, String compositeur) {
 		
+		logger.debug("Démarrage: modifier");
+
 		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
 		
 		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree +
@@ -473,6 +501,7 @@ public class Document {
 			this.compositeur = compositeur;
 			this.interprete = interprete;
 		}
+		logger.debug("Arrêt: modifier");
 		return nbRows>0;
 	}
 	
@@ -482,7 +511,8 @@ public class Document {
 	 * @throws SQLException 
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: supprimer");
+				
 		//On supprime les associations document/programme
 		Programme p;
 		for (int i=0; i<programmes.size(); i++){
@@ -491,6 +521,7 @@ public class Document {
 		}
 		
 		//On supprime les infos de la base
+		logger.debug("Arrêt: supprimer");
 		return Document.deleteById(id);
 	}
 
@@ -502,7 +533,8 @@ public class Document {
 	 * @return Dictionary
 	 */
 	public Dictionary getAttributesDictionary() {
-		
+		logger.debug("Démarrage: getAttributesDictionary");
+	
 		int jour = dateParution.get(GregorianCalendar.DATE);
 		int mois = dateParution.get(GregorianCalendar.MONTH);
 		int annee = dateParution.get(GregorianCalendar.YEAR);
@@ -521,7 +553,8 @@ public class Document {
 		dico.put("artiste", artiste);
 		dico.put("interprete", interprete);
 		dico.put("compositeur", compositeur);
-		
+
+		logger.debug("Arrêt: getAttributesDictionary");
 		return dico;
 	}
 
@@ -530,6 +563,8 @@ public class Document {
 	 * @return String
 	 */
 	public String getId() {
+		logger.debug("Démarrage: getId");
+		logger.debug("Arrêt: getId");
 		return id;
 	}
 
@@ -538,6 +573,8 @@ public class Document {
 	 * @return String
 	 */
 	public String getTitre() {
+		logger.debug("Démarrage: getTitre");
+		logger.debug("Arrêt: getTitre");
 		return titre;
 	}
 
@@ -546,6 +583,8 @@ public class Document {
 	 * @return int
 	 */
 	public int getDuree() {
+		logger.debug("Démarrage: getDuree");
+		logger.debug("Arrêt: getDuree");
 		return duree;
 	}
 
@@ -554,6 +593,8 @@ public class Document {
 	 * @return String
 	 */
 	public String getSource() {
+		logger.debug("Démarrage: getSource");
+		logger.debug("Arrêt: getSource");
 		return source;
 	}
 
@@ -562,6 +603,8 @@ public class Document {
 	 * @return String
 	 */
 	public String getLangue() {
+		logger.debug("Démarrage: getLangue");
+		logger.debug("Arrêt: getLangue");
 		return langue;
 	}
 
@@ -570,6 +613,8 @@ public class Document {
 	 * @return String
 	 */
 	public String getGenre() {
+		logger.debug("Démarrage: getGenre");
+		logger.debug("Arrêt: getGenre");
 		return genre;
 	}
 
@@ -578,6 +623,8 @@ public class Document {
 	 * @return String
 	 */
 	public String getFichier() {
+		logger.debug("Démarrage: getFichier");
+		logger.debug("Arrêt: getFichier");
 		return fichier;
 	}
 
@@ -586,6 +633,8 @@ public class Document {
 	 * @return String
 	 */
 	public String getEtat() {
+		logger.debug("Démarrage: getEtat");
+		logger.debug("Arrêt: getEtat");
 		return etat;
 	}
 	
@@ -594,22 +643,27 @@ public class Document {
 	 * Affiche les programmes vérrouillant le document
 	 */
 	public void compterVerrouProgramme() {
-		System.out.println("Le document : " + id + " est verrouillé : " + verrous.size() + " fois");
+		logger.debug("Démarrage: compterVerrouProgramme");
+		logger.info("Le document : " + id + " est verrouillé : " + verrous.size() + " fois");
+		logger.debug("Arrêt: compterVerrouProgramme");
 	}
 	
 	/**
 	 * Affiche la liste des programmes vérrouillant le document
 	 */
 	public void getProgrammesArchives() {
+	logger.debug("Démarrage: getProgrammesArchives");
+
 		int i;
 		if (verrous.size() != 0) {
 			for (i = 0; i < verrous.size(); i++) {
 				String idProg = (String) verrous.elementAt(i);
-				System.out.println("Le document : " + id + " est verrouillé par le programme : " + idProg);
+				logger.info("Le document : " + id + " est verrouillé par le programme : " + idProg);
 			}
 		} else {
-			System.out.println("Le document : " + id + " est verrouillé par aucun programme");
+			logger.info("Le document : " + id + " est verrouillé par aucun programme");
 		}
+		logger.debug("Arrêt: getProgrammesArchives");
 	}
 	
 	/**
@@ -617,13 +671,17 @@ public class Document {
 	 * @return Date
 	 */
 	public Date getDateCreation() {
+
+		logger.debug("Démarrage: getDateCreation");
+		
 		int jour = dateParution.get(GregorianCalendar.DATE);
 		int mois = dateParution.get(GregorianCalendar.MONTH);
 		int annee = dateParution.get(GregorianCalendar.YEAR);
 
 		String date = jour + "/"+ mois + "/" + annee;
 		TransformeDate TD = new TransformeDate(date);
-		System.out.println(TD.d);
+		logger.info(TD.d);
+		logger.debug("Arrêt: getDateCreation");
 		return TD.d;
 	}
 	
@@ -632,6 +690,8 @@ public class Document {
 	 * @return boolean
 	 */
 	public boolean enLecture() {
+		logger.debug("Démarrage: enLecture");
+		logger.debug("Arrêt: enLecture");
 		return etat.equalsIgnoreCase("LECTURE");
 	}
 
@@ -640,6 +700,8 @@ public class Document {
 	 * @return boolean
 	 */
 	public boolean estProgramme() {
+		logger.debug("Démarrage: estProgramme");
+		logger.debug("Arrêt: estProgramme");
 		return etat.equalsIgnoreCase("PROGRAMME");
 	}
 	
@@ -647,6 +709,8 @@ public class Document {
 	 * @return Renvoie artiste.
 	 */
 	public String getArtiste() {
+		logger.debug("Démarrage: getArtiste");
+		logger.debug("Arrêt: getArtiste");
 		return artiste;
 	}
 
@@ -654,6 +718,8 @@ public class Document {
 	 * @return Renvoie compositeur.
 	 */
 	public String getCompositeur() {
+		logger.debug("Démarrage: getCompositeur");
+		logger.debug("Arrêt: getCompositeur");
 		return compositeur;
 	}
 
@@ -661,52 +727,62 @@ public class Document {
 	 * @return Renvoie interprete.
 	 */
 	public String getInterprete() {
+		logger.debug("Démarrage: getInterprete");
+		logger.debug("Arrêt: getInterprete");
 		return interprete;
 	}
-	
+		
 //#### SETTERS ####
 //#################
-	
 	/**
 	 * @param compositeur compositeur à définir.
 	 */
 	public boolean setCompositeur(String compositeur) {
+		logger.debug("Démarrage: setCompositeur");
+		
 		String requete = "UPDATE document SET compositeur = '" + compositeur + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.compositeur = compositeur;
 		}
+		logger.debug("Arrêt: setCompositeur");
 		return nbRows>0;
 	}
 	/**
 	 * @param artiste artiste à définir.
 	 */
 	public boolean setArtiste(String artiste) {
+		logger.debug("Démarrage: setArtiste");
+		
 		String requete = "UPDATE document SET artiste = '" + artiste + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.artiste = artiste;
 		}
+		logger.debug("Arrêt: setArtiste");
 		return nbRows>0;
 	}
 	/**
 	 * @param interprete interprete à définir.
 	 */
 	public boolean setInterprete(String interprete) {
+		logger.debug("Démarrage: setInterprete");
+
 		String requete = "UPDATE document SET interprete = '" + interprete + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.interprete = interprete;
 		}
+		logger.debug("Arrêt: setInterprete");
 		return nbRows>0;
 	}
 	
@@ -717,6 +793,8 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setFichier(String fichier) /*throws SQLException*/ {
+		logger.debug("Démarrage: setFichier");
+	
 		String requete = "UPDATE document SET fichier = '" + fichier + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -725,6 +803,7 @@ public class Document {
 		if (nbRows>0) {
 			this.fichier = fichier;
 		}
+		logger.debug("Arrêt: setFichier");
 		return nbRows>0;
 	}
 	
@@ -735,6 +814,8 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setGenre(String genre) /*throws SQLException*/ {
+		logger.debug("Démarrage: setGenre");
+
 		String requete = "UPDATE Document SET genre = '" + genre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -743,6 +824,7 @@ public class Document {
 		if (nbRows>0) {
 			this.genre = genre;
 		}
+		logger.debug("Arrêt: setGenre");
 		return nbRows>0;
 	}
 	
@@ -753,6 +835,8 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setLangue(String langue) /*throws SQLException*/ {
+		logger.debug("Démarrage: setLangue");
+		
 		String requete = "UPDATE document SET langue = '" + langue + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -761,6 +845,7 @@ public class Document {
 		if (nbRows>0) {
 			this.langue = langue;
 		}
+		logger.debug("Arrêt: setLangue");
 		return nbRows>0;
 	}
 	
@@ -771,6 +856,8 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setSource(String source) /*throws SQLException*/ {
+		logger.debug("Démarrage: setSource");
+		
 		String requete = "UPDATE document SET source = '" + source + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -779,6 +866,7 @@ public class Document {
 		if (nbRows>0) {
 			this.source = source;
 		}
+		logger.debug("Arrêt: setSource");
 		return nbRows>0;
 	}
 	
@@ -791,6 +879,7 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setDate(int jour, int mois, int annee) /*throws SQLException*/ {
+		logger.debug("Démarrage: setDate");
 		
 		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
 		
@@ -802,6 +891,7 @@ public class Document {
 		if (nbRows>0) {
 			this.dateParution = date;
 		}
+		logger.debug("Arret: setDate");
 		return nbRows>0;
 	}
 	
@@ -812,6 +902,8 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setTitre(String titre) /*throws SQLException*/ {
+		logger.debug("Démarrage: setTitre");
+		
 		String requete = "UPDATE document SET titre = '" + titre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -820,6 +912,7 @@ public class Document {
 		if (nbRows>0) {
 			this.titre = titre;
 		}
+		logger.debug("Arrêt: setTitre");
 		return nbRows>0;
 	}
 	
@@ -830,6 +923,8 @@ public class Document {
 	 * @throws SQLException
 	 */
 	public boolean setDuree(int duree) /*throws SQLException*/ {
+		logger.debug("Démarrage: setDuree");
+		
 		String requete = "UPDATE document SET duree = '" + duree + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -838,6 +933,7 @@ public class Document {
 		if (nbRows>0) {
 			this.duree = duree;
 		}
+		logger.debug("Arrêt: setDuree");
 		return nbRows>0;
 	}
 }
