@@ -1,13 +1,12 @@
 package proto.serveur;
 
-
+import java.io.*;
 import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.prefs.Preferences;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.naming.NamingException;
@@ -683,6 +682,8 @@ public class Systeme {
 					
 					//On le retire de la liste des documents du système
 					//documents.remove(id);
+					File f = new File(d.getFichier());
+					f.delete(); 
 					
 					System.out.println("Document '"+id+"' supprimé");
 					return Boolean.toString(true);
@@ -852,6 +853,7 @@ public class Systeme {
 			if (ProgrammeFactory.getByTitre(titre) == null) {
 				
 				//On crée le programme
+				@SuppressWarnings("unused")
 				Programme p = ProgrammeFactory.create(titre, thematique);
 				
 				//On l'ajoute à la liste des programmes du système
@@ -1172,6 +1174,7 @@ public class Systeme {
 			if (CanalFactory.getByNom(nom) == null) {
 				
 				//On crée le canal
+				@SuppressWarnings("unused")
 				Canal c = CanalFactory.create(nom, Integer.parseInt(utilMax));
 				
 				//On l'ajoute à la liste des canaux du système
@@ -1752,6 +1755,7 @@ public class Systeme {
 			if (ContratFactory.getByTitre(titre) == null) {
 				
 				//On crée le canal
+				@SuppressWarnings("unused")
 				Contrat c = ContratFactory.create(titre, Integer.parseInt(jourSignature), Integer.parseInt(moisSignature),
 						Integer.parseInt(anneeSignature), Integer.parseInt(jourExpiration), Integer.parseInt(moisExpiration),
 						Integer.parseInt(anneeExpiration), signataire, modeReglement, type);
@@ -2032,6 +2036,7 @@ public class Systeme {
 			if (ContractantFactory.getByNom(nom) == null) {
 				
 				//On crée le canal
+				@SuppressWarnings("unused")
 				Contractant c = ContractantFactory.create(nom, adresse, codePostal, ville, telephone, fax, mail, type);
 				
 				//On l'ajoute à la liste des contractants du système
