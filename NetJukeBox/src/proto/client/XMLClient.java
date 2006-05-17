@@ -50,7 +50,14 @@ public class XMLClient {
 	 * @param String ip
 	 * @param String port
 	 */
+	
 	public XMLClient(String ip, String port) {
+		
+		//Fichier de configuration de la journalisation
+		//PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
+		//PropertyConfigurator.configure("/home/netjukebox/Workspace/NetJukeBox/proto/serveur/log4j.prop");
+		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4jClient.prop");
+		
 		logger.debug("Démarrage: XMLCllient");
 		// Si le client XML n'est pas déjà initialisé
 		if (clientXML == null) {
