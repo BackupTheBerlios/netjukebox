@@ -530,10 +530,11 @@ public class Systeme {
 	 * @return String
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
 	public String creerDocument(String login, String titre, String duree, String jour, String mois, String annee,
-			String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur)throws NumberFormatException, SQLException {
+			String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur)throws NumberFormatException, SQLException, IOException {
 
 		System.out.println("Création du document "+titre);
 
@@ -551,6 +552,22 @@ public class Systeme {
 					//On l'ajoute à la liste des documents du système
 					//documents.put(d.getId(), d);
 					
+					//Conversion du fichier audio en .wav
+					String mplayer = prefs.node("conversion").get("mplayer", null);
+					String chemin = prefs.node("conversion").get("chemin", null);
+					
+					String fichierResult = chemin + d.getId();
+					String fichierInit = d.getFichier();
+					//Commande permettant la conversion
+					String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + ".wav " + fichierInit;
+					
+					//Execution de la conversion
+					@SuppressWarnings("unused")
+					Process proc = Runtime.getRuntime().exec(commande);
+					
+					//MàJ de l'objet document et de la base
+					d.setFichier(fichierResult);
+
 					System.out.println("Document '"+titre+"' créé");
 					return Boolean.toString(true);
 				}
