@@ -531,10 +531,11 @@ public class Systeme {
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
 	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
 	@SuppressWarnings("unchecked")
 	public String creerDocument(String login, String titre, String duree, String jour, String mois, String annee,
-			String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur)throws NumberFormatException, SQLException, IOException {
+			String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur)throws NumberFormatException, SQLException, IOException, InterruptedException {
 
 		System.out.println("Création du document "+titre);
 
@@ -556,14 +557,15 @@ public class Systeme {
 					String mplayer = prefs.node("conversion").get("mplayer", null);
 					String chemin = prefs.node("conversion").get("chemin", null);
 					
-					String fichierResult = chemin + d.getId();
+					String fichierResult = chemin + d.getId() + ".wav";
 					String fichierInit = d.getFichier();
 					//Commande permettant la conversion
-					String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + ".wav " + fichierInit;
-					
+					String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + " " + fichierInit;
+					System.err.println(commande);
 					//Execution de la conversion
 					@SuppressWarnings("unused")
 					Process proc = Runtime.getRuntime().exec(commande);
+					proc.waitFor();
 					
 					//MàJ de l'objet document et de la base
 					d.setFichier(fichierResult);
