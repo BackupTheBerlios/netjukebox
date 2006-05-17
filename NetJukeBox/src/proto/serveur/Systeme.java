@@ -568,6 +568,10 @@ public class Systeme {
 					//MàJ de l'objet document et de la base
 					d.setFichier(fichierResult);
 
+					//Suppression du fichier initial
+					File f = new File(fichierInit);
+					f.delete(); 
+					
 					System.out.println("Document '"+titre+"' créé");
 					return Boolean.toString(true);
 				}
