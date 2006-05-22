@@ -58,12 +58,17 @@ public class Utilisateur {
 	/**
 	 * Role de l'utilisateur
 	 */
-	private String role;
+	private Role role;
 
 	/**
 	 * Permissions
 	 */
 	private Hashtable permissions;
+	
+	/**
+	 * Etat
+	 */
+	private String etat = "DECONNECTE";
 
 // METHODES STATIQUES
 //*************************************************
@@ -149,8 +154,6 @@ public class Utilisateur {
 		}			
 		
 		/**
-		if (log.equalsIgnoreCase("toto")) {
-
 		if (log.equalsIgnoreCase("toto")) {
 
 			//On retourne un objet utilisateur configuré
@@ -270,17 +273,18 @@ public class Utilisateur {
 		}
 	}
 	
-// CONSTRUCTEURS
+// CONSTRUCTEUR
 //************************************************	
 		
 		/**
-		 * Constructeur simple
-		 */
-		public Utilisateur() {
-		}
-		
-		/**
-		 * Constructeur complet
+		 * Constructeur
+		 * @param String login
+		 * @param String pwd
+		 * @param String nom
+		 * @param String prenom
+		 * @param String mail
+		 * @param String pays
+		 * @param String role
 		 */
 		public Utilisateur(String login, String pwd, String nom, String prenom, String mail, String pays, String role) {
 
@@ -290,7 +294,7 @@ public class Utilisateur {
 			this.prenom=prenom;
 			this.mail=mail;
 			this.pays=pays;
-			this.role=role;
+			this.role=RoleFactory.getById(role);
 		}
 	
 // METHODES DYNAMIQUES
@@ -314,75 +318,93 @@ public class Utilisateur {
 		
 		
 	/**
-	 * Deconnecterl'utilisateur
-	 * @return
+	 * Deconnecter l'utilisateur
+	 * @return boolean
 	 */
 	public boolean deconnecter() {
-		// your code here
-		
-		return false;
+		this.etat = "DECONNECTE";
+		return true;
 	}
 
-	/**
-	 * Deconnexion de l'utilisateur
-	 */
-	public void deconnexion() {
-		// your code here
-	}
 
 	/**
 	 * Connecter l'utilisateur
-	 * @param Login
-	 * @param Pwd
-	 * @return
+	 * @return boolean
 	 */
-	public boolean connecter(String Login, String Pwd) {
-		// your code here
-		return false;
-	}
-
-	/**
-	 * Connexion de l'utilisateurs
-	 * @return
-	 */
-	public boolean connexion() {
-		// your code here
+	public boolean connecter() {
+		this.etat = "CONNNECTE";
 		return true;
 	}
+
 
 	/**
 	 * Modifier les informations de l'utilisateur
 	 * @throws NamingException 
 	 */
-	public boolean modifierInfos(String login, String role, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
+	public boolean modifier(String login, String role, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
 		
 		logger.debug("Démarrage: modifierInfos");
 		Ldap ldap = Ldap.getInstance();
 		ldap.ModifieAttributs(login, role, newlogin, pwd, nom, prenom, mail, pays);
+		this.login = login;
+		this.pwd = pwd;
+		this.nom=nom;
+		this.prenom=prenom;
+		this.mail=mail;
+		this.pays=pays;
+		this.role=RoleFactory.getById(role);
 		logger.debug("Arrêt: modifierInfos");
 		return true;
 	}
 
 	/**
-	 * Attribuer une permission à l'utilisateur
-	 * @param Id_Perm
-	 * @param Lib_Perm
+	 * Vérification de l'état de connexion de l'utilisateur
 	 * @return boolean
 	 */
-	public boolean setPermission(int Id_Perm, String Lib_Perm) {
-		// your code here
-		return false;
+	public /*@ pure @*/ boolean estConnecte() {
+		return etat.equalsIgnoreCase("CONNECTE");
 	}
 
 	/**
-	 * Vérification de l'état de connexion de l'utilisateur
-	 * @return
+	 * Retirer une permission à l'utilisateur 
+	 * @param String idPerm
+	 * @return boolean
 	 */
-	public /*@ pure @*/boolean verifConnecte() {
-		// your code here
-		return false;
+	public boolean retirerPermission(String idPerm) {
+		permissions.remove(idPerm);
+		return true;
+	}
+	
+	/**
+	 * Ajouter une permission à l'utilisateur 
+	 * @param String idPerm
+	 * @return boolean
+	 */
+	public boolean ajouterPermission(Permission perm) {
+		permissions.put(perm.getId(), perm);
+		return true;
 	}
 
+	
+	/**
+	 * Vérfie que l'utilisateur a bien la permission requise
+	 * @param String idPerm
+	 * @return boolean
+	 */
+	public /*@ pure @*/ boolean verifPermission(String idPerm) {
+		return (role.getPermissions().containsKey(idPerm) || permissions.containsKey(idPerm));
+	}
+
+//#### GETTERS ####	
+	
+	/**
+	 * Retourne les permissions attribuées à l'utilisateur
+	 * @return Hashtable
+	 */
+	public /*@ pure @*/ Hashtable getPermissions() {
+		return permissions;
+	}
+	
 	/**
 	 * Retourne le login de l'utilisateur
 	 * @return String
@@ -435,105 +457,35 @@ public class Utilisateur {
 	 * Retourne le role de l'utilisateur
 	 * @return String
 	 */
-	public /*@ pure @*/ String getRole() {
+	public /*@ pure @*/ Role getRole() {
 		return role;
 	}
+	
+//	#### SETTERS ####	
 
 	/**
-	 * Vérification de l'état de connexion de l'utilisateur
-	 * @return
-	 */
-	public /*@ pure @*/ boolean estConnecte() {
-		return false;
-	}
-
-	/**
-	 * Sélectionne l'utilisateur
-	 */
-	public void selectionner() {
-		// your code here
-	}
-
-	/**
-	 * Modifier l'utilisateur
-	 * @param Nom
-	 * @param Prenom
-	 * @param Mail
-	 * @param Pwd
-	 * @param Pays
-	 * @return boolean
-	 */
-	public boolean modifier(String Nom, String Prenom, String Mail, String Pwd, String Pays) {
-		// your code here
-		return false;
-	}
-
-	/**
-	 * Mise à jour des informations de l'utilisateur
-	 * @param Nom
-	 * @param Prenom
-	 * @param Mail
-	 * @param Pwd
-	 * @param Pays
-	 * @return boolean
-	 */
-	public boolean majInfos(String Nom, String Prenom, String Mail, String Pwd, String Pays) {
-		// your code here
-		return false;
-	}
-
-	/**
-	 * Retourne les permissions attribuées à l'utilisateur
-	 */
-	public /*@ pure @*/ void getPermissions() {
-		// your code here
-	}
-
-	/**
-	 * Ajouter une permision à l'utilisateur
-	 * @param Id_Perm
-	 * @return boolean
-	 */
-	@SuppressWarnings("static-access")
-	public void ajouterPermission(String login, String ancienrole, String nouveaurole) {
-		
-		logger.debug("Démarrage: ajouterPermission");
-		Ldap ldap = Ldap.getInstance();
-		ldap.changerRole(login, ancienrole, nouveaurole);
-		logger.debug("Arrêt: ajouterPermission");
-	}
-
-	/**
-	 * Retirer une permission à l'utilisateur 
-	 * @param Id_Perm
-	 * @return
-	 */
-	public boolean retirerPermission(int Id_Perm) {
-		// your code here
-		return false;
-	}
-
-	/**
-	 * Définir une permission
+	 * Attribuer une permission à l'utilisateur
 	 * @param Id_Perm
 	 * @param Lib_Perm
-	 * @return
+	 * @return boolean
 	 */
-	public boolean definirPermission(int Id_Perm, String Lib_Perm) {
+	public boolean setPermission(int Id_Perm, String Lib_Perm) {
 		// your code here
 		return false;
 	}
 	
 	/**
-	 * Vérfie que l'utilisateur a bien la permission requise
-	 * @param String perm
+	 * Change le rôle de l'utilisateur
+	 * @param String role
 	 * @return boolean
 	 */
-	public /*@ pure @*/ boolean verifPermission(String perm) {
-
-		//if (permssions.containsKey(perm)) return permssions.get(perm);
-		//else return false;
-				
-		return true;
+	@SuppressWarnings("static-access")
+	public void setRole(String nouveauRole) {
+		
+		logger.debug("Démarrage: changerRole");
+		Ldap ldap = Ldap.getInstance();
+		ldap.changerRole(login, role.getId(), nouveauRole);
+		this.role = RoleFactory.getById(nouveauRole);
+		logger.debug("Arrêt: changerRole");
 	}
 }

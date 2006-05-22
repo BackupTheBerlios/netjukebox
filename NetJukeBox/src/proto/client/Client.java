@@ -1027,6 +1027,38 @@ public class Client {
 					}
 				}
 				
+				// AJOUTERPERMISSIONUTILISATEUR
+				if  (ligne.equalsIgnoreCase("ajouterPermissionUtilisateur")) {
+					if (etatConnecte) {
+						System.out.print("ID de la permission source: ");
+						String idPerm = lire();
+						System.out.print("ID de l'utilisateur cible: ");
+						String idUtilisateur = lire();
+						boolean ajoute = clientXML.ajouterPermissionUtilisateur(idPerm, idUtilisateur);
+						if (ajoute) System.err.println("INFO: Permission ajoutée à l'utilisateur");
+						else System.err.println("ERREUR: Permission non ajoutée à l'utilisateur");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RETIRERPERMISSIONUTILISATEUR
+				if  (ligne.equalsIgnoreCase("retirerPermissionUtilisateur")) {
+					if (etatConnecte) {
+						System.out.print("ID de l'utilisateur source: ");
+						String idUtilisateur = lire();
+						System.out.print("ID de la permission à retirer : ");
+						String idPerm = lire();
+						boolean retire = clientXML.retirerPermissionUtilisateur(idPerm, idUtilisateur);
+						if (retire) System.err.println("INFO: Permission retirée à l'utilisateur");
+						else System.err.println("ERREUR: Permission non retirée à l'utilisateur");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 //### CONTRAT ###
 				
 				// CREERCONTRAT
@@ -1510,6 +1542,270 @@ public class Client {
 					}
 				}
 				
+//### PERMISSION ###
+				
+				// CREERPERMISSION
+				if  (ligne.equalsIgnoreCase("creerPermission")) {
+					if (etatConnecte) {
+						System.out.print("Code de la permission: ");
+						String id = lire();
+						System.out.print("Libellé: ");
+						String libelle = lire();
+						boolean cree = clientXML.creerPermission(id, libelle);
+						if (cree) System.err.println("INFO: Permission créée");
+						else System.err.println("ERREUR: Permission non créée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERPERMISSIONS
+				if  (ligne.equalsIgnoreCase("listerPermission")) {
+					if (etatConnecte) {
+						Vector vPermissions = clientXML.listerPermissions();
+						if (vPermissions!=null && vPermissions.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vPermissions.size(); i++){
+								c = (Dictionary)vPermissions.get(i);
+								System.out.println("--------------- Permission -----------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Libellé: "+c.get("libelle"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Permissions listées");
+						}
+						else System.err.println("WARNING: Aucune permission disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RECHERCHERPERMISSION
+				if  (ligne.equalsIgnoreCase("rechercherPermission")) {
+					if (etatConnecte) {
+						System.out.print("ID de la permission: ");
+						String id = lire();
+						System.out.print("Libellé: ");
+						String libelle = lire();
+						Vector vPermissions = clientXML.rechercherPermission(id, libelle);
+						if (vPermissions!=null && vPermissions.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vPermissions.size(); i++){
+								c = (Dictionary)vPermissions.get(i);
+								System.out.println("--------------- Permission -----------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Libellé: "+c.get("libelle"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Permission recherchée");
+						}
+						else System.err.println("WARNING: Aucune permission disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERPERMISSION
+				if  (ligne.equalsIgnoreCase("supprimerPermission")) {
+					if (etatConnecte) {
+						System.out.print("ID de la permission ");
+						String id = lire();
+						if (clientXML.supprimerPermission(id)) {
+							System.err.println("INFO: Permission supprimée");
+						}
+						else System.err.println("ERREUR: Suppression de la permission échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// MODIFIERPERMISSION
+				if  (ligne.equalsIgnoreCase("modifierPermission")) {
+					if (etatConnecte) {
+						
+						//ID du doc à modifier
+						System.out.print("ID de la permission à modifier : ");
+						String id = lire();
+						
+						//On affiche ses infos
+						Vector vPermissions = clientXML.rechercherPermission(id, "");
+						if (vPermissions!=null && vPermissions.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vPermissions.size(); i++){
+								c = (Dictionary)vPermissions.get(i);
+								System.out.println("--------------- Permission -----------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("Libellé: "+c.get("libelle"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Permission recherchée");
+							
+							//Si la permission existe, on la modifie
+							System.out.print("Nouveau libellé: ");
+							String libelle = lire();
+							
+							boolean modifie = clientXML.modifierPermission(id, libelle);
+							if (modifie) System.err.println("INFO: Permission modifiée");
+							else System.err.println("ERREUR: Permission non modifiée");
+						}
+						else System.err.println("WARNING: Aucune permission disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// INFOPERMISSION
+				if  (ligne.equalsIgnoreCase("infoPermission")) {
+					if (etatConnecte) {
+						//ID du doc
+						System.out.print("ID de la permission : ");
+						String id = lire();
+						
+						Dictionary c = clientXML.infoPermission(id);
+						
+						if (c != null) {
+							System.out.println("--------------- Permission -----------------");
+							System.out.println("Id: "+c.get("id"));
+							System.out.println("Libellé: "+c.get("libelle"));
+							System.out.println("----------------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Permission affichée");
+						}
+						else System.err.println("WARNING: Aucun permission disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+//### ROLE ###
+				
+				// CREERROLE
+				if  (ligne.equalsIgnoreCase("creerRole")) {
+					if (etatConnecte) {
+						System.out.print("Code du rôle: ");
+						String id = lire();
+						boolean cree = clientXML.creerRole(id);
+						if (cree) System.err.println("INFO: Rôle créé");
+						else System.err.println("ERREUR: Rôle non créé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// LISTERROLES
+				if  (ligne.equalsIgnoreCase("listerRole")) {
+					if (etatConnecte) {
+						Vector vRoles = clientXML.listerRoles();
+						if (vRoles!=null && vRoles.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary c;
+							for (int i=0; i<vRoles.size(); i++){
+								c = (Dictionary)vRoles.get(i);
+								System.out.println("--------------- Rôle -----------------");
+								System.out.println("Id: "+c.get("id"));
+								System.out.println("--------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Rôle listés");
+						}
+						else System.err.println("WARNING: Aucun rôle disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// SUPPRIMERROLE
+				if  (ligne.equalsIgnoreCase("supprimerRole")) {
+					if (etatConnecte) {
+						System.out.print("ID du rôle: ");
+						String id = lire();
+						if (clientXML.supprimerRole(id)) {
+							System.err.println("INFO: Rôle supprimé");
+						}
+						else System.err.println("ERREUR: Suppression de lu rôle échouée");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// INFOROLE
+				if  (ligne.equalsIgnoreCase("infoRole")) {
+					if (etatConnecte) {
+						//ID du doc
+						System.out.print("ID du rôle: ");
+						String id = lire();
+						
+						Dictionary c = clientXML.infoRole(id);
+						
+						if (c != null) {
+							System.out.println("--------------- Rôle -----------------");
+							System.out.println("Id: "+c.get("id"));
+							System.out.println("-------- Permissions associés --------");
+							
+							Vector vPermissions = (Vector)c.get("permissions");
+							Dictionary permission;
+							for (int i=0; i<vPermissions.size(); i++) {
+								permission = (Dictionary)vPermissions.get(i);
+								System.out.println("Permission: "+permission);
+							}
+							System.out.println("--------------------------------------");
+							System.out.println();
+							System.err.println("INFO: Rôle affiché");
+						}
+						else System.err.println("WARNING: Aucun rôle disponible");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// AJOUTERPERMISSIONROLE
+				if  (ligne.equalsIgnoreCase("ajouterPermissionRole")) {
+					if (etatConnecte) {
+						System.out.print("ID de la permission source: ");
+						String idPerm = lire();
+						System.out.print("ID du rôle cible: ");
+						String idRole = lire();
+						boolean ajoute = clientXML.ajouterPermissionRole(idPerm, idRole);
+						if (ajoute) System.err.println("INFO: Permission ajoutée au rôle");
+						else System.err.println("ERREUR: Permission non ajoutée au rôle");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				// RETIRERPERMISSIONROLE
+				if  (ligne.equalsIgnoreCase("retirerPermissionRole")) {
+					if (etatConnecte) {
+						System.out.print("ID du role source: ");
+						String idRole = lire();
+						System.out.print("ID de la permission à retirer : ");
+						String idPerm = lire();
+						boolean retire = clientXML.retirerPermissionRole(idPerm, idRole);
+						if (retire) System.err.println("INFO: Permission retirée au rôle");
+						else System.err.println("ERREUR: Permission non retirée au rôle");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
 //### MENU ###
 				
 				// HELP
@@ -1552,6 +1848,8 @@ public class Client {
 					System.out.println(" modifierUtilisateur : modifier vos attributs");
 					System.out.println(" supprimerUtilisateur : suppression d'un utilisateur");
 					System.out.println(" rechercherUtilisateur : rechercher vos attributs");
+					System.out.println(" ajouterPermissionUtilisateur : ajouter une permission à un utilisateur");
+					System.out.println(" retirerPermissionUtilisateur : retirer une permission d'un utilisateur");
 					
 					System.out.println(" creerContractant : créer un contractant");
 					System.out.println(" modifierContractant : modifier un contractant");
@@ -1568,6 +1866,20 @@ public class Client {
 					System.out.println(" infoContrat : afficher les informations sur un contrat");
 					System.out.println(" ajouterDocumentContrat : ajouter un document à un contrat");
 					System.out.println(" retirerDocumentContrat : retirer un document d'un contrat");
+					
+					System.out.println(" creerPermission : créer une permission");
+					System.out.println(" modifierPermission : modifier une permission");
+					System.out.println(" supprimerPermission : supprimer une permission");
+					System.out.println(" rechercherPermission : rechercher une permission");
+					System.out.println(" listerPermission : lister les permissions disponibles");
+					System.out.println(" infoPermission : afficher les informations sur une permission");
+					
+					System.out.println(" creerRole : créer un rôle");
+					System.out.println(" supprimerRole : supprimer un rôle");
+					System.out.println(" listerRole : lister les rôles disponibles");
+					System.out.println(" infoRole : afficher les informations sur un rôle");
+					System.out.println(" ajouterPermissionRole : ajouter une permission à un rôle");
+					System.out.println(" retirerPermissionRole : retirer une permission d'un rôle");
 
 					System.out.println(" end : terminer");
 					System.out.println(" help : lister les commandes disponibles");

@@ -50,7 +50,6 @@ public class XMLClient {
 	 * @param String ip
 	 * @param String port
 	 */
-	
 	public XMLClient(String ip, String port) {
 		
 		//Fichier de configuration de la journalisation
@@ -1483,6 +1482,80 @@ public class XMLClient {
 			return false;
 		}
 	}
+	
+	/**
+	 * Ajouter une permssion à un utilisateur
+	 * @param String idPermission
+	 * @param String logUtil
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean ajouterPermissionUtilisateur(String idPermission, String logUtil) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Ajout d'une permission à un utilisateur...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(logUtil);
+				params.addElement(idPermission);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.ajouterPermissionUtilisateur", params);
+
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				logger.error("ERREUR : " + e);
+				logger.debug("Arrêt: recherchepwd");
+				return false;
+			}
+
+			// Sinon, non connecté
+		} else {
+			logger.warn("WARNING: Client non connecté au serveur !");
+			logger.debug("Arrêt: recherchepwd");
+			return false;
+		}
+	}
+
+	/**
+	 * Retirer une permission à un utilisateur
+	 * @param String idPermission
+	 * @param String logUtil
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean retirerPermissionUtilisateur(String idPermission, String logUtil) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Retirer une permission à un utilisateur...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(logUtil);
+				params.addElement(idPermission);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.retirerPermissionUtilisateur", params);
+
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
 
 // CONTRAT
 //------------------------------------------------------------
@@ -2056,7 +2129,7 @@ public class XMLClient {
 
 			// Sinon, non connecté
 		} else {
-			logger.warn(("WARNING: Client non connecté au serveur !");
+			logger.warn("WARNING: Client non connecté au serveur !");
 			logger.debug("Arrêt: supprimerContractant ");
 			return false;
 		}
@@ -2113,6 +2186,409 @@ public class XMLClient {
 		} else {
 			logger.warn("WARNING: Client non connecté au serveur !");
 			logger.debug("Arrêt: modifierContractant");
+			return false;
+		}
+	}
+
+//ROLE
+//------------------------------------------------------------	
+	
+	/**
+	 * Création d'un rôle
+	 * @param String id
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean creerRole(String id) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Création d'un rôle...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.creerRole", params);
+
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+
+	/**
+	 * Lister les rôles disponibles sur le serveur
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector listerRoles() {
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Liste des rôles...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+
+				// Adresse la requête et affiche les résultats
+				return (Vector) clientXML.execute("Systeme.listerRoles", params);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Informations d'un rôle
+	 * @param String id
+	 * @return Dictionary
+	 */
+	@SuppressWarnings("unchecked")
+	public Dictionary infoRole(String id) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Informations sur un rôle...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+
+				// Adresse la requête et affiche les résultats
+				return (Dictionary) clientXML.execute("Systeme.infoRole", params);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+
+	/**
+	 * Supprimer un rôle
+	 * @param String id
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean supprimerRole(String id) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Suppression d'un rôle...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.supprimerRole", params);
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Ajouter une permssion à un rôle
+	 * @param String idPermission
+	 * @param String idRole
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean ajouterPermissionRole(String idPermission, String idRole) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Ajout d'une permission à un rôle...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(idRole);
+				params.addElement(idPermission);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.ajouterPermissionRole", params);
+
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+
+	/**
+	 * Retirer une permission à un rôle
+	 * @param String idPermission
+	 * @param String idRole
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean retirerPermissionRole(String idPermission, String idRole) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Retirer une permission à un rôle...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(idRole);
+				params.addElement(idPermission);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.retirerPermissionRole", params);
+
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+//PERMISSION
+//------------------------------------------------------------	
+		
+	/**
+	 * Création d'une permission
+	 * @param String id
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean creerPermission(String id, String libelle) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Création d'une permission...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(libelle);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.creerPermission", params);
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+				// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+
+	/**
+	 * Lister les permissions disponibles sur le serveur
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector listerPermissions() {
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Liste des permissions...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+
+				// Adresse la requête et affiche les résultats
+				return (Vector) clientXML.execute("Systeme.listerPermissions", params);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+		
+	/**
+	 * Informations d'une permission
+	 * @param String id
+	 * @return Dictionary
+	 */
+	@SuppressWarnings("unchecked")
+	public Dictionary infoPermission(String id) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Informations sur une permission...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+
+				// Adresse la requête et affiche les résultats
+				return (Dictionary) clientXML.execute("Systeme.infoPermission", params);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+
+		// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+
+	/**
+	 * Supprimer une permission
+	 * @param String id
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean supprimerPermission(String id) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Suppression d'une permission...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.supprimerPermission", params);
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+
+			}
+		// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}
+	}
+	
+	/**
+	 * Rechercher une permission
+	 * @param String id
+	 * @param String libelle
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector rechercherPermission(String id, String libelle) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Recherche des permissions...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(libelle);
+
+				// Adresse la requête et affiche les résultats
+				return (Vector) clientXML.execute("Systeme.rechercherPermissions", params);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}
+	}
+	
+	/**
+	 * Modification d'une permission
+	 * @param String id
+	 * @param String libelle
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean modifierPermission(String id, String libelle) {
+
+		// Si l'utilisateur est connecté au seveur
+		if (etatConnecte) {
+			System.err.println("INFO: Modification d'une permission...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(id);
+				params.addElement(libelle);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.modifierPermission", params);
+
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+
+			// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
