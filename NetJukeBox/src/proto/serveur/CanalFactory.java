@@ -8,6 +8,10 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 public class CanalFactory {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(CanalFactory.class);
 
 //ATTRIBUTS
 //-----------------------------------
@@ -30,7 +34,7 @@ public class CanalFactory {
 	 * Renvoie la liste des instances
 	 * @return Hashtable
 	 */
-	public static Hashtable getInstances() {
+	public /*pure*/ static Hashtable getInstances() {
 		return instancesById;
 	}
 	
@@ -39,7 +43,7 @@ public class CanalFactory {
 	 * @param String key
 	 * @return boolean
 	 */
-	public static boolean containsId(String key) {
+	public /*pure*/ static boolean containsId(String key) {
 		return instancesById.containsKey(key);
 	}
 	
@@ -48,7 +52,7 @@ public class CanalFactory {
 	 * @param String key
 	 * @return boolean
 	 */
-	public static boolean containsNom(String key) {
+	public /*pure*/ static boolean containsNom(String key) {
 		return instancesByNom.containsKey(key);
 	}
 	
@@ -60,9 +64,8 @@ public class CanalFactory {
 	 * @throws SQLException 
 	 */
 	public static Canal create(String nom, int utilmax) /*throws SQLException*/ {
-		
-		System.out.println("Canal.create()");
-		
+		logger.debug("Démarrage: create");
+				
 		String requete = "INSERT INTO canal (nom, utilmax) VALUES ('" + nom + "', '" + utilmax + "');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -70,10 +73,12 @@ public class CanalFactory {
 		//Si l'insertion s'est bien déroulée
 		if (nbRows>0) {
 			//On retourne ensuite un objet pour ce canal
+			logger.debug("Arrêt: create");
 			return getByNom(nom);
 		}
 		
 		//Sinon, retourne un objet vide
+		logger.debug("Arrêt: create");
 		return null;
 	}
 	
@@ -84,12 +89,12 @@ public class CanalFactory {
 	 * @throws SQLException 
 	 */
 	public static Canal getByNom(String nom) /*throws SQLException*/ {
-		
-		System.out.println("Canal.getByNom("+nom+")");
+		logger.debug("Démarrage: getByNom("+nom+")");
 		
 		//Si le programme est déjà instancié
 		if (instancesByNom.containsKey(nom)) {
-			System.out.println("Instance trouvée pour Canal "+nom);
+			logger.info("Instance trouvée pour Canal "+nom);
+			logger.debug("Arrêt: getByNom");
 			return (Canal)instancesByNom.get(nom);
 		}
 		
@@ -123,10 +128,12 @@ public class CanalFactory {
 				instancesById.put(c.getId(), c);
 				instancesByNom.put(c.getNom(), c);
 				c.setProgrammesPlanifies();
+				logger.debug("Arrêt: getByNom");
 				return c;
 			}
 			
 			//Sinon, on retourne un objet vide
+			logger.debug("Arrêt: getByNom");
 			return null;
 		}
 		
@@ -139,12 +146,12 @@ public class CanalFactory {
 	 * @throws SQLException 
 	 */
 	public static Canal getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("Canal.getById("+id+")");
-		
+		logger.debug("Démarage: getById("+id+")");
+
 		//Si le canal est déjà instancié
 		if (instancesById.containsKey(id)) {
-			System.out.println("Instance trouvée pour Canal "+id);
+			logger.info("Instance trouvée pour Canal "+id);
+			logger.debug("Arrêt: getById");
 			return (Canal)instancesById.get(id);
 		}
 		
@@ -178,10 +185,12 @@ public class CanalFactory {
 				instancesById.put(c.getId(), c);
 				instancesByNom.put(c.getNom(), c);
 				c.setProgrammesPlanifies();
+				logger.debug("Arrêt: getById");
 				return c;
 			}
 			
 			//Sinon, on retourne un objet vide
+			logger.debug("Arrêt: getById");
 			return null;
 		}
 	}
@@ -192,8 +201,7 @@ public class CanalFactory {
 	 * @throws SQLException 
 	 */
 	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("Canal.getAll()");
+		logger.debug("Démarrage: getAll");
 		
 		//On crée un vecteur pour contenir les objets canaux instanciés
 		Hashtable canaux = new Hashtable();
@@ -202,7 +210,7 @@ public class CanalFactory {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Canal.getAll() : "+resultats.size()+" canal(canaux) trouvé(s)");
+		logger.info("Canal.getAll() : "+resultats.size()+" canal(canaux) trouvé(s)");
 		
 		// Pour chaque canal, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -212,6 +220,7 @@ public class CanalFactory {
 		}
 		
 		//On retourne le vecteur contenant les objets canaux instanciés
+		logger.debug("Arrêt: getAll");
 		return canaux;
 	}
 	
@@ -222,7 +231,7 @@ public class CanalFactory {
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: deleteById");
 		//On supprime le canal de la base, en partant d'un id
 		String requete = "DELETE FROM canal WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
@@ -235,10 +244,12 @@ public class CanalFactory {
 			Canal c = getById(id);
 			instancesByNom.remove(c.getNom());
 			instancesById.remove(id);
+			logger.debug("Arrêt: deleteById");
 			return true;
 		}
 		
 		//Sinon, suppression invalide
+		logger.debug("Arrêt: deleteById");
 		return false;
 	}
 	
