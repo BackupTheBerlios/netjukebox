@@ -8,7 +8,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Document mis à disposition dans le NetJukeBox
@@ -155,7 +154,7 @@ public class Document {
 	 * @param Programme prog
 	 */
 	public void ajouterContrat(Contrat contrat) {
-		
+		logger.debug("Démarrage: ajouterContrat");
 		//Si le contrat n'est pas déjà associé
 		if (!contrats.contains(contrat.getId())) {
 			
@@ -163,7 +162,8 @@ public class Document {
 			contrats.put(contrat.getId(), contrat);
 		}
 		
-		System.out.println("Contrat associé au document");
+		logger.info("Contrat associé au document");
+		logger.debug("Arrêt: ajouterContrat");
 	}
 
 	/**
@@ -171,15 +171,15 @@ public class Document {
 	 * @param String
 	 */
 	public void retirerContrat(String idContrat) {
-		
+		logger.debug("Démarrage: retirerContrat");
 		//Si le contrat est associé au document
 		if (contrats.containsKey(idContrat)) {
 			
 			//On dissocie le contrat
 			contrats.remove(idContrat);
-		}
-		
-		System.out.println("Contrat dissocié du document");
+		}		
+		logger.info("Contrat dissocié du document");
+		logger.debug("Arrêt: retirerContrat");
 	}
 	
 	/**
@@ -304,7 +304,6 @@ public class Document {
 	 * @return Dictionary
 	 */
 	public Dictionary getAttributesDictionary() {
-		logger.debug("Démarrage: getAttributesDictionary");
 	
 		int jour = dateParution.get(GregorianCalendar.DATE);
 		int mois = dateParution.get(GregorianCalendar.MONTH);
@@ -325,7 +324,6 @@ public class Document {
 		dico.put("interprete", interprete);
 		dico.put("compositeur", compositeur);
 
-		logger.debug("Arrêt: getAttributesDictionary");
 		return dico;
 	}
 
@@ -333,9 +331,7 @@ public class Document {
 	 * Retourne l'identifiant du document
 	 * @return String
 	 */
-	public String getId() {
-		logger.debug("Démarrage: getId");
-		logger.debug("Arrêt: getId");
+	public /*pure*/ String getId() {
 		return id;
 	}
 
@@ -343,9 +339,7 @@ public class Document {
 	 * Retourne le titre du document
 	 * @return String
 	 */
-	public String getTitre() {
-		logger.debug("Démarrage: getTitre");
-		logger.debug("Arrêt: getTitre");
+	public /*pure*/ String getTitre() {
 		return titre;
 	}
 
@@ -353,9 +347,7 @@ public class Document {
 	 * Retourne la durée du document
 	 * @return int
 	 */
-	public int getDuree() {
-		logger.debug("Démarrage: getDuree");
-		logger.debug("Arrêt: getDuree");
+	public /*pure*/ int getDuree() {
 		return duree;
 	}
 
@@ -363,9 +355,7 @@ public class Document {
 	 * Retourne la source du document
 	 * @return String
 	 */
-	public String getSource() {
-		logger.debug("Démarrage: getSource");
-		logger.debug("Arrêt: getSource");
+	public /*pure*/ String getSource() {
 		return source;
 	}
 
@@ -373,9 +363,7 @@ public class Document {
 	 * Retourne la langue du documennt
 	 * @return String
 	 */
-	public String getLangue() {
-		logger.debug("Démarrage: getLangue");
-		logger.debug("Arrêt: getLangue");
+	public /*pure*/ String getLangue() {
 		return langue;
 	}
 
@@ -383,9 +371,7 @@ public class Document {
 	 * Retourne le genre du document
 	 * @return String
 	 */
-	public String getGenre() {
-		logger.debug("Démarrage: getGenre");
-		logger.debug("Arrêt: getGenre");
+	public /*pure*/String getGenre() {
 		return genre;
 	}
 
@@ -393,9 +379,7 @@ public class Document {
 	 * Retourne le chemin où stocké le document
 	 * @return String
 	 */
-	public String getFichier() {
-		logger.debug("Démarrage: getFichier");
-		logger.debug("Arrêt: getFichier");
+	public /*pure*/ String getFichier() {
 		return fichier;
 	}
 
@@ -403,9 +387,7 @@ public class Document {
 	 * Retourne l'état du document
 	 * @return String
 	 */
-	public String getEtat() {
-		logger.debug("Démarrage: getEtat");
-		logger.debug("Arrêt: getEtat");
+	public /*pure*/ String getEtat() {
 		return etat;
 	}
 	
@@ -413,18 +395,14 @@ public class Document {
 	 * Affiche le nombre de verrous sur le document
 	 * Affiche les programmes vérrouillant le document
 	 */
-	public void compterVerrouProgramme() {
-		logger.debug("Démarrage: compterVerrouProgramme");
+	public /*pure*/ void compterVerrouProgramme() {
 		logger.info("Le document : " + id + " est verrouillé : " + verrous.size() + " fois");
-		logger.debug("Arrêt: compterVerrouProgramme");
 	}
 	
 	/**
 	 * Affiche la liste des programmes vérrouillant le document
 	 */
-	public void getProgrammesArchives() {
-	logger.debug("Démarrage: getProgrammesArchives");
-
+	public /*pure*/ void getProgrammesArchives() {
 		int i;
 		if (verrous.size() != 0) {
 			for (i = 0; i < verrous.size(); i++) {
@@ -434,16 +412,13 @@ public class Document {
 		} else {
 			logger.info("Le document : " + id + " est verrouillé par aucun programme");
 		}
-		logger.debug("Arrêt: getProgrammesArchives");
 	}
 	
 	/**
 	 * Retourne la date de création du document
 	 * @return Date
 	 */
-	public Date getDateCreation() {
-
-		logger.debug("Démarrage: getDateCreation");
+	public /*pure*/ Date getDateCreation() {
 		
 		int jour = dateParution.get(GregorianCalendar.DATE);
 		int mois = dateParution.get(GregorianCalendar.MONTH);
@@ -452,7 +427,6 @@ public class Document {
 		String date = jour + "/"+ mois + "/" + annee;
 		TransformeDate TD = new TransformeDate(date);
 		logger.info(TD.d);
-		logger.debug("Arrêt: getDateCreation");
 		return TD.d;
 	}
 	
@@ -460,9 +434,7 @@ public class Document {
 	 * Vérifie l'état EN LECTURE
 	 * @return boolean
 	 */
-	public boolean enLecture() {
-		logger.debug("Démarrage: enLecture");
-		logger.debug("Arrêt: enLecture");
+	public /*pure*/ boolean enLecture() {
 		return etat.equalsIgnoreCase("LECTURE");
 	}
 
@@ -470,36 +442,28 @@ public class Document {
 	 * Vérifie l'état PROFRAMME
 	 * @return boolean
 	 */
-	public boolean estProgramme() {
-		logger.debug("Démarrage: estProgramme");
-		logger.debug("Arrêt: estProgramme");
+	public /*pure*/ boolean estProgramme() {
 		return etat.equalsIgnoreCase("PROGRAMME");
 	}
 	
 	/**
 	 * @return Renvoie artiste.
 	 */
-	public String getArtiste() {
-		logger.debug("Démarrage: getArtiste");
-		logger.debug("Arrêt: getArtiste");
+	public /*pure*/ String getArtiste() {
 		return artiste;
 	}
 
 	/**
 	 * @return Renvoie compositeur.
 	 */
-	public String getCompositeur() {
-		logger.debug("Démarrage: getCompositeur");
-		logger.debug("Arrêt: getCompositeur");
+	public /*pure*/ String getCompositeur() {
 		return compositeur;
 	}
 
 	/**
 	 * @return Renvoie interprete.
 	 */
-	public String getInterprete() {
-		logger.debug("Démarrage: getInterprete");
-		logger.debug("Arrêt: getInterprete");
+	public /*pure*/ String getInterprete() {
 		return interprete;
 	}
 		
