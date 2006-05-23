@@ -22,18 +22,21 @@ public class Serveur {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		logger.debug("Démarrage: main");
+	
 		
 		//Fichier de configuration de la journalisation
 		PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
 		//PropertyConfigurator.configure("/home/netjukebox/Workspace/NetJukeBox/proto/serveur/log4j.prop");
 		//PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
 		
+		logger.debug("Démarrage: main");
+		
 		//USAGE : java Serveur [filename.ini]
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
 		String filename = args.length > 0 ? args[0] : "src/proto/serveur/serveur.ini";
 		//String filename = args.length > 0 ? args[0] : "/home/netjukebox/Workspace/NetJukeBox/proto/serveur/serveur.ini";
+		//String filename = args.length > 0 ? args[0] : ("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/serveur.ini");
 		Preferences prefs = new IniFile(new File(filename));
 
 		try {
