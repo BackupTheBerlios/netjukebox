@@ -7,11 +7,16 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /**
  * Contractant
  */
 public class Contractant {
-
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Contractant.class);
 // ATTRIBUTS
 // ************************
 
@@ -105,8 +110,8 @@ public class Contractant {
 	 * @return Hastable
 	 */
 	public void setContratsAssocies() {
-		System.out.println("Contractant.setContratsAssocies()");
-		
+		logger.debug("Démarrage: setContratsAssocies");
+			
 		//On crée un vecteur pour contenir les objets contrats instanciés
 		Hashtable contrats = new Hashtable();
 		
@@ -115,7 +120,7 @@ public class Contractant {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Contractant.getContratAssocies() : "+resultats.size()+" contrat(s) trouvé(s)");
+		logger.info("Contractant.getContratAssocies() : "+resultats.size()+" contrat(s) trouvé(s)");
 		
 		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -124,6 +129,7 @@ public class Contractant {
 			contrats.put(id, ContratFactory.getById(id));
 		}
 		this.contrats = contrats;
+		logger.debug("Arrêt: setContratsAssocies");
 	}
 
 	/**
@@ -131,7 +137,7 @@ public class Contractant {
 	 * @param Programme prog
 	 */
 	public void ajouterContrat(Contrat contrat) {
-		
+		logger.debug("Démarrage: ajouterContrat");
 		//Si le contrat n'est pas déjà associé
 		if (!contrats.containsKey(contrat.getId())) {
 			
@@ -139,7 +145,8 @@ public class Contractant {
 			contrats.put(contrat.getId(), contrat);
 		}
 		
-		System.out.println("Contrat ajouté");
+		logger.info("Contrat ajouté");
+		logger.debug("Arrêt: ajouterContrat");
 	}
 
 	/**
@@ -147,11 +154,13 @@ public class Contractant {
 	 * @param String
 	 */
 	public void retirerContrat(String idCon) {
+		logger.debug("Démarrage: retirerContrat");
 		
 		//On enlève le contrat
 		contrats.remove(idCon);
 		
-		System.out.println("Contrat retiré");
+		logger.info("Contrat retiré");
+		logger.debug("Arrêt: retirerContrat");
 	}
 
 	/**
@@ -168,6 +177,7 @@ public class Contractant {
 	 */
 	public boolean modifier(String nom, String adresse, String codePostal, String ville,
 			String telephone, String fax, String mail, String type) {
+		logger.debug("Démarrage: modifier");
 
 		String requete = "UPDATE contractant SET nom = '" + nom + "', adresse = '" + adresse +
 			"', cp = '"+ codePostal + "', ville = '" + ville + "', telephone = '" + telephone +
@@ -188,6 +198,7 @@ public class Contractant {
 			this.mail = mail;
 			this.type = type;
 		}
+		logger.debug("Arrêt: modifier");
 		return nbRows>0;
 	}
 	
@@ -197,6 +208,7 @@ public class Contractant {
 	 * @throws SQLException 
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
+		logger.debug("Démarrage: supprimer");
 		
 		//On supprime les associations document/programme
 		Contrat c;
@@ -206,6 +218,7 @@ public class Contractant {
 		}
 		
 		//On supprime les infos de la base
+		logger.debug("Arrêt: supprimer");
 		return ContratFactory.deleteById(id);
 	}
 
@@ -216,7 +229,7 @@ public class Contractant {
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */
-	public Dictionary getAttributesDictionary() {
+	public /*pure*/ Dictionary getAttributesDictionary() {
 		
 		Dictionary dico = new Hashtable();
 		
@@ -248,7 +261,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie adresse.
 	 */
-	public String getAdresse() {
+	public /*pure*/ String getAdresse() {
 		return adresse;
 	}
 
@@ -256,7 +269,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie codePostal.
 	 */
-	public String getCodePostal() {
+	public /*pure*/ String getCodePostal() {
 		return codePostal;
 	}
 
@@ -264,7 +277,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie contrats.
 	 */
-	public Hashtable getContrats() {
+	public /*pure*/ Hashtable getContrats() {
 		return contrats;
 	}
 
@@ -272,7 +285,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie fax.
 	 */
-	public String getFax() {
+	public /*pure*/ String getFax() {
 		return fax;
 	}
 
@@ -280,7 +293,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie id.
 	 */
-	public String getId() {
+	public /*pure*/ String getId() {
 		return id;
 	}
 
@@ -288,7 +301,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie mail.
 	 */
-	public String getMail() {
+	public /*pure*/ String getMail() {
 		return mail;
 	}
 
@@ -296,7 +309,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie nom.
 	 */
-	public String getNom() {
+	public /*pure*/ String getNom() {
 		return nom;
 	}
 
@@ -304,7 +317,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie telephone.
 	 */
-	public String getTelephone() {
+	public /*pure*/ String getTelephone() {
 		return telephone;
 	}
 
@@ -312,7 +325,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie type.
 	 */
-	public String getType() {
+	public /*pure*/ String getType() {
 		return type;
 	}
 
@@ -320,7 +333,7 @@ public class Contractant {
 	/**
 	 * @return Renvoie ville.
 	 */
-	public String getVille() {
+	public /*pure*/ String getVille() {
 		return ville;
 	}
 
@@ -331,6 +344,7 @@ public class Contractant {
 	 * @param adresse adresse à définir.
 	 */
 	public boolean setAdresse(String adresse) {
+		logger.debug("Démarrage: setAdresse");
 		String requete = "UPDATE contractant SET adresse = '" + adresse + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -339,6 +353,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.adresse = adresse;
 		}
+		logger.debug("Arrêt: setAdresse");
 		return nbRows>0;
 	}
 
@@ -347,6 +362,7 @@ public class Contractant {
 	 * @param codePostal codePostal à définir.
 	 */
 	public boolean setCodePostal(String codePostal) {
+		logger.debug("Démarrage: setCodePostal");
 		String requete = "UPDATE contractant SET cp = '" + codePostal + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -355,6 +371,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.codePostal = codePostal;
 		}
+		logger.debug("Arrêt: setCodePostal");
 		return nbRows>0;
 	}
 
@@ -362,6 +379,7 @@ public class Contractant {
 	 * @param fax fax à définir.
 	 */
 	public boolean setFax(String fax) {
+		logger.debug("Démarrage: setFax");
 		String requete = "UPDATE contractant SET fax = '" + fax + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -370,6 +388,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.fax = fax;
 		}
+		logger.debug("Arrêt: setFax");
 		return nbRows>0;
 	}
 
@@ -377,6 +396,7 @@ public class Contractant {
 	 * @param mail mail à définir.
 	 */
 	public boolean setMail(String mail) {
+		logger.debug("Démarrage: setMail");
 		String requete = "UPDATE contractant SET mail = '" + mail + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -385,6 +405,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.mail = mail;
 		}
+		logger.debug("Arrêt: setMail");
 		return nbRows>0;
 	}
 
@@ -393,6 +414,7 @@ public class Contractant {
 	 * @param nom nom à définir.
 	 */
 	public boolean setNom(String nom) {
+		logger.debug("Démarrage: setNom");
 		String requete = "UPDATE contractant SET nom = '" + nom + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -401,6 +423,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.nom = nom;
 		}
+		logger.debug("Arrêt: setNom");
 		return nbRows>0;
 	}
 
@@ -409,6 +432,7 @@ public class Contractant {
 	 * @param telephone telephone à définir.
 	 */
 	public boolean setTelephone(String telephone) {
+		logger.debug("Démarrage: setTelephone");
 		String requete = "UPDATE contractant SET type = '" + type + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -417,6 +441,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.type = type;
 		}
+		logger.debug("Arrêt: setTelephone");
 		return nbRows>0;
 	}
 
@@ -425,6 +450,7 @@ public class Contractant {
 	 * @param type type à définir.
 	 */
 	public boolean setType(String type) {
+		logger.debug("Démarrage: setType");
 		String requete = "UPDATE contractant SET type = '" + type + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -433,6 +459,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.type = type;
 		}
+		logger.debug("Arrêt: setType");
 		return nbRows>0;
 	}
 
@@ -441,6 +468,7 @@ public class Contractant {
 	 * @param ville ville à définir.
 	 */
 	public boolean setVille(String ville) {
+		logger.debug("Démarrage: setVille");
 		String requete = "UPDATE contractant SET ville = '" + ville + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -449,6 +477,7 @@ public class Contractant {
 		if (nbRows>0) {
 			this.ville = ville;
 		}
+		logger.debug("Arrêt: setVille");
 		return nbRows>0;
 	}
 }
