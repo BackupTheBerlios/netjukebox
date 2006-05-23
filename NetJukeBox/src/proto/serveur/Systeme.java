@@ -265,7 +265,7 @@ public class Systeme {
 				utilisateurs.put(loginldap, util);
 				
 				//On planifie sa tâche PING
-				PingTask task = new PingTask(loginldap, ipClient, portXML);
+				PingTask task = new PingTask(loginldap, ipClient, portXML, this);
 				timer.scheduleAtFixedRate(task, 1000, 60000);
 				
 				System.out.println("Utilisateur "+loginldap+" connecté");
@@ -2719,15 +2719,17 @@ class PingTask extends TimerTask {
 	private String ip;
 	private int port;
 	private XmlRpcClient clientXML;
+	private Systeme sys;
 	
-	public PingTask(String login, String ip, int port) {
+	public PingTask(String login, String ip, int port, Systeme sys) {
 		System.err.println("TIMER: Programmation de la tâche "+login+"@"+ip);
 		this.login = login;
 		this.ip = ip;
 		this.port = port;
+		this.sys = sys;
 		try {
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
-			this.clientXML = new XmlRpcClient("http://" + ip + ":" + port);
+			this.clientXML = new XmlRpcClient("http://" + ip + ":" + (port+1));
 		} catch (ClassNotFoundException e) {
 			System.out.println("ERREUR: Impossible de localiser le pilote Sax");
 		} catch (MalformedURLException e) {
@@ -2747,7 +2749,7 @@ class PingTask extends TimerTask {
 		
 		} catch (Exception e) {
 			System.out.println("ERREUR: "+ e);
-			
+			//sys.deconnexion(login);
 		}
 	}
 }
