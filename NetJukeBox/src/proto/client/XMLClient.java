@@ -55,7 +55,7 @@ public class XMLClient {
 				clientXML = new XmlRpcClient("http://" + ip + ":" + port);
 				
 				//Creation du serveur xmlrpc
-				WebServer server = new WebServer(Integer.parseInt(port));
+				WebServer server = new WebServer(Integer.parseInt(port+1));
 				
 				// Enregistre la classe du gestionnaire
 				server.addHandler("PingXML", new PingXML());
