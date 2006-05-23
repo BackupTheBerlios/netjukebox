@@ -6,7 +6,13 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 public class ContratFactory {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(ContratFactory.class);
 
 //ATTRIBUTS
 //-----------------------------------------
@@ -28,7 +34,7 @@ public class ContratFactory {
 	 * Renvoie la liste des instances
 	 * @return Hashtable
 	 */
-	public static Hashtable getInstances() {
+	public /*pure*/ static Hashtable getInstances() {
 		return instancesById;
 	}
 	
@@ -37,7 +43,7 @@ public class ContratFactory {
 	 * @param String key
 	 * @return boolean
 	 */
-	public static boolean containsId(String key) {
+	public /*pure*/ static boolean containsId(String key) {
 		return instancesById.containsKey(key);
 	}
 	
@@ -46,7 +52,7 @@ public class ContratFactory {
 	 * @param String key
 	 * @return boolean
 	 */
-	public static boolean containsTitre(String key) {
+	public /*pure*/ static boolean containsTitre(String key) {
 		return instancesByTitre.containsKey(key);
 	}
 	
@@ -68,7 +74,7 @@ public class ContratFactory {
 			int jourExpiration, int moisExpiration, int anneeExpiration, String idContractant,
 			String modeReglement, String type) /*throws SQLException*/ {
 		
-		System.out.println("ContratFactory.create()");
+		logger.debug("Démarrage: create");
 		
 		//On assemble la date de signature
 		GregorianCalendar dateSignature = new GregorianCalendar(anneeSignature, moisSignature-1, jourSignature);
@@ -95,10 +101,12 @@ public class ContratFactory {
 			ct.ajouterContrat(c);
 			
 			//On retourne ensuite un objet pour ce contrat
+			logger.debug("Arrêt: create");
 			return c;
 		}
 		
 		//Sinon on retourne un objet vide
+		logger.debug("Arrêt: create");
 		return null;
 	}
 	
@@ -108,18 +116,18 @@ public class ContratFactory {
 	 * @return Contrat
 	 */
 	public static Contrat getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("ContratFactory.getById("+id+")");
+		logger.debug("Démarrage: getById("+id+")");
 		
 		//Si le contrat est déjà instancié
 		if (instancesById.containsKey(id)) {
-			System.out.println("Instance trouvée pour Contrat "+id);
+			logger.info("Instance trouvée pour Contrat "+id);
+			logger.debug("Arrêt: getById");
 			return (Contrat)instancesById.get(id);
 		}
 		
 		//Sinon, on crée l'instance
 		else {
-			System.out.println("Nouvelle instance pour Contrat "+id);
+			logger.info("Nouvelle instance pour Contrat "+id);
 			String requete = "SELECT * FROM contrat WHERE id = '" + id + "';";
 	
 			Jdbc base = Jdbc.getInstance();
@@ -167,10 +175,12 @@ public class ContratFactory {
 				instancesById.put(id, contrat);
 				instancesByTitre.put(titre, contrat);
 				contrat.setDocumentsAssocies();
+				logger.debug("Arrêt: getById");
 				return contrat;
 			}
 			
 			//Sinon, on retourne un objet vide
+			logger.debug("Arrêt: getById");
 			return null;
 		}
 	}
@@ -181,11 +191,12 @@ public class ContratFactory {
 	 * @return Contrat
 	 */
 	public static Contrat getByTitre(String titre) /*throws SQLException*/ {
-		
-		System.out.println("ContratFactory.getByTitre("+titre+")");
+		logger.debug("Démarrage: getByTitre("+titre+")");
 		
 		//Si le contrat est déjà instancié
 		if (instancesByTitre.containsKey(titre)) {
+			logger.info("Instance trouvée pour Contrat "+titre);
+			logger.debug("Arrêt: getByTitre");
 			return (Contrat)instancesByTitre.get(titre);
 		}
 		
@@ -239,10 +250,12 @@ public class ContratFactory {
 				instancesById.put(id, contrat);
 				instancesByTitre.put(titre, contrat);
 				contrat.setDocumentsAssocies();
+				logger.debug("Arrêt: getByTitre");
 				return contrat;
 			}
 			
 			//Sinon, on retourne un objet vide
+			logger.debug("Arrêt: getByTitre");
 			return null;
 		}
 	}
@@ -254,8 +267,7 @@ public class ContratFactory {
 	 */
 
 	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("ContratFactory.getAll()");
+		logger.debug("Démarrage: getAll");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable contrats = new Hashtable();
@@ -265,7 +277,7 @@ public class ContratFactory {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("ContratFactory.getAll() : "+resultats.size()+" contrat(s) trouvé(s)");
+		logger.info("ContratFactory.getAll() : "+resultats.size()+" contrat(s) trouvé(s)");
 		
 		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -275,6 +287,7 @@ public class ContratFactory {
 		}
 		
 		//On retourne le vecteur contenant les objets contractants instanciés
+		logger.debug("Arrêt: getAll");
 		return contrats;
 	}
 	
@@ -285,7 +298,7 @@ public class ContratFactory {
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: deleteById");
 		//On supprime le contractant de la base, en partant d'un id
 		String requete = "DELETE FROM contrat WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
@@ -298,10 +311,12 @@ public class ContratFactory {
 			Contrat c = getById(id);
 			instancesByTitre.remove(c.getTitre());
 			instancesById.remove(id);
+			logger.debug("Arrêt: deleteById");
 			return true;
 		}
 		
 		//Sinon, suppression invalide
+		logger.debug("Arrêt: deleteById");
 		return false;
 	}
 }
