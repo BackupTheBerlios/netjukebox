@@ -1,21 +1,13 @@
 package proto.client;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.Dictionary;
 import java.util.TimerTask;
 import java.util.Vector;
-
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
-
-import proto.serveur.Systeme;
-import proto.serveur.Utilisateur;
-
 
 /**
  * Client XML (envoie les requêtes au serveur XML du serveur principal)
@@ -23,10 +15,6 @@ import proto.serveur.Utilisateur;
  * @author philippeB
  */
 public class XMLClient {
-	/**
-	 * Crée le logger de la classe
-	 */
-	private static final Logger logger = Logger.getLogger(XMLClient.class);
 
 // ATTRIBUTS
 // **************************************
@@ -56,15 +44,9 @@ public class XMLClient {
 	 */
 	public XMLClient(String ip, String port) {
 		
-		//Fichier de configuration de la journalisation
-		//PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
-		//PropertyConfigurator.configure("/home/netjukebox/Workspace/NetJukeBox/proto/serveur/log4j.prop");
-		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4jClient.prop");
-		
-		logger.debug("Démarrage: XMLCllient");
 		// Si le client XML n'est pas déjà initialisé
 		if (clientXML == null) {
-			logger.info("INFO: Initialisation XMLRPC en cours...");
+			System.out.println("INFO: Initialisation XMLRPC en cours...");
 			try {
 				// Utilise lengthpilote Sax d'Apache Xerces
 				XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
@@ -78,23 +60,19 @@ public class XMLClient {
 				// Enregistre la classe du gestionnaire
 				server.addHandler("PingXML", new PingXML());
 
-				logger.info("INFO: Client Streaming démarré");
+				System.out.println("INFO: Client Streaming démarré");
 
 			} catch (ClassNotFoundException e) {
-				logger.error("ERREUR: Impossible de localiser le pilote Sax");
-				logger.debug("Arrêt: XMLCllient");
+				System.err.println("ERREUR: Impossible de localiser le pilote Sax");
 			} catch (MalformedURLException e) {
-				logger.error("ERREUR: URL non conforme au format du serveur XML-RPC");
-				logger.debug("Arrêt: XMLCllient");
+				System.err.println("ERREUR: URL non conforme au format du serveur XML-RPC");
 			} catch (Exception e) {
-				logger.error("ERREUR: "+ e);
-				logger.debug("Arrêt: XMLCllient");
+				System.err.println("ERREUR: "+ e);
 			}
 
 			// Sinon, déjà initialisé
 		} else {
-			logger.warn("WARNING: Client XML déjà initialisé !");
-			logger.debug("Arrêt: XMLCllient");
+			System.err.println("WARNING: Client XML déjà initialisé !");
 		}
 	}
 
@@ -108,8 +86,7 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean testConnectXML(String ip) {
-		logger.debug("Démarrage: testConnectXML");
-		logger.info("INFO: Tentative de connexion au serveur XML...");
+		System.out.println("INFO: Tentative de connexion au serveur XML...");
 		try {
 			// Création de la requête
 			Vector params = new Vector();
@@ -119,12 +96,10 @@ public class XMLClient {
 			String result = (String) clientXML.execute(
 					"Systeme.testConnectXML", params);
 			
-			logger.debug("Arrêt: testConnectXML");
 			return Boolean.parseBoolean(result);			
 
 		} catch (Exception e) {
-			logger.error("ERREUR : " + e);
-			logger.debug("Arrêt: testConnectXML");
+			System.err.println("ERREUR : " + e);
 			return false;
 		}
 	}
@@ -139,11 +114,10 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean creerCanal(String nom, String utilMax) {
-		logger.debug("Démarrage: creerCanal");
 		// Si l'utilisateur est connecté au seveur
 		
 		if (etatConnecte) {
-			logger.info("INFO: Création d'un canal...");
+			System.out.println("INFO: Création d'un canal...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -154,19 +128,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.creerCanal", params);
-				logger.debug("Arrêt: creerCanal");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: creerCanal");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: creerCanal");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -179,10 +150,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean diffuserProgramme(String idProg, String idCanal) {
-		logger.debug("Démarrage: diffuserProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Diffusion du programme...");
+			System.out.println("INFO: Diffusion du programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -193,19 +163,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.diffuserProgramme", params);
-				logger.debug("Arrêt: diffuserProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: diffuserProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: diffuserProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -226,10 +193,9 @@ public class XMLClient {
 	public boolean planifierProgramme(String idProg, String idCanal,
 			String jour, String mois, String annee, String heure,
 			String minute, String seconde) {
-		logger.debug("Démarrage: planifierProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Planification du programme...");
+			System.out.println("INFO: Planification du programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -246,19 +212,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.planifierProgramme", params);
-				logger.debug("Arrêt: planifierProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: planifierProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: planifierProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -271,10 +234,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean deplanifierProgramme(String idCanal, String calage) {
-		logger.debug("Démarrage: deplanifierProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Déplanification du programme...");
+			System.out.println("INFO: Déplanification du programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -285,19 +247,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.deplanifierProgramme", params);
-				logger.debug("Arrêt: deplanifierProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: deplanifierProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: deplanifierProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -309,10 +268,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public String ecouterCanal(String idCanal) {
-		logger.debug("Démarrage: ecouterCanal");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Ecoute d'un canal...");
+			System.out.println("INFO: Ecoute d'un canal...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -320,20 +278,17 @@ public class XMLClient {
 				params.addElement(idCanal);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: ecouterCanal");
 				return (String) clientXML.execute("Systeme.ecouterCanal",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: ecouterCanal");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: ecouterCanal");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -345,10 +300,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean startCanal(String idCanal) {
-		logger.debug("Démarrage: startCanal ");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Diffusion d'un canal...");
+			System.out.println("INFO: Diffusion d'un canal...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -358,19 +312,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.startCanal", params);
-				logger.debug("Arrêt: startCanal ");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.warn("ERREUR : " + e);
-				logger.debug("Arrêt: startCanal ");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: startCanal ");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -382,10 +333,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean stopCanal(String idCanal) {
-		logger.debug("Démarrage: stopCanal");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Arrêt d'un canal...");
+			System.out.println("INFO: Arrêt d'un canal...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -395,19 +345,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute("Systeme.stopCanal",
 						params);
-				logger.debug("Arrêt: stopCanal");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: stopCanal");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: stopCanal");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -418,30 +365,26 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector listerCanaux() {
-		logger.debug("Démarrage: listerCanaux");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Liste des canaux...");
+			System.out.println("INFO: Liste des canaux...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: listerCanaux");
 				return (Vector) clientXML.execute("Systeme.listerCanaux",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: listerCanaux");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: listerCanaux");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -455,10 +398,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector rechercherCanal(String id, String nom, String utilMax) {
-		logger.debug("Démarrage: rechercherCanal");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Recherche des canaux...");
+			System.out.println("INFO: Recherche des canaux...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -468,20 +410,17 @@ public class XMLClient {
 				params.addElement(utilMax);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: rechercherCanal");
 				return (Vector) clientXML.execute("Systeme.rechercherCanal",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: rechercherCanal");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: rechercherCanal");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -493,10 +432,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean supprimerCanal(String id) {
-		logger.debug("Démarrage: supprimerCanal");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Suppression d'un canal...");
+			System.out.println("INFO: Suppression d'un canal...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -506,19 +444,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.supprimerCanal", params);
-				logger.debug("Arrêt: supprimerCanal");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: supprimerCanal");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: supprimerCanal");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -532,10 +467,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean modifierCanal(String id, String nom, String utilMax) {
-		logger.debug("Démarrage: modifierCanal");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Modification d'un canal...");
+			System.out.println("INFO: Modification d'un canal...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -547,19 +481,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.modifierCanal", params);
-				logger.debug("Arrêt: modifierCanal");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: modifierCanal");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: modifierCanal");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -571,10 +502,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Dictionary infoCanal(String id) {
-		logger.debug("Démarrage: infoCanal");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Informations sur un canal...");
+			System.out.println("INFO: Informations sur un canal...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -582,20 +512,17 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: infoCanal");
 				return (Dictionary) clientXML.execute("Systeme.infoCanal",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: infoCanal");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: infoCanal");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -611,10 +538,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean creerProgramme(String titre, String thematique) {
-		logger.debug("Démarrage: creerProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Création d'un programme...");
+			System.out.println("INFO: Création d'un programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -625,19 +551,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.creerProgramme", params);
-				logger.debug("Arrêt: creerProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: creerProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: creerProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -650,10 +573,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean ajouterDocumentProgramme(String idDoc, String idProg) {
-		logger.debug("Démarrage: ajouterDocumentProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Ajout du document au programme...");
+			System.out.println("INFO: Ajout du document au programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -664,19 +586,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.ajouterDocumentProgramme", params);
-				logger.debug("Arrêt: ajouterDocumentProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: ajouterDocumentProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: ajouterDocumentProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -689,10 +608,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean retirerDocumentProgramme(String idProg, String calage) {
-		logger.debug("Démarrage: retirerDocumentProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Retirer un document du programme...");
+			System.out.println("INFO: Retirer un document du programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -703,19 +621,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.retirerDocumentProgramme", params);
-				logger.debug("Arrêt: retirerDocumentProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: retirerDocumentProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: retirerDocumentProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -726,30 +641,26 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector listerProgrammes() {
-		logger.debug("Démarrage: listerProgrammes");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Liste des programmes...");
+			System.out.println("INFO: Liste des programmes...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: listerProgrammes");
 				return (Vector) clientXML.execute("Systeme.listerProgrammes",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: listerProgrammes");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: listerProgrammes");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -763,10 +674,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector rechercherProgramme(String id, String titre, String thematique) {
-		logger.debug("Démarrage: rechercherProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Recherche des programmes...");
+			System.out.println("INFO: Recherche des programmes...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -776,20 +686,17 @@ public class XMLClient {
 				params.addElement(thematique);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: rechercherProgramme");
 				return (Vector) clientXML.execute(
 						"Systeme.rechercherProgramme", params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: rechercherProgramme");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: rechercherProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -801,10 +708,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean supprimerProgramme(String id) {
-		logger.debug("Démarrage: rechercherProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Suppression d'un programme...");
+			System.out.println("INFO: Suppression d'un programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -814,19 +720,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.supprimerProgramme", params);
-				logger.debug("Arrêt: rechercherProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: rechercherProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: rechercherProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -840,10 +743,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean modifierProgramme(String id, String titre, String thematique) {
-		logger.debug("Démarrage: modifierProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Modification d'un programme...");
+			System.out.println("INFO: Modification d'un programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -855,19 +757,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.modifierProgramme", params);
-				logger.debug("Arrêt: modifierProgramme");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: modifierProgramme");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: modifierProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -879,10 +778,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Dictionary infoProgramme(String id) {
-		logger.debug("Démarrage: infoProgramme");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Informations sur un programme...");
+			System.out.println("INFO: Informations sur un programme...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -890,20 +788,17 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: infoProgramme");
 				return (Dictionary) clientXML.execute("Systeme.infoProgramme",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: infoProgramme");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: infoProgramme");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -932,10 +827,9 @@ public class XMLClient {
 			String mois, String annee, String source, String langue,
 			String genre, String fichier, String artiste, String interprete,
 			String compositeur) {
-		logger.debug("Démarrage: creerDocument");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Création d'un document...");
+			System.out.println("INFO: Création d'un document...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -956,19 +850,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.creerDocument", params);
-				logger.debug("Arrêt: creerDocument");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: creerDocument");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: creerDocument");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -979,30 +870,26 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector listerDocuments() {
-		logger.debug("Démarrage: listerDocuments");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Liste des documents...");
+			System.out.println("INFO: Liste des documents...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: listerDocuments");
 				return (Vector) clientXML.execute("Systeme.listerDocuments",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: listerDocuments");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: listerDocuments");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -1029,10 +916,9 @@ public class XMLClient {
 			String jour, String mois, String annee, String source,
 			String langue, String genre, String fichier, String artiste,
 			String interprete, String compositeur) {
-		logger.debug("Démarrage: rechercherDocument");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Recherche des documents...");
+			System.out.println("INFO: Recherche des documents...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1052,20 +938,17 @@ public class XMLClient {
 				params.addElement(compositeur);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: rechercherDocument");
 				return (Vector) clientXML.execute("Systeme.rechercherDocument",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: rechercherDocument");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: rechercherDocument");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -1077,10 +960,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean supprimerDocument(String id) {
-		logger.debug("Démarrage: supprimerDocument");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Suppression d'un document...");
+			System.out.println("INFO: Suppression d'un document...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1090,19 +972,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.supprimerDocument", params);
-				logger.debug("Arrêt: supprimerDocument");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: supprimerDocument");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: supprimerDocument");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1129,10 +1008,9 @@ public class XMLClient {
 			String jour, String mois, String annee, String source,
 			String langue, String genre, String fichier, String artiste,
 			String interprete, String compositeur) {
-		logger.debug("Démarrage: modifierDocument");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Modification d'un document...");
+			System.out.println("INFO: Modification d'un document...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1154,19 +1032,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.modifierDocument", params);
-				logger.debug("Arrêt: modifierDocument");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: modifierDocument");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: modifierDocument");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1178,10 +1053,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Dictionary infoDocument(String id) {
-		logger.debug("Démarrage: infoDocument");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Informations sur un document...");
+			System.out.println("INFO: Informations sur un document...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1189,20 +1063,17 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: infoDocument");
 				return (Dictionary) clientXML.execute("Systeme.infoDocument",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: infoDocument");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: infoDocument");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -1218,10 +1089,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean connexion(String login, String pwd) {
-		logger.debug("Démarrage: connexion");
 		// Si l'utilisateur n'est pas connecté au seveur
 		if (!etatConnecte) {
-			logger.info("INFO: Connexion en cours...");
+			System.out.println("INFO: Connexion en cours...");
 			this.login = login;
 			try {
 				// Création de la requête
@@ -1235,19 +1105,16 @@ public class XMLClient {
 						params);
 
 				etatConnecte = Boolean.parseBoolean(result);
-				logger.debug("Arrêt: connexion");
 				return etatConnecte;
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: connexion");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, déjà connecté
 		} else {
-			logger.warn("WARNING: Client déjà connecté au serveur !");
-			logger.debug("Arrêt: connexion");
+			System.err.println("WARNING: Client déjà connecté au serveur !");
 			return false;
 		}
 	}
@@ -1260,10 +1127,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean deconnexion() {
-		logger.debug("Démarrage: deconnexion");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Déconnexion en cours...");
+			System.out.println("INFO: Déconnexion en cours...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1275,19 +1141,16 @@ public class XMLClient {
 				boolean estDeconnecte = Boolean.parseBoolean(result);
 
 				etatConnecte = !estDeconnecte;
-				logger.debug("Arrêt: deconnexion");
 				return estDeconnecte;
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: deconnexion");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, n'est pas connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: deconnexion");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1306,10 +1169,9 @@ public class XMLClient {
 	@SuppressWarnings("unchecked")
 	public boolean inscription(String log, String pass, String role,
 			String email, String nom, String prenom, String pays) {
-		logger.debug("Démarrage: inscription");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Inscription d'un utilisateur...");
+			System.out.println("INFO: Inscription d'un utilisateur...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1325,19 +1187,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.inscription", params);
-				logger.debug("Arrêt: inscription");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: inscription");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: inscription");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1349,9 +1208,8 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean supprimerUtilisateur(String login) {
-		logger.debug("Démarrage:  ");
 		if (etatConnecte) {
-			logger.info("INFO: Suppression du compte ...");
+			System.out.println("INFO: Suppression du compte ...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1360,17 +1218,14 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.supprimerUtilisateur", params);
-				logger.debug("Arrêt: supprimerUtilisateur");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: supprimerUtilisateur");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: supprimerUtilisateur");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1382,28 +1237,24 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector rechercherUtilisateur() {
-		logger.debug("Démarrage: rechercherUtilisateur");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Recherche des attributs...");
+			System.out.println("INFO: Recherche des attributs...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: rechercherUtilisateur");
 				return (Vector) clientXML.execute(
 						"Systeme.rechercherUtilisateur", params);
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: rechercherUtilisateur");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: rechercherUtilisateur");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -1421,10 +1272,9 @@ public class XMLClient {
 	@SuppressWarnings("unchecked")
 	public boolean modifierUtilisateur(String newlogin, String pwd, String Nom,
 			String Prenom, String Email, String Pays) {
-		logger.debug("Démarrage: modifierUtilisateur");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Modification des attributs...");
+			System.out.println("INFO: Modification des attributs...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1441,19 +1291,16 @@ public class XMLClient {
 						"Systeme.modifierUtilisateur", params);
 
 				// return Boolean.parseBoolean(result);
-				logger.debug("Arrêt: modifierUtilisateur");
 				return true;
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: modifierUtilisateur");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: modifierUtilisateur");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1465,10 +1312,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean recherchepwd(String login) {
-		logger.debug("Démarrage: recherchepwd");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Recherche du mot de passe...");
+			System.out.println("INFO: Recherche du mot de passe...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1477,19 +1323,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.rechercherpwd", params);
-				logger.debug("Arrêt: recherchepwd");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: recherchepwd");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: recherchepwd");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1519,15 +1362,13 @@ public class XMLClient {
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: recherchepwd");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: recherchepwd");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1590,10 +1431,9 @@ public class XMLClient {
 	public boolean creerContrat(String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration,
 			String anneeExpiration, String idContractant, String modeReglement, String type) {
-		logger.debug("Démarrage: creerContrat");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Création d'un contrat...");
+			System.out.println("INFO: Création d'un contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1612,19 +1452,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.creerContrat", params);
-				logger.debug("Arrêt: creerContrat");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: creerContrat");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: creerContrat");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1635,30 +1472,26 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector listerContrats() {
-		logger.debug("Démarrage: listerContrats");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Liste des contrats...");
+			System.out.println("INFO: Liste des contrats...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: listerContrats");
 				return (Vector) clientXML.execute("Systeme.listerContrats",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: listerContrats");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: listerContrats");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -1670,10 +1503,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Dictionary infoContrat(String id) {
-		logger.debug("Démarrage: infoContrat");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Informations sur un contrat...");
+			System.out.println("INFO: Informations sur un contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1681,20 +1513,17 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: infoContrat");
 				return (Dictionary) clientXML.execute("Systeme.infoContrat",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: infoContrat");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: infoContrat");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -1718,10 +1547,9 @@ public class XMLClient {
 	public Vector rechercherContrat(String id, String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration, String anneeExpiration,
 			String idContractant, String modeReglement, String type) {
-		logger.debug("Démarrage: rechercherContrat");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Recherche des contrats...");
+			System.out.println("INFO: Recherche des contrats...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1739,20 +1567,17 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: rechercherContrat");
 				return (Vector) clientXML.execute("Systeme.rechercherContrats",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: rechercherContrat");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: rechercherContrat");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -1764,10 +1589,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean supprimerContrat(String id) {
-		logger.debug("Démarrage: supprimerContrat");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Suppression d'un contrat...");
+			System.out.println("INFO: Suppression d'un contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1777,19 +1601,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.supprimerContrat", params);
-				logger.debug("Arrêt: supprimerContrat");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: supprimerContrat");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: supprimerContrat");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1812,10 +1633,9 @@ public class XMLClient {
 	public boolean modifierContrat(String id, String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration, String anneeExpiration,
 			String signataire, String modeReglement, String type) {
-		logger.debug("Démarrage: modifierContrat");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Modification d'un contrat...");
+			System.out.println("INFO: Modification d'un contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1835,19 +1655,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.modifierContrat", params);
-				logger.debug("Arrêt: modifierContrat");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: modifierContrat");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: modifierContrat");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1860,10 +1677,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean ajouterDocumentContrat(String idContrat, String idDoc) {
-		logger.debug("Démarrage: ajouterDocumentContrat");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Ajout du document au contrat...");
+			System.out.println("INFO: Ajout du document au contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1874,19 +1690,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.ajouterDocumentContrat", params);
-				logger.debug("Arrêt: ajouterDocumentContrat");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: ajouterDocumentContrat");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: ajouterDocumentContrat");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1899,10 +1712,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean retirerDocumentContrat(String idContrat, String idDoc) {
-		logger.debug("Démarrage: retirerDocumentContrat");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Retirer un document du contrat...");
+			System.out.println("INFO: Retirer un document du contrat...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1913,19 +1725,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.retirerDocumentContrat", params);
-				logger.debug("Arrêt: retirerDocumentContrat");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: retirerDocumentContrat");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: retirerDocumentContrat");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1948,10 +1757,9 @@ public class XMLClient {
 	@SuppressWarnings("unchecked")
 	public boolean creerContractant(String nom, String adresse, String codePostal,
 			String ville, String telephone, String fax, String mail, String type) {
-		logger.debug("Démarrage: creerContractant");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Création d'un contractant...");
+			System.out.println("INFO: Création d'un contractant...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1968,19 +1776,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.creerContractant", params);
-				logger.debug("Arrêt: creerContractant");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: creerContractant");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: creerContractant");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -1991,30 +1796,26 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector listerContractants() {
-		logger.debug("Démarrage: listerContractants");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Liste des contractants...");
+			System.out.println("INFO: Liste des contractants...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: listerContractants");
 				return (Vector) clientXML.execute("Systeme.listerContractants",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: listerContractants");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: listerContractants");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -2026,10 +1827,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public Dictionary infoContractant(String id) {
-		logger.debug("Démarrage: infoContractant");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Informations sur un contractant...");
+			System.out.println("INFO: Informations sur un contractant...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -2037,20 +1837,17 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: infoContractant");
 				return (Dictionary) clientXML.execute("Systeme.infoContractant",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: infoContractant");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: infoContractant");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -2072,10 +1869,9 @@ public class XMLClient {
 	public Vector rechercherContractant(String id, String nom, String adresse,
 			String codePostal, String ville, String telephone, String fax,
 			String mail, String type) {
-		logger.debug("Démarrage: rechercherContractant");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Recherche des contractants...");
+			System.out.println("INFO: Recherche des contractants...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -2091,20 +1887,17 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				logger.debug("Arrêt: rechercherContractant");
 				return (Vector) clientXML.execute("Systeme.rechercherContractants",
 						params);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: rechercherContractant");
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: rechercherContractant");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
 		}
 	}
@@ -2116,10 +1909,9 @@ public class XMLClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean supprimerContractant(String id) {
-		logger.debug("Démarrage: supprimerContractant ");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Suppression d'un contractant...");
+			System.out.println("INFO: Suppression d'un contractant...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -2129,19 +1921,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.supprimerContractant", params);
-				logger.debug("Arrêt: supprimerContractant ");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: supprimerContractant ");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: supprimerContractant ");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
@@ -2163,10 +1952,9 @@ public class XMLClient {
 	public boolean modifierContractant(String id, String nom, String adresse,
 			String codePostal, String ville, String telephone, String fax,
 			String mail, String type) {
-		logger.debug("Démarrage: modifierContractant");
 		// Si l'utilisateur est connecté au seveur
 		if (etatConnecte) {
-			logger.info("INFO: Modification d'un contractant...");
+			System.out.println("INFO: Modification d'un contractant...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -2184,19 +1972,16 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.modifierContractant", params);
-				logger.debug("Arrêt: modifierContractant");
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
-				logger.error("ERREUR : " + e);
-				logger.debug("Arrêt: modifierContractant");
+				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
 			// Sinon, non connecté
 		} else {
-			logger.warn("WARNING: Client non connecté au serveur !");
-			logger.debug("Arrêt: modifierContractant");
+			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
 		}
 	}
