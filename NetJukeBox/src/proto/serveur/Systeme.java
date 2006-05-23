@@ -1,15 +1,21 @@
 package proto.serveur;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.naming.NamingException;
+
+import org.apache.xmlrpc.XmlRpc;
+import org.apache.xmlrpc.XmlRpcClient;
 
 /**
  * Classe contenant la logique principale du serveur principal
@@ -96,6 +102,16 @@ public class Systeme {
 	 */
 	private String from;
 	
+	/**
+	 * Timer
+	 */
+	private Timer timer;
+	
+	/**
+	 * Threads de diffusion
+	 */
+	private Hashtable tasks;
+	
 // CONSTRUCTEUR
 //************************************************************
 	
@@ -163,6 +179,10 @@ public class Systeme {
 		/*this.documents = */DocumentFactory.getAll();
 		/*this.contractants = */ContractantFactory.getAll();
 		/*this.contrats = */ContratFactory.getAll();
+		
+		//"Ping" des clients
+		this.timer = new Timer(true);
+		this.tasks = new Hashtable();
 	}
 	
 // METHODES DU SYSTEME
@@ -207,7 +227,7 @@ public class Systeme {
 	 * @throws NamingException 
 	 */
 	@SuppressWarnings("unchecked")
-	public String connexion(String loginldap, String pwd) throws NamingException {
+	public String connexion(String loginldap, String pwd, String ipClient) throws NamingException {
 		
 		System.out.println("Connexion de l'utilisateur "+ loginldap);
 		
@@ -243,6 +263,10 @@ public class Systeme {
 				
 				//On l'ajoute à la liste des utilisateurs connectés au système
 				utilisateurs.put(loginldap, util);
+				
+				//On planifie sa tâche PING
+				PingTask task = new PingTask(loginldap, ipClient, portXML);
+				timer.scheduleAtFixedRate(task, 1000, 60000);
 				
 				System.out.println("Utilisateur "+loginldap+" connecté");
 				return Boolean.toString(true);
@@ -2683,5 +2707,47 @@ public class Systeme {
 			return Boolean.toString(false);
 		}
 			
+	}
+}
+
+/**
+ * Thread de "ping" sur les clients
+ */
+class PingTask extends TimerTask {
+	
+	private String login;
+	private String ip;
+	private int port;
+	private XmlRpcClient clientXML;
+	
+	public PingTask(String login, String ip, int port) {
+		System.err.println("TIMER: Programmation de la tâche "+login+"@"+ip);
+		this.login = login;
+		this.ip = ip;
+		this.port = port;
+		try {
+			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
+			this.clientXML = new XmlRpcClient("http://" + ip + ":" + port);
+		} catch (ClassNotFoundException e) {
+			System.out.println("ERREUR: Impossible de localiser le pilote Sax");
+		} catch (MalformedURLException e) {
+			System.out.println("ERREUR: URL non conforme au format du serveur XML-RPC");
+		}
+	}
+	
+	public void run() {
+		try {
+			System.err.println("TIMER: Lancement de la tâche "+login+"@"+ip);
+			
+			//Création de la requête
+			Vector params = new Vector();
+
+			// Adresse la requête et affiche les résultats
+			String result = (String) clientXML.execute("TestXML.testConnectXML", params);		
+		
+		} catch (Exception e) {
+			System.out.println("ERREUR: "+ e);
+			
+		}
 	}
 }

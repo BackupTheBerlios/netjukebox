@@ -3,13 +3,17 @@ package proto.client;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.Dictionary;
+import java.util.TimerTask;
 import java.util.Vector;
 
+import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
 
+import proto.serveur.Systeme;
 import proto.serveur.Utilisateur;
 
 
@@ -67,6 +71,12 @@ public class XMLClient {
 
 				// Creation du client & identification du serveur
 				clientXML = new XmlRpcClient("http://" + ip + ":" + port);
+				
+				//Creation du serveur xmlrpc
+				WebServer server = new WebServer(Integer.parseInt(port));
+				
+				// Enregistre la classe du gestionnaire
+				server.addHandler("PingXML", new PingXML());
 
 				logger.info("INFO: Client Streaming démarré");
 
@@ -77,7 +87,7 @@ public class XMLClient {
 				logger.error("ERREUR: URL non conforme au format du serveur XML-RPC");
 				logger.debug("Arrêt: XMLCllient");
 			} catch (Exception e) {
-				logger.error("ERREUR: ", e);
+				logger.error("ERREUR: "+ e);
 				logger.debug("Arrêt: XMLCllient");
 			}
 
@@ -1218,6 +1228,7 @@ public class XMLClient {
 				Vector params = new Vector();
 				params.addElement(login);
 				params.addElement(pwd);
+				params.addElement(InetAddress.getLocalHost().getHostAddress());
 
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute("Systeme.connexion",
@@ -2592,4 +2603,24 @@ public class XMLClient {
 			return false;
 		}
 	}
+}
+
+/**
+ * "ping"
+ */
+class PingXML{
+	
+
+	public PingXML() {
+	}
+	
+	/**
+	 * Signale au serveur que le client est bien connecté
+	 * @return String
+	 */
+	public String testConnectXML() {
+		System.out.println("Test de connexion envoyé par serveur NetJukeBox");
+		return Boolean.toString(true);
+	}
+
 }
