@@ -3,7 +3,7 @@ log4j.rootLogger=debug, R, A1
 # Initialise la sortie du logger A1 vers la console
 log4j.appender.A1=org.apache.log4j.ConsoleAppender
 log4j.appender.A1.layout=org.apache.log4j.PatternLayout
-log4j.appender.A1.layout.ConversionPattern=%5p [%t] - %m %n
+log4j.appender.A1.layout.ConversionPattern= %5p | %c | %m %n
 
 # Effectue une rotation du fichier de log et initialise la sortie du logger R vers un fichier
 log4j.appender.R=org.apache.log4j.RollingFileAppender
