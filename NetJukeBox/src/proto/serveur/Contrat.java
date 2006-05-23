@@ -8,10 +8,16 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /**
  * Contrat {durée_contrat=date_expiration-date_signature}
  */
 public class Contrat {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Contrat.class);
 
 	/**
 	 * Identifiant
@@ -309,7 +315,8 @@ public class Contrat {
 	 * @return Hastable
 	 */
 	public void setDocumentsAssocies() {
-		System.out.println("Contrat.setDocumentsAssocies()");
+		
+		logger.debug("Démarrage: setDocumentsAssocies");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable docs = new Hashtable();
@@ -319,7 +326,7 @@ public class Contrat {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Contrat.getDocumentsAssocies() : "+resultats.size()+" document(s) trouvé(s)");
+		logger.info("Contrat.getDocumentsAssocies() : "+resultats.size()+" document(s) trouvé(s)");
 		
 		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -329,6 +336,7 @@ public class Contrat {
 		}
 		
 		this.documents=docs;
+		logger.debug("Arrêt: setDocumentsAssocies");
 	}
 	
 	/**
@@ -336,7 +344,7 @@ public class Contrat {
 	 * @param Programme prog
 	 */
 	public void ajouterDocument(Document doc) {
-		
+		logger.debug("Démarrage: ajouterDocument");
 		//On ajoute le document au contrat
 		String requete = "INSERT INTO contratdoc (id_contrat, id_doc) VALUES ('" + id + "', '" + doc.getId() + "');";
 		Jdbc base = Jdbc.getInstance();
@@ -352,15 +360,16 @@ public class Contrat {
 			doc.ajouterContrat(this);
 		}
 		
-		System.out.println("Document ajouté");
+		logger.info("Document ajouté");
+		logger.debug("Arrêt: ajouterDocument");
 	}
 
 	/**
 	 * Supprime de sa liste le document
 	 * @param boolean
 	 */
-	public boolean retirerDocument(String idDoc) {
-		
+	public boolean ajouterDocument(String idDoc) {
+		logger.debug("Démarrage: ajouterDocument");
 		// On retire le document du CONTRAT
 		String requete = "DELETE FROM contratdoc WHERE id_contrat='"+this.id+"' AND id_doc='"+idDoc+"';";
 		Jdbc base = Jdbc.getInstance();
@@ -377,11 +386,12 @@ public class Contrat {
 			
 			//On met à jour le vecteur d'association
 			documents.remove(idDoc);
-			
+			logger.debug("Arrêt: ajouterDocument");
 			return true;
 		}
 		
 		//Sinon
+		logger.debug("Arrêt: ajouterDocument");
 		return false;
 	}
 
@@ -402,7 +412,7 @@ public class Contrat {
 	public boolean modifier(String titre, int jourSignature, int moisSignature, int anneeSignature,
 			int jourExpiration, int moisExpiration, int anneeExpiration, String idContractant,
 			String modeReglement, String type) {
-
+		logger.debug("Démarrage: modifier");
 		
 		//On assemble la date de signature
 		GregorianCalendar dateSignature = new GregorianCalendar(anneeSignature, moisSignature-1, jourSignature);
@@ -426,6 +436,7 @@ public class Contrat {
 			this.modeReglement = modeReglement;
 			this.type = type;
 		}
+		logger.debug("Arrêt: modifier");
 		return nbRows>0;
 	}
 	
@@ -435,7 +446,7 @@ public class Contrat {
 	 * @throws SQLException 
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: supprimer");
 		//On supprime les associations contrat/document
 		for (int i=0; i<documents.size(); i++){
 			Document d = (Document)documents.get(i);
@@ -446,6 +457,7 @@ public class Contrat {
 		contractant.retirerContrat(this.id);
 		
 		//On supprime les infos de la base
+		logger.debug("Arrêt: supprimer");
 		return ContractantFactory.deleteById(id);
 	}
 	
@@ -455,7 +467,7 @@ public class Contrat {
 	/**
 	 * Calcule la durée du contrat
 	 */
-	public long getDureeContrat() {
+	public /*pure*/ long getDureeContrat() {
 		// your code here
 		return dateExpiration.getTimeInMillis()-dateSignature.getTimeInMillis();
 	}
@@ -464,7 +476,7 @@ public class Contrat {
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */
-	public Dictionary getAttributesDictionary() {
+	public /*pure*/ Dictionary getAttributesDictionary() {
 		
 		Dictionary dico = new Hashtable();
 		
@@ -503,56 +515,56 @@ public class Contrat {
 	/**
 	 * @return Renvoie titre.
 	 */
-	public String getTitre() {
+	public /*pure*/ String getTitre() {
 		return titre;
 	}
 
 	/**
 	 * @return Renvoie dateExpiration.
 	 */
-	public GregorianCalendar getDateExpiration() {
+	public /*pure*/ GregorianCalendar getDateExpiration() {
 		return dateExpiration;
 	}
 
 	/**
 	 * @return Renvoie dateSignature.
 	 */
-	public GregorianCalendar getDateSignature() {
+	public /*pure*/ GregorianCalendar getDateSignature() {
 		return dateSignature;
 	}
 
 	/**
 	 * @return Renvoie documents.
 	 */
-	public Hashtable getDocuments() {
+	public /*pure*/ Hashtable getDocuments() {
 		return documents;
 	}
 
 	/**
 	 * @return Renvoie id.
 	 */
-	public String getId() {
+	public /*pure*/ String getId() {
 		return id;
 	}
 
 	/**
 	 * @return Renvoie modeReglement.
 	 */
-	public String getModeReglement() {
+	public /*pure*/ String getModeReglement() {
 		return modeReglement;
 	}
 
 	/**
 	 * @return Renvoie le contractant.
 	 */
-	public Contractant getContractant() {
+	public /*pure*/ Contractant getContractant() {
 		return contractant;
 	}
 
 	/**
 	 * @return Renvoie type.
 	 */
-	public String getType() {
+	public /*pure*/ String getType() {
 		return type;
 	}
 
@@ -563,16 +575,18 @@ public class Contrat {
 	 * @param dateExpiration dateExpiration à définir.
 	 */
 	public boolean setDateExpiration(int jour, int mois, int annee) {
+		logger.debug("Démarrage: setDateExpiration");
 		GregorianCalendar date = new GregorianCalendar(annee, mois-1, jour);
 		
 		String requete = "UPDATE contrat SET expiration = '" + date.getTimeInMillis() + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.dateExpiration = date;
 		}
+		logger.debug("Arrêt: setDateExpiration");
 		return nbRows>0;
 	}
 
@@ -580,16 +594,18 @@ public class Contrat {
 	 * @param dateSignature dateSignature à définir.
 	 */
 	public boolean setDateSignature(int jour, int mois, int annee) {
+		logger.debug("Démarrage: setDateSignature");
 		GregorianCalendar date = new GregorianCalendar(annee, mois-1, jour);
 		
 		String requete = "UPDATE contrat SET signature = '" + date.getTimeInMillis() + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.dateSignature = date;
 		}
+		logger.debug("Arrêt: setDateSignature");
 		return nbRows>0;
 	}
 
@@ -597,14 +613,16 @@ public class Contrat {
 	 * @param modeReglement modeReglement à définir.
 	 */
 	public boolean setModeReglement(String modeReglement) {
+		logger.debug("Démarrage: setModeReglement");
 		String requete = "UPDATE contrat SET reglement = '" + modeReglement + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.modeReglement = modeReglement;
 		}
+		logger.debug("Arrêt: setModeReglement");
 		return nbRows>0;
 	}
 
@@ -612,14 +630,16 @@ public class Contrat {
 	 * @param signataire signataire à définir.
 	 */
 	public boolean setContractant(String idContractant) {
+		logger.debug("Démarrage: setContractant");
 		String requete = "UPDATE contrat SET id_contractant = '" + idContractant + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.contractant = (Contractant)ContractantFactory.getById(idContractant);
 		}
+		logger.debug("Arrêt: setContractant");
 		return nbRows>0;
 	}
 
@@ -627,14 +647,16 @@ public class Contrat {
 	 * @param type type à définir.
 	 */
 	public boolean setType(String type) {
+		logger.debug("Démarrage: setType");
 		String requete = "UPDATE contrat SET type = '" + type + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.type = type;
 		}
+		logger.debug("Arrêt: setType");
 		return nbRows>0;
 	}
 	
@@ -642,14 +664,16 @@ public class Contrat {
 	 * @param type titre à définir.
 	 */
 	public boolean setTitre(String titre) {
+		logger.debug("Démarrage: setTitre");
 		String requete = "UPDATE contrat SET titre = '" + titre + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
-		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
 			this.titre = titre;
 		}
+		logger.debug("Arrêt: setTitre");
 		return nbRows>0;
 	}
 
