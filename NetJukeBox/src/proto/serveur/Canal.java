@@ -10,10 +10,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /**
  * Canal de diffusion
  */
 public class Canal {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Canal.class);
 
 // ATTRIBUTS DU CANAL
 // *************************************************
@@ -100,9 +106,10 @@ public class Canal {
 		//this.programmes = getProgrammesPlanifies();
 	}
 
+
 // METHODES DYNAMIQUES
 // *************************************************
-	
+
 	/**
 	 * Relance la diffusion d'un canal
 	 * @param idCanal
@@ -119,7 +126,7 @@ public class Canal {
 	 * @return
 	 */
 	public boolean verifierPlanification(long horaire, long duree) {
-		
+		logger.debug("Démarrage: verifierPlanification");
 		//Si on a des programmes planifiés
 		if (programmes.size()>0) {
 			
@@ -139,6 +146,7 @@ public class Canal {
 				
 				//Si l'horaire demandé est déjà occupé
 				if (horaireProg == horaire) {
+					logger.debug("Arrêt: verifierPlanification");
 					return false;
 				}
 				
@@ -159,6 +167,7 @@ public class Canal {
 			
 			//S'il n'y a pas de prog après l'horaire demandé
 			if (!trouveProgSuivant) {
+				logger.debug("Arrêt: verifierPlanification");
 				return true;
 			}
 			
@@ -169,6 +178,7 @@ public class Canal {
 				if (progPrecedent != null) {
 					
 					//On vérifie que le créneau demandé commence après le précédent et se termine avant le suivant
+					logger.debug("Arrêt: verifierPlanification");
 					return ((horaire>(progPrecedent.getDuree()+horairePrecedent)) && ((horaire+duree)<horaireSuivant));
 				}
 				
@@ -176,6 +186,7 @@ public class Canal {
 				else {
 					
 					//On vérifie que le créneau demandé finit avant l'horaire suivant
+					logger.debug("Arrêt: verifierPlanification");
 					return (horaire+duree)<horaireSuivant;
 				}
 			}
@@ -183,6 +194,7 @@ public class Canal {
 		
 		//Sinon, c'est libre
 		else {
+			logger.debug("Arrêt: verifierPlanification");
 			return true;
 		}
 	}
@@ -200,7 +212,7 @@ public class Canal {
 	 * @return boolean
 	 */
 	public boolean planifierProgramme(Programme p, int jour, int mois, int annee, int heure, int minute, int seconde) {
-		
+		logger.debug("Démarrage: planifierProgramme");
 		//On assemble la date
 		GregorianCalendar horaire = new GregorianCalendar(annee, mois-1, jour, heure, minute, seconde);
 		
@@ -217,15 +229,17 @@ public class Canal {
 				
 				//On met à jour le vecteurs d'association
 				programmes.put(horaire.getTimeInMillis(), p);
-				
+				logger.debug("Arrêt: planifierProgramme");
 				return true;
 			}
 			
 			//Sinon, problème à l'insertion
+			logger.debug("Arrêt: planifierProgramme");
 			return false;
 		}
 		
 		//Sinon, créneau non libre
+		logger.debug("Arrêt: planifierProgramme");
 		return false;
 	}
 	
@@ -235,6 +249,7 @@ public class Canal {
 	 * @return boolean
 	 */
 	public boolean annulerPlanification(long calage) {
+		logger.debug("Démarrage: annulerPlanification");
 		if (programmes.containsKey(calage)) {
 			
 			//On retire le programme du canal
@@ -255,11 +270,14 @@ public class Canal {
 				
 				//On dissocie le programme
 				programmes.remove(calage);
+				logger.debug("Arrêt: annulerPlanification");
 				return true;
 			}
 			//Sinon
+			logger.debug("Arrêt: annulerPlanification");
 			return false;
 		}
+		logger.debug("Arrêt: annulerPlanification");
 		return false;
 	}
 	
@@ -267,7 +285,7 @@ public class Canal {
 	 * Définit la liste des programmes planifiés
 	 */
 	public void setProgrammesPlanifies() {
-		System.out.println("Canal.getProgrammesPlanifies()");
+		logger.debug("Démarrage: setProgrammesPlanifies");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable progs = new Hashtable();
@@ -277,7 +295,7 @@ public class Canal {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Canal.getProgrammesPlanifies() : "+resultats.size()+" programme(s) trouvé(s)");
+		logger.info("Canal.getProgrammesPlanifies() : "+resultats.size()+" programme(s) trouvé(s)");
 		
 		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -288,6 +306,7 @@ public class Canal {
 		}
 		
 		programmes = progs;
+		logger.debug("Arrêt: setProgrammesPlanifies");
 	}
 	
 	/**
@@ -297,7 +316,7 @@ public class Canal {
 	 * @return boolean
 	 */
 	public boolean modifier(String nom, int utilMax) {
-		
+		logger.debug("Démarrage: modifier");
 		String requete = "UPDATE canal SET nom = '" + nom + "', utilMax = '" + utilMax + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -308,6 +327,7 @@ public class Canal {
 			this.nom = nom;
 			this.utilMax = utilMax;
 		}
+		logger.debug("Arrêt: modifier");
 		return nbRows>0;
 	}
 	
@@ -315,7 +335,7 @@ public class Canal {
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */
-	public Dictionary getAttributesDictionary() {
+	public /*pure*/ Dictionary getAttributesDictionary() {
 		
 		Dictionary dico = new Hashtable();
 		
@@ -350,7 +370,7 @@ public class Canal {
 	 * Retourne l'URL du canal
 	 * @return String
 	 */
-	public String getUrlStreaming() {
+	public /*pure*/ String getUrlStreaming() {
 		if (RTP!=null) {
 			return RTP.getUrl();
 		}
@@ -363,16 +383,17 @@ public class Canal {
 	 * @param port
 	 */
 	public void createRTPServer(String ip, int port, String publicite) {
-		
+		logger.debug("Démarrage: createRTPServer");
 		//Si le RTPServer n'existe pas, on le crée
 		if (this.RTP == null) this.RTP = new RTPServer(ip, port, publicite);
+		logger.debug("Arrêt: createRTPServer");
 	}
 	
 	/**
 	 * Vérifie si le serveur RTP est démarré
 	 * @return boolean
 	 */
-	public boolean isRTPstarted() {
+	public /*pure*/ boolean isRTPstarted() {
 		return RTP != null;
 	}
 	
@@ -380,7 +401,7 @@ public class Canal {
 	 * Lance la diffusion
 	 */
 	public void startDiffusion() {
-		
+		logger.debug("Démarrage: startDiffusion");
 		//Si le RTPServer existe
 		if (this.RTP != null) {
 			
@@ -402,6 +423,7 @@ public class Canal {
 		    
 		    //On lance le RTPServer
 		    this.RTP.diffuser();
+		    logger.debug("Arrêt: startDiffusion");
 		}
 	}
 	
@@ -409,9 +431,10 @@ public class Canal {
 	 * Arrête la diffusion
 	 */
 	public void stopDiffusion() {
-		
+		logger.debug("Démarrage: stopDiffusion");
 		//Si le RTPServer existe, on le stoppe
 		if (this.RTP != null) this.RTP.stop();
+		logger.debug("Arrêt: stopDiffusion");
 	}
 
 	/**
@@ -420,11 +443,12 @@ public class Canal {
 	 * @throws SQLException 
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: supprimer");
 		//On stoppe la diffusion éventuelle
 		this.stopDiffusion();
 		
 		//On supprime les infos de la base
+		logger.debug("Arrêt: supprimer");
 		return CanalFactory.deleteById(this.id);
 	}
 
@@ -432,7 +456,7 @@ public class Canal {
 	 * Vérifie si le canal est actif
 	 * @return boolean
 	 */
-	public boolean estActif() {
+	public /*pure*/ boolean estActif() {
 		return etat.equalsIgnoreCase("ACTIF");
 	}
 
@@ -440,7 +464,7 @@ public class Canal {
 	 * Retourne l'identifiant du canal
 	 * @return String
 	 */
-	public String getId() {
+	public /*pure*/ String getId() {
 		return id;
 	}
 
@@ -448,7 +472,7 @@ public class Canal {
 	 * Retourne le nom du canal
 	 * @return String
 	 */
-	public String getNom() {
+	public /*pure*/ String getNom() {
 		return nom;
 	}
 
@@ -456,7 +480,7 @@ public class Canal {
 	 * Retourne le nombre maximal d'auditeurs supporté par le canal
 	 * @return int
 	 */
-	public int getUtilMax() {
+	public /*pure*/ int getUtilMax() {
 		return utilMax;
 	}
 	
@@ -464,10 +488,11 @@ public class Canal {
 	 * Diffuser un programme
 	 * @param Programme
 	 */
-	public void diffuserProgramme(Programme p) {        
+	public void diffuserProgramme(Programme p) {    
+		logger.debug("Démarrage: diffuserProgramme");
 		//p.getTitre();
 		//p.diffuser();
-		System.out.println("Le programme " +  p.getTitre() + " est en cours de diffusion");
+		logger.info("Le programme " +  p.getTitre() + " est en cours de diffusion");
 		
 		Vector medias = new Vector();
 		Enumeration cles = p.getDocuments().keys();
@@ -480,6 +505,7 @@ public class Canal {
 			RTP.programmer(medias);
 			//RTP.diffuser();
 		}
+		logger.debug("Arrêt: diffuserProgramme");
 	} 
 	
 
@@ -487,7 +513,9 @@ public class Canal {
 	 * Rend le canal actif
 	 */
 	public void setActif() {
+		logger.debug("Démarrage: setActif");
 		etat = "ACTIF";
+		logger.debug("Arrêt: setActif");
 	}
 
 	/**
@@ -495,7 +523,9 @@ public class Canal {
 	 * @param idAuditeur
 	 */
 	public void deconnecterAuditeur(String idAuditeur) {
+		logger.debug("Démarrage: deconnecterAuditeur");
 		if (auditeurs.contains(idAuditeur)) auditeurs.removeElement(idAuditeur);
+		logger.debug("Arrêt: deconnecterAuditeur");
 	}
 	
 	/**
@@ -503,7 +533,9 @@ public class Canal {
 	 * @param idAuditeur
 	 */
 	public void connecterAuditeur(String idAuditeur) {
+		logger.debug("Démarrage: connecterAuditeur");
 		if (!auditeurs.contains(idAuditeur)) auditeurs.addElement(idAuditeur);
+		logger.debug("Arrêt: connecterAuditeur");
 	}
 	
 	/**
@@ -513,6 +545,7 @@ public class Canal {
 	 * @throws SQLException
 	 */
 	public boolean setNom(String nom) /*throws SQLException*/ {
+		logger.debug("Démarrage: setNom");
 		String requete = "UPDATE canal SET nom = '" + nom + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -521,6 +554,7 @@ public class Canal {
 		if (nbRows>0) {
 			this.nom = nom;
 		}
+		logger.debug("Arrêt: setNom");
 		return nbRows>0;
 	}
 	
@@ -531,6 +565,7 @@ public class Canal {
 	 * @throws SQLException
 	 */
 	public boolean setUtilMax(int utilmax) /*throws SQLException*/ {
+		logger.debug("Démarrage: setUtilMax");
 		String requete = "UPDATE canal SET utilmax = '" + utilmax + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -539,6 +574,7 @@ public class Canal {
 		if (nbRows>0) {
 			this.utilMax = utilmax;
 		}
+		logger.debug("Arrêt: setUtilMax");
 		return nbRows>0;
 	}
 }
@@ -547,19 +583,25 @@ public class Canal {
  * Thread de diffusion
  */
 class DiffusionTask extends TimerTask {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(DiffusionTask.class);
 	
 	private Programme programme;
 	private Canal canal;
 	
 	public DiffusionTask(Programme p, Canal c) {
-		System.err.println("TIMER: Programmation de la tâche "+p.getId());
+		logger.debug("Démarrage: DiffusionTask");
+		logger.error("TIMER: Programmation de la tâche "+p.getId());
 		this.programme = p;
 		this.canal = c;
+		logger.debug("Arrêt: DiffusionTask");
 	}
 	
 	public void run() {
-		System.err.println("TIMER: Lancement de la tâche "+programme.getId());
-				
+		logger.debug("Démarrage: run");
+		logger.error("TIMER: Lancement de la tâche "+programme.getId());				
 		canal.diffuserProgramme(programme);
 		
 		/*
@@ -575,5 +617,7 @@ class DiffusionTask extends TimerTask {
 			RTP.diffuser();
 		}
 		*/
+		
+		logger.debug("Démarrage: run");
 	}
 }
