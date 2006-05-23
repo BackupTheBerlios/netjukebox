@@ -5,8 +5,13 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
-public class ContractantFactory {
+import org.apache.log4j.Logger;
 
+public class ContractantFactory {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(ContractantFactory.class);
 //ATTRIBUTS
 //-----------------------------------------
 
@@ -28,7 +33,7 @@ public class ContractantFactory {
 	 * @param String key
 	 * @return boolean
 	 */
-	public static boolean containsId(String key) {
+	public /*pure*/ static boolean containsId(String key) {
 		return instancesById.containsKey(key);
 	}
 	
@@ -37,7 +42,7 @@ public class ContractantFactory {
 	 * @param String key
 	 * @return boolean
 	 */
-	public static boolean containsNom(String key) {
+	public /*pure*/ static boolean containsNom(String key) {
 		return instancesByNom.containsKey(key);
 	}
 	
@@ -45,7 +50,7 @@ public class ContractantFactory {
 	 * Renvoie la liste des instances
 	 * @return Hashtable
 	 */
-	public static Hashtable getInstances() {
+	public /*pure*/ static Hashtable getInstances() {
 		return instancesById;
 	}
 	
@@ -64,7 +69,7 @@ public class ContractantFactory {
 	public static Contractant create(String nom, String adresse, String codePostal,
 			String ville, String telephone, String fax, String mail, String type) /*throws SQLException*/ {
 		
-		System.out.println("ContractantFactory.create()");
+		logger.debug("Démarrage: create");
 		
 		//On crée le contractant dans la base
 		String requete = "INSERT INTO contractant (nom, adresse, cp, ville, telephone, fax, mail, type) VALUES ('" +
@@ -77,10 +82,12 @@ public class ContractantFactory {
 		//Si l'insertion s'est bien déroulée
 		if (nbRows>0) {
 			//On retourne ensuite un objet pour ce contractant
+			logger.debug("Arrêt: create");
 			return getByNom(nom);
 		}
 		
 		//Sinon on retourne un objet vide
+		logger.debug("Arrêt: create");
 		return null;
 	}
 	
@@ -90,18 +97,18 @@ public class ContractantFactory {
 	 * @return Contractant
 	 */
 	public static Contractant getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("ContractantFactory.getById("+id+")");
+		logger.debug("Démarrage: getById("+id+")");
 		
 		//Si le contractant est déjà instancié
 		if (instancesById.containsKey(id)) {
-			System.out.println("Instance trouvée pour Contractant "+id);
+			logger.info("Instance trouvée pour Contractant "+id);
+			logger.debug("Arrêt: getById");
 			return (Contractant)instancesById.get(id);
 		}
 		
 		//Sinon, on crée l'instance
 		else {
-			System.out.println("Nouvelle instance pour Contractant "+id);
+			logger.info("Nouvelle instance pour Contractant "+id);
 			String requete = "SELECT * FROM contractant WHERE id = '" + id + "';";
 	
 			Jdbc base = Jdbc.getInstance();
@@ -140,10 +147,12 @@ public class ContractantFactory {
 				instancesById.put(id, contractant);
 				instancesByNom.put(nom, contractant);
 				contractant.setContratsAssocies();
+				logger.debug("Arrêt: getById");
 				return contractant;
 			}
 			
 			//Sinon, on retourne un objet vide
+			logger.debug("Arrêt: getById");
 			return null;
 		}
 	}
@@ -154,12 +163,12 @@ public class ContractantFactory {
 	 * @return Contractant
 	 */
 	public static Contractant getByNom(String nom) /*throws SQLException*/ {
-		
-		System.out.println("ContractantFactory.getByNom("+nom+")");
+		logger.debug("Démarrage: getByNom("+nom+")");
 		
 		//Si le contractant est déjà instancié
 		if (instancesById.containsKey(nom)) {
-			
+			logger.info("Instance trouvée pour Contractant "+nom);
+			logger.debug("Arrêt: getByNom");
 			return (Contractant)instancesById.get(nom);
 		}
 		
@@ -204,10 +213,12 @@ public class ContractantFactory {
 				instancesByNom.put(nom, contractant);
 				instancesById.put(id, contractant);
 				contractant.setContratsAssocies();
+				logger.debug("Arrêt: getByNom");
 				return contractant;
 			}
 			
 			//Sinon, on retourne un objet vide
+			logger.debug("Arrêt: getByNom");
 			return null;
 		}
 	}
@@ -220,7 +231,7 @@ public class ContractantFactory {
 
 	public static Hashtable getAll() /*throws SQLException*/ {
 		
-		System.out.println("ContractantFactory.getAll()");
+		logger.debug("Démarrage: getAll");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable contractants = new Hashtable();
@@ -230,7 +241,7 @@ public class ContractantFactory {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Contractant.getAll() : "+resultats.size()+" contractant(s) trouvé(s)");
+		logger.info("Contractant.getAll() : "+resultats.size()+" contractant(s) trouvé(s)");
 		
 		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -240,6 +251,7 @@ public class ContractantFactory {
 		}
 		
 		//On retourne le vecteur contenant les objets contractants instanciés
+		logger.debug("Arrêt: getAll");
 		return contractants;
 	}
 	
@@ -250,7 +262,7 @@ public class ContractantFactory {
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: deleteById");
 		//On supprime le contractant de la base, en partant d'un id
 		String requete = "DELETE FROM contractant WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
@@ -263,10 +275,12 @@ public class ContractantFactory {
 			Contractant c = getById(id);
 			instancesByNom.remove(c.getNom());
 			instancesById.remove(id);
+			logger.debug("Arrêt: deleteById");
 			return true;
 		}
 		
 		//Sinon, suppression invalide
+		logger.debug("Arrêt: deleteById");
 		return false;
 	}
 }
