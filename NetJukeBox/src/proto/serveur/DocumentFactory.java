@@ -77,8 +77,6 @@ public class DocumentFactory {
 			int mois, int annee, String source, String langue, String genre,
 			String fichier, String artiste, String interprete, String compositeur) /*throws SQLException*/ {
 		
-	
-		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
 		logger.debug("Démarrage : Document.create");				
 		
 		//On assemble la date
