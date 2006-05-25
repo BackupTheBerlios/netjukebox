@@ -10,9 +10,6 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Utlisateur du Net-JukeBox
@@ -86,19 +83,12 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	public static Utilisateur create(String login, String pwd, String nom, String prenom, String mail, String pays, String role) throws NamingException {
-		
-	    //PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
-		PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
 		logger.debug("Démarrage: Utilisateur.create");
-				
 		Ldap ldap = Ldap.getInstance();
 		ldap.executeCreer(login, pwd, nom, prenom, mail, pays, role);
-		
-		logger.debug("Arrêt: Utilisateur.create");
-		
 		//On retourne un objet configuré avec les infos issues de LDAP
+		logger.debug("Arrêt: Utilisateur.create");
 		return Utilisateur.getByLogin(login);
-		
 	}
 
 	/**
@@ -146,20 +136,20 @@ public class Utilisateur {
 			String email = (String) mail.get();
 			String pays = (String) st.get();
 			String role = (String) ou.get();
-			
-			logger.debug("Arrêt: Utilisateur.GetByLogin");
-			
+					
 			//On retourne l'objet
+			logger.debug("Arrêt: Utilisateur.GetByLogin");
 			return new Utilisateur(login, encStrPassword, nom, prenom, email, pays, role);
 		}			
-		
+	
 		/**
 		if (log.equalsIgnoreCase("toto")) {
 
 			//On retourne un objet utilisateur configuré
 			return new Utilisateur("toto", "toto", "Toto", "Toto", "toto@netjukebox.com", "France", "role");
 		}*/
-		//Sinon, on retourne un objet vide
+		//Sinon, on retourne un objet vide*
+		logger.debug("Arrêt: Utilisateur.GetByLogin");
 		return null;
 	}
 		
@@ -210,7 +200,6 @@ public class Utilisateur {
 				encStrPassword = new String(encPassword);
 				log = (String) uid.get();
 				r = (String) role.get();
-				
 
 				logger.debug("Arrêt: verifierLogin");
 				return true;
@@ -221,8 +210,8 @@ public class Utilisateur {
 				return false;
 			}
 		} catch (Exception e){
-			logger.fatal("Erreur le login : " + login + " n'existe pas");
-			logger.fatal("Arrêt: verifierLogin");
+			logger.error("Erreur, le login : " + login + " n'existe pas");
+			logger.debug("Arrêt: verifierLogin");
 			return false;
 		}
 		//return (login.equalsIgnoreCase("toto"));
@@ -267,8 +256,8 @@ public class Utilisateur {
 					
 				}
 		} catch (Exception e){
-			logger.fatal("Erreur le login : " + login + " n'existe pas");
-			logger.fatal("Arrêt: verifierPwd");
+			logger.error("Erreur le login : " + login + " n'existe pas");
+			logger.debug("Arrêt: verifierPwd");
 			return false;
 		}
 	}
@@ -342,8 +331,8 @@ public class Utilisateur {
 	 * @throws NamingException 
 	 */
 	public boolean modifier(String login, String role, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
-		
 		logger.debug("Démarrage: modifierInfos");
+		
 		Ldap ldap = Ldap.getInstance();
 		ldap.ModifieAttributs(login, role, newlogin, pwd, nom, prenom, mail, pays);
 		this.login = login;
@@ -353,6 +342,7 @@ public class Utilisateur {
 		this.mail=mail;
 		this.pays=pays;
 		this.role=RoleFactory.getById(role);
+		
 		logger.debug("Arrêt: modifierInfos");
 		return true;
 	}
@@ -481,11 +471,12 @@ public class Utilisateur {
 	 */
 	@SuppressWarnings("static-access")
 	public void setRole(String nouveauRole) {
-		
 		logger.debug("Démarrage: changerRole");
+		
 		Ldap ldap = Ldap.getInstance();
 		ldap.changerRole(login, role.getId(), nouveauRole);
 		this.role = RoleFactory.getById(nouveauRole);
+		
 		logger.debug("Arrêt: changerRole");
 	}
 }
