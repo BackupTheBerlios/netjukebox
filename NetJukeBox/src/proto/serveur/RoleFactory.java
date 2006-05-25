@@ -5,10 +5,16 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /**
  * Role Factory
  */
 public class RoleFactory {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(RoleFactory.class);
 	
 //ATTRIBUTS
 //-----------------------------------------
@@ -45,17 +51,18 @@ public class RoleFactory {
 	 * @return Permission
 	 */
 	public static Role create(String id) {
-		
-		System.out.println("RoleFactory.create()");
+		logger.debug("Démarrage: create");
 		
 		//------------
 		// LDAP
 		//------------
 		
 		//On retourne ensuite un objet pour ce contractant
+		logger.debug("Arrêt: create");
 		return getById(id);
 		
 		//Sinon on retourne un objet vide
+		//logger.debug("Arrêt: create");
 		//return null;
 	}
 	
@@ -65,18 +72,18 @@ public class RoleFactory {
 	 * @return Permission
 	 */
 	public static Role getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("RoleFactory.getById("+id+")");
+		logger.debug("Démarrage: getById("+id+")");
 		
 		//Si le contractant est déjà instancié
 		if (instances.containsKey(id)) {
-			System.out.println("Instance trouvée pour Role "+id);
+			logger.info("Instance trouvée pour Role "+id);
+			logger.debug("Arrêt: getById");
 			return (Role)instances.get(id);
 		}
 		
 		//Sinon, on crée l'instance
 		else {
-			System.out.println("Nouvelle instance pour Role "+id);
+			logger.info("Nouvelle instance pour Role "+id);
 			
 			//------------
 			// LDAP
@@ -90,9 +97,11 @@ public class RoleFactory {
 				Role role = new Role(id);
 				instances.put(id, role);
 				role.setPermissions();
+				logger.debug("Arrêt: getById");
 				return role;
 			
 			//Sinon, on retourne un objet vide
+			//logger.debug("Arrêt: getById");
 			//return null;
 		}
 	}
@@ -103,8 +112,7 @@ public class RoleFactory {
 	 */
 
 	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("RoleFactory.getAll()");
+		logger.debug("Démarrage: getAll");
 		
 		//On crée un vecteur pour contenir les objets roles instanciés
 		Hashtable roles = new Hashtable();
@@ -122,6 +130,7 @@ public class RoleFactory {
 			roles.put("admin", getById("admin"));
 		
 		//On retourne le vecteur contenant les objets permissions instanciés
+		logger.debug("Arrêt: getAll");
 		return roles;
 	}
 	
@@ -132,7 +141,7 @@ public class RoleFactory {
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: deleteById");
 		//On supprime le rôle de LDAP
 		//--------------
 		// LDAP
@@ -148,10 +157,12 @@ public class RoleFactory {
 			
 			//On retire l'instance
 			instances.remove(id);
+			logger.debug("Arrêt: deleteById");
 			return true;
 		}
 		
 		//Sinon, suppression invalide
+		logger.debug("Arrêt: deleteById");
 		return false;
 	}
 }
