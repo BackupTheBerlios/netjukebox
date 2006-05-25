@@ -2112,8 +2112,8 @@ public class Systeme {
 				Contrat c = (Contrat)ContratFactory.getById(idContrat);
 				
 				//On retire le document du contrat
-				c.retirerDocument(idDoc);
-				
+				c.retirerDocument(idDoc);	
+							
 				logger.info("Document retiré du contrat "+idContrat);
 				return Boolean.toString(true);
 				
@@ -2719,6 +2719,10 @@ public class Systeme {
  * Thread de "ping" sur les clients
  */
 class PingTask extends TimerTask {
+	/**
+	 *  Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(PingTask.class);
 	
 	private String login;
 	private String ip;
@@ -2753,7 +2757,7 @@ class PingTask extends TimerTask {
 			String result = (String) clientXML.execute("TestXML.testConnectXML", params);		
 		
 		} catch (Exception e) {
-			logger.info("ERREUR: "+ e);
+			logger.info("ERREUR: ", e);
 			//sys.deconnexion(login);
 		}
 	}
