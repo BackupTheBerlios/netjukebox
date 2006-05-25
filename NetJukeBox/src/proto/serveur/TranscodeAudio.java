@@ -64,9 +64,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 			logger.error("- create processor for: " + inML);
 			p = Manager.createProcessor(inML);
 		} catch (Exception e) {
-			System.err
-					.println("Yikes!  Cannot create a processor from the given url: "
-							+ e);
+			logger.error("Yikes!  Cannot create a processor from the given url: ", e);
 			return false;
 		}
 
@@ -97,9 +95,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		// Now, we'll need to create a DataSink.
 		DataSink dsink;
 		if ((dsink = createDataSink(p, outML)) == null) {
-			System.err
-					.println("Failed to create a DataSink for the given output MediaLocator: "
-							+ outML);
+			logger.error("Failed to create a DataSink for the given output MediaLocator: "+ outML);
 			return false;
 		}
 
@@ -178,8 +174,8 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 
 		if ((tcs = p.getTrackControls()) == null) {
 			// The processor does not support any track control.
-			System.err
-					.println("The Processor cannot transcode the tracks to the given formats");
+			
+			logger.error ("The Processor cannot transcode the tracks to the given formats");
 			return false;
 		}
 
@@ -235,8 +231,8 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		DataSource ds;
 
 		if ((ds = p.getDataOutput()) == null) {
-			System.err
-					.println("Something is really wrong: the processor does not have an output DataSource");
+			
+			logger.error ("Something is really wrong: the processor does not have an output DataSource");
 			return null;
 		}
 
@@ -312,12 +308,12 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 	 * Block until file writing is done.
 	 */
 	boolean waitForFileDone() {
-		System.err.print("  ");
+		logger.error("  ");
 		synchronized (waitFileSync) {
 			try {
 				while (!fileDone) {
 					waitFileSync.wait(1000);
-					System.err.print(".");
+					logger.error(".");
 				}
 			} catch (Exception e) {
 			}
@@ -567,14 +563,13 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 	
 
 	static void prUsage() {
-		System.err
-				.println("Usage: java Transcode -o <output> -a <audio format> -v <video format> -s <start time> -e <end time> <input>");
+		
+		logger.error ("Usage: java Transcode -o <output> -a <audio format> -v <video format> -s <start time> -e <end time> <input>");
 		logger.error("     <output>: input URL or file name");
 		logger.error("     <input>: output URL or file name");
-		System.err
-				.println("     <audio format>: [encoding]:[rate]:[sizeInBits]:[channels]:[big|little]:[signed|unsigned]");
+		logger.error ("     <audio format>: [encoding]:[rate]:[sizeInBits]:[channels]:[big|little]:[signed|unsigned]");
 		logger.error("     <video format>: [encoding]:[widthXheight]");
-		System.err.println("     <start time>: start time in seconds");
+		logger.error ("     <start time>: start time in seconds");
 		logger.error("     <end time>: end time in seconds");
 		System.exit(0);
 	}
