@@ -1,9 +1,15 @@
 package proto.serveur;
 
+import org.apache.log4j.Logger;
+
 /**
  * Protocole
  */
 public class Protocole {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Protocole.class);
 
 // ATTRIBUTS
 //**********************************
@@ -42,13 +48,17 @@ public class Protocole {
 	 * 
 	 */
 	public void ajouter() {
+		logger.debug("Démarrage: ajout");
 		// your code here
+		logger.debug("Arrêt: ajout");
 	}
 
 	/**
 	 * 
 	 */
 	public void modifier() {
+		logger.debug("Démarrage: modifier");
 		// your code here
+		logger.debug("Arrêt: modifier");
 	}
 }

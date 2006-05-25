@@ -5,10 +5,16 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /**
  * Permission Factory
  */
 public class PermissionFactory {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(PermissionFactory.class);
 	
 //ATTRIBUTS
 //-----------------------------------
@@ -46,8 +52,7 @@ public class PermissionFactory {
 	 * @return Permission
 	 */
 	public static Permission create(String id, String libelle) {
-		
-		System.out.println("PermissionFactory.create()");
+		logger.debug("Démarrage: create");
 		
 		//On crée le contractant dans la base
 		String requete = "INSERT INTO permission (id, libelle) VALUES ('" + id + "', '"+ libelle + "');"; 
@@ -58,10 +63,12 @@ public class PermissionFactory {
 		//Si l'insertion s'est bien déroulée
 		if (nbRows>0) {
 			//On retourne ensuite un objet pour ce contractant
+			logger.debug("Arrêt: create");
 			return getById(id);
 		}
 		
 		//Sinon on retourne un objet vide
+		logger.debug("Arrêt: create");
 		return null;
 	}
 	
@@ -71,12 +78,12 @@ public class PermissionFactory {
 	 * @return Permission
 	 */
 	public static Permission getById(String id) /*throws SQLException*/ {
-		
-		System.out.println("PermissionFactory.getById("+id+")");
+		logger.debug("Démarrage: getById("+id+")");
 		
 		//Si le contractant est déjà instancié
 		if (instances.containsKey(id)) {
-			System.out.println("Instance trouvée pour Permission "+id);
+			logger.info("Instance trouvée pour Permission "+id);
+			logger.debug("Arrêt: getById");
 			return (Permission)instances.get(id);
 		}
 		
@@ -105,10 +112,12 @@ public class PermissionFactory {
 				//On retourne l'objet
 				Permission permission = new Permission(id, libelle);
 				instances.put(id, permission);
+				logger.debug("Arrêt: getById");
 				return permission;
 			}
 			
 			//Sinon, on retourne un objet vide
+			logger.debug("Arrêt: getById");
 			return null;
 		}
 	}
@@ -119,8 +128,7 @@ public class PermissionFactory {
 	 */
 
 	public static Hashtable getAll() /*throws SQLException*/ {
-		
-		System.out.println("PermissionFactory.getAll()");
+		logger.debug("Démarrage: getAll");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
 		Hashtable permissions = new Hashtable();
@@ -130,7 +138,7 @@ public class PermissionFactory {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Permission.getAll() : "+resultats.size()+" permission(s) trouvé(s)");
+		logger.info("Permission.getAll() : "+resultats.size()+" permission(s) trouvé(s)");
 		
 		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -140,6 +148,7 @@ public class PermissionFactory {
 		}
 		
 		//On retourne le vecteur contenant les objets permissions instanciés
+		logger.debug("Arrêt: getAll");
 		return permissions;
 	}
 	
@@ -150,7 +159,7 @@ public class PermissionFactory {
 	 * @throws SQLException 
 	 */
 	public static boolean deleteById(String id) /*throws SQLException*/ {
-		
+		logger.debug("Démarrage: deleteById");
 		//On supprime le contractant de la base, en partant d'un id
 		String requete = "DELETE FROM permission WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
@@ -161,10 +170,12 @@ public class PermissionFactory {
 			
 			//On retire l'instance
 			instances.remove(id);
+			logger.debug("Arrêt: deleteById");
 			return true;
 		}
 		
 		//Sinon, suppression invalide
+		logger.debug("Arrêt: deleteById");
 		return false;
 	}
 }

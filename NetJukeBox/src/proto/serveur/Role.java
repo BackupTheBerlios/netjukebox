@@ -7,10 +7,16 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /**
  * Rôle d'un utilisateur
  */
 public class Role {
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Role.class);
 
 //ATTRIBUTS
 //------------------------------------
@@ -78,7 +84,7 @@ public class Role {
 	 * @param Permission perm
 	 */
 	public void ajouterPermission(Permission perm) {
-		
+		logger.debug("Démarrage: ajouterPermission");
 		//On ajoute la permission au rôle
 		String requete = "INSERT INTO attribuer (login, id_permission) VALUES ('" + id + "', '" + perm.getId()+"');";
 		Jdbc base = Jdbc.getInstance();
@@ -89,7 +95,9 @@ public class Role {
 			
 			//On met à jour le vecteurs d'association
 			permissions.put(perm.getId(), perm);
+			logger.debug("Arrêt: ajouterPermission");
 		}
+		logger.debug("Arrêt: ajouterPermission");
 	}
 
 	/**
@@ -98,7 +106,7 @@ public class Role {
 	 * @return boolean
 	 */
 	public boolean retirerPermission(String idPerm) {
-		//logger.debug("Démarrage: retirerPermission");
+		logger.debug("Démarrage: retirerPermission");
 		
 		// On retire la permission du rôle
 		String requete = "DELETE FROM attribuer WHERE login='"+id+"' AND id_permission='"+idPerm+"';";
@@ -110,13 +118,11 @@ public class Role {
 			
 			//On met à jour le vecteur d'association
 			permissions.remove(idPerm);
-			
-			//logger.debug("Arrêt: retirerPermission");			
+			logger.debug("Arrêt: retirerPermission");			
 			return true;
 		}
-		
 		//Sinon
-		//logger.debug("Arrêt: retirerPermission");
+		logger.debug("Arrêt: retirerPermission");
 		return false;
 	}
 	
@@ -128,7 +134,7 @@ public class Role {
 	 * Retourne la liste des permissions
 	 * @return Hashtable
 	 */
-	public Hashtable getPermissions() {
+	public /*pure*/ Hashtable getPermissions() {
 		return permissions;
 	}
 	
@@ -136,7 +142,7 @@ public class Role {
 	 * Retourne l'ID
 	 * @return String
 	 */
-	public String getId() {
+	public /*pure*/ String getId() {
 		return id;
 	}
 	
@@ -147,7 +153,7 @@ public class Role {
 	 * Définit les permssions pour le rôle
 	 */
 	public void setPermissions() {
-		//logger.info("Role.setPermissions()");
+		logger.debug("Démarrage: setPermissions");
 		
 		//On crée un vecteur pour contenir les objets permissions instanciés
 		Hashtable perms = new Hashtable();
@@ -157,9 +163,8 @@ public class Role {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Role.setPermissions() : "+resultats.size()+" permission(s) trouvée(s)");
-		//logger.info("Role.setPermissions() : "+resultats.size()+" permission(s) trouvée(s)");
-		
+		logger.info("Role.setPermissions() : "+resultats.size()+" permission(s) trouvée(s)");
+			
 		// Pour chaque permission, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
@@ -168,5 +173,6 @@ public class Role {
 		}
 		
 		this.permissions=perms;
+		logger.debug("Arrêt: setPermissions");
 	}
 }
