@@ -14,6 +14,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.naming.NamingException;
 
+import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
 
@@ -21,6 +22,10 @@ import org.apache.xmlrpc.XmlRpcClient;
  * Classe contenant la logique principale du serveur principal
  */
 public class Systeme {
+	/**
+	 *  Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Systeme.class);
 
 // ATTRIBUTS DU SYSTEME
 //************************************************************
@@ -136,10 +141,10 @@ public class Systeme {
 		
 		String urljdbc = "jdbc:"+typejdbc+"://"+ipjdbc+":"+portjdbc+"/"+baseNamejdbc;
 		
-		System.err.println("BD Driver: "+driverjdbc);
-		System.err.println("BD URL: "+urljdbc);
-		System.err.println("BD Login: "+loginjdbc);
-		System.err.println("BD Pwd: "+pwdjdbc);
+		logger.info("BD Driver: "+driverjdbc);
+		logger.info("BD URL: "+urljdbc);
+		logger.info("BD Login: "+loginjdbc);
+		logger.info("BD Pwd: "+pwdjdbc);
 		
 		base = Jdbc.getInstance();
 		base.openDB(driverjdbc, urljdbc, loginjdbc, pwdjdbc);
@@ -156,10 +161,10 @@ public class Systeme {
 		
 		String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
 		
-		System.err.println("LDAP Driver: " + driverldap);
-		System.err.println("LDAP URL: " + urlldap);
-		System.err.println("LDAP Login: " + loginldap);
-		System.err.println("LDAP Pwd: " + pwdldap);
+		logger.info("LDAP Driver: " + driverldap);
+		logger.info("LDAP URL: " + urlldap);
+		logger.info("LDAP Login: " + loginldap);
+		logger.info("LDAP Pwd: " + pwdldap);
 		
 		//ldap = Ldap.getInstance();
 		//ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, role, baseNameldap);
@@ -169,9 +174,9 @@ public class Systeme {
 		this.port = prefs.node("smtp").get("port", null);
 		this.from = prefs.node("smtp").get("from", null);
 		
-		System.err.println("Adresse du serveur SMTP : " + host);
-		System.err.println("Port du serveur SMTP : " + port);
-		System.err.println("Mail envoyeur depuis le serveur SMTP : " + from);
+		logger.info("Adresse du serveur SMTP : " + host);
+		logger.info("Port du serveur SMTP : " + port);
+		logger.info("Mail envoyeur depuis le serveur SMTP : " + from);
 		
 		//On initialise les listes de canaux, programmes, documents
 		/*this.canaux = */CanalFactory.getAll();
@@ -197,7 +202,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String testConnectXML(String ip) {
-		System.out.println("Test de connexion envoyé par client XML "+ip);
+		logger.info("Test de connexion envoyé par client XML "+ip);
 		return Boolean.toString(true);
 	}
 	
@@ -229,7 +234,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public String connexion(String loginldap, String pwd, String ipClient) throws NamingException {
 		
-		System.out.println("Connexion de l'utilisateur "+ loginldap);
+		logger.info("Connexion de l'utilisateur "+ loginldap);
 		
 		//On vérifie que l'utilisateur n'est pas déjà connecté
 		if (!utilisateurs.containsKey(loginldap)) {
@@ -247,10 +252,10 @@ public class Systeme {
 				
 			String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
 				
-			System.err.println("LDAP Driver: " + driverldap);
-			System.err.println("LDAP URL: " + urlldap);
-			System.err.println("LDAP Login: " + loginldap);
-			System.err.println("LDAP Pwd: " + pwd);
+			logger.info("LDAP Driver: " + driverldap);
+			logger.info("LDAP URL: " + urlldap);
+			logger.info("LDAP Login: " + loginldap);
+			logger.info("LDAP Pwd: " + pwd);
 				
 			ldap = Ldap.getInstance();
 			ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwd, baseNameldap);
@@ -268,18 +273,18 @@ public class Systeme {
 				PingTask task = new PingTask(loginldap, ipClient, portXML, this);
 				timer.scheduleAtFixedRate(task, 1000, 60000);
 				
-				System.out.println("Utilisateur "+loginldap+" connecté");
+				logger.info("Utilisateur "+loginldap+" connecté");
 				return Boolean.toString(true);
 			} else {
 			
 				//Sinon, connexion refusée
-				System.out.println("Utilisateur "+loginldap+" non connecté");
+				logger.info("Utilisateur "+loginldap+" non connecté");
 				return Boolean.toString(false);
 			}
 		} else {
 		
 			//Sinon, connexion refusée
-			System.out.println("Utilisateur "+loginldap+" déjà connecté");
+			logger.info("Utilisateur "+loginldap+" déjà connecté");
 			return Boolean.toString(false);
 		
 		}
@@ -292,7 +297,7 @@ public class Systeme {
 	 */
 	public String deconnexion(String login) {
 		
-		System.out.println("Deconnexion de l'utilisateur "+login);
+		logger.info("Deconnexion de l'utilisateur "+login);
 		
 		//S'il y a des utilisateurs connectés
 		if (utilisateurs.size()>0) {
@@ -309,13 +314,13 @@ public class Systeme {
 				//On le supprime de la liste des utilisateurs connectés au système
 				utilisateurs.remove(login);
 				
-				System.out.println("Utilisateur "+login+" deconnecté");
+				logger.info("Utilisateur "+login+" deconnecté");
 				return Boolean.toString(true);
 			}
-			System.out.println("Utilisateur "+login+" introuvable");
+			logger.info("Utilisateur "+login+" introuvable");
 			return Boolean.toString(false);
 		}
-		System.out.println("Aucun utilisateur n'est connecté");
+		logger.info("Aucun utilisateur n'est connecté");
 		return Boolean.toString(false);
 	}
 
@@ -350,7 +355,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public String inscription(String login, String log, String pass, String role, String email, String nom, String prenom, String pays) throws NamingException, AddressException, MessagingException {
 		
-		System.out.println("Inscription de l'utilisateur "+log);
+		logger.info("Inscription de l'utilisateur "+log);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "inscriptionUtilisateur")) {
@@ -366,22 +371,22 @@ public class Systeme {
 					//On l'ajoute à la liste des utilisateurs du système
 					utilisateurs.put(u.getLogin(), u);
 					
-					System.out.println("Utilisateur '"+log+"' créé");
+					logger.info("Utilisateur '"+log+"' créé");
 					new EnvoiMail(host, port, from, log, nom, prenom, email, pass, pays);
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, création a échoué
-				System.out.println("Utilisateur '"+log+"' non créé");
+				logger.info("Utilisateur '"+log+"' non créé");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Utilisateur '"+log+"' déjà existant. Inscription annulée");
+			logger.info("Utilisateur '"+log+"' déjà existant. Inscription annulée");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Inscription annulée");
+		logger.info("Permission non accordée. Inscription annulée");
 		return Boolean.toString(false);
 	}
 
@@ -392,7 +397,7 @@ public class Systeme {
 	 */
 	public String supprimerUtilisateur(String Login) throws NamingException {
 		
-		System.out.println("Suppression de l'utilisateur "+Login);
+		logger.info("Suppression de l'utilisateur "+Login);
 		
 		//Vérification de l'existance du login à supprimer et suppression 
 		if (Utilisateur.verifierLogin(Login)) {
@@ -413,7 +418,7 @@ public class Systeme {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector rechercherUtilisateur(String login) throws NamingException {
-		System.out.println("Recherche des attributs de l'utilisateur : " + login);
+		logger.info("Recherche des attributs de l'utilisateur : " + login);
 
 		//On vérifie que l'utilisateur a la permission
 			if (Utilisateur.verifierLogin(login)) {
@@ -433,7 +438,7 @@ public class Systeme {
 				return vUtilisateur;
 			} else {
 				// Sinon, opération refusée
-				System.out.println("Permission non accordée. Recherche non effectuées");
+				logger.info("Permission non accordée. Recherche non effectuées");
 				return null;
 			}
 	}
@@ -489,11 +494,11 @@ public class Systeme {
 			
 			//On modifie les attributs
 			u.modifier(login, role, newlogin, pwd, nom, prenom, mail, pays);
-			System.out.println("Utilisateur '"+login+"' modifié");
+			logger.info("Utilisateur '"+login+"' modifié");
 			return Boolean.toString(true);
 		} else {
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Utilisateur non modifié");
+		logger.info("Permission non accordée. Utilisateur non modifié");
 		return Boolean.toString(false);
 		}
 	}
@@ -514,11 +519,11 @@ public class Systeme {
 
 			//On change le rôle
 			u.setRole(role);
-			System.out.println("Rôle de l'utilisateur '"+login+"' changé");
+			logger.info("Rôle de l'utilisateur '"+login+"' changé");
 			return Boolean.toString(true);
 		} else {
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Role non modifié");
+		logger.info("Permission non accordée. Role non modifié");
 		return Boolean.toString(false);
 		}
 			
@@ -546,17 +551,17 @@ public class Systeme {
 				//On attribue la permission
 				u.ajouterPermission(p);
 				
-				System.out.println("Permission ajoutée à l'utilisateur '"+login+"'");
+				logger.info("Permission ajoutée à l'utilisateur '"+login+"'");
 				return Boolean.toString(true);
 			}
 			else {
 				//Sinon, opération refusée
-				System.out.println("Permission non accordée. Permission non ajoutée");
+				logger.info("Permission non accordée. Permission non ajoutée");
 				return Boolean.toString(false);
 			}
 		} else {
 			// Sinon, opération refusée
-			System.out.println("Permission non accordée. Permission non ajoutée");
+			logger.info("Permission non accordée. Permission non ajoutée");
 			return Boolean.toString(false);
 		}
 			
@@ -582,16 +587,16 @@ public class Systeme {
 				//On retire la permission
 				u.retirerPermission(permission);
 				
-				System.out.println("Permission retirée à l'utilisateur '"+login+"'");
+				logger.info("Permission retirée à l'utilisateur '"+login+"'");
 				return Boolean.toString(true);
 			} else {
 				// Sinon, opération refusée
-				System.out.println("Permission non accordée. Permission non retirée");
+				logger.info("Permission non accordée. Permission non retirée");
 				return Boolean.toString(false);
 			} 
 		}else {
 			// Sinon, opération refusée
-			System.out.println("Permission non accordée. Permission non retirée");
+			logger.info("Permission non accordée. Permission non retirée");
 			return Boolean.toString(false);
 		}
 			
@@ -630,7 +635,7 @@ public class Systeme {
 	public String creerDocument(String login, String titre, String duree, String jour, String mois, String annee,
 			String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur)throws NumberFormatException, SQLException, IOException, InterruptedException {
 
-		System.out.println("Création du document "+titre);
+		logger.info("Création du document "+titre);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "creerDocument")) {
@@ -654,7 +659,7 @@ public class Systeme {
 					String fichierInit = d.getFichier();
 					//Commande permettant la conversion
 					String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + " " + fichierInit;
-					System.err.println(commande);
+					logger.error(commande);
 					//Execution de la conversion
 					@SuppressWarnings("unused")
 					Process proc = Runtime.getRuntime().exec(commande);
@@ -667,21 +672,21 @@ public class Systeme {
 					File f = new File(fichierInit);
 					f.delete(); 
 					
-					System.out.println("Document '"+titre+"' créé");
+					logger.info("Document '"+titre+"' créé");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, création a échoué
-				System.out.println("Document '"+titre+"' non créé");
+				logger.info("Document '"+titre+"' non créé");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Document '"+titre+"' non créé");
+			logger.info("Document '"+titre+"' non créé");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Document non créé");
+		logger.info("Permission non accordée. Document non créé");
 		return Boolean.toString(false);
 	}
 	
@@ -693,7 +698,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector listerDocuments(String login) {
 
-		System.out.println("Liste des documents disponibles");
+		logger.info("Liste des documents disponibles");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerDocuments")) {
@@ -713,7 +718,7 @@ public class Systeme {
 			return vDocuments;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Documents non listés");
+		logger.info("Permission non accordée. Documents non listés");
 		return null;
 	}
 	
@@ -738,7 +743,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector rechercherDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur) {
 
-		System.out.println("Recherche d'un document");
+		logger.info("Recherche d'un document");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "rechercherDocument")) {
@@ -771,7 +776,7 @@ public class Systeme {
 			return vDocuments;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Recherche non effectuées");
+		logger.info("Permission non accordée. Recherche non effectuées");
 		return null;
 	}
 	
@@ -782,7 +787,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String supprimerDocument(String login, String id) {
-		System.out.println("Suppression du document "+id);
+		logger.info("Suppression du document "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "supprimerDocument")) {
@@ -801,21 +806,21 @@ public class Systeme {
 					File f = new File(d.getFichier());
 					f.delete(); 
 					
-					System.out.println("Document '"+id+"' supprimé");
+					logger.info("Document '"+id+"' supprimé");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, suppression échouée
-				System.out.println("Document '"+id+"' non supprimé");
+				logger.info("Document '"+id+"' non supprimé");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, document introuvable
-			System.out.println("Document '"+id+"' introuvable");
+			logger.info("Document '"+id+"' introuvable");
 			return Boolean.toString(false);
 		}
 		// Sinon, suppression refusée
-		System.out.println("Permission non accordée. Document non supprimé");
+		logger.info("Permission non accordée. Document non supprimé");
 		return Boolean.toString(false);
 	}
 	
@@ -841,7 +846,7 @@ public class Systeme {
 	 */
 	public String modifierDocument(String login, String id, String titre, String duree, String jour, String mois, String annee, String source, String langue, String genre, String fichier, String artiste, String interprete, String compositeur) throws NumberFormatException, SQLException {
 
-		System.out.println("Modification du document "+id);
+		logger.info("Modification du document "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "modifierDocument")) {
@@ -855,21 +860,21 @@ public class Systeme {
 				//On modifie le document
 				if (d.modifier(titre, Integer.parseInt(duree), Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), source, langue, genre, fichier, artiste, interprete, compositeur)) {
 				
-					System.out.println("Document '"+id+"' modifié");
+					logger.info("Document '"+id+"' modifié");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, création a échoué
-				System.out.println("Document '"+id+"' non modifié");
+				logger.info("Document '"+id+"' non modifié");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Document '"+id+"' non trouvé");
+			logger.info("Document '"+id+"' non trouvé");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Document non modifié");
+		logger.info("Permission non accordée. Document non modifié");
 		return Boolean.toString(false);
 	}
 	
@@ -899,7 +904,7 @@ public class Systeme {
            
         } else {
             // Sinon, opération refusée
-            System.out.println("Permission non accordée. Mail non envoyé");
+            logger.info("Permission non accordée. Mail non envoyé");
             return Boolean.toString(false);
             }
     }
@@ -912,7 +917,7 @@ public class Systeme {
 	 */
 	public Dictionary infoDocument(String login, String id) {
 		
-		System.out.println("Infos sur un document");
+		logger.info("Infos sur un document");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "infoDocument")) {
@@ -923,12 +928,12 @@ public class Systeme {
 				return d.getAttributesDictionary();
 			}
 			else {
-				System.out.println("Document indisponible");
+				logger.info("Document indisponible");
 				return null;
 			}
 		}
 		// Sinon, refusé
-		System.out.println("Permission non accordée. Document non affiché");
+		logger.info("Permission non accordée. Document non affiché");
 		return null;
 	}
 
@@ -960,7 +965,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public String creerProgramme(String login, String titre, String thematique) throws SQLException {
 
-		System.out.println("Création du programme "+titre);
+		logger.info("Création du programme "+titre);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "creerProgramme")) {
@@ -975,16 +980,16 @@ public class Systeme {
 				//On l'ajoute à la liste des programmes du système
 				//programmes.put(p.getId(), p);
 				
-				System.out.println("Programme '"+titre+"' créé");
+				logger.info("Programme '"+titre+"' créé");
 				return Boolean.toString(true);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Programme '"+titre+"' non créé");
+			logger.info("Programme '"+titre+"' non créé");
 			return Boolean.toString(false);
 		}
 		//Sinon, opération refusée
-		System.out.println("Permission non accordée. Programme non créé");
+		logger.info("Permission non accordée. Programme non créé");
 		return Boolean.toString(false);
 	}
 	
@@ -997,7 +1002,7 @@ public class Systeme {
 	 * @throws SQLException 
 	 */
 	public String ajouterDocumentProgramme(String login, String idDoc, String idProg) throws SQLException {
-		System.out.println("Ajout du document "+idDoc+" au programme "+idProg);
+		logger.info("Ajout du document "+idDoc+" au programme "+idProg);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "ajouterDocumentProgramme")) {
@@ -1012,17 +1017,17 @@ public class Systeme {
 				//On ajoute le document au programme
 				p.ajouterDocument(d);
 				
-				System.out.println("Document "+idDoc+" ajouté au programme "+idProg);
+				logger.info("Document "+idDoc+" ajouté au programme "+idProg);
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le document "+idDoc+" n'a pas été ajouté au programme "+idProg);
+			logger.info("Le document "+idDoc+" n'a pas été ajouté au programme "+idProg);
 			return Boolean.toString(false);
 		}
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Le document non programmé");
+		logger.info("Permission non accordée. Le document non programmé");
 		return Boolean.toString(false);
 	}
 	
@@ -1035,7 +1040,7 @@ public class Systeme {
 	 * @throws SQLException 
 	 */
 	public String retirerDocumentProgramme(String login, String idProg, String calage) throws SQLException {
-		System.out.println("Retirer du programme "+idProg+ " le document calé à "+calage);
+		logger.info("Retirer du programme "+idProg+ " le document calé à "+calage);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "retirerDocumentProgramme")) {
@@ -1049,17 +1054,17 @@ public class Systeme {
 				//On ajoute le document au programme
 				p.retirerDocument(calage);
 				
-				System.out.println("Document retiré du programme "+idProg);
+				logger.info("Document retiré du programme "+idProg);
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le document n'a pas été retiré au programme "+idProg);
+			logger.info("Le document n'a pas été retiré au programme "+idProg);
 			return Boolean.toString(false);
 		}
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Le document non retiré");
+		logger.info("Permission non accordée. Le document non retiré");
 		return Boolean.toString(false);
 	}
 	
@@ -1071,7 +1076,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector listerProgrammes(String login) {
 
-		System.out.println("Liste des programmes disponibles");
+		logger.info("Liste des programmes disponibles");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerProgrammes")) {
@@ -1091,7 +1096,7 @@ public class Systeme {
 			return vProgrammes;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Programmes non listés");
+		logger.info("Permission non accordée. Programmes non listés");
 		return null;
 	}
 	
@@ -1106,7 +1111,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector rechercherProgramme(String login, String id, String titre, String thematique) {
 
-		System.out.println("Recherche d'un programme");
+		logger.info("Recherche d'un programme");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "rechercherProgramme")) {
@@ -1132,7 +1137,7 @@ public class Systeme {
 			return vProgrammes;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Recherche non effectuées");
+		logger.info("Permission non accordée. Recherche non effectuées");
 		return null;
 	}
 
@@ -1143,7 +1148,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String supprimerProgramme(String login, String id) {
-		System.out.println("Suppression du programme "+id);
+		logger.info("Suppression du programme "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "supprimerProgramme")) {
@@ -1160,21 +1165,21 @@ public class Systeme {
 					//On le retire de la liste des programmes du système
 					//programmes.remove(id);
 					
-					System.out.println("Programme '"+id+"' supprimé");
+					logger.info("Programme '"+id+"' supprimé");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, suppression échouée
-				System.out.println("Programme '"+id+"' non supprimé");
+				logger.info("Programme '"+id+"' non supprimé");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, programme introuvable
-			System.out.println("Programme '"+id+"' introuvable");
+			logger.info("Programme '"+id+"' introuvable");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Programme non supprimé");
+		logger.info("Permission non accordée. Programme non supprimé");
 		return Boolean.toString(false);
 	}
 	
@@ -1188,7 +1193,7 @@ public class Systeme {
 	 */
 	public String modifierProgramme(String login, String id, String titre, String thematique) throws NumberFormatException, SQLException {
 
-		System.out.println("Modification du programme "+id);
+		logger.info("Modification du programme "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "modifierProgramme")) {
@@ -1202,21 +1207,21 @@ public class Systeme {
 				//On modifie le programme
 				if (p.modifier(titre, thematique)) {
 				
-					System.out.println("Programme '"+id+"' modifié");
+					logger.info("Programme '"+id+"' modifié");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, création a échoué
-				System.out.println("Programme '"+id+"' non modifié");
+				logger.info("Programme '"+id+"' non modifié");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Programme '"+id+"' non trouvé");
+			logger.info("Programme '"+id+"' non trouvé");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Programme non modifié");
+		logger.info("Permission non accordée. Programme non modifié");
 		return Boolean.toString(false);
 	}
 	
@@ -1228,7 +1233,7 @@ public class Systeme {
 	 */
 	public Dictionary infoProgramme(String login, String id) {
 		
-		System.out.println("Infos sur un programme");
+		logger.info("Infos sur un programme");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "infoProgramme")) {
@@ -1239,13 +1244,13 @@ public class Systeme {
 				return p.getAttributesDictionary();
 			}
 			else {
-				System.out.println("Programme indisponible");
+				logger.info("Programme indisponible");
 				return null;
 			}
 		}
 		
 		// Sinon, refusé
-		System.out.println("Permission non accordée. Programme non affiché");
+		logger.info("Permission non accordée. Programme non affiché");
 		return null;
 	}
 
@@ -1281,7 +1286,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public String creerCanal(String login, String nom, String utilMax) throws NumberFormatException, SQLException {
 
-		System.out.println("Création du canal "+nom);
+		logger.info("Création du canal "+nom);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "creerCanal")) {
@@ -1296,17 +1301,17 @@ public class Systeme {
 				//On l'ajoute à la liste des canaux du système
 				//canaux.put(c.getId(), c);
 				
-				System.out.println("Canal '"+nom+"' créé");
+				logger.info("Canal '"+nom+"' créé");
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Canal '"+nom+"' non créé");
+			logger.info("Canal '"+nom+"' non créé");
 			return Boolean.toString(false);
 		}
 		//Sinon, opération refusée
-		System.out.println("Permission non accordée. Canal non créé");
+		logger.info("Permission non accordée. Canal non créé");
 		return Boolean.toString(false);
 	}
 	
@@ -1325,7 +1330,7 @@ public class Systeme {
 	 */
 	public String planifierProgramme(String login, String idProg, String idCanal, String jour, String mois, String annee, String heure, String minute, String seconde) {
 
-		System.out.println("Planification du programme "+idProg+" sur le canal "+idCanal);
+		logger.info("Planification du programme "+idProg+" sur le canal "+idCanal);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "planifierProgramme")) {
@@ -1340,23 +1345,23 @@ public class Systeme {
 				//On planifie le programme
 				if (c.planifierProgramme(p, Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), Integer.parseInt(heure), Integer.parseInt(minute), Integer.parseInt(seconde))) {
 				
-					System.out.println("Programme "+idProg+" planifié sur le canal "+idCanal);
+					logger.info("Programme "+idProg+" planifié sur le canal "+idCanal);
 					return Boolean.toString(true);
 				}
 				else {
-					System.out.println("Programme "+idProg+" non planifié sur le canal "+idCanal);
+					logger.info("Programme "+idProg+" non planifié sur le canal "+idCanal);
 					return Boolean.toString(false);
 				}
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le programme "+idProg+" n'a pas été plnifié sur le canal "+idCanal);
+			logger.info("Le programme "+idProg+" n'a pas été plnifié sur le canal "+idCanal);
 			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Programme non planifié");
+		logger.info("Permission non accordée. Programme non planifié");
 		return Boolean.toString(false);
 	}
 	
@@ -1369,7 +1374,7 @@ public class Systeme {
 	 */
 	public String deplanifierProgramme(String login, String idCanal, String calage) {
 
-		System.out.println("Déplanification d'un programme sur le canal "+idCanal);
+		logger.info("Déplanification d'un programme sur le canal "+idCanal);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "deplanifierProgramme")) {
@@ -1383,23 +1388,23 @@ public class Systeme {
 				//On deplanifie le programme
 				if (c.annulerPlanification(Long.parseLong(calage))) {
 				
-					System.out.println("Programme déplanifié du canal "+idCanal);
+					logger.info("Programme déplanifié du canal "+idCanal);
 					return Boolean.toString(true);
 				}
 				else {
-					System.out.println("Programme non déplanifié du le canal "+idCanal);
+					logger.info("Programme non déplanifié du le canal "+idCanal);
 					return Boolean.toString(false);
 				}
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le programme n'a pas été déplanifié sur le canal "+idCanal);
+			logger.info("Le programme n'a pas été déplanifié sur le canal "+idCanal);
 			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Programme non déplanifié");
+		logger.info("Permission non accordée. Programme non déplanifié");
 		return Boolean.toString(false);
 	}
 	
@@ -1412,7 +1417,7 @@ public class Systeme {
 	 */
 	public String diffuserProgramme(String login, String idProg, String idCanal) {
 		
-		System.out.println("Diffusion du programme "+idProg+" sur le canal "+idCanal);
+		logger.info("Diffusion du programme "+idProg+" sur le canal "+idCanal);
 		
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "diffuserProgramme")) {
@@ -1428,18 +1433,18 @@ public class Systeme {
 				if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
 				c.diffuserProgramme(p);
 				
-				System.out.println("Programme "+idProg+" en diffusion sur le canal "+idCanal);
+				logger.info("Programme "+idProg+" en diffusion sur le canal "+idCanal);
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("La diffusion du programme "+idProg+" n'a pas été lancée sur le canal "+idCanal);
+			logger.info("La diffusion du programme "+idProg+" n'a pas été lancée sur le canal "+idCanal);
 			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Diffusion non lancée");
+		logger.info("Permission non accordée. Diffusion non lancée");
 		return Boolean.toString(false);
 	}
 	
@@ -1450,7 +1455,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String ecouterCanal(String login, String idCanal) {
-		System.out.println("Ecoute du canal "+idCanal);
+		logger.info("Ecoute du canal "+idCanal);
 		
 		//	On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "ecouterCanal")) {
@@ -1460,19 +1465,19 @@ public class Systeme {
 				
 				//On récupère l'objet canal
 				Canal c = (Canal)CanalFactory.getById(idCanal);
-				System.out.println("Construction de l'url du canal "+idCanal);
+				logger.info("Construction de l'url du canal "+idCanal);
 				String url = c.getUrlStreaming();
-				System.out.println("URL: "+url);
+				logger.info("URL: "+url);
 				return url;
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Canal "+idCanal+" inconnu");
+			logger.info("Canal "+idCanal+" inconnu");
 			return null;
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée.");
+		logger.info("Permission non accordée.");
 		return null;
 	}
 	
@@ -1483,7 +1488,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String startCanal(String login, String idCanal) {
-		System.out.println("Ecoute du canal "+idCanal);
+		logger.info("Ecoute du canal "+idCanal);
 		
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "startCanal")) {
@@ -1499,12 +1504,12 @@ public class Systeme {
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Canal "+idCanal+" inconnu");
+			logger.info("Canal "+idCanal+" inconnu");
 			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Canal non démarré");
+		logger.info("Permission non accordée. Canal non démarré");
 		return Boolean.toString(false);
 			
 	}
@@ -1516,7 +1521,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String stopCanal(String login, String idCanal) {
-		System.out.println("Stopper le canal "+idCanal);
+		logger.info("Stopper le canal "+idCanal);
 		
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "stopCanal")) {
@@ -1531,12 +1536,12 @@ public class Systeme {
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Canal "+idCanal+" inconnu");
+			logger.info("Canal "+idCanal+" inconnu");
 			return Boolean.toString(false);
 		}
 		
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Canal non arrété");
+		logger.info("Permission non accordée. Canal non arrété");
 		return Boolean.toString(false);
 	}
 	
@@ -1548,7 +1553,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector listerCanaux(String login) {
 
-		System.out.println("Liste des canaux disponibles");
+		logger.info("Liste des canaux disponibles");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerCanaux")) {
@@ -1568,7 +1573,7 @@ public class Systeme {
 			return vCanaux;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Canaux non listés");
+		logger.info("Permission non accordée. Canaux non listés");
 		return null;
 	}
 	
@@ -1583,7 +1588,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector rechercherCanal(String login, String id, String nom, String utilMax) {
 
-		System.out.println("Recherche d'un canal");
+		logger.info("Recherche d'un canal");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "rechercherCanal")) {
@@ -1608,7 +1613,7 @@ public class Systeme {
 			return vCanaux;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Recherche non effectuées");
+		logger.info("Permission non accordée. Recherche non effectuées");
 		return null;
 	}
 	
@@ -1619,7 +1624,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String supprimerCanal(String login, String id) {
-		System.out.println("Suppression du canal "+id);
+		logger.info("Suppression du canal "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "supprimerCanal")) {
@@ -1636,21 +1641,21 @@ public class Systeme {
 					//On le retire de la liste des canaux du système
 					//canaux.remove(id);
 					
-					System.out.println("Canal '"+id+"' supprimé");
+					logger.info("Canal '"+id+"' supprimé");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, suppression échouée
-				System.out.println("Canal '"+id+"' non supprimé");
+				logger.info("Canal '"+id+"' non supprimé");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, canal introuvable
-			System.out.println("Canal '"+id+"' introuvable");
+			logger.info("Canal '"+id+"' introuvable");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Canal non supprimé");
+		logger.info("Permission non accordée. Canal non supprimé");
 		return Boolean.toString(false);
 	}
 	
@@ -1664,7 +1669,7 @@ public class Systeme {
 	 */
 	public String modifierCanal(String login, String id, String nom, String utilMax) throws NumberFormatException, SQLException {
 
-		System.out.println("Modification du canal "+id);
+		logger.info("Modification du canal "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "modifierCanal")) {
@@ -1678,21 +1683,21 @@ public class Systeme {
 				//On modifie le canal
 				if (c.modifier(nom, Integer.valueOf(utilMax))) {
 				
-					System.out.println("Canal '"+id+"' modifié");
+					logger.info("Canal '"+id+"' modifié");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, création a échoué
-				System.out.println("Canal '"+id+"' non modifié");
+				logger.info("Canal '"+id+"' non modifié");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Canal '"+id+"' non trouvé");
+			logger.info("Canal '"+id+"' non trouvé");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Canal non modifié");
+		logger.info("Permission non accordée. Canal non modifié");
 		return Boolean.toString(false);
 	}
 	
@@ -1704,7 +1709,7 @@ public class Systeme {
 	 */
 	public Dictionary infoCanal(String login, String id) {
 		
-		System.out.println("Infos sur un canal");
+		logger.info("Infos sur un canal");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "infoCanal")) {
@@ -1715,12 +1720,12 @@ public class Systeme {
 				return c.getAttributesDictionary();
 			}
 			else {
-				System.out.println("Canal indisponible");
+				logger.info("Canal indisponible");
 				return null;
 			}
 		}
 		// Sinon, refusé
-		System.out.println("Permission non accordée. Canal non affiché");
+		logger.info("Permission non accordée. Canal non affiché");
 		return null;
 	}
 	
@@ -1862,7 +1867,7 @@ public class Systeme {
 			String anneeSignature, String jourExpiration, String moisExpiration, String anneeExpiration,
 			String signataire, String modeReglement, String type) throws SQLException {
 
-		System.out.println("Création du contrat");
+		logger.info("Création du contrat");
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "creerContrat")) {
@@ -1879,17 +1884,17 @@ public class Systeme {
 				//On l'ajoute à la liste des contrats du système
 				//contrats.put(c.getId(), c);
 				
-				System.out.println("Contrat créé");
+				logger.info("Contrat créé");
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Contrat non créé");
+			logger.info("Contrat non créé");
 			return Boolean.toString(false);
 		}
 		//Sinon, opération refusée
-		System.out.println("Permission non accordée. Contrat non créé");
+		logger.info("Permission non accordée. Contrat non créé");
 		return Boolean.toString(false);
 	}
 	
@@ -1901,7 +1906,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector listerContrats(String login) {
 
-		System.out.println("Liste des contrats disponibles");
+		logger.info("Liste des contrats disponibles");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerContrats")) {
@@ -1921,7 +1926,7 @@ public class Systeme {
 			return vContrats;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Contrats non listés");
+		logger.info("Permission non accordée. Contrats non listés");
 		return null;
 	}
 	
@@ -1933,7 +1938,7 @@ public class Systeme {
 	 */
 	public Dictionary infoContrat(String login, String id) {
 		
-		System.out.println("Infos sur un contrat");
+		logger.info("Infos sur un contrat");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "infoContrat")) {
@@ -1944,12 +1949,12 @@ public class Systeme {
 				return c.getAttributesDictionary();
 			}
 			else {
-				System.out.println("Contrat indisponible");
+				logger.info("Contrat indisponible");
 				return null;
 			}
 		}
 		// Sinon, refusé
-		System.out.println("Permission non accordée. Contrat non affiché");
+		logger.info("Permission non accordée. Contrat non affiché");
 		return null;
 	}
 	
@@ -1960,7 +1965,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String supprimerContrat(String login, String id) {
-		System.out.println("Suppression du contrat "+id);
+		logger.info("Suppression du contrat "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "supprimerContrat")) {
@@ -1977,21 +1982,21 @@ public class Systeme {
 					//On le retire de la liste des canaux du système
 					//contrats.remove(id);
 					
-					System.out.println("Contrat '"+id+"' supprimé");
+					logger.info("Contrat '"+id+"' supprimé");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, suppression échouée
-				System.out.println("Contrat '"+id+"' non supprimé");
+				logger.info("Contrat '"+id+"' non supprimé");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, canal introuvable
-			System.out.println("Contrat '"+id+"' introuvable");
+			logger.info("Contrat '"+id+"' introuvable");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Contrat non supprimé");
+		logger.info("Permission non accordée. Contrat non supprimé");
 		return Boolean.toString(false);
 	}
 	
@@ -2014,7 +2019,7 @@ public class Systeme {
 	public String modifierContrat(String login, String id, String titre, String jourSignature, String moisSignature, String anneeSignature,
 			String jourExpiration, String moisExpiration, String anneeExpiration, String signataire, String modeReglement, String type) throws NumberFormatException, SQLException {
 
-		System.out.println("Modification du contrat "+id);
+		logger.info("Modification du contrat "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "modifierContrat")) {
@@ -2030,21 +2035,21 @@ public class Systeme {
 						Integer.parseInt(jourExpiration), Integer.parseInt(moisExpiration), Integer.parseInt(anneeExpiration),
 						signataire, modeReglement, type)) {
 				
-					System.out.println("Contrat '"+id+"' modifié");
+					logger.info("Contrat '"+id+"' modifié");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, création a échoué
-				System.out.println("Contrat '"+id+"' non modifié");
+				logger.info("Contrat '"+id+"' non modifié");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Contrat '"+id+"' non trouvé");
+			logger.info("Contrat '"+id+"' non trouvé");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Contrat non modifié");
+		logger.info("Permission non accordée. Contrat non modifié");
 		return Boolean.toString(false);
 	}
 	
@@ -2057,7 +2062,7 @@ public class Systeme {
 	 * @throws SQLException 
 	 */
 	public String ajouterDocumentContrat(String login, String idContrat, String idDoc) throws SQLException {
-		System.out.println("Ajout du document "+idDoc+" au contrat "+idContrat);
+		logger.info("Ajout du document "+idDoc+" au contrat "+idContrat);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "ajouterDocumentContrat")) {
@@ -2072,17 +2077,17 @@ public class Systeme {
 				//On ajoute le contractant au contrat
 				c.ajouterDocument(d);
 				
-				System.out.println("Document "+idDoc+" ajouté au contrat "+idContrat);
+				logger.info("Document "+idDoc+" ajouté au contrat "+idContrat);
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le document "+idDoc+" n'a pas été ajouté au contrat "+idContrat);
+			logger.info("Le document "+idDoc+" n'a pas été ajouté au contrat "+idContrat);
 			return Boolean.toString(false);
 		}
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Document non ajouté");
+		logger.info("Permission non accordée. Document non ajouté");
 		return Boolean.toString(false);
 	}
 	
@@ -2095,7 +2100,7 @@ public class Systeme {
 	 * @throws SQLException 
 	 */
 	public String retirerDocumentContrat(String login, String idContrat, String idDoc) throws SQLException {
-		System.out.println("Retirer le document "+idDoc+ " du contrat "+idContrat);
+		logger.info("Retirer le document "+idDoc+ " du contrat "+idContrat);
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "retirerDocumentContrat")) {
@@ -2109,17 +2114,17 @@ public class Systeme {
 				//On retire le document du contrat
 				c.retirerDocument(idDoc);
 				
-				System.out.println("Document retiré du contrat "+idContrat);
+				logger.info("Document retiré du contrat "+idContrat);
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, ajout refusé
-			System.out.println("Le document n'a pas été retiré du contrat "+idContrat);
+			logger.info("Le document n'a pas été retiré du contrat "+idContrat);
 			return Boolean.toString(false);
 		}
 		//Sinon, ajout refusé
-		System.out.println("Permission non accordée. Document non retiré");
+		logger.info("Permission non accordée. Document non retiré");
 		return Boolean.toString(false);
 	}
 	
@@ -2143,7 +2148,7 @@ public class Systeme {
 	public String creerContractant(String login, String nom, String adresse, String codePostal,
 			String ville, String telephone, String fax, String mail, String type) throws SQLException {
 
-		System.out.println("Création du contractant");
+		logger.info("Création du contractant");
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "creerContractant")) {
@@ -2158,17 +2163,17 @@ public class Systeme {
 				//On l'ajoute à la liste des contractants du système
 				//contractants.put(c.getId(), c);
 				
-				System.out.println("Contractant créé");
+				logger.info("Contractant créé");
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Contractant non créé");
+			logger.info("Contractant non créé");
 			return Boolean.toString(false);
 		}
 		//Sinon, opération refusée
-		System.out.println("Permission non accordée. Contractant non créé");
+		logger.info("Permission non accordée. Contractant non créé");
 		return Boolean.toString(false);
 	}	
 	
@@ -2180,7 +2185,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector listerContractants(String login) {
 
-		System.out.println("Liste des contractants disponibles");
+		logger.info("Liste des contractants disponibles");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerContractants")) {
@@ -2199,7 +2204,7 @@ public class Systeme {
 			return vContractants;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Contractants non listés");
+		logger.info("Permission non accordée. Contractants non listés");
 		return null;
 	}
 	
@@ -2211,7 +2216,7 @@ public class Systeme {
 	 */
 	public Dictionary infoContractant(String login, String id) {
 		
-		System.out.println("Infos sur un contractant");
+		logger.info("Infos sur un contractant");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "infoContractant")) {
@@ -2222,12 +2227,12 @@ public class Systeme {
 				return c.getAttributesDictionary();
 			}
 			else {
-				System.out.println("Contractant indisponible");
+				logger.info("Contractant indisponible");
 				return null;
 			}
 		}
 		// Sinon, refusé
-		System.out.println("Permission non accordée. Contractant non affiché");
+		logger.info("Permission non accordée. Contractant non affiché");
 		return null;
 	}
 	
@@ -2238,7 +2243,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String supprimerContractant(String login, String id) {
-		System.out.println("Suppression du contractant "+id);
+		logger.info("Suppression du contractant "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "supprimerContractant")) {
@@ -2255,21 +2260,21 @@ public class Systeme {
 					//On le retire de la liste des canaux du système
 					//contractants.remove(id);
 					
-					System.out.println("Contractant '"+id+"' supprimé");
+					logger.info("Contractant '"+id+"' supprimé");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, suppression échouée
-				System.out.println("Contractant '"+id+"' non supprimé");
+				logger.info("Contractant '"+id+"' non supprimé");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, canal introuvable
-			System.out.println("Contractant '"+id+"' introuvable");
+			logger.info("Contractant '"+id+"' introuvable");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Contractant non supprimé");
+		logger.info("Permission non accordée. Contractant non supprimé");
 		return Boolean.toString(false);
 	}
 	
@@ -2289,7 +2294,7 @@ public class Systeme {
 	public String modifierContractant(String login, String id, String nom, String adresse, String codePostal,
 			String ville, String telephone, String fax, String mail, String type) throws NumberFormatException, SQLException {
 
-		System.out.println("Modification du contractant "+id);
+		logger.info("Modification du contractant "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "modifierContractant")) {
@@ -2303,21 +2308,21 @@ public class Systeme {
 				//On modifie le canal
 				if (c.modifier(nom, adresse, codePostal, ville, telephone, fax, mail, type)) {
 				
-					System.out.println("Contractant '"+id+"' modifié");
+					logger.info("Contractant '"+id+"' modifié");
 					return Boolean.toString(true);
 				}
 				
 				//Sinon, création a échoué
-				System.out.println("Contractant '"+id+"' non modifié");
+				logger.info("Contractant '"+id+"' non modifié");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Contractant '"+id+"' non trouvé");
+			logger.info("Contractant '"+id+"' non trouvé");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Contractant non modifié");
+		logger.info("Permission non accordée. Contractant non modifié");
 		return Boolean.toString(false);
 	}
 	
@@ -2334,7 +2339,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public String creerPermission(String login, String id, String libelle) throws SQLException {
 
-		System.out.println("Création de la permission");
+		logger.info("Création de la permission");
 		
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "creerPermission")) {
@@ -2346,17 +2351,17 @@ public class Systeme {
 				@SuppressWarnings("unused")
 				Permission p = PermissionFactory.create(id, libelle);
 					
-				System.out.println("Permission créée");
+				logger.info("Permission créée");
 				return Boolean.toString(true);
 				
 			}
 			
 			//Sinon, opération refusée
-			System.out.println("Permission non créée");
+			logger.info("Permission non créée");
 			return Boolean.toString(false);
 		}
 		//Sinon, opération refusée
-		System.out.println("Permission non accordée. Permission non créée");
+		logger.info("Permission non accordée. Permission non créée");
 		return Boolean.toString(false);
 	}	
 	
@@ -2368,7 +2373,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector listerPermissions(String login) {
 
-		System.out.println("Liste des permissions disponibles");
+		logger.info("Liste des permissions disponibles");
 		
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerPermissions")) {
@@ -2387,7 +2392,7 @@ public class Systeme {
 			return vPermissions;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Permissions non listées");
+		logger.info("Permission non accordée. Permissions non listées");
 		return null;
 	}
 		
@@ -2399,7 +2404,7 @@ public class Systeme {
 	 */
 	public Dictionary infoPermission(String login, String id) {
 			
-		System.out.println("Infos sur une permission");
+		logger.info("Infos sur une permission");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "infoPermission")) {
@@ -2410,12 +2415,12 @@ public class Systeme {
 				return p.getAttributesDictionary();
 			}
 			else {
-				System.out.println("Permission indisponible");
+				logger.info("Permission indisponible");
 				return null;
 			}
 		}
 		// Sinon, refusé
-		System.out.println("Permission non accordée. Permission non affichée");
+		logger.info("Permission non accordée. Permission non affichée");
 		return null;
 	}
 		
@@ -2426,7 +2431,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String supprimerPermission(String login, String id) {
-		System.out.println("Suppression de la permission "+id);
+		logger.info("Suppression de la permission "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "supprimerPermission")) {
@@ -2440,21 +2445,21 @@ public class Systeme {
 				//Si la Permission a bien été supprimé
 				if (p.supprimer()) {
 					
-					System.out.println("Permission '"+id+"' supprimée");
+					logger.info("Permission '"+id+"' supprimée");
 					return Boolean.toString(true);
 				}
 					
 				//Sinon, suppression échouée
-				System.out.println("Permission '"+id+"' non supprimée");
+				logger.info("Permission '"+id+"' non supprimée");
 				return Boolean.toString(false);
 			}
 			
 			//Sinon, Permission introuvable
-			System.out.println("Permission '"+id+"' introuvable");
+			logger.info("Permission '"+id+"' introuvable");
 			return Boolean.toString(false);
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Permission non supprimée");
+		logger.info("Permission non accordée. Permission non supprimée");
 		return Boolean.toString(false);
 	}
 		
@@ -2467,7 +2472,7 @@ public class Systeme {
 	 */
 	public String modifierPermission(String login, String id, String libelle) throws SQLException {
 
-		System.out.println("Modification de la permission "+id);
+		logger.info("Modification de la permission "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "modifierPermission")) {
@@ -2481,21 +2486,21 @@ public class Systeme {
 				//On modifie la Permission
 				if (p.setLibelle(libelle)) {
 					
-					System.out.println("Permission '"+id+"' modifiée");
+					logger.info("Permission '"+id+"' modifiée");
 					return Boolean.toString(true);
 				}
 					
 				//Sinon, modification a échoué
-				System.out.println("Permission '"+id+"' non modifiée");
+				logger.info("Permission '"+id+"' non modifiée");
 				return Boolean.toString(false);
 			}
 				
 			//Sinon, modification refusée
-			System.out.println("Permission '"+id+"' non trouvée");
+			logger.info("Permission '"+id+"' non trouvée");
 			return Boolean.toString(false);
 		}
 		// Sinon, modification refusée
-		System.out.println("Permission non accordée. Permission non modifiée");
+		logger.info("Permission non accordée. Permission non modifiée");
 		return Boolean.toString(false);
 	}
 		
@@ -2511,7 +2516,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public String creerRole(String login, String id) throws SQLException {
 
-		System.out.println("Création du rôle");
+		logger.info("Création du rôle");
 					
 		// On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "creerRole")) {
@@ -2523,17 +2528,17 @@ public class Systeme {
 				@SuppressWarnings("unused")
 				Role r = RoleFactory.create(id);
 						
-				System.out.println("Rôle créé");
+				logger.info("Rôle créé");
 				return Boolean.toString(true);
 						
 			}
 						
 			//Sinon, opération refusée
-			System.out.println("Rôle non créé");
+			logger.info("Rôle non créé");
 			return Boolean.toString(false);
 		}
 		//Sinon, opération refusée
-		System.out.println("Permission non accordée. Rôle non créé");
+		logger.info("Permission non accordée. Rôle non créé");
 		return Boolean.toString(false);
 	}	
 				
@@ -2545,7 +2550,7 @@ public class Systeme {
 	@SuppressWarnings("unchecked")
 	public Vector listerRoles(String login) {
 
-		System.out.println("Liste des rôles disponibles");
+		logger.info("Liste des rôles disponibles");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerRoles")) {
@@ -2564,7 +2569,7 @@ public class Systeme {
 			return vRoles;
 		}
 		// Sinon, opération refusée
-		System.out.println("Permission non accordée. Rôles non listés");
+		logger.info("Permission non accordée. Rôles non listés");
 		return null;
 	}
 				
@@ -2576,7 +2581,7 @@ public class Systeme {
 	 */
 	public Dictionary infoRole(String login, String id) {
 					
-		System.out.println("Infos sur un rôle");
+		logger.info("Infos sur un rôle");
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "infoRole")) {
@@ -2587,12 +2592,12 @@ public class Systeme {
 				return r.getAttributesDictionary();
 			}
 			else {
-				System.out.println("Rôle indisponible");
+				logger.info("Rôle indisponible");
 				return null;
 			}
 		}
 		// Sinon, refusé
-		System.out.println("Permission non accordée. Rôle non affiché");
+		logger.info("Permission non accordée. Rôle non affiché");
 		return null;
 	}
 				
@@ -2603,7 +2608,7 @@ public class Systeme {
 	 * @return String
 	 */
 	public String supprimerRole(String login, String id) {
-		System.out.println("Suppression du rôle "+id);
+		logger.info("Suppression du rôle "+id);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "supprimerRole")) {
@@ -2617,21 +2622,21 @@ public class Systeme {
 				//Si le Role a bien été supprimé
 				if (r.supprimer()) {
 								
-					System.out.println("Rôle '"+id+"' supprimé");
+					logger.info("Rôle '"+id+"' supprimé");
 					return Boolean.toString(true);
 				}
 							
 				//Sinon, suppression échouée
-				System.out.println("Rôle '"+id+"' non supprimé");
+				logger.info("Rôle '"+id+"' non supprimé");
 				return Boolean.toString(false);
 			}
 						
 			//Sinon, Role introuvable
-			System.out.println("Rôle '"+id+"' introuvable");
+			logger.info("Rôle '"+id+"' introuvable");
 			return Boolean.toString(false);
 		}
 		// Sinon, suppression refusée
-		System.out.println("Permission non accordée. Role non supprimé");
+		logger.info("Permission non accordée. Role non supprimé");
 		return Boolean.toString(false);
 	}
 	
@@ -2658,17 +2663,17 @@ public class Systeme {
 				//On attribue la permission
 				r.ajouterPermission(p);
 				
-				System.out.println("Permission ajoutée au rôle '"+role+"'");
+				logger.info("Permission ajoutée au rôle '"+role+"'");
 				return Boolean.toString(true);
 			}
 			else {
 				//Sinon, opération refusée
-				System.out.println("Permission ou rôle introuvable. Permission non ajoutée");
+				logger.info("Permission ou rôle introuvable. Permission non ajoutée");
 				return Boolean.toString(false);
 			}
 		} else {
 			// Sinon, opération refusée
-			System.out.println("Permission non accordée. Permission non ajoutée");
+			logger.info("Permission non accordée. Permission non ajoutée");
 			return Boolean.toString(false);
 		}
 			
@@ -2694,16 +2699,16 @@ public class Systeme {
 				//On retire la permission
 				r.retirerPermission(permission);
 				
-				System.out.println("Permission retirée au role '"+role+"'");
+				logger.info("Permission retirée au role '"+role+"'");
 				return Boolean.toString(true);
 			} else {
 				// Sinon, opération refusée
-				System.out.println("Permission non accordée. Permission non retirée");
+				logger.info("Permission non accordée. Permission non retirée");
 				return Boolean.toString(false);
 			} 
 		}else {
 			// Sinon, opération refusée
-			System.out.println("Permission non accordée. Permission non retirée");
+			logger.info("Permission non accordée. Permission non retirée");
 			return Boolean.toString(false);
 		}
 			
@@ -2722,7 +2727,7 @@ class PingTask extends TimerTask {
 	private Systeme sys;
 	
 	public PingTask(String login, String ip, int port, Systeme sys) {
-		System.err.println("TIMER: Programmation de la tâche "+login+"@"+ip);
+		logger.error("TIMER: Programmation de la tâche "+login+"@"+ip);
 		this.login = login;
 		this.ip = ip;
 		this.port = port;
@@ -2731,15 +2736,15 @@ class PingTask extends TimerTask {
 			XmlRpc.setDriver("org.apache.xerces.parsers.SAXParser");
 			this.clientXML = new XmlRpcClient("http://" + ip + ":" + (port+1));
 		} catch (ClassNotFoundException e) {
-			System.out.println("ERREUR: Impossible de localiser le pilote Sax");
+			logger.info("ERREUR: Impossible de localiser le pilote Sax");
 		} catch (MalformedURLException e) {
-			System.out.println("ERREUR: URL non conforme au format du serveur XML-RPC");
+			logger.info("ERREUR: URL non conforme au format du serveur XML-RPC");
 		}
 	}
 	
 	public void run() {
 		try {
-			System.err.println("TIMER: Lancement de la tâche "+login+"@"+ip);
+			logger.error("TIMER: Lancement de la tâche "+login+"@"+ip);
 			
 			//Création de la requête
 			Vector params = new Vector();
@@ -2748,7 +2753,7 @@ class PingTask extends TimerTask {
 			String result = (String) clientXML.execute("TestXML.testConnectXML", params);		
 		
 		} catch (Exception e) {
-			System.out.println("ERREUR: "+ e);
+			logger.info("ERREUR: "+ e);
 			//sys.deconnexion(login);
 		}
 	}
