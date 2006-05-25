@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+
 
 public class DocumentFactory {
 	
@@ -27,7 +27,7 @@ public class DocumentFactory {
 	/**
 	 * Crée le logger de la classe
 	 */
-	private static final Logger logger = Logger.getLogger(Document.class);
+	private static final Logger logger = Logger.getLogger(DocumentFactory.class);
 	
 //METHODES STATIQUES
 //-----------------------------------
