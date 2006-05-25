@@ -108,6 +108,6 @@ public class EnvoiMail {
 						"Votre Pays = " + Pays);
 		//Send message
 		Transport.send(message);
-		logger.debug("Démarrage : EnvoiMail");
+		logger.debug("Arrêt: EnvoiMail");
 	}
 }
