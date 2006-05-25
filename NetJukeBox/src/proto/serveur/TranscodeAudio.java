@@ -35,6 +35,9 @@ import javax.media.format.VideoFormat;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.DataSource;
 import javax.media.protocol.FileTypeDescriptor;
+
+import org.apache.log4j.Logger;
+
 import com.sun.media.format.WavAudioFormat;
 
 /**
@@ -42,6 +45,10 @@ import com.sun.media.format.WavAudioFormat;
  * different data formats.
  */
 public class TranscodeAudio implements ControllerListener, DataSinkListener {
+	/**
+	 *  Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(TranscodeAudio.class);
 
 	/**
 	 * Given a source media locator, destination media locator and an array of
@@ -54,7 +61,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		Processor p;
 
 		try {
-			System.err.println("- create processor for: " + inML);
+			logger.error("- create processor for: " + inML);
 			p = Manager.createProcessor(inML);
 		} catch (Exception e) {
 			System.err
@@ -68,7 +75,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		// Put the Processor into configured state.
 		p.configure();
 		if (!waitForState(p, p.Configured)) {
-			System.err.println("Failed to configure the processor.");
+			logger.error("Failed to configure the processor.");
 			return false;
 		}
 
@@ -83,7 +90,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		// realize the it.
 		p.realize();
 		if (!waitForState(p, p.Realized)) {
-			System.err.println("Failed to realize the processor.");
+			logger.error("Failed to realize the processor.");
 			return false;
 		}
 		
@@ -107,14 +114,14 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		if (end > 0)
 			p.setStopTime(new Time((double) end));
 
-		System.err.println("start transcoding...");
+		logger.error("start transcoding...");
 
 		// OK, we can now start the actual transcoding.
 		try {
 			p.start();
 			dsink.start();
 		} catch (IOException e) {
-			System.err.println("IO error during transcoding");
+			logger.error("IO error during transcoding");
 			return false;
 		}
 
@@ -128,7 +135,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		}
 		p.removeControllerListener(this);
 
-		System.err.println("...done transcoding.");
+		logger.error("...done transcoding.");
 
 		return true;
 	}
@@ -145,7 +152,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 
 		if ((cd = fileExtToCD(outML.getRemainder())) != null) {
 
-			System.err.println("- set content descriptor to: " + cd);
+			logger.error("- set content descriptor to: " + cd);
 
 			if ((p.setContentDescriptor(cd)) == null) {
 
@@ -178,10 +185,10 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 
 		for (int i = 0; i < fmts.length; i++) {
 
-			System.err.println("- set track format to: " + fmts[i]);
+			logger.error("- set track format to: " + fmts[i]);
 
 			if (!setEachTrackFormat(p, tcs, fmts[i])) {
-				System.err.println("Cannot transcode any track to: " + fmts[i]);
+				logger.error("Cannot transcode any track to: " + fmts[i]);
 				return false;
 			}
 		}
@@ -236,11 +243,11 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		DataSink dsink;
 
 		try {
-			System.err.println("- create DataSink for: " + outML);
+			logger.error("- create DataSink for: " + outML);
 			dsink = Manager.createDataSink(ds, outML);
 			dsink.open();
 		} catch (Exception e) {
-			System.err.println("Cannot create the DataSink: " + e);
+			logger.error("Cannot create the DataSink: " + e);
 			return null;
 		}
 
@@ -286,10 +293,10 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		} else if (evt instanceof EndOfMediaEvent) {
 			evt.getSourceController().close();
 		} else if (evt instanceof MediaTimeSetEvent) {
-			System.err.println("- mediaTime set: "
+			logger.error("- mediaTime set: "
 					+ ((MediaTimeSetEvent) evt).getMediaTime().getSeconds());
 		} else if (evt instanceof StopAtTimeEvent) {
-			System.err.println("- stop at time: "
+			logger.error("- stop at time: "
 					+ ((StopAtTimeEvent) evt).getMediaTime().getSeconds());
 			evt.getSourceController().close();
 		}
@@ -315,7 +322,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 			} catch (Exception e) {
 			}
 		}
-		System.err.println("");
+		logger.error("");
 		return fileSuccess;
 	}
 
@@ -531,7 +538,7 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		for (int i = 0; i < audFmt.size(); i++) {
 
 			if ((fmt = parseAudioFormat((String) audFmt.elementAt(i))) == null) {
-				System.err.println("Invalid audio format specification: "
+				logger.error("Invalid audio format specification: "
 						+ (String) audFmt.elementAt(i));
 				prUsage();
 			}
@@ -542,17 +549,17 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 		MediaLocator iml, oml;
 
 		if ((iml = createMediaLocator(inputURL)) == null) {
-			System.err.println("Cannot build media locator from: " + inputURL);
+			logger.error("Cannot build media locator from: " + inputURL);
 			System.exit(0);
 		}
 
 		if ((oml = createMediaLocator(outputURL)) == null) {
-			System.err.println("Cannot build media locator from: " + outputURL);
+			logger.error("Cannot build media locator from: " + outputURL);
 			System.exit(0);
 		}
 
 		if (!doIt(iml, oml, fmts, mediaStart, mediaEnd)) {
-			System.err.println("Transcoding failed");
+			logger.error("Transcoding failed");
 		}
 
 		System.exit(0);
@@ -562,13 +569,13 @@ public class TranscodeAudio implements ControllerListener, DataSinkListener {
 	static void prUsage() {
 		System.err
 				.println("Usage: java Transcode -o <output> -a <audio format> -v <video format> -s <start time> -e <end time> <input>");
-		System.err.println("     <output>: input URL or file name");
-		System.err.println("     <input>: output URL or file name");
+		logger.error("     <output>: input URL or file name");
+		logger.error("     <input>: output URL or file name");
 		System.err
 				.println("     <audio format>: [encoding]:[rate]:[sizeInBits]:[channels]:[big|little]:[signed|unsigned]");
-		System.err.println("     <video format>: [encoding]:[widthXheight]");
+		logger.error("     <video format>: [encoding]:[widthXheight]");
 		System.err.println("     <start time>: start time in seconds");
-		System.err.println("     <end time>: end time in seconds");
+		logger.error("     <end time>: end time in seconds");
 		System.exit(0);
 	}
 }
