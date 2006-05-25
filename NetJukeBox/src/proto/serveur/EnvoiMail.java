@@ -4,7 +4,14 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.apache.log4j.Logger;
+
 public class EnvoiMail {
+	
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(EnvoiMail.class);
 	/**
 	 * Adresse du serveur SMTP
 	 */
@@ -62,6 +69,8 @@ public class EnvoiMail {
 	 * @throws MessagingException
 	 */
 	public EnvoiMail(String host, String port, String from, String login, String nom, String prenom, String mail, String pwd, String pays) throws AddressException, MessagingException {
+		logger.debug("Démarrage : EnvoiMail");			
+		
 		this.Host = host;
 		this.Port = port;
 		this.From = from;
@@ -99,5 +108,6 @@ public class EnvoiMail {
 						"Votre Pays = " + Pays);
 		//Send message
 		Transport.send(message);
+		logger.debug("Démarrage : EnvoiMail");
 	}
 }
