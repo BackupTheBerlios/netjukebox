@@ -127,11 +127,6 @@ public class Ldap {
 	 * @return boolean
 	 */
 	public boolean openLdap() {
-		
-		//PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
-		PropertyConfigurator.configure("src/proto/serveur/log4j.prop");
-
-		
 		logger.debug("Démarrage: openLdap");
 				
 		String role = null;
@@ -155,11 +150,9 @@ public class Ldap {
 	    			role = (String) ou.get();
 	    		} catch(Exception e) {
 					logger.fatal("openLdap :", e);
-
 					}
 
-				logger.info("role: "+ role);
-			
+				logger.info("role: "+ role);			
 	    		String log = "uid=" + login + ",ou=" + role + "," + base;
 	    		
 	      		connect = (DirContext) connectanonyme.lookup("");
@@ -167,14 +160,13 @@ public class Ldap {
 	    		connect.addToEnvironment(Context.SECURITY_PRINCIPAL, log);
 	    		connect.addToEnvironment(Context.SECURITY_CREDENTIALS, pwd);
 	    
-				logger.info("Vous avez été connecté à la base " + env);
-								
-				logger.debug("Arrêt: openLdap");
-				
+				logger.info("Vous avez été connecté à la base " + env);								
+				logger.debug("Arrêt: openLdap");				
 	    		return true;
+	    		
 	    	} catch (NamingException e) {
-				logger.fatal("openLdap: "+ e);			
-				logger.fatal("Arrêt: openLdap");
+				logger.error("openLdap: "+ e);			
+				logger.debug("Arrêt: openLdap");
 				return false;
 	    	}
 	    }
@@ -227,8 +219,8 @@ public boolean executeSupprimer(String login) throws NamingException {
 			return true;
 			
 			}catch (Exception e){
-			logger.fatal("L'utilisateur "+ login + " n'existe pas.");
-			logger.fatal("Arrêt: executeSupprimer");
+			logger.error("L'utilisateur "+ login + " n'existe pas.");
+			logger.debug("Arrêt: executeSupprimer");
 			return false;
 			} 
 		}
@@ -259,7 +251,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 				logger.info("L'utilisateur : "+ newlogin+ " existe déjà! Votre login ne peut être modifié!");
 				log=login;
 			} catch (Exception e){
-				logger.fatal("L'utilisateur : "+ newlogin+ " n'existe pas. Votre login va être modifié!");
+				logger.info("L'utilisateur : "+ newlogin+ " n'existe pas. Votre login va être modifié!");
 				connect.rename("uid=" + login + ",ou=" + role,"uid=" + newlogin + ",ou=" + role );
 				log=newlogin;
 			}
@@ -318,12 +310,12 @@ public boolean executeSupprimer(String login) throws NamingException {
 			logger.info("test");
 		    // Modifie les attributs de l'objet
 		    connect.modifyAttributes(requete, mods);
-			logger.info("Les modifications sont faites! ");
+			logger.info("Les modifications sont faites!");
 			logger.debug("Arrêt: ModifieAttributs");
 			return true;
 		} catch (NamingException e) {
-			logger.fatal(" Les modifications ont échoué. ");
-			logger.fatal("Arrêt: ModifieAttributs");
+			logger.error(" Les modifications ont échoué.");
+			logger.debug("Arrêt: ModifieAttributs");
 			return false;
 		}
 	}
@@ -379,8 +371,8 @@ public boolean executeSupprimer(String login) throws NamingException {
 			logger.debug("Arrêt: executeCreer");
 			return true ;
     	} catch (NamingException e) {
-			logger.fatal("L'utilisateur "+ login + " n'a pas pu être créé!");
-			logger.fatal("Arrêt: executeCreer");
+			logger.error("L'utilisateur "+ login + " n'a pas pu être créé!");
+			logger.debug("Arrêt: executeCreer");
 			return false;
     	}
 	}
@@ -402,8 +394,8 @@ public boolean executeSupprimer(String login) throws NamingException {
 			logger.debug("Arrêt: changerRole");
 			return true;
 		} catch (NamingException e) {
-			logger.fatal("L'utilisateur n'existe pas");
-			logger.fatal("Arrêt: changerRole");
+			logger.error("L'utilisateur n'existe pas!");
+			logger.debug("Arrêt: changerRole");
 			return false;
 		}
 	}
@@ -430,8 +422,8 @@ public boolean executeSupprimer(String login) throws NamingException {
 			logger.debug("Arrêt: getLogin");
 			return resultat;
 		} catch (Exception e) {
-			logger.fatal("getLogin: "+ e);
-			logger.fatal("Arrêt: getLogin");
+			logger.error("getLogin: "+ e);
+			logger.debug("Arrêt: getLogin");
 			return null;
 		}
 	}
@@ -451,7 +443,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 		    }
 		    return resultat;
 		} catch (NamingException e) {
-			logger.fatal("printSearchEnumeration: ", e);
+			logger.error("printSearchEnumeration: ", e);
 		    return  null;
 		}
 	}
@@ -464,17 +456,14 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 */
 	
 	public Dictionary getAttributs(String login, String role) {
-		logger.debug("Démarrage: getAttributs");
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
 			Attributes answer = connect.getAttributes(requete);
 			Dictionary ligne = printAttrs(answer);
-			logger.debug("Arrêt: getAttributs");
 			return ligne;
 		} catch (Exception e) {
-			logger.fatal("L'utilisateur : "+ login + " n'existe pas");
+			logger.error("L'utilisateur : "+ login + " n'existe pas");
 			}
-			logger.fatal("Arrêt: getAttributs");
 			return null;
 		}
 	
@@ -501,7 +490,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 				}	
 				return ligne;
 			} catch (NamingException e) {
-				logger.fatal("L'utilisateur n'existe pas!");
+				logger.error("L'utilisateur n'existe pas!");
 				return null;
 			}
 		}
