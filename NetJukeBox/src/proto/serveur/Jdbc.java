@@ -5,10 +5,17 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /**
  * Interface la base de données avec JDBC
  */
 public class Jdbc {
+	
+	/**
+	 * Crée le logger de la classe
+	 */
+	private static final Logger logger = Logger.getLogger(Jdbc.class);
 	
 // ATTRIBUTS
 //*******************************************
@@ -75,6 +82,7 @@ public class Jdbc {
      * @return int
      */
     public int executeUpdate(String requete) {
+    	logger.debug("Démarrage: executeUpdate");	
     	try {
     		//Requête
     		Statement st = connect.createStatement();
@@ -87,9 +95,11 @@ public class Jdbc {
 			st.close();
 			
 			//On retourne le nombre de lignes affectées (0 = échec)
+			logger.debug("Arrêt: executeUpdate");
 			return row; 
 	    } catch (SQLException e) {
-			System.err.println("ERREUR: Problème de requête \n" + e);
+			logger.error("ERREUR: Problème de requête \n" + e);
+			logger.debug("Arrêt: executeUpdate");
 			return 0;
 	    }
     }
@@ -100,6 +110,7 @@ public class Jdbc {
      * @return Vector of Dictionary
      */
     public Vector executeQuery(String requete) {
+    	logger.debug("Démarrage: executeQuery");	
     	try {
     		
     		//On exécute la requête et on en sort des résultats
@@ -144,10 +155,12 @@ public class Jdbc {
 			st.close();
 			
 			//Retour du Vector de Dictionary
+	    	logger.debug("Arrêt: executeQuery");
 			return lignes;
 			
 	    } catch (SQLException e) {
-			System.err.println("ERREUR: Problème de requête \n" + e);
+			logger.error("ERREUR: Problème de requête \n" + e);
+	    	logger.debug("Arrêt: executeQuery");
 			return null;
 		}
     }
@@ -159,7 +172,7 @@ public class Jdbc {
      * @param String login
      * @param String password
      */
-    public boolean openDB(String driver, String url, String login, String pwd) {
+    public /*pure*/ boolean openDB(String driver, String url, String login, String pwd) {
     	this.driver = driver;
     	this.url = url;
     	this.login = login;
@@ -173,18 +186,22 @@ public class Jdbc {
      * @return
      */
     public boolean openDB() {
+    	logger.debug("Démarrage: openDB");	
 		if (connect == null) {
 			try {
 				Class.forName(driver);
 				connect = DriverManager.getConnection(url, login, pwd);
 				connect.setAutoCommit(false);
+				logger.debug("Arrêt: openDB");
 				return true;
 			}
 			catch (ClassNotFoundException e) {
-				System.err.println("ERREUR: Impossible de charger le pilote JDBC : " + e);
+				logger.error("ERREUR: Impossible de charger le pilote JDBC : " + e);
+				logger.debug("Arrêt: openDB");
 				return false;
 			} catch (SQLException e) {
-				System.err.println("ERREUR: Connexion à la base impossible : " + e);
+				logger.error("ERREUR: Connexion à la base impossible : " + e);
+				logger.debug("Arrêt: openDB");	
 				return false;
 			}
 			
@@ -198,16 +215,20 @@ public class Jdbc {
      * @return boolean
      */
 	public boolean closeDB() {
+		logger.debug("Démarrage : closeDB");	
 		if (connect != null) {
 			try {
 				connect.close();
+				logger.debug("Arrêt : closeDB");
 				return true;
 			} catch (SQLException e) {
-				System.err.println("ERREUR: Connexion à la base impossible : \n" + e);
+				logger.error("ERREUR: Connexion à la base impossible : \n" + e);
+				logger.debug("Arrêt : closeDB");
 				return false;
 			}
 		}
-		System.err.println("ERREUR: Non connecté à la base");
+		logger.error("ERREUR: Non connecté à la base");
+		logger.debug("Arrêt : closeDB");
 		return false;
 	}
 }
