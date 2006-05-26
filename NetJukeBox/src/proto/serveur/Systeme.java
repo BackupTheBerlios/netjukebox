@@ -271,7 +271,7 @@ public class Systeme {
 				
 				//On planifie sa tâche PING
 				PingTask task = new PingTask(loginldap, ipClient, portXML, this);
-				timer.scheduleAtFixedRate(task, 1000, 60000);
+				//timer.scheduleAtFixedRate(task, 1000, 60000);
 				
 				logger.info("Utilisateur "+loginldap+" connecté");
 				return Boolean.toString(true);
@@ -650,27 +650,28 @@ public class Systeme {
 				if (d != null) {
 					//On l'ajoute à la liste des documents du système
 					//documents.put(d.getId(), d);
-					
-					//Conversion du fichier audio en .wav
-					String mplayer = prefs.node("conversion").get("mplayer", null);
-					String chemin = prefs.node("conversion").get("chemin", null);
-					
-					String fichierResult = chemin + d.getId() + ".wav";
-					String fichierInit = d.getFichier();
-					//Commande permettant la conversion
-					String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + " " + fichierInit;
-					logger.error(commande);
-					//Execution de la conversion
-					@SuppressWarnings("unused")
-					Process proc = Runtime.getRuntime().exec(commande);
-					proc.waitFor();
-					
-					//MàJ de l'objet document et de la base
-					d.setFichier(fichierResult);
-
-					//Suppression du fichier initial
-					File f = new File(fichierInit);
-					f.delete(); 
+					if (!fichier.endsWith(".wav")) {
+						//Conversion du fichier audio en .wav
+						String mplayer = prefs.node("conversion").get("mplayer", null);
+						String chemin = prefs.node("conversion").get("chemin", null);
+						
+						String fichierResult = chemin + d.getId() + ".wav";
+						String fichierInit = d.getFichier();
+						//Commande permettant la conversion
+						String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + " " + fichierInit;
+						logger.error(commande);
+						//Execution de la conversion
+						@SuppressWarnings("unused")
+						Process proc = Runtime.getRuntime().exec(commande);
+						proc.waitFor();
+						
+						//MàJ de l'objet document et de la base
+						d.setFichier(fichierResult);
+	
+						//Suppression du fichier initial
+						File f = new File(fichierInit);
+						f.delete();
+					}
 					
 					logger.info("Document '"+titre+"' créé");
 					return Boolean.toString(true);
@@ -1052,7 +1053,7 @@ public class Systeme {
 				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
 				//On ajoute le document au programme
-				p.retirerDocument(calage);
+				p.retirerDocument(Long.parseLong(calage));
 				
 				logger.info("Document retiré du programme "+idProg);
 				return Boolean.toString(true);

@@ -3,6 +3,7 @@ package proto.serveur;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -285,9 +286,9 @@ public class Document {
 		logger.debug("Démarrage: supprimer");
 				
 		//On supprime les associations document/programme
-		Programme p;
-		for (int i=0; i<programmes.size(); i++){
-			p = (Programme)programmes.get(i);
+		Enumeration progs = programmes.elements();
+		while (progs.hasMoreElements()) {
+			Programme p = (Programme)progs.nextElement();
 			p.retirerDocument(id);
 		}
 		
@@ -469,6 +470,35 @@ public class Document {
 		
 //#### SETTERS ####
 //#################
+	
+	/**
+	 * Retourne la liste des documents programmés
+	 * @return Hastable
+	 */
+	public /*pure*/ void setProgrammesAssocies() {
+		logger.info("Programme.getProgrammesAssocies()");
+		
+		//On crée un vecteur pour contenir les objets programmes instanciés
+		Hashtable progs = new Hashtable();
+		
+		//On va chercher dans la base la liste des id de tous les programmes
+		String requete = "SELECT DISTINCT id_prog FROM composer WHERE id_doc = '"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		System.out.println("Programme.getProgrammesAssocies() : "+resultats.size()+" programme(s) trouvé(s)");
+		logger.info("Programme.getProgrammesAssocies() : "+resultats.size()+" programme(s) trouvé(s)");
+		
+		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			String id = String.valueOf((Integer)dico.get("id_prog"));
+			progs.put(id, ProgrammeFactory.getById(id));
+		}
+		
+		this.programmes=progs;
+	}
+	
 	/**
 	 * @param compositeur compositeur à définir.
 	 */

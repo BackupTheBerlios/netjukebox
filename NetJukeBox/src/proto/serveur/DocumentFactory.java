@@ -81,7 +81,7 @@ public class DocumentFactory {
 		
 		//On assemble la date
 		//String date = jour+"-"+mois+"-"+annee;
-		GregorianCalendar date = new GregorianCalendar(annee, mois-1, jour);
+		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
 		
 		//On crée le document dans la base
 		String requete = "INSERT INTO document (titre, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur) VALUES ('" +
@@ -172,6 +172,7 @@ public class DocumentFactory {
 				Document doc = new Document(id, titre, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur);
 				instancesById.put(doc.getId(), doc);
 				instancesByTitre.put(doc.getTitre(), doc);
+				doc.setProgrammesAssocies();
 				logger.debug("Arrêt: Document.getByTitre");
 				return doc;
 			}
@@ -255,6 +256,7 @@ public class DocumentFactory {
 				Document doc = new Document(id, titre, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur);
 				instancesById.put(doc.getId(), doc);
 				instancesByTitre.put(doc.getTitre(), doc);
+				doc.setProgrammesAssocies();
 				logger.debug("Arrêt: Document.getById");
 				return doc;
 			}

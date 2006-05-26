@@ -148,10 +148,10 @@ public class Programme {
 
 	/**
 	 * Retire un document du programme
-	 * @param String id
+	 * @param long calage
 	 * @return boolean
 	 */
-	public boolean retirerDocument(String calage) {
+	public boolean retirerDocument(long calage) {
 		logger.debug("Démarrage: retirerDocument");
 		// On retire le document du programme
 		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND calage='"+calage+"';";
@@ -162,7 +162,7 @@ public class Programme {
 		if (nbRows>0) {
 			
 			//On récupère le doc
-			Document doc = (Document)documents.get(Long.parseLong(calage));
+			Document doc = (Document)documents.get(calage);
 			
 			//On met à jour la durée du programme
 			this.setDuree(duree-doc.getDuree());
@@ -171,7 +171,43 @@ public class Programme {
 			doc.retirerProgramme(this.id);
 			
 			//On met à jour le vecteur d'association
-			documents.remove(Long.parseLong(calage));
+			documents.remove(calage);
+			
+			logger.debug("Arrêt: retirerDocument");			
+			return true;
+		}
+		
+		//Sinon
+		logger.debug("Arrêt: retirerDocument");
+		return false;
+	}
+	
+	/**
+	 * Retire un document du programme
+	 * @param String id
+	 * @return boolean
+	 */
+	public boolean retirerDocument(String id) {
+		logger.debug("Démarrage: retirerDocument");
+		// On retire le document du programme
+		String requete = "DELETE FROM composer WHERE id_prog='"+this.id+"' AND id_doc='"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la suppression s'est bien déroulée
+		if (nbRows>0) {
+			
+			Enumeration calages = documents.keys();
+			while (calages.hasMoreElements()) {
+				long calage = (Long)calages.nextElement();
+				Document doc = (Document)documents.get(calage);
+				if (doc.getId().equals(id)) {
+					documents.remove(calage);
+					
+					//On met à jour la durée du programme
+					setDuree(duree-doc.getDuree());
+				}
+			}
 			
 			logger.debug("Arrêt: retirerDocument");			
 			return true;
