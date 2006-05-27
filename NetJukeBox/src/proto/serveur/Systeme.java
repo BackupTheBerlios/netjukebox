@@ -13,7 +13,6 @@ import java.util.prefs.Preferences;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.naming.NamingException;
-
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -1900,6 +1899,55 @@ public class Systeme {
 	}
 	
 	/**
+	 * Recherche d'un contrat
+	 * @param login
+	 * @param id
+	 * @param titre
+	 * @param jourSignature
+	 * @param moisSignature
+	 * @param anneeSignature
+	 * @param jourExpiration
+	 * @param moisExpiration
+	 * @param anneeExpiration
+	 * @param idContractant
+	 * @param modeReglement
+	 * @param type
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector rechercherContrats(String login, String id, String titre, String jourSignature, 
+			String moisSignature, String anneeSignature, String jourExpiration, String moisExpiration, 
+			String anneeExpiration, String idContractant, String modeReglement, String type) {
+
+		logger.info("Recherche d'un contrat");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "rechercherContrat")) {
+			
+			//Vecteur de contrats à retourner
+			Vector vContrat = new Vector();
+		
+			Enumeration listeContrat = ContratFactory.getInstances().elements();
+			Contrat c;
+			
+			while (listeContrat.hasMoreElements()) {
+				c = (Contrat)listeContrat.nextElement();
+				
+				if ((id.length()>0 && c.getId().contains(id))
+					|| (titre.length()>0 && c.getTitre().contains(titre))) {
+					
+					vContrat.addElement(c.getAttributesDictionary());
+				}
+			}
+			
+			return vContrat;
+		}
+		// Sinon, opération refusée
+		logger.info("Permission non accordée. Recherche non effectuées");
+		return null;
+	}
+	
+	/**
 	 * Lister les contrats disponibles
 	 * @param String login
 	 * @return Vector
@@ -2179,6 +2227,53 @@ public class Systeme {
 	}	
 	
 	/**
+	 * Recherche d'un contractant
+	 * @param login
+	 * @param id
+	 * @param nom
+	 * @param adresse
+	 * @param codePostal
+	 * @param ville
+	 * @param telephone
+	 * @param fax
+	 * @param mail
+	 * @param type
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector rechercherContractants(String login, String id, String nom, String adresse,
+			String codePostal, String ville, String telephone, String fax,
+			String mail, String type) {
+
+		logger.info("Recherche d'un contractant");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "rechercherContractant")) {
+			
+			//Vecteur de contractants à retourner
+			Vector vContractant = new Vector();
+		
+			Enumeration listeContractant = ContractantFactory.getInstances().elements();
+			Contractant c;
+			
+			while (listeContractant.hasMoreElements()) {
+				c = (Contractant)listeContractant.nextElement();
+				
+				if ((id.length()>0 && c.getId().contains(id))
+					|| (nom.length()>0 && c.getNom().contains(nom))) {
+					
+					vContractant.addElement(c.getAttributesDictionary());
+				}
+			}
+			
+			return vContractant;
+		}
+		// Sinon, opération refusée
+		logger.info("Permission non accordée. Recherche non effectuées");
+		return null;
+	}	
+	
+	/**
 	 * Lister les contractants disponibles
 	 * @param String login
 	 * @return Vector
@@ -2365,6 +2460,39 @@ public class Systeme {
 		logger.info("Permission non accordée. Permission non créée");
 		return Boolean.toString(false);
 	}	
+	
+	@SuppressWarnings("unchecked")
+	public Vector rechercherPermissions(String login, String id, String libelle) {
+
+		logger.info("Recherche d'une permission");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "rechercherPermissions")) {
+			
+			//Vecteur de contractants à retourner
+			Vector vPerm = new Vector();
+		
+			Enumeration listePerm = PermissionFactory.getInstances().elements();
+			Permission p;
+			
+			while (listePerm.hasMoreElements()) {
+				p = (Permission)listePerm.nextElement();
+				
+				if ((id.length()>0 && p.getId().contains(id))
+					|| (libelle.length()>0 && p.getLibelle().contains(libelle))) {
+					
+					vPerm.addElement(p.getAttributesDictionary());
+				}
+			}
+			
+			return vPerm;
+		}
+		// Sinon, opération refusée
+		logger.info("Permission non accordée. Recherche non effectuées");
+		return null;
+	}	
+	
+	
 	
 	/**
 	 * Lister les permissions disponibles
