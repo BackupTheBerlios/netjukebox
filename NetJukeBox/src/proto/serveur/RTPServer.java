@@ -21,16 +21,11 @@ import javax.media.rtp.RTPManager;
 import javax.media.rtp.SendStream;
 import javax.media.rtp.SessionAddress;
 
-import org.apache.log4j.Logger;
-
 /**
  * RTP Server : serveur de streaming pour un canal
  */
 public class RTPServer implements ControllerListener {
-	/**
-	 * Crée le logger de la classe
-	 */
-	private static final Logger logger = Logger.getLogger(RTPServer.class);
+	
 // ATTRIBUTS	
 //***************************************************	
 	/**
@@ -103,7 +98,8 @@ public class RTPServer implements ControllerListener {
 	 * @param piste
 	 */
 	public RTPServer(String ip, int port, String publicite) {
-		logger.info("Création d'un serveur RTP");
+
+		System.out.println("Création d'un serveur RTP");
 		this.ip = ip;
 		this.port = port;
 		this.piste = "1";
@@ -113,7 +109,7 @@ public class RTPServer implements ControllerListener {
 		
 		// Creation du MediaLocator pour l'Adresse de destination
 		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
-		logger.info("Serveur RTP créé");
+		System.out.println("Serveur RTP créé");
 
 	}
 
@@ -126,7 +122,7 @@ public class RTPServer implements ControllerListener {
 	 */
 /*	public RTPServer(String ip, int port, String piste, String publicite) {
 
-		logger.info("Création d'un serveur RTP");
+		System.out.println("Création d'un serveur RTP");
 		this.ip = ip;
 		this.port = port;
 		this.piste = piste;
@@ -135,7 +131,7 @@ public class RTPServer implements ControllerListener {
 		
 		// Creation du MediaLocator pour l'Adresse de destination
 		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
-		logger.info("Serveur RTP créé");
+		System.out.println("Serveur RTP créé");
 
 	}
 */
@@ -149,13 +145,13 @@ public class RTPServer implements ControllerListener {
 	/**
 	 * Retourne l'URL
 	 */
-	public /*pure*/ String getUrl() {
+	public String getUrl() {
 		try {
 			String ipServeur = InetAddress.getLocalHost().getHostAddress();
 			//return "rtp://"+ipServeur+":"+port+"/audio/"+piste;
 			return ipServeur+"/"+port;
 		} catch (Exception e) {
-			logger.error("ERREUR: "+e);
+			System.err.println("ERREUR: "+e);
 			return null;
 		}
 		
@@ -166,27 +162,26 @@ public class RTPServer implements ControllerListener {
 	 * @param medias
 	 */
 	public void programmer(Vector medias) {
-		logger.debug("Démarrage: programmer");
+		
 		//Si on a encore des médias à diffuser
 		if (cDiffuse && medias.size()>0 && mediaEnCours<medias.size()) {
 			
 			//On ajoute les nouveaux médias à la liste actuelle
 			this.medias.addAll(medias);
-			logger.debug("Arrêt: programmer");
 		}
 		
 		//Si on ne diffuse rien actuellement
 		else {
+			
 			//On stoppe la pub
 			stop();
-						
+			
 			//On définit la liste de médias à diffuser
 			this.medias = medias;
 			this.mediaEnCours = 0;
 			
 			//On lance la diffusion
 			diffuser();
-			logger.debug("Arrêt: programmer");
 		}
 	}
 	
@@ -194,32 +189,27 @@ public class RTPServer implements ControllerListener {
 	 * Arrêter la diffusion
 	 */
 	public void stop() {
-		logger.debug("Démarrage: stop");
-		logger.info("Diffusion stoppée");
+		System.out.println("Diffusion stoppée");
 		cDiffuse=false;
 		if (OutputSink != null) OutputSink.close();
 		//if (OutputStream != null) OutputStream.close();
-		logger.debug("Arrêt: stop");
 	}
 	
 	/**
 	 * Lancer la diffusion
 	 */
 	public void diffuser() {
-		logger.debug("Démarrage: diffuser");
-		logger.info("Diffusion lancée");
+		System.out.println("Diffusion lancée");
 		cDiffuse=true;
 		
 		//Si on a des medias à diffuser
 		if (medias.size()>0 && mediaEnCours<medias.size()) {
 			sendStream((String)medias.elementAt(mediaEnCours++));
-			logger.debug("Arrêt: diffuser");
 		}
 		
 		//Sinon, on diffuse de la pub
 		else {
 			sendStream(publicite);
-			logger.debug("Arrêt: diffuser");
 		}
 	}
 	
@@ -228,8 +218,7 @@ public class RTPServer implements ControllerListener {
 	 * @param filename
 	 */
 	private void sendStream(String filename) {
-		logger.debug("Démarrage: sendStream");
-		logger.info("Diffusion de "+filename);
+		System.out.println("Diffusion de "+filename);
 		pRealized = false;
 		pConfigured = false;
 		try {
@@ -242,8 +231,7 @@ public class RTPServer implements ControllerListener {
 				try {
 					Thread.currentThread().sleep(100L);
 				} catch (InterruptedException e) {
-					logger.error("ERREUR:", e);
-					logger.debug("Arrêt: sendStream");
+					System.out.println("erreur : " + e);
 				}
 			}
 			setTrackFormat(p);
@@ -253,18 +241,14 @@ public class RTPServer implements ControllerListener {
 				try {
 					Thread.currentThread().sleep(100L);
 				} catch (InterruptedException e) {
-					logger.error("ERREUR:", e);
-					logger.debug("Arrêt: sendStream");
+					System.out.println("erreur : " + e);
 				}
 			}
 			transmitSink(p);
-			logger.debug("Arrêt: sendStream");
 			//transmitManager(p);
 		} catch (Exception e) {
-			logger.error("ERREUR:", e);
-			logger.debug("Arrêt: sendStream");
+			e.printStackTrace();
 			System.exit(1);
-			
 		}
 	}
 
@@ -273,8 +257,7 @@ public class RTPServer implements ControllerListener {
 	 * @param p
 	 */
 	private void transmitSink(Processor p) {
-		logger.debug("Démarrage: transmitSink");
-		logger.info("Transmission d'un flux audio avec un DataSink");
+		System.out.println("Transmission");
 		p.start();
 		try {
 			// Creation du DataSink
@@ -288,14 +271,13 @@ public class RTPServer implements ControllerListener {
 
 			// Demarrage du DataSink
 			OutputSink.start();
-			logger.info("Transmission lancée!");
-			logger.debug("Arrêt: transmitSink");
 			
+
+			System.out.println("Started");
 		}
 
 		catch (Exception e) {
-			logger.error("ERREUR:", e);
-			logger.debug("Arrêt: transmitSink");
+			System.out.println(e);
 		}
 	}
 	
@@ -304,8 +286,6 @@ public class RTPServer implements ControllerListener {
 	 * @param p
 	 */
 	private void transmitManager(Processor p) {
-		logger.debug("Démarrage: transmitManager");
-		logger.info("Transmission d'un flux audio avec un RTPManager");
 		try {
 
 			DataSource output = p.getDataOutput();
@@ -319,17 +299,14 @@ public class RTPServer implements ControllerListener {
 			rtpMgr.initialize(canal);
 			rtpMgr.addTarget(destAddr);
 			
-			logger.error("Created RTP session: " + ip + " " + port);
+			System.err.println("Created RTP session: " + ip + " " + port);
 			
 			OutputStream = rtpMgr.createSendStream(output, 0);		
 			OutputStream.start();
 			p.start();
-			logger.info("Transmission lancée!");
-			logger.debug("Arrêt: transmitManager");
 		}
 		catch(Exception e) {
-			logger.error("ERREUR:", e);
-			logger.debug("Arrêt: transmitManager");
+			e.printStackTrace();
 		}
 	}
 
@@ -338,13 +315,11 @@ public class RTPServer implements ControllerListener {
 	 * @param p
 	 */
 	private void setTrackFormat(Processor p) {
-		logger.debug("Démarrage: setTrackFormat");
 		// Get the tracks from the processor
 		TrackControl[] tracks = p.getTrackControls();
 		// Do we have atleast one track?
 		if (tracks == null || tracks.length < 1) {
-			logger.info("Couldn't find tracks in processor");
-			logger.debug("Arrêt: setTrackFormat");
+			System.out.println("Couldn't find tracks in processor");
 			System.exit(1);
 		}
 
@@ -359,26 +334,24 @@ public class RTPServer implements ControllerListener {
 		// Program the tracks.
 		for (int i = 0; i < tracks.length; i++) {
 			Format format = tracks[i].getFormat();
-			logger.info("File Format: "+format);
+			System.out.println("File Format: "+format);
 			if (tracks[i].isEnabled()) {
 				supported = tracks[i].getSupportedFormats();
 				for (int n = 0; n < supported.length; n++)
-					logger.info("Supported format: " + supported[n]);
+					System.out.println("Supported format: " + supported[n]);
 				// We've set the output content to the RAW_RTP.
 				// So all the supported formats should work with RTP.
 				// We'll just pick the first one.
 				if (supported.length > 0) {
 					chosen = supported[0];
 					tracks[i].setFormat(chosen);
-					logger.error("Track " + i + " is set to transmit as:");
-					logger.error("  " + chosen);
-					logger.debug("Arrêt: setTrackFormat");
+					System.err
+							.println("Track " + i + " is set to transmit as:");
+					System.err.println("  " + chosen);
 					atLeastOneTrack = true;
 				} else
-					logger.debug("Arrêt: setTrackFormat");
 					tracks[i].setEnabled(false);
 			} else
-				logger.debug("Arrêt: setTrackFormat");
 				tracks[i].setEnabled(false);
 		}
 	}
@@ -407,7 +380,7 @@ public class RTPServer implements ControllerListener {
 				//System.exit(0);
 			}
 		} else {
-			logger.info(evt.toString());
+			System.out.println(evt.toString());
 		}
 	}
 }
