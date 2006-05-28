@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.Vector;
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -18,14 +20,13 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Interface la base ldap avec JNDI
  */
-public class Ldap {
+public class Ldap{
 	/**
 	 * Crée le logger de la classe
 	 */
@@ -116,7 +117,7 @@ public class Ldap {
     	this.login = login;
     	this.pwd = pwd;
     	this.auth = auth;
-    	//this.role = role;
+    	this.role = role;
     	this.base = base;
     	
     	return this.openLdap();
@@ -126,9 +127,10 @@ public class Ldap {
 	 * Se connecte à la base ldap
 	 * @return boolean
 	 */
-	public boolean openLdap() {
-		logger.debug("Démarrage: openLdap");
-				
+public boolean openLdap() {
+			//PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
+			logger.debug("Démarrage: openLdap");
+			
 		String role = null;
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
@@ -141,7 +143,7 @@ public class Ldap {
 	    		
 	    		Dictionary resultats = getLogin(login);
 				logger.info("login :"+ login);
-				//logger.info(resultats);
+				logger.info(resultats);
 					    		
 	    		try {
 	    			Enumeration donnee = resultats.elements();
@@ -212,13 +214,13 @@ public boolean executeSupprimer(String login) throws NamingException {
 			Attribute branche = result.get("ou");
 			String l =(String) log.get();
 			String b =(String) branche.get();
-			logger.info("L'utilisateur " + l + " existe bien.");
-						connect.destroySubcontext("uid="+l+",ou="+ b);
+			logger.info("L'utilisateur " + l +" en tant que "+ b + " existe bien.");
+			connect.destroySubcontext("uid="+l+",ou="+ b);
 			logger.info("L'utilisateur " + l + " référencé en tant que " + b + " a été supprimé.");
 			logger.debug("Arrêt: executeSupprimer");
 			return true;
-			
-			}catch (Exception e){
+		}
+		catch (Exception e){
 			logger.error("L'utilisateur "+ login + " n'existe pas.");
 			logger.debug("Arrêt: executeSupprimer");
 			return false;
@@ -439,7 +441,8 @@ public boolean executeSupprimer(String login) throws NamingException {
 		try {
 		    while (answer.hasMore()) {
 		    	SearchResult sr = (SearchResult) answer.next();
-		    	resultat.put("resultat", sr.getAttributes());
+		    	resultat.put(resultat, sr.getAttributes());
+		    	System.out.println(sr.getAttributes());
 		    }
 		    return resultat;
 		} catch (NamingException e) {
@@ -496,4 +499,87 @@ public boolean executeSupprimer(String login) throws NamingException {
 		}
 		return ligne;
 	}
+
+	/**
+	 * Récupère les groupes de l'annuaire
+	 */
+
+	public Vector ListeGroupe() {
+		logger.debug("Démarrage: getSchema");
+		Vector result=new Vector();
+		try {
+	    	String searchBase    = "";
+			String searchFilter  = "(objectclass=*)";
+			SearchControls constraints = new SearchControls();
+			constraints.setSearchScope( SearchControls.ONELEVEL_SCOPE );
+			    
+	        NamingEnumeration answer = connectanonyme.search( searchBase,searchFilter,constraints );
+	       
+	           	while (answer.hasMore()) {
+		       		result = printSearchEnumeration2(answer);
+		       	}
+	        logger.debug("Arrêt: getSchema");
+	       	return result;
+	       	
+		} catch (Exception e) {
+			logger.error("getSchema: "+ e);
+			logger.debug("Arrêt: getSchema");
+			return null;
+		}
+	}
+
+	private Vector printSearchEnumeration2(NamingEnumeration answer) {
+		Vector vec = new Vector(100); int i=0;
+		try {
+			while (answer.hasMore()) {
+				SearchResult sr = (SearchResult) answer.next();
+				vec.insertElementAt(sr.getName(),i);
+				i++;
+			}
+			return vec;
+	    
+		} catch (NamingException e) {
+			logger.error("printSearchEnumeration: ", e);
+			return  null;
+		}
+	}
+	
+
+	/**
+	 * Création d'un groupe de l'annuaire
+	 */
+
+/**	public boolean CreationGroupe(String groupe) {
+		logger.debug("Démarrage: CreationGroupe");
+		
+			try {
+				 Attributes attrs = new BasicAttributes(); 
+				    attrs.put("MUST","ou");
+				    attrs.put("NUMERICOID", "2.5.6.5");
+				    attrs.put("NAME", "organizationalUnit");
+				    attrs.put("SUP", "top");
+				    attrs.put("STRUCTURAL", "true");
+				    attrs.put("DESC", "RFC2256: an organizational unit");
+				  
+				    //Attribute must = new BasicAttribute("MUST", "ou");
+				    //must.add("objectclass");
+				    //attrs.put(must);
+/
+				    System.out.println(attrs);
+				   // System.out.println(must);
+			    
+				    DirContext schema = connectanonyme.getSchema("");
+			    
+			    DirContext newClass = schema.createSubcontext("ClassDefinition/organizationalUnit", attrs);
+
+		    	logger.debug("Arrêt: CreationGroupe");
+		    	return true;
+		    	
+		} catch (Exception e) {
+			logger.error("ERREUR: "+ e);
+			logger.debug("Arrêt: CreationGroupe");
+			return false;
+		}
+	}*/
+
 }
