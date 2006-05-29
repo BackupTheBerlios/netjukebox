@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+    
+    <!-- ========== Data Source Configuration =============================== -->
+    <data-sources />
+    
+    <!-- ========== Form Bean Definitions ================================== -->
+    <form-beans>
+		
+		<!--CONNEXION-->
+        <form-bean name="loginForm" type="form.LoginForm">
+            <form-property name="login" type="java.lang.String" />
+			<form-property name="pass" type="java.lang.String" />
+        </form-bean>
+		
+		<!--MOT DE PASSE PERDU-->
+		<form-bean name="pwdPerduForm" type="form.pwdPerduForm">
+            <form-property name="login" type="java.lang.String" />
+        </form-bean>
+		
+		<!--CREATION-->
+        <form-bean name="userForm" type="form.NewUserForm">
+			<form-property name="login" type="java.lang.String" />
+			<form-property name="pass" type="java.lang.String" />
+            <form-property name="nom" type="java.lang.String" />
+            <form-property name="prenom" type="java.lang.String" />
+			<form-property name="mail" type="java.lang.String" />
+			<form-property name="pays" type="java.lang.String" />
+        </form-bean>
+
+		<form-bean name="progForm" type="form.NewProgForm">
+            <form-property name="titre" type="java.lang.String" />
+			<form-property name="thematique" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="canalForm" type="form.NewCanalForm">
+            <form-property name="nom" type="java.lang.String" />
+			<form-property name="nbmaxutil" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="docForm" type="form.NewDocForm">
+            <form-property name="titre" type="java.lang.String" />
+			<form-property name="duree" type="java.lang.String" />
+			<form-property name="jour" type="java.lang.String" />
+			<form-property name="mois" type="java.lang.String" />
+			<form-property name="annee" type="java.lang.String" />
+			<form-property name="source" type="java.lang.String" />
+			<form-property name="langue" type="java.lang.String" />
+			<form-property name="genre" type="java.lang.String" />
+			<form-property name="fichier" type="NewDocAction" />
+			<form-property name="artiste" type="java.lang.String" />
+			<form-property name="interprete" type="java.lang.String" />
+			<form-property name="compositeur" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="contratForm" type="form.NewContratForm">
+            <form-property name="titre" type="java.lang.String" />
+			<form-property name="joursig" type="java.lang.String" />
+			<form-property name="moissig" type="java.lang.String" />
+			<form-property name="anneesig" type="java.lang.String" />
+			<form-property name="jourexp" type="java.lang.String" />
+			<form-property name="moisexp" type="java.lang.String" />
+			<form-property name="anneeexp" type="java.lang.String" />
+			<form-property name="idcontractant" type="java.lang.String" />
+			<form-property name="reg" type="java.lang.String" />
+			<form-property name="type" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="contractantForm" type="form.NewContractantForm">
+            <form-property name="nom" type="java.lang.String" />
+			<form-property name="adresse" type="java.lang.String" />
+			<form-property name="codepostal" type="java.lang.String" />
+			<form-property name="ville" type="java.lang.String" />
+			<form-property name="telephone" type="java.lang.String" />
+			<form-property name="fax" type="java.lang.String" />
+			<form-property name="mail" type="java.lang.String" />
+			<form-property name="type" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="permForm" type="form.NewPermForm">
+            <form-property name="id" type="java.lang.String" />
+			<form-property name="libelle" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="roleForm" type="form.NewRoleForm">
+            <form-property name="id" type="java.lang.String" />
+        </form-bean>
+			    
+		<!--RECHERCHE-->
+		<form-bean name="rechercheCanalForm" type="form.rechercheCanalForm">
+			<form-property name="id" type="java.lang.String" />
+            <form-property name="nom" type="java.lang.String" />
+			<form-property name="nbmaxutil" type="java.lang.String" />
+        </form-bean>
+		    
+		<form-bean name="rechercheProgForm" type="form.rechercheProgForm">
+			<form-property name="id" type="java.lang.String" />
+            <form-property name="titre" type="java.lang.String" />
+			<form-property name="thematique" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="rechercheDocForm" type="form.rechercheDocForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="titre" type="java.lang.String" />
+			<form-property name="duree" type="java.lang.String" />
+			<form-property name="jour" type="java.lang.String" />
+			<form-property name="mois" type="java.lang.String" />
+			<form-property name="annee" type="java.lang.String" />
+			<form-property name="source" type="java.lang.String" />
+			<form-property name="langue" type="java.lang.String" />
+			<form-property name="genre" type="java.lang.String" />
+			<form-property name="fichier" type="NewDocAction" />
+			<form-property name="artiste" type="java.lang.String" />
+			<form-property name="interprete" type="java.lang.String" />
+			<form-property name="compositeur" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="rechercheContractantForm" type="form.rechercheContractantForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="nom" type="java.lang.String" />
+			<form-property name="adresse" type="java.lang.String" />
+			<form-property name="codepostal" type="java.lang.String" />
+			<form-property name="ville" type="java.lang.String" />
+			<form-property name="telephone" type="java.lang.String" />
+			<form-property name="fax" type="java.lang.String" />
+			<form-property name="mail" type="java.lang.String" />
+			<form-property name="type" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="rechercheContratForm" type="form.rechercheContratForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="titre" type="java.lang.String" />
+			<form-property name="joursig" type="java.lang.String" />
+			<form-property name="moissig" type="java.lang.String" />
+			<form-property name="anneesig" type="java.lang.String" />
+			<form-property name="jourexp" type="java.lang.String" />
+			<form-property name="moisexp" type="java.lang.String" />
+			<form-property name="anneeexp" type="java.lang.String" />
+			<form-property name="idcontractant" type="java.lang.String" />
+			<form-property name="reg" type="java.lang.String" />
+			<form-property name="type" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="recherchePermForm" type="form.recherchePermForm">
+			<form-property name="id" type="java.lang.String" />
+            <form-property name="libelle" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="rechercheRoleForm" type="form.rechercheRoleForm">
+			<form-property name="id" type="java.lang.String" />
+        </form-bean>
+		
+		<!--SUPPRESSION-->
+		<form-bean name="supprForm" type="form.supprForm">
+            <form-property name="id" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="supprUtilForm" type="form.supprUtilForm">
+            <form-property name="login" type="java.lang.String" />
+        </form-bean>		
+		
+		<!--INFOS-->
+		<form-bean name="infoForm" type="form.infoForm">
+			<form-property name="id" type="java.lang.String" />
+        </form-bean>
+		
+		<!--LISTER-->
+		<form-bean name="listeForm" type="form.listeForm">
+        </form-bean>
+		
+		<!--PLANIFIER-->
+		<form-bean name="planifProgForm" type="form.planifProgForm">
+			<form-property name="idprog" type="java.lang.String" />
+			<form-property name="idcanal" type="java.lang.String" />
+			<form-property name="jour" type="java.lang.String" />
+			<form-property name="mois" type="java.lang.String" />
+			<form-property name="annee" type="java.lang.String" />
+			<form-property name="heure" type="java.lang.String" />
+			<form-property name="minute" type="java.lang.String" />
+			<form-property name="seconde" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="deplanifProgForm" type="form.deplanifProgForm">
+			<form-property name="idcanal" type="java.lang.String" />
+			<form-property name="calage" type="java.lang.String" />
+		</form-bean>
+		
+		<!--DIFFUSER-->
+		<form-bean name="difProgForm" type="form.difProgForm">
+			<form-property name="idprog" type="java.lang.String" />
+			<form-property name="idcanal" type="java.lang.String" />
+		</form-bean>
+		
+		<!--AJOUTSUPPRESSION DOC PROG-->
+		<form-bean name="ajoutsuppressionForm" type="form.ajoutsuppressionForm">
+			<form-property name="id1" type="java.lang.String" />
+			<form-property name="id2" type="java.lang.String" />
+		</form-bean>
+		
+		
+    </form-beans>
+    
+    <!-- ========== Global Exception Definitions ============================== -->
+    <global-exceptions />
+    
+    <!-- ========== Global Forward Definitions =============================== -->
+    <global-forwards />
+    
+    <!-- ========== Action Mapping Definitions =============================== -->
+    <action-mappings>
+		
+		<!--CONNEXION-->
+        <action
+            path="/login"
+            input="/index.jsp"
+            name="loginForm"
+            type="action.LoginAction">
+            <forward name="failed" path="/index.jsp" />
+            <forward name="ok" path="/mainPage.jsp" />
+        </action>
+        
+		<!--MOT DE PASSE PERDU-->
+		 <action
+            path="/pwdPerdu"
+            input="/pwdPerdu.jsp"
+            name="pwdPerduForm"
+            type="action.pwdPerduAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/index.jsp" />
+        </action>
+		
+		<!--CREATION-->
+        <action
+            path="/newUser"
+            input="/addUser.jsp"
+            name="userForm"
+            type="action.NewUserAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/newDoc"
+            input="/addDoc.jsp"
+            name="docForm"
+            type="action.NewDocAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+
+		<action
+            path="/newCanal"
+            input="/addCanal.jsp"
+            name="canalForm"
+            type="action.NewCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/newProg"
+            input="/addProg.jsp"
+            name="progForm"
+            type="action.NewProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/newContrat"
+            input="/addContrat.jsp"
+            name="contratForm"
+            type="action.NewContratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/newContractant"
+            input="/addContractant.jsp"
+            name="contractantForm"
+            type="action.NewContractantAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/newPerm"
+            input="/addPerm.jsp"
+            name="permForm"
+            type="action.NewPermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/newRole"
+            input="/addRole.jsp"
+            name="roleForm"
+            type="action.NewRoleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--SUPPRESSION-->
+		<action
+            path="/supprDoc"
+            input="/supprDoc.jsp"
+            name="supprForm"
+            type="action.supprDocAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/supprProg"
+            input="/supprProg.jsp"
+            name="supprForm"
+            type="action.supprProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/supprCanal"
+            input="/supprCanal.jsp"
+            name="supprForm"
+            type="action.supprCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/supprContrat"
+            input="/supprContrat.jsp"
+            name="supprForm"
+            type="action.supprContratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/supprContractant"
+            input="/supprContractant.jsp"
+            name="supprForm"
+            type="action.supprContractantAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/supprPerm"
+            input="/supprPerm.jsp"
+            name="supprForm"
+            type="action.supprPermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/supprRole"
+            input="/supprRole.jsp"
+            name="supprForm"
+            type="action.supprRoleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/supprUtil"
+            input="/supprUtil.jsp"
+            name="supprUtilForm"
+            type="action.supprUtilAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--RECHERCHE-->
+		<action
+            path="/rechercheCanal"
+            input="/rechercheCanal.jsp"
+            name="rechercheCanalForm"
+            type="action.rechercheCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheCanal.jsp" />
+        </action>
+		
+		<action
+            path="/rechercheProg"
+            input="/rechercheProg.jsp"
+            name="rechercheProgForm"
+            type="action.rechercheProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheProg.jsp" />
+        </action>
+		
+		<action
+            path="/rechercheDoc"
+            input="/rechercheDoc.jsp"
+            name="rechercheDocForm"
+            type="action.rechercheDocAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheDoc.jsp" />
+        </action>
+		
+		<action
+            path="/rechercheContractant"
+            input="/rechercheContractant.jsp"
+            name="rechercheContractantForm"
+            type="action.rechercheContractantAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheContractant.jsp" />
+        </action>
+		
+		<action
+            path="/rechercheContrat"
+            input="/rechercheContrat.jsp"
+            name="rechercheContratForm"
+            type="action.rechercheContratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheContrat.jsp" />
+        </action>
+		
+		<action
+            path="/recherchePerm"
+            input="/recherchePerm.jsp"
+            name="recherchePermForm"
+            type="action.recherchePermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/affichePerm.jsp" />
+        </action>
+		
+		<action
+            path="/rechercheRole"
+            input="/rechercheRole.jsp"
+            name="rechercheRoleForm"
+            type="action.rechercheRoleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheRole.jsp" />
+        </action>
+		
+		<!--INFOS-->
+		<action
+            path="/infoCanal"
+            input="/infoCanal.jsp"
+            name="infoForm"
+            type="action.infoCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheCanalInfo.jsp" />
+        </action>
+		
+		<action
+            path="/infoProg"
+            input="/infoProg.jsp"
+            name="infoForm"
+            type="action.infoProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheProgInfo.jsp" />
+        </action>
+		
+		<action
+            path="/infoDoc"
+            input="/infoDoc.jsp"
+            name="infoForm"
+            type="action.infoDocAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheDoc.jsp" />
+        </action>
+		
+		<action
+            path="/infoContractant"
+            input="/infoContractant.jsp"
+            name="infoForm"
+            type="action.infoContractantAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheContractant.jsp" />
+        </action>
+		
+		<action
+            path="/infoContrat"
+            input="/infoContrat.jsp"
+            name="infoForm"
+            type="action.infoContratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheContrat.jsp" />
+        </action>
+		
+		<action
+            path="/infoPerm"
+            input="/infoPerm.jsp"
+            name="infoForm"
+            type="action.infoPermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/affichePerm.jsp" />
+        </action>
+		
+		<action
+            path="/infoRole"
+            input="/infoRole.jsp"
+            name="infoForm"
+            type="action.infoRoleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheRole.jsp" />
+        </action>
+		
+		<!--LISTE-->
+		<action
+            path="/listeCanal"
+            input="/listeCanal.jsp"
+            name="listeForm"
+            type="action.listeCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheCanalListe.jsp" />
+        </action>
+		
+		<action
+            path="/listeProg"
+            input="/listeProg.jsp"
+            name="listeForm"
+            type="action.listeProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheProgListe.jsp" />
+        </action>
+		
+		<action
+            path="/listeDoc"
+            input="/listeDoc.jsp"
+            name="listeForm"
+            type="action.listeDocAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheDocListe.jsp" />
+        </action>
+		
+		<action
+            path="/listeContrat"
+            input="/listeContrat.jsp"
+            name="listeForm"
+            type="action.listeContratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheContratListe.jsp" />
+        </action>
+		
+		<action
+            path="/listeContractant"
+            input="/listeContractant.jsp"
+            name="listeForm"
+            type="action.listeContractantAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheContractantListe.jsp" />
+        </action>
+		
+		<action
+            path="/listePerm"
+            input="/listePerm.jsp"
+            name="listeForm"
+            type="action.listePermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/affichePermListe.jsp" />
+        </action>
+		
+		<action
+            path="/listeRole"
+            input="/listeRole.jsp"
+            name="listeForm"
+            type="action.listeRoleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheRoleListe.jsp" />
+        </action>
+		
+		<action
+            path="/listeUtil"
+            input="/listeUtil.jsp"
+            name="listeForm"
+            type="action.listeUtilAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheUtilListe.jsp" />
+        </action>
+		
+		<!--MODIFICATION-->
+		<action
+            path="/modifierCanal"
+            input="/modifierCanal.jsp"
+            name="infoForm"
+            type="action.modifierCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifCanal.jsp" />
+        </action>
+		
+		<action
+            path="/modifierProg"
+            input="/modifierProg.jsp"
+            name="infoForm"
+            type="action.modifierProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifProg.jsp" />
+        </action>
+		
+		<action
+            path="/modifierDoc"
+            input="/modifierDoc.jsp"
+            name="infoForm"
+            type="action.modifierDocAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifDoc.jsp" />
+        </action>
+		
+		<action
+            path="/modifierContractant"
+            input="/modifierContractant.jsp"
+            name="infoForm"
+            type="action.modifierContractantAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifContractant.jsp" />
+        </action>
+		
+		<action
+            path="/modifierContrat"
+            input="/modifierContrat.jsp"
+            name="infoForm"
+            type="action.modifierContratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifContrat.jsp" />
+        </action>
+		
+		<action
+            path="/modifierPerm"
+            input="/modifierPerm.jsp"
+            name="infoForm"
+            type="action.modifierPermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifPerm.jsp" />
+        </action>
+		
+		<action
+            path="/modifierRole"
+            input="/modifierRole.jsp"
+            name="infoForm"
+            type="action.modifierRoleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifRole.jsp" />
+        </action>
+		
+		<!--VALIDER MODIFICATION-->
+		<action
+   		    path="/validemodifCanal"
+       		input="/validemodifCanal.jsp"
+			name="rechercheCanalForm"
+       		type="action.validemodifCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/validemodifProg"
+            input="/validemodifProg.jsp"
+            name="rechercheProgForm"
+            type="action.validemodifProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/validemodifDoc"
+            input="/validemodifDoc.jsp"
+            name="rechercheDocForm"
+            type="action.validemodifDocAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/validemodifContractant"
+            input="/validemodifContractant.jsp"
+            name="rechercheContractantForm"
+            type="action.validemodifContractantAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/validemodifContrat"
+            input="/validemodifContrat.jsp"
+            name="rechercheContratForm"
+            type="action.validemodifContratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/validemodifPerm"
+            input="/validemodifPerm.jsp"
+            name="recherchePermForm"
+            type="action.validemodifPermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creationPerm.jsp" />
+        </action>
+		
+		<action
+            path="/validemodifRole"
+            input="/validemodifRole.jsp"
+            name="rechercheRoleForm"
+            type="action.validemodifRoleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+				
+		<!--PLANIFIER-->
+		<action
+            path="/planifprog"
+            input="/planifprog.jsp"
+            name="planifProgForm"
+            type="action.planifProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/deplanifprog"
+            input="/deplanifprog.jsp"
+            name="deplanifProgForm"
+            type="action.deplanifProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--PLANIFIER-->
+		<action
+            path="/difprog"
+            input="/difprog.jsp"
+            name="difProgForm"
+            type="action.difProgAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--START STOP CANAL-->
+		<action
+            path="/startcanal"
+            input="/startcanal.jsp"
+            name="infoForm"
+            type="action.startCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/stopcanal"
+            input="/stopcanal.jsp"
+            name="infoForm"
+            type="action.stopCanalAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--AJOUT SUPPRESSION DOC PROGRAMME-->
+		<action
+            path="/ajouterdocprog"
+            input="/ajouterdocprog.jsp"
+            name="ajoutsuppressionForm"
+            type="action.ajouterdocprogAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/retirerdocprog"
+            input="/retirerdocprog.jsp"
+            name="ajoutsuppressionForm"
+            type="action.retirerdocprogAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--AJOUT SUPPRESSION CONTRAT DOC-->
+		<action
+            path="/retirerdoccontrat"
+            input="/retirerdoccontrat.jsp"
+            name="ajoutsuppressionForm"
+            type="action.retirerdoccontratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/ajouterdoccontrat"
+            input="/ajouterdoccontrat.jsp"
+            name="ajoutsuppressionForm"
+            type="action.ajouterdoccontratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--START STOP PLAYER-->
+		<action
+            path="/startplayer"
+            input="/startplayer.jsp"
+            name="infoForm"
+            type="action.startplayerAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/stopplayer"
+            input="/stopplayer.jsp"
+            name="infoForm"
+            type="action.stopplayerAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+    </action-mappings>
+    
+    <!-- ========== Controller Configuration ================================ -->
+    <controller />
+    
+    <!-- ========== Message Resources Definitions ============================ -->
+    
+    <!-- ========== Plug Ins Configuration ================================= -->
+    <message-resources parameter="resources.ApplicationResources" />
+</struts-config>
