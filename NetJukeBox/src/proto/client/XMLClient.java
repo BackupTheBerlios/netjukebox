@@ -27,12 +27,12 @@ public class XMLClient {
 	/**
 	 * Etat connecté
 	 */
-	private boolean etatConnecte = false;
+	//private boolean etatConnecte = false;
 
 	/**
 	 * Login
 	 */
-	private String login;
+	//private String login;
 
 // CONSTRUCTEUR
 // **************************************
@@ -45,7 +45,7 @@ public class XMLClient {
 	public XMLClient(String ip, String port) {
 		
 		// Si le client XML n'est pas déjà initialisé
-		if (clientXML == null) {
+		//if (clientXML == null) {
 			System.out.println("INFO: Initialisation XMLRPC en cours...");
 			try {
 				// Utilise lengthpilote Sax d'Apache Xerces
@@ -70,10 +70,10 @@ public class XMLClient {
 				System.err.println("ERREUR: "+ e);
 			}
 
-			// Sinon, déjà initialisé
+		/*	// Sinon, déjà initialisé
 		} else {
 			System.err.println("WARNING: Client XML déjà initialisé !");
-		}
+		}*/
 	}
 
 // METHODES DYNAMIQUES
@@ -113,10 +113,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerCanal(String nom, String utilMax) {
+	public boolean creerCanal(String login, String nom, String utilMax) {
 		// Si l'utilisateur est connecté au seveur
 		
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Création d'un canal...");
 			try {
 				// Création de la requête
@@ -135,11 +135,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -149,9 +149,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean diffuserProgramme(String idProg, String idCanal) {
+	public boolean diffuserProgramme(String login, String idProg, String idCanal) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Diffusion du programme...");
 			try {
 				// Création de la requête
@@ -170,11 +170,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -190,11 +190,11 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean planifierProgramme(String idProg, String idCanal,
+	public boolean planifierProgramme(String login, String idProg, String idCanal,
 			String jour, String mois, String annee, String heure,
 			String minute, String seconde) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Planification du programme...");
 			try {
 				// Création de la requête
@@ -219,11 +219,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -233,9 +233,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean deplanifierProgramme(String idCanal, String calage) {
+	public boolean deplanifierProgramme(String login, String idCanal, String calage) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Déplanification du programme...");
 			try {
 				// Création de la requête
@@ -254,11 +254,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -267,9 +267,9 @@ public class XMLClient {
 	 * @return String
 	 */
 	@SuppressWarnings("unchecked")
-	public String ecouterCanal(String idCanal) {
+	public String ecouterCanal(String login, String idCanal) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Ecoute d'un canal...");
 			try {
 				// Création de la requête
@@ -286,11 +286,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -299,9 +299,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean startCanal(String idCanal) {
+	public boolean startCanal(String login, String idCanal) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Diffusion d'un canal...");
 			try {
 				// Création de la requête
@@ -319,11 +319,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -332,9 +332,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean stopCanal(String idCanal) {
+	public boolean stopCanal(String login, String idCanal) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Arrêt d'un canal...");
 			try {
 				// Création de la requête
@@ -352,11 +352,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -364,9 +364,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerCanaux() {
+	public Vector listerCanaux(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Liste des canaux...");
 			try {
 				// Création de la requête
@@ -382,11 +382,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -397,9 +397,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherCanal(String id, String nom, String utilMax) {
+	public Vector rechercherCanal(String login, String id, String nom, String utilMax) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des canaux...");
 			try {
 				// Création de la requête
@@ -418,11 +418,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -431,9 +431,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerCanal(String id) {
+	public boolean supprimerCanal(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Suppression d'un canal...");
 			try {
 				// Création de la requête
@@ -451,11 +451,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -466,9 +466,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierCanal(String id, String nom, String utilMax) {
+	public boolean modifierCanal(String login, String id, String nom, String utilMax) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Modification d'un canal...");
 			try {
 				// Création de la requête
@@ -488,11 +488,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -501,9 +501,9 @@ public class XMLClient {
 	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
-	public Dictionary infoCanal(String id) {
+	public Dictionary infoCanal(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Informations sur un canal...");
 			try {
 				// Création de la requête
@@ -520,11 +520,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 // PROGRAMME
@@ -537,9 +537,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerProgramme(String titre, String thematique) {
+	public boolean creerProgramme(String login, String titre, String thematique) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Création d'un programme...");
 			try {
 				// Création de la requête
@@ -558,11 +558,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -572,9 +572,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean ajouterDocumentProgramme(String idDoc, String idProg) {
+	public boolean ajouterDocumentProgramme(String login, String idDoc, String idProg) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Ajout du document au programme...");
 			try {
 				// Création de la requête
@@ -593,11 +593,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -607,9 +607,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean retirerDocumentProgramme(String idProg, String calage) {
+	public boolean retirerDocumentProgramme(String login, String idProg, String calage) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Retirer un document du programme...");
 			try {
 				// Création de la requête
@@ -628,11 +628,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -640,9 +640,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerProgrammes() {
+	public Vector listerProgrammes(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Liste des programmes...");
 			try {
 				// Création de la requête
@@ -658,11 +658,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -673,9 +673,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherProgramme(String id, String titre, String thematique) {
+	public Vector rechercherProgramme(String login, String id, String titre, String thematique) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des programmes...");
 			try {
 				// Création de la requête
@@ -694,11 +694,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -707,9 +707,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerProgramme(String id) {
+	public boolean supprimerProgramme(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Suppression d'un programme...");
 			try {
 				// Création de la requête
@@ -727,11 +727,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -742,9 +742,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierProgramme(String id, String titre, String thematique) {
+	public boolean modifierProgramme(String login, String id, String titre, String thematique) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Modification d'un programme...");
 			try {
 				// Création de la requête
@@ -764,11 +764,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -777,9 +777,9 @@ public class XMLClient {
 	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
-	public Dictionary infoProgramme(String id) {
+	public Dictionary infoProgramme(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Informations sur un programme...");
 			try {
 				// Création de la requête
@@ -796,11 +796,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 // DOCUMENT
@@ -823,12 +823,12 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerDocument(String titre, String duree, String jour,
+	public boolean creerDocument(String login, String titre, String duree, String jour,
 			String mois, String annee, String source, String langue,
 			String genre, String fichier, String artiste, String interprete,
 			String compositeur) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Création d'un document...");
 			try {
 				// Création de la requête
@@ -857,11 +857,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -869,9 +869,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerDocuments() {
+	public Vector listerDocuments(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Liste des documents...");
 			try {
 				// Création de la requête
@@ -887,11 +887,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -912,12 +912,12 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherDocument(String id, String titre, String duree,
+	public Vector rechercherDocument(String login, String id, String titre, String duree,
 			String jour, String mois, String annee, String source,
 			String langue, String genre, String fichier, String artiste,
 			String interprete, String compositeur) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des documents...");
 			try {
 				// Création de la requête
@@ -946,11 +946,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -959,9 +959,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerDocument(String id) {
+	public boolean supprimerDocument(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Suppression d'un document...");
 			try {
 				// Création de la requête
@@ -979,11 +979,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1004,12 +1004,12 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierDocument(String id, String titre, String duree,
+	public boolean modifierDocument(String login, String id, String titre, String duree,
 			String jour, String mois, String annee, String source,
 			String langue, String genre, String fichier, String artiste,
 			String interprete, String compositeur) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Modification d'un document...");
 			try {
 				// Création de la requête
@@ -1039,11 +1039,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1052,9 +1052,9 @@ public class XMLClient {
 	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
-	public Dictionary infoDocument(String id) {
+	public Dictionary infoDocument(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Informations sur un document...");
 			try {
 				// Création de la requête
@@ -1071,11 +1071,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 // UTILISATEUR
@@ -1090,9 +1090,9 @@ public class XMLClient {
 	@SuppressWarnings("unchecked")
 	public boolean connexion(String login, String pwd) {
 		// Si l'utilisateur n'est pas connecté au seveur
-		if (!etatConnecte) {
+		//if (!etatConnecte) {
 			System.out.println("INFO: Connexion en cours...");
-			this.login = login;
+			//this.login = login;
 			try {
 				// Création de la requête
 				Vector params = new Vector();
@@ -1104,19 +1104,20 @@ public class XMLClient {
 				String result = (String) clientXML.execute("Systeme.connexion",
 						params);
 
-				etatConnecte = Boolean.parseBoolean(result);
-				return etatConnecte;
-
+				//etatConnecte = Boolean.parseBoolean(result);
+				//return etatConnecte;
+				return Boolean.parseBoolean(result);
+				
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
-			// Sinon, déjà connecté
+		/*	// Sinon, déjà connecté
 		} else {
 			System.err.println("WARNING: Client déjà connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1126,9 +1127,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean deconnexion() {
+	public boolean deconnexion(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Déconnexion en cours...");
 			try {
 				// Création de la requête
@@ -1138,21 +1139,23 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.deconnexion", params);
-				boolean estDeconnecte = Boolean.parseBoolean(result);
-
+				
+				/*boolean estDeconnecte = Boolean.parseBoolean(result);
 				etatConnecte = !estDeconnecte;
-				return estDeconnecte;
+				return estDeconnecte;*/
+				
+				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
 				return false;
 			}
 
-			// Sinon, n'est pas connecté
+		/*	// Sinon, n'est pas connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 	
 	/**
@@ -1167,10 +1170,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean inscription(String log, String pass, String role,
+	public boolean inscription(String login, String log, String pass, String role,
 			String email, String nom, String prenom, String pays) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Inscription d'un utilisateur...");
 			try {
 				// Création de la requête
@@ -1194,11 +1197,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1207,14 +1210,15 @@ public class XMLClient {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerUtilisateur(String login) {
-		if (etatConnecte) {
+	public boolean supprimerUtilisateur(String login, String log) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Suppression du compte ...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
-
+				params.addElement(log);
+				
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
 						"Systeme.supprimerUtilisateur", params);
@@ -1223,11 +1227,11 @@ public class XMLClient {
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
 				return false;
-			}
-		} else {
+		}
+		/*else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1236,9 +1240,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherUtilisateur() {
+	public Vector rechercherUtilisateur(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des attributs...");
 			try {
 				// Création de la requête
@@ -1252,11 +1256,11 @@ public class XMLClient {
 				System.err.println("ERREUR : " + e);
 				return null;
 			}
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -1270,10 +1274,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierUtilisateur(String newlogin, String pwd, String Nom,
+	public boolean modifierUtilisateur(String login, String newlogin, String pwd, String Nom,
 			String Prenom, String Email, String Pays) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Modification des attributs...");
 			try {
 				// Création de la requête
@@ -1298,11 +1302,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1311,14 +1315,15 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean recherchepwd(String login) {
+	public boolean recherchepwd(String login, String log) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Recherche du mot de passe...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
+				params.addElement(log);
 
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute(
@@ -1330,11 +1335,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 	
 	/**
@@ -1344,10 +1349,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean ajouterPermissionUtilisateur(String idPermission, String logUtil) {
+	public boolean ajouterPermissionUtilisateur(String login, String idPermission, String logUtil) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Ajout d'une permission à un utilisateur...");
 			try {
 				// Création de la requête
@@ -1366,11 +1371,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1380,10 +1385,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean retirerPermissionUtilisateur(String idPermission, String logUtil) {
+	public boolean retirerPermissionUtilisateur(String login, String idPermission, String logUtil) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Retirer une permission à un utilisateur...");
 			try {
 				// Création de la requête
@@ -1402,11 +1407,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 // CONTRAT
@@ -1428,11 +1433,11 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerContrat(String titre, String jourSignature, String moisSignature,
+	public boolean creerContrat(String login, String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration,
 			String anneeExpiration, String idContractant, String modeReglement, String type) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Création d'un contrat...");
 			try {
 				// Création de la requête
@@ -1459,11 +1464,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1471,9 +1476,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerContrats() {
+	public Vector listerContrats(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Liste des contrats...");
 			try {
 				// Création de la requête
@@ -1489,11 +1494,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 	
 	/**
@@ -1502,9 +1507,9 @@ public class XMLClient {
 	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
-	public Dictionary infoContrat(String id) {
+	public Dictionary infoContrat(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Informations sur un contrat...");
 			try {
 				// Création de la requête
@@ -1521,11 +1526,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 	
 	/**
@@ -1544,11 +1549,11 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherContrat(String id, String titre, String jourSignature, String moisSignature,
+	public Vector rechercherContrat(String login, String id, String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration, String anneeExpiration,
 			String idContractant, String modeReglement, String type) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des contrats...");
 			try {
 				// Création de la requête
@@ -1575,11 +1580,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -1588,9 +1593,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerContrat(String id) {
+	public boolean supprimerContrat(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Suppression d'un contrat...");
 			try {
 				// Création de la requête
@@ -1608,11 +1613,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1630,11 +1635,11 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierContrat(String id, String titre, String jourSignature, String moisSignature,
+	public boolean modifierContrat(String login, String id, String titre, String jourSignature, String moisSignature,
 			String anneeSignature, String jourExpiration, String moisExpiration, String anneeExpiration,
 			String signataire, String modeReglement, String type) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Modification d'un contrat...");
 			try {
 				// Création de la requête
@@ -1662,11 +1667,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 	
 	/**
@@ -1676,9 +1681,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean ajouterDocumentContrat(String idContrat, String idDoc) {
+	public boolean ajouterDocumentContrat(String login, String idContrat, String idDoc) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Ajout du document au contrat...");
 			try {
 				// Création de la requête
@@ -1697,11 +1702,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1711,9 +1716,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean retirerDocumentContrat(String idContrat, String idDoc) {
+	public boolean retirerDocumentContrat(String login, String idContrat, String idDoc) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Retirer un document du contrat...");
 			try {
 				// Création de la requête
@@ -1732,11 +1737,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 	
 //	CONTRACTANT
@@ -1755,10 +1760,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerContractant(String nom, String adresse, String codePostal,
+	public boolean creerContractant(String login, String nom, String adresse, String codePostal,
 			String ville, String telephone, String fax, String mail, String type) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Création d'un contractant...");
 			try {
 				// Création de la requête
@@ -1783,11 +1788,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1795,9 +1800,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerContractants() {
+	public Vector listerContractants(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Liste des contractants...");
 			try {
 				// Création de la requête
@@ -1813,11 +1818,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 	
 	/**
@@ -1826,9 +1831,9 @@ public class XMLClient {
 	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
-	public Dictionary infoContractant(String id) {
+	public Dictionary infoContractant(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Informations sur un contractant...");
 			try {
 				// Création de la requête
@@ -1845,11 +1850,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 	
 	/**
@@ -1866,11 +1871,11 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherContractant(String id, String nom, String adresse,
+	public Vector rechercherContractant(String login, String id, String nom, String adresse,
 			String codePostal, String ville, String telephone, String fax,
 			String mail, String type) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des contractants...");
 			try {
 				// Création de la requête
@@ -1895,11 +1900,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -1908,9 +1913,9 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerContractant(String id) {
+	public boolean supprimerContractant(String login, String id) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Suppression d'un contractant...");
 			try {
 				// Création de la requête
@@ -1928,11 +1933,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -1949,11 +1954,11 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierContractant(String id, String nom, String adresse,
+	public boolean modifierContractant(String login, String id, String nom, String adresse,
 			String codePostal, String ville, String telephone, String fax,
 			String mail, String type) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.out.println("INFO: Modification d'un contractant...");
 			try {
 				// Création de la requête
@@ -1979,11 +1984,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 //ROLE
@@ -1995,10 +2000,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerRole(String id) {
+	public boolean creerRole(String login, String id) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Création d'un rôle...");
 			try {
 				// Création de la requête
@@ -2016,11 +2021,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -2028,9 +2033,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerRoles() {
+	public Vector listerRoles(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Liste des rôles...");
 			try {
 				// Création de la requête
@@ -2045,11 +2050,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 	
 	/**
@@ -2058,10 +2063,10 @@ public class XMLClient {
 	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
-	public Dictionary infoRole(String id) {
+	public Dictionary infoRole(String login, String id) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Informations sur un rôle...");
 			try {
 				// Création de la requête
@@ -2077,11 +2082,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -2090,10 +2095,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerRole(String id) {
+	public boolean supprimerRole(String login, String id) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Suppression d'un rôle...");
 			try {
 				// Création de la requête
@@ -2110,11 +2115,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 	
 	/**
@@ -2124,10 +2129,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean ajouterPermissionRole(String idPermission, String idRole) {
+	public boolean ajouterPermissionRole(String login, String idPermission, String idRole) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Ajout d'une permission à un rôle...");
 			try {
 				// Création de la requête
@@ -2146,11 +2151,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -2160,10 +2165,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean retirerPermissionRole(String idPermission, String idRole) {
+	public boolean retirerPermissionRole(String login, String idPermission, String idRole) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Retirer une permission à un rôle...");
 			try {
 				// Création de la requête
@@ -2182,11 +2187,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 	
 //PERMISSION
@@ -2198,10 +2203,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean creerPermission(String id, String libelle) {
+	public boolean creerPermission(String login, String id, String libelle) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Création d'une permission...");
 			try {
 				// Création de la requête
@@ -2218,11 +2223,11 @@ public class XMLClient {
 				System.err.println("ERREUR : " + e);
 				return false;
 			}
-				// Sinon, non connecté
+				/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -2230,9 +2235,9 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerPermissions() {
+	public Vector listerPermissions(String login) {
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Liste des permissions...");
 			try {
 				// Création de la requête
@@ -2247,11 +2252,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 		
 	/**
@@ -2260,10 +2265,10 @@ public class XMLClient {
 	 * @return Dictionary
 	 */
 	@SuppressWarnings("unchecked")
-	public Dictionary infoPermission(String id) {
+	public Dictionary infoPermission(String login, String id) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Informations sur une permission...");
 			try {
 				// Création de la requête
@@ -2279,11 +2284,11 @@ public class XMLClient {
 				return null;
 			}
 
-		// Sinon, non connecté
+		/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -2292,10 +2297,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean supprimerPermission(String id) {
+	public boolean supprimerPermission(String login, String id) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Suppression d'une permission...");
 			try {
 				// Création de la requête
@@ -2312,11 +2317,11 @@ public class XMLClient {
 				return false;
 
 			}
-		// Sinon, non connecté
+		/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 	
 	/**
@@ -2326,10 +2331,10 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherPermission(String id, String libelle) {
+	public Vector rechercherPermission(String login, String id, String libelle) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Recherche des permissions...");
 			try {
 				// Création de la requête
@@ -2346,11 +2351,11 @@ public class XMLClient {
 				return null;
 			}
 
-			// Sinon, non connecté
+		/*	// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return null;
-		}
+		}*/
 	}
 	
 	/**
@@ -2360,10 +2365,10 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierPermission(String id, String libelle) {
+	public boolean modifierPermission(String login, String id, String libelle) {
 
 		// Si l'utilisateur est connecté au seveur
-		if (etatConnecte) {
+		//if (etatConnecte) {
 			System.err.println("INFO: Modification d'une permission...");
 			try {
 				// Création de la requête
@@ -2382,11 +2387,11 @@ public class XMLClient {
 				return false;
 			}
 
-			// Sinon, non connecté
+			/*// Sinon, non connecté
 		} else {
 			System.err.println("WARNING: Client non connecté au serveur !");
 			return false;
-		}
+		}*/
 	}
 }
 

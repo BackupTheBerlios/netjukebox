@@ -32,6 +32,10 @@ public class Client {
 	 */
 	private boolean etatConnecte = false;
 	
+	/**
+	 * Login
+	 */
+	private String login=null;
 
 // CONSTRUCTEUR
 //***********************************
@@ -142,7 +146,10 @@ public class Client {
 						System.out.print("Pwd: ");
 						String pwd = lire();
 						etatConnecte = clientXML.connexion(login, pwd);
-						if (etatConnecte) System.err.println("INFO: Utilisateur connecté");
+						if (etatConnecte) {
+							this.login = login;
+							System.err.println("INFO: Utilisateur connecté");
+						}
 						else System.err.println("ERREUR: Utilisateur non connecté");
 					}
 					else {
@@ -153,7 +160,7 @@ public class Client {
 				// DECONNEXION
 				if (ligne.equalsIgnoreCase("deconnexion")) {
 					if (etatConnecte) {
-						etatConnecte = !clientXML.deconnexion();
+						etatConnecte = !clientXML.deconnexion(login);
 						if (!etatConnecte) System.err.println("INFO: Utilisateur déconnecté");
 						else System.err.println("ERREUR: Utilisateur toujours connecté");
 					}
@@ -191,7 +198,7 @@ public class Client {
 						String interprete = lire();
 						System.out.print("Compositeur: ");
 						String compositeur = lire();
-						boolean cree = clientXML.creerDocument(titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
+						boolean cree = clientXML.creerDocument(login, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 						if (cree) System.err.println("INFO: Document créé");
 						else System.err.println("ERREUR: Document non créé");
 					}
@@ -203,7 +210,7 @@ public class Client {
 				// LISTERDOCUMENT
 				if  (ligne.equalsIgnoreCase("listerDocument")) {
 					if (etatConnecte) {
-						Vector vDocuments = clientXML.listerDocuments();
+						Vector vDocuments = clientXML.listerDocuments(login);
 						if (vDocuments!=null && vDocuments.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -262,7 +269,7 @@ public class Client {
 						String interprete = lire();
 						System.out.print("Compositeur: ");
 						String compositeur = lire();
-						Vector vDocuments = clientXML.rechercherDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
+						Vector vDocuments = clientXML.rechercherDocument(login, id, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 						if (vDocuments!=null && vDocuments.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -297,7 +304,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du document ");
 						String id = lire();
-						if (clientXML.supprimerDocument(id)) {
+						if (clientXML.supprimerDocument(login, id)) {
 							System.err.println("INFO: Document supprimé");
 						}
 						else System.err.println("ERREUR: Suppression du document échouée");
@@ -316,7 +323,7 @@ public class Client {
 						String id = lire();
 						
 						//On affiche ses infos
-						Vector vDocuments = clientXML.rechercherDocument(id, "", "", "", "", "", "", "", "", "", "", "", "");
+						Vector vDocuments = clientXML.rechercherDocument(login, id, "", "", "", "", "", "", "", "", "", "", "", "");
 						if (vDocuments!=null && vDocuments.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -364,7 +371,7 @@ public class Client {
 							String interprete = lire();
 							System.out.print("Compositeur: ");
 							String compositeur = lire();
-							boolean modifie = clientXML.modifierDocument(id, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
+							boolean modifie = clientXML.modifierDocument(login, id, titre, duree, jour, mois, annee, source, langue, genre, fichier, artiste, interprete, compositeur);
 							if (modifie) System.err.println("INFO: Document modifié");
 							else System.err.println("ERREUR: Document non modifié");
 						}
@@ -382,7 +389,7 @@ public class Client {
 						System.out.print("ID du document : ");
 						String id = lire();
 						
-						Dictionary d = clientXML.infoDocument(id);
+						Dictionary d = clientXML.infoDocument(login, id);
 						
 						if (d != null) {
 							System.out.println("----------------- Document -------------------");
@@ -417,7 +424,7 @@ public class Client {
 						String titre = lire();
 						System.out.print("Thématique: ");
 						String thematique = lire();
-						boolean cree = clientXML.creerProgramme(titre, thematique);
+						boolean cree = clientXML.creerProgramme(login, titre, thematique);
 						if (cree) System.err.println("INFO: Programme créé");
 						else System.err.println("ERREUR: Programme non créé");
 					}
@@ -429,7 +436,7 @@ public class Client {
 				// LISTERPROGRAMME
 				if  (ligne.equalsIgnoreCase("listerProgramme")) {
 					if (etatConnecte) {
-						Vector vProgrammes = clientXML.listerProgrammes();
+						Vector vProgrammes = clientXML.listerProgrammes(login);
 						if (vProgrammes!=null && vProgrammes.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary p;
@@ -462,7 +469,7 @@ public class Client {
 						String titre = lire();
 						System.out.print("Thématique: ");
 						String thematique = lire();
-						Vector vProgrammes = clientXML.rechercherProgramme(id, titre, thematique);
+						Vector vProgrammes = clientXML.rechercherProgramme(login, id, titre, thematique);
 						if (vProgrammes!=null && vProgrammes.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -489,7 +496,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du progamme ");
 						String id = lire();
-						if (clientXML.supprimerProgramme(id)) {
+						if (clientXML.supprimerProgramme(login, id)) {
 							System.err.println("INFO: Programme supprimé");
 						}
 						else System.err.println("ERREUR: Suppression du programme échouée");
@@ -508,7 +515,7 @@ public class Client {
 						String id = lire();
 						
 						//On affiche ses infos
-						Vector vProgrammes = clientXML.rechercherProgramme(id, "", "");
+						Vector vProgrammes = clientXML.rechercherProgramme(login, id, "", "");
 						if (vProgrammes!=null && vProgrammes.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -528,7 +535,7 @@ public class Client {
 							String titre = lire();
 							System.out.print("Thématique: ");
 							String thematique = lire();
-							boolean modifie = clientXML.modifierProgramme(id, titre, thematique);
+							boolean modifie = clientXML.modifierProgramme(login, id, titre, thematique);
 							if (modifie) System.err.println("INFO: Programme modifié");
 							else System.err.println("ERREUR: Programme non modifié");
 						}
@@ -546,7 +553,7 @@ public class Client {
 						System.out.print("ID du programme : ");
 						String id = lire();
 						
-						Dictionary p = clientXML.infoProgramme(id);
+						Dictionary p = clientXML.infoProgramme(login, id);
 						
 						if (p!=null) {
 							System.out.println("----------------- Programme -------------------");
@@ -580,7 +587,7 @@ public class Client {
 						String idDoc = lire();
 						System.out.print("ID du programme cible: ");
 						String idProg = lire();
-						boolean ajoute = clientXML.ajouterDocumentProgramme(idDoc, idProg);
+						boolean ajoute = clientXML.ajouterDocumentProgramme(login, idDoc, idProg);
 						if (ajoute) System.err.println("INFO: Document ajouté au programme");
 						else System.err.println("ERREUR: Document non ajouté au progamme");
 					}
@@ -596,7 +603,7 @@ public class Client {
 						String idProg = lire();
 						System.out.print("Document calé au temps : ");
 						String calage = lire();
-						boolean retire = clientXML.retirerDocumentProgramme(idProg, calage);
+						boolean retire = clientXML.retirerDocumentProgramme(login, idProg, calage);
 						if (retire) System.err.println("INFO: Document retiré du programme");
 						else System.err.println("ERREUR: Document non retiré du progamme");
 					}
@@ -614,7 +621,7 @@ public class Client {
 						String nom = lire();
 						System.out.print("Nombre maximal d'auditeurs: ");
 						String utilMax = lire();
-						boolean cree = clientXML.creerCanal(nom, utilMax);
+						boolean cree = clientXML.creerCanal(login, nom, utilMax);
 						if (cree) System.err.println("INFO: Canal créé");
 						else System.err.println("ERREUR: Canal non créé");
 					}
@@ -626,7 +633,7 @@ public class Client {
 				// LISTERCANAL
 				if  (ligne.equalsIgnoreCase("listerCanal")) {
 					if (etatConnecte) {
-						Vector vCanaux = clientXML.listerCanaux();
+						Vector vCanaux = clientXML.listerCanaux(login);
 						if (vCanaux!=null && vCanaux.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -658,7 +665,7 @@ public class Client {
 						String nom = lire();
 						System.out.print("NbMax d'auditeurs: ");
 						String utilMax = lire();
-						Vector vCanaux = clientXML.rechercherCanal(id, nom, utilMax);
+						Vector vCanaux = clientXML.rechercherCanal(login, id, nom, utilMax);
 						if (vCanaux!=null && vCanaux.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -685,7 +692,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du canal ");
 						String id = lire();
-						if (clientXML.supprimerCanal(id)) {
+						if (clientXML.supprimerCanal(login, id)) {
 							System.err.println("INFO: Canal supprimé");
 						}
 						else System.err.println("ERREUR: Suppression du canal échouée");
@@ -704,7 +711,7 @@ public class Client {
 						String id = lire();
 						
 						//On affiche ses infos
-						Vector vCanaux = clientXML.rechercherCanal(id, "", "");
+						Vector vCanaux = clientXML.rechercherCanal(login, id, "", "");
 						if (vCanaux!=null && vCanaux.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -724,7 +731,7 @@ public class Client {
 							String nom = lire();
 							System.out.print("NbMax d'auditeurs: ");
 							String utilMax = lire();
-							boolean modifie = clientXML.modifierCanal(id, nom, utilMax);
+							boolean modifie = clientXML.modifierCanal(login, id, nom, utilMax);
 							if (modifie) System.err.println("INFO: Canal modifié");
 							else System.err.println("ERREUR: Canal non modifié");
 						}
@@ -742,7 +749,7 @@ public class Client {
 						System.out.print("ID du canal : ");
 						String id = lire();
 						
-						Dictionary c = clientXML.infoCanal(id);
+						Dictionary c = clientXML.infoCanal(login, id);
 						if (c!=null) {
 							System.out.println("----------------- Canal -------------------");
 							System.out.println("Id: "+c.get("id"));
@@ -782,7 +789,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du canal source: ");
 						String idCanal = lire();
-						if (clientXML.startCanal(idCanal)) {
+						if (clientXML.startCanal(login, idCanal)) {
 							System.err.println("INFO: Diffusion du canal lancée");
 						}
 						else System.err.println("ERREUR: Diffusion du canal non lancée");
@@ -797,7 +804,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du canal source: ");
 						String idCanal = lire();
-						if (clientXML.stopCanal(idCanal)) {
+						if (clientXML.stopCanal(login, idCanal)) {
 							System.err.println("INFO: Canal arrété");
 						}
 						else System.err.println("ERREUR: Canal non stoppé");
@@ -812,7 +819,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du canal source: ");
 						String idCanal = lire();
-						String urlPlayer = clientXML.ecouterCanal(idCanal);
+						String urlPlayer = clientXML.ecouterCanal(login, idCanal);
 						if (urlPlayer != null) {
 							//RTPClient player = RTPClient.getInstance();
 							RTPClient2 player = RTPClient2.getInstance();
@@ -846,7 +853,7 @@ public class Client {
 						String idProg = lire();
 						System.out.print("ID du canal cible: ");
 						String idCanal = lire();
-						boolean diffuse = clientXML.diffuserProgramme(idProg, idCanal);
+						boolean diffuse = clientXML.diffuserProgramme(login, idProg, idCanal);
 						if (diffuse) System.err.println("INFO: Diffusion du programme lancée sur le canal");
 						else System.err.println("ERREUR: Diffusion du programme non lancée sur le canal");
 					}
@@ -874,7 +881,7 @@ public class Client {
 						String minute = lire();
 						System.out.print("Seconde: ");
 						String seconde = lire();
-						boolean planifie = clientXML.planifierProgramme(idProg, idCanal, jour, mois, annee, heure, minute, seconde);
+						boolean planifie = clientXML.planifierProgramme(login, idProg, idCanal, jour, mois, annee, heure, minute, seconde);
 						if (planifie) System.err.println("INFO: Programme planifié sur le canal");
 						else System.err.println("ERREUR: Programme non planifié");
 					}
@@ -890,7 +897,7 @@ public class Client {
 						String idCanal = lire();
 						System.out.print("Programme calé au temps: ");
 						String calage = lire();
-						boolean planifie = clientXML.deplanifierProgramme(idCanal, calage);
+						boolean planifie = clientXML.deplanifierProgramme(login, idCanal, calage);
 						if (planifie) System.err.println("INFO: Programme déplanifié sur le canal");
 						else System.err.println("ERREUR: Programme non déplanifié");
 					}
@@ -919,7 +926,7 @@ public class Client {
 						System.out.print("pays: ");
 						String pays = lire();
 						
-						if (clientXML.inscription(log, pass, role, email, nom, prenom, pays)) {
+						if (clientXML.inscription(login, log, pass, role, email, nom, prenom, pays)) {
 							System.err.println("INFO: Utilisateur inscrit");
 						}
 						else System.err.println("WARNING: Inscription impossible");
@@ -935,7 +942,7 @@ public class Client {
 						System.out.print("login: ");
 						String log = lire();
 						
-						if (clientXML.supprimerUtilisateur(log)) {
+						if (clientXML.supprimerUtilisateur(login, log)) {
 							System.err.println("INFO: Utilisateur supprimé");
 						}
 						else System.err.println("WARNING: Suppression impossible");
@@ -948,7 +955,7 @@ public class Client {
 				// RECHERCHERUTILISATEUR
 				if  (ligne.equalsIgnoreCase("rechercherUtilisateur")) {
 					if (etatConnecte) {
-						Vector vUtilisateur = clientXML.rechercherUtilisateur();
+						Vector vUtilisateur = clientXML.rechercherUtilisateur(login);
 						if (vUtilisateur!=null && vUtilisateur.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary v;
@@ -980,7 +987,7 @@ public class Client {
 					if (etatConnecte) {
 											
 						//On affiche ses infos
-						Vector vUtilisateur = clientXML.rechercherUtilisateur();
+						Vector vUtilisateur = clientXML.rechercherUtilisateur(login);
 						if (vUtilisateur!=null && vUtilisateur.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -1004,7 +1011,7 @@ public class Client {
 							//System.err.print("INFO: Attributs recherché");
 									
 							System.out.print("Nouveau Login: ");
-							String login = lire();
+							String loginUtil = lire();
 							System.out.print("Nouveau mot de passe: ");
 							String pwd = lire();
 							System.out.print("Nouveau Nom: ");
@@ -1016,7 +1023,7 @@ public class Client {
 							System.out.print("Nouveau Pays: ");
 							String pays = lire();
 							
-							boolean modifie = clientXML.modifierUtilisateur(login, pwd, nom, prenom, mail, pays);
+							boolean modifie = clientXML.modifierUtilisateur(login, loginUtil, pwd, nom, prenom, mail, pays);
 							if (modifie) System.err.println("INFO: Attributs modifiés");
 							else System.err.println("ERREUR: Attributs non modifiés");
 						}
@@ -1034,7 +1041,7 @@ public class Client {
 						String idPerm = lire();
 						System.out.print("ID de l'utilisateur cible: ");
 						String idUtilisateur = lire();
-						boolean ajoute = clientXML.ajouterPermissionUtilisateur(idPerm, idUtilisateur);
+						boolean ajoute = clientXML.ajouterPermissionUtilisateur(login, idPerm, idUtilisateur);
 						if (ajoute) System.err.println("INFO: Permission ajoutée à l'utilisateur");
 						else System.err.println("ERREUR: Permission non ajoutée à l'utilisateur");
 					}
@@ -1050,7 +1057,7 @@ public class Client {
 						String idUtilisateur = lire();
 						System.out.print("ID de la permission à retirer : ");
 						String idPerm = lire();
-						boolean retire = clientXML.retirerPermissionUtilisateur(idPerm, idUtilisateur);
+						boolean retire = clientXML.retirerPermissionUtilisateur(login, idPerm, idUtilisateur);
 						if (retire) System.err.println("INFO: Permission retirée à l'utilisateur");
 						else System.err.println("ERREUR: Permission non retirée à l'utilisateur");
 					}
@@ -1084,7 +1091,7 @@ public class Client {
 						String modeReglement = lire();
 						System.out.print("Type: ");
 						String type = lire();
-						boolean cree = clientXML.creerContrat(titre, jourSignature, moisSignature, anneeSignature, jourExpiration, moisExpiration, anneeExpiration, idContractant, modeReglement, type);
+						boolean cree = clientXML.creerContrat(login, titre, jourSignature, moisSignature, anneeSignature, jourExpiration, moisExpiration, anneeExpiration, idContractant, modeReglement, type);
 						if (cree) System.err.println("INFO: Contrat créé");
 						else System.err.println("ERREUR: Contrat non créé");
 					}
@@ -1096,7 +1103,7 @@ public class Client {
 				// LISTERCONTRATS
 				if  (ligne.equalsIgnoreCase("listerContrat")) {
 					if (etatConnecte) {
-						Vector vContrats = clientXML.listerContrats();
+						Vector vContrats = clientXML.listerContrats(login);
 						if (vContrats!=null && vContrats.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1147,7 +1154,7 @@ public class Client {
 						String modeReglement = lire();
 						System.out.print("Type: ");
 						String type = lire();
-						Vector vContrats = clientXML.rechercherContrat(id, titre, jourSignature, moisSignature, anneeSignature,
+						Vector vContrats = clientXML.rechercherContrat(login, id, titre, jourSignature, moisSignature, anneeSignature,
 								jourExpiration, moisExpiration, anneeExpiration, idContractant, modeReglement, type);
 						
 						if (vContrats!=null && vContrats.size()>0) {
@@ -1180,7 +1187,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du contrat ");
 						String id = lire();
-						if (clientXML.supprimerContrat(id)) {
+						if (clientXML.supprimerContrat(login, id)) {
 							System.err.println("INFO: Contrat supprimé");
 						}
 						else System.err.println("ERREUR: Suppression du contrat échouée");
@@ -1199,7 +1206,7 @@ public class Client {
 						String id = lire();
 						
 						//On affiche ses infos
-						Vector vContrats = clientXML.rechercherContrat(id, "", "", "", "", "", "", "", "", "", "");
+						Vector vContrats = clientXML.rechercherContrat(login, id, "", "", "", "", "", "", "", "", "", "");
 						if (vContrats!=null && vContrats.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1239,7 +1246,7 @@ public class Client {
 							String modeReglement = lire();
 							System.out.print("Type: ");
 							String type = lire();
-							boolean modifie = clientXML.modifierContrat(id, titre, jourSignature, moisSignature, anneeSignature,
+							boolean modifie = clientXML.modifierContrat(login, id, titre, jourSignature, moisSignature, anneeSignature,
 									jourExpiration, moisExpiration, anneeExpiration, idContractant, modeReglement, type);
 							if (modifie) System.err.println("INFO: Contrat modifié");
 							else System.err.println("ERREUR: Contrat non modifié");
@@ -1258,7 +1265,7 @@ public class Client {
 						System.out.print("ID du contrat : ");
 						String id = lire();
 						
-						Dictionary c = clientXML.infoContrat(id);
+						Dictionary c = clientXML.infoContrat(login, id);
 						
 						if (c != null) {
 							System.out.println("----------------- Contrat -------------------");
@@ -1295,7 +1302,7 @@ public class Client {
 						String idDoc = lire();
 						System.out.print("ID du contrat cible: ");
 						String idContrat = lire();
-						boolean ajoute = clientXML.ajouterDocumentContrat(idContrat, idDoc);
+						boolean ajoute = clientXML.ajouterDocumentContrat(login, idContrat, idDoc);
 						if (ajoute) System.err.println("INFO: Document ajouté au contrat");
 						else System.err.println("ERREUR: Document non ajouté au contrat");
 					}
@@ -1311,7 +1318,7 @@ public class Client {
 						String idContrat = lire();
 						System.out.print("ID du document à retirer : ");
 						String idDoc = lire();
-						boolean retire = clientXML.retirerDocumentContrat(idContrat, idDoc);
+						boolean retire = clientXML.retirerDocumentContrat(login, idContrat, idDoc);
 						if (retire) System.err.println("INFO: Document retiré du contrat");
 						else System.err.println("ERREUR: Document non retiré du contrat");
 					}
@@ -1341,7 +1348,7 @@ public class Client {
 						String mail = lire();
 						System.out.print("Type: ");
 						String type = lire();
-						boolean cree = clientXML.creerContractant(nom, adresse, codePostal, ville, telephone, fax, mail, type);
+						boolean cree = clientXML.creerContractant(login, nom, adresse, codePostal, ville, telephone, fax, mail, type);
 						if (cree) System.err.println("INFO: Contractant créé");
 						else System.err.println("ERREUR: Contractant non créé");
 					}
@@ -1353,7 +1360,7 @@ public class Client {
 				// LISTERCONTRACTANTS
 				if  (ligne.equalsIgnoreCase("listerContractant")) {
 					if (etatConnecte) {
-						Vector vContractants = clientXML.listerContractants();
+						Vector vContractants = clientXML.listerContractants(login);
 						if (vContractants!=null && vContractants.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1402,7 +1409,7 @@ public class Client {
 						String mail = lire();
 						System.out.print("Type: ");
 						String type = lire();
-						Vector vContractants = clientXML.rechercherContractant(id, nom, adresse, codePostal, ville, telephone, fax, mail, type);
+						Vector vContractants = clientXML.rechercherContractant(login, id, nom, adresse, codePostal, ville, telephone, fax, mail, type);
 						if (vContractants!=null && vContractants.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1435,7 +1442,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du contractant ");
 						String id = lire();
-						if (clientXML.supprimerContractant(id)) {
+						if (clientXML.supprimerContractant(login, id)) {
 							System.err.println("INFO: Contractant supprimé");
 						}
 						else System.err.println("ERREUR: Suppression du contractant échouée");
@@ -1454,7 +1461,7 @@ public class Client {
 						String id = lire();
 						
 						//On affiche ses infos
-						Vector vContractants = clientXML.rechercherContractant(id, "", "", "", "", "", "", "", "");
+						Vector vContractants = clientXML.rechercherContractant(login, id, "", "", "", "", "", "", "", "");
 						if (vContractants!=null && vContractants.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1492,7 +1499,7 @@ public class Client {
 							String mail = lire();
 							System.out.print("Type: ");
 							String type = lire();
-							boolean modifie = clientXML.modifierContractant(id, nom, adresse, codePostal, ville, telephone, fax, mail, type);
+							boolean modifie = clientXML.modifierContractant(login, id, nom, adresse, codePostal, ville, telephone, fax, mail, type);
 							if (modifie) System.err.println("INFO: Contractant modifié");
 							else System.err.println("ERREUR: Contractant non modifié");
 						}
@@ -1510,7 +1517,7 @@ public class Client {
 						System.out.print("ID du contractant : ");
 						String id = lire();
 						
-						Dictionary c = clientXML.infoContractant(id);
+						Dictionary c = clientXML.infoContractant(login, id);
 						
 						if (c != null) {
 							System.out.println("--------------- Contractant -----------------");
@@ -1551,7 +1558,7 @@ public class Client {
 						String id = lire();
 						System.out.print("Libellé: ");
 						String libelle = lire();
-						boolean cree = clientXML.creerPermission(id, libelle);
+						boolean cree = clientXML.creerPermission(login, id, libelle);
 						if (cree) System.err.println("INFO: Permission créée");
 						else System.err.println("ERREUR: Permission non créée");
 					}
@@ -1563,7 +1570,7 @@ public class Client {
 				// LISTERPERMISSIONS
 				if  (ligne.equalsIgnoreCase("listerPermission")) {
 					if (etatConnecte) {
-						Vector vPermissions = clientXML.listerPermissions();
+						Vector vPermissions = clientXML.listerPermissions(login);
 						if (vPermissions!=null && vPermissions.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1591,7 +1598,7 @@ public class Client {
 						String id = lire();
 						System.out.print("Libellé: ");
 						String libelle = lire();
-						Vector vPermissions = clientXML.rechercherPermission(id, libelle);
+						Vector vPermissions = clientXML.rechercherPermission(login, id, libelle);
 						if (vPermissions!=null && vPermissions.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1617,7 +1624,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID de la permission ");
 						String id = lire();
-						if (clientXML.supprimerPermission(id)) {
+						if (clientXML.supprimerPermission(login, id)) {
 							System.err.println("INFO: Permission supprimée");
 						}
 						else System.err.println("ERREUR: Suppression de la permission échouée");
@@ -1636,7 +1643,7 @@ public class Client {
 						String id = lire();
 						
 						//On affiche ses infos
-						Vector vPermissions = clientXML.rechercherPermission(id, "");
+						Vector vPermissions = clientXML.rechercherPermission(login, id, "");
 						if (vPermissions!=null && vPermissions.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1654,7 +1661,7 @@ public class Client {
 							System.out.print("Nouveau libellé: ");
 							String libelle = lire();
 							
-							boolean modifie = clientXML.modifierPermission(id, libelle);
+							boolean modifie = clientXML.modifierPermission(login, id, libelle);
 							if (modifie) System.err.println("INFO: Permission modifiée");
 							else System.err.println("ERREUR: Permission non modifiée");
 						}
@@ -1672,7 +1679,7 @@ public class Client {
 						System.out.print("ID de la permission : ");
 						String id = lire();
 						
-						Dictionary c = clientXML.infoPermission(id);
+						Dictionary c = clientXML.infoPermission(login, id);
 						
 						if (c != null) {
 							System.out.println("--------------- Permission -----------------");
@@ -1696,7 +1703,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("Code du rôle: ");
 						String id = lire();
-						boolean cree = clientXML.creerRole(id);
+						boolean cree = clientXML.creerRole(login, id);
 						if (cree) System.err.println("INFO: Rôle créé");
 						else System.err.println("ERREUR: Rôle non créé");
 					}
@@ -1708,7 +1715,7 @@ public class Client {
 				// LISTERROLES
 				if  (ligne.equalsIgnoreCase("listerRole")) {
 					if (etatConnecte) {
-						Vector vRoles = clientXML.listerRoles();
+						Vector vRoles = clientXML.listerRoles(login);
 						if (vRoles!=null && vRoles.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary c;
@@ -1733,7 +1740,7 @@ public class Client {
 					if (etatConnecte) {
 						System.out.print("ID du rôle: ");
 						String id = lire();
-						if (clientXML.supprimerRole(id)) {
+						if (clientXML.supprimerRole(login, id)) {
 							System.err.println("INFO: Rôle supprimé");
 						}
 						else System.err.println("ERREUR: Suppression de lu rôle échouée");
@@ -1750,7 +1757,7 @@ public class Client {
 						System.out.print("ID du rôle: ");
 						String id = lire();
 						
-						Dictionary c = clientXML.infoRole(id);
+						Dictionary c = clientXML.infoRole(login, id);
 						
 						if (c != null) {
 							System.out.println("--------------- Rôle -----------------");
@@ -1781,7 +1788,7 @@ public class Client {
 						String idPerm = lire();
 						System.out.print("ID du rôle cible: ");
 						String idRole = lire();
-						boolean ajoute = clientXML.ajouterPermissionRole(idPerm, idRole);
+						boolean ajoute = clientXML.ajouterPermissionRole(login, idPerm, idRole);
 						if (ajoute) System.err.println("INFO: Permission ajoutée au rôle");
 						else System.err.println("ERREUR: Permission non ajoutée au rôle");
 					}
@@ -1797,7 +1804,7 @@ public class Client {
 						String idRole = lire();
 						System.out.print("ID de la permission à retirer : ");
 						String idPerm = lire();
-						boolean retire = clientXML.retirerPermissionRole(idPerm, idRole);
+						boolean retire = clientXML.retirerPermissionRole(login, idPerm, idRole);
 						if (retire) System.err.println("INFO: Permission retirée au rôle");
 						else System.err.println("ERREUR: Permission non retirée au rôle");
 					}
