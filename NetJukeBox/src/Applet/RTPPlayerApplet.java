@@ -52,8 +52,6 @@ ControllerListener, ReceiveStreamListener, ActionListener{
     String address;
     String portstr;
     String media;
-    //Player videoplayer = null;
-    //SessionManager videomgr = null;
     SessionManager audiomgr = null;
     Component visualComponent = null;
     Component controlComponent = null;
@@ -62,11 +60,13 @@ ControllerListener, ReceiveStreamListener, ActionListener{
     //Button videobutton = null;
     GridBagLayout gridbag = null;
     GridBagConstraints c = null;
-    //ParticipantListWindow videogui = null;
     //ParticipantListWindow audiogui = null;
     int width = 320;
     int height =0;
     Vector playerlist = new Vector();
+    
+    //Instance du player
+    Player player = null;
    
     
     public void init(){
@@ -74,26 +74,6 @@ ControllerListener, ReceiveStreamListener, ActionListener{
         Panel buttonPanel = new Panel();
         buttonPanel.setLayout( new FlowLayout() );
         add("North", buttonPanel);
-        /*media = getParameter("video");
-        if (media.equals("On")){
-            address = getParameter("videosession");
-            portstr = getParameter("videoport");
-            StartSessionManager(address,
-                                StrToInt(portstr),
-                                "video");
-            if (videomgr == null){
-                System.err.println("null video manager ");
-                return;
-            }
-            // this is the GUI for displaying the RTCP
-            // statistics. This will not be displayed until the user
-            // clicks on the RTP Monitor window
-            //videogui = new ParticipantListWindow(videomgr);
-            // add a button for the video RTP monitor
-            videobutton = new Button("Video RTP Monitor");
-            videobutton.addActionListener(this);
-            buttonPanel.add(videobutton);
-        }*/
         media = getParameter("audio");
         if (media.equals("On")){
             address = getParameter("audiosession");
@@ -114,33 +94,14 @@ ControllerListener, ReceiveStreamListener, ActionListener{
     }// end of constructor
 
     public void start(){
-        // The applet only controls the first video player by adding
-        // its visual and control component to the applet canvas. Thus
-        // only this player needs to be controlled when this applet is
-        // swiched in browser pages etc.
-        /*if (videoplayer != null){
-            videoplayer.start();
-        }*/
-        if (playerlist == null)
-            return;
-        for (int i =0; i < playerlist.size(); i++){
-            Player player = (Player)playerlist.elementAt(i);
-            if (player != null)
-                new PlayerWindow(player);
+        if (player == null) {
+        	new PlayerWindow(player);
         }
     }
     // applet has been stopped, stop and deallocate all the RTP players.
     public void stop(){
-        /*if (videoplayer != null){
-            videoplayer.close();
-        }*/
-        if (playerlist == null)
-            return;
-        for (int i =0; i < playerlist.size(); i++){
-            Player player = (Player)playerlist.elementAt(i);
-            if (player != null){
-                player.close();
-            }
+        if (player != null) {
+        	player.close();
         }
     }
 
@@ -149,13 +110,7 @@ ControllerListener, ReceiveStreamListener, ActionListener{
     public void destroy(){
         // close the video and audio RTP SessionManagers
         String reason = "Shutdown RTP Player";
-        
-        /*if (videomgr != null){
-            videomgr.closeSession(reason);
-            videoplayer = null;
-            videomgr = null;
-        }*/
-        
+  
         if (audiomgr != null){
             audiomgr.closeSession(reason);
             audiomgr = null;
@@ -166,9 +121,6 @@ ControllerListener, ReceiveStreamListener, ActionListener{
    
     public void actionPerformed(ActionEvent event){
         Button button = (Button)event.getSource();
-        //if ((button == videobutton) && (videomgr != null)) ;
-            //videogui = new ParticipantListWindow(videomgr);
-            //videogui.Show();
         if ((button == audiobutton) && (audiomgr != null)) ;
             //audiogui = new ParticipantListWindow(audiomgr);
             //audiogui.Show();
@@ -205,19 +157,6 @@ ControllerListener, ReceiveStreamListener, ActionListener{
         
         
         if (event instanceof RealizeCompleteEvent) {
-            // add the video player's visual component to the applet
-            /*if (( visualComponent =
-                  player.getVisualComponent())!= null){
-                width = visualComponent.getPreferredSize().width;
-                height += visualComponent.getPreferredSize().height;
-                if (panel == null) {
-                    panel = new Panel();
-                    repositionPanel(width, height);
-                    panel.setLayout(new BorderLayout());
-                }
-                panel.add("Center", visualComponent);
-                panel.validate();
-            }*/
             // add the player's control component to the applet
             if (( controlComponent = 
                   player.getControlPanelComponent()) != null){
@@ -268,53 +207,27 @@ ControllerListener, ReceiveStreamListener, ActionListener{
 
     public void update( ReceiveStreamEvent event){
         SessionManager source =(SessionManager)event.getSource();
-        Player newplayer = null;
+
         // create a new player if a new recvstream is detected
         if (event instanceof NewReceiveStreamEvent){
             try{
                 ReceiveStream stream = ((NewReceiveStreamEvent)event).getReceiveStream();
                 DataSource dsource = stream.getDataSource();
-                newplayer = Manager.createPlayer(dsource);
-            }catch (Exception e){
-          System.err.println("RTPPlayerApplet Exception " + e.getMessage());
-          e.printStackTrace();
-            }
-            if (newplayer == null){
-                return;
-            }
-            // if this is the first video player, we need to listen to
-            // its events. Add me as a ControllerListener before
-            // starting the player
-            /*if (source == videomgr){
-                if (videoplayer == null){
-                    videoplayer = newplayer;
-                    newplayer.addControllerListener(this);
-                    newplayer.start();
-                }               
-                else{// controller listener and start is taken care of
-                    // in playerWindiow 
-                    if (playerlist != null)
-                        playerlist.addElement((Object)newplayer);
-                    new PlayerWindow(newplayer);
+                if (player!=null) {
+                	player.stop();
+                	player.setSource(dsource);
+                	player.start();
                 }
-            }// if (source == videomgr)*/
-            if (source == audiomgr){
+            }catch (Exception e){
+            	System.err.println("RTPPlayerApplet Exception " + e.getMessage());
+            	e.printStackTrace();
+            }
+            /*if (source == audiomgr){
                 if (playerlist != null)
                         playerlist.addElement((Object)newplayer);
                 new PlayerWindow(newplayer);
-            }
+            }*/
         }// if (event instanceof NewReceiveStreamEvent)
-
-        
-        if (event instanceof RemotePayloadChangeEvent){
-            // we received a payload change event. If a player was not
-            // created for this ReceiveStream, create a player. If the
-            // player already exists, RTPSM and JMF have taken care of
-            // switching the payloads and we dont do anything.
-            // If this is the first video player add me as the
-            // controllerlistener before starting the player, else
-            // just create a new player window.
-        }
         
     }// end of RTPSessionUpdate
         
