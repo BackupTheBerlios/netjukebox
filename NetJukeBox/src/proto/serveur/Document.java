@@ -319,6 +319,9 @@ public class Document {
 		dico.put("source", source);
 		dico.put("langue", langue);
 		dico.put("date", (jour+"/"+mois+"/"+annee));
+		dico.put("jour", jour);
+		dico.put("mois", mois);
+		dico.put("annee", annee);
 		dico.put("fichier", fichier);
 		
 		dico.put("artiste", artiste);
