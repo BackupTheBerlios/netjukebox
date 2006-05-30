@@ -234,12 +234,9 @@ public class Contrat {
 		//On supprime l'association contrat/contractant
 		contractant.retirerContrat(this.id);
 		
-		//On supprime les infos en base
-		ContratFactory.deleteById(this.id);
-		
 		//On supprime les infos de la base
 		logger.debug("Arrêt: supprimer");
-		return ContractantFactory.deleteById(id);
+		return ContratFactory.deleteById(id);
 	}
 	
 //#### GETTERS ####

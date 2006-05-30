@@ -216,11 +216,10 @@ public class Contractant {
 			c = (Contrat)contrats.get(i);
 			c.supprimer();
 		}
-		ContractantFactory.deleteById(this.id);
 		
 		//On supprime les infos de la base
 		logger.debug("Arrêt: supprimer");
-		return ContratFactory.deleteById(id);
+		return ContractantFactory.deleteById(id);
 	}
 
 //#### GETTERS ####
