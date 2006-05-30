@@ -655,11 +655,6 @@ public class Systeme {
 						String chemin = prefs.node("conversion").get("chemin", null);
 						
 						if (!chemin.endsWith("/")) chemin.concat("/");
-						if (!chemin.startsWith("file:/")) {
-							String chem = "file:/";
-							chem.concat(chemin);
-							chemin = chem;
-						}
 						
 						String fichierResult = chemin + d.getId() + ".wav";
 						String fichierInit = d.getFichier();
