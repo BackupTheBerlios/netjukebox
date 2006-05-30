@@ -1,18 +1,22 @@
 package proto.serveur;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 import java.util.prefs.Preferences;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.naming.NamingException;
+
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -760,6 +764,10 @@ public class Systeme {
 			while (listeDocs.hasMoreElements()) {
 				d = (Document)listeDocs.nextElement();
 				
+				int jourP = d.getDate().get(GregorianCalendar.DAY_OF_MONTH);
+				int moisP = d.getDate().get(GregorianCalendar.MONTH);
+				int anneeP = d.getDate().get(GregorianCalendar.YEAR);
+				
 				if ((id.length()>0 && d.getId().contains(id))
 					|| (titre.length()>0 && d.getTitre().contains(titre))
 					|| (genre.length()>0 && d.getGenre().contains(genre))
@@ -769,7 +777,10 @@ public class Systeme {
 					|| (duree.length()>0 && Integer.toString(d.getDuree()).contains(duree))
 					|| (artiste.length()>0 && d.getArtiste().contains(artiste))
 					|| (interprete.length()>0 && d.getInterprete().contains(interprete))
-					|| (compositeur.length()>0 && d.getCompositeur().contains(compositeur))) {
+					|| (compositeur.length()>0 && d.getCompositeur().contains(compositeur))
+					|| (jour.length()>0 && jourP==Integer.parseInt(jour))
+					|| (mois.length()>0 && moisP==Integer.parseInt(mois))
+					|| (annee.length()>0 && anneeP==Integer.parseInt(annee))) {
 					
 					vDocuments.addElement(d.getAttributesDictionary());
 				}
@@ -1606,7 +1617,8 @@ public class Systeme {
 				c = (Canal)listeCanx.nextElement();
 				
 				if ((id.length()>0 && c.getId().contains(id))
-					|| (nom.length()>0 && c.getNom().contains(nom))) {
+					|| (nom.length()>0 && c.getNom().contains(nom))
+					|| (utilMax.length()>0 && c.getUtilMax()==Integer.parseInt(utilMax))) {
 					
 					vCanaux.addElement(c.getAttributesDictionary());
 				}
@@ -1683,7 +1695,7 @@ public class Systeme {
 				Canal c = (Canal)CanalFactory.getById(id);
 				
 				//On modifie le canal
-				if (c.modifier(nom, Integer.valueOf(utilMax))) {
+				if (c.modifier(nom, Integer.parseInt(utilMax))) {
 				
 					logger.info("Canal '"+id+"' modifié");
 					return Boolean.toString(true);
@@ -1935,8 +1947,24 @@ public class Systeme {
 			while (listeContrat.hasMoreElements()) {
 				c = (Contrat)listeContrat.nextElement();
 				
+				int jourS = c.getDateSignature().get(GregorianCalendar.DAY_OF_MONTH);
+				int moisS = c.getDateSignature().get(GregorianCalendar.MONTH);
+				int anneeS = c.getDateSignature().get(GregorianCalendar.YEAR);
+				int jourE = c.getDateExpiration().get(GregorianCalendar.DAY_OF_MONTH);
+				int moisE = c.getDateExpiration().get(GregorianCalendar.MONTH);
+				int anneeE = c.getDateExpiration().get(GregorianCalendar.YEAR);
+				
 				if ((id.length()>0 && c.getId().contains(id))
-					|| (titre.length()>0 && c.getTitre().contains(titre))) {
+					|| (titre.length()>0 && c.getTitre().contains(titre))
+					|| (jourSignature.length()>0 && jourS==Integer.parseInt(jourSignature))
+					|| (moisSignature.length()>0 && moisS==Integer.parseInt(moisSignature))
+					|| (anneeSignature.length()>0 && anneeS==Integer.parseInt(anneeExpiration))
+					|| (jourExpiration.length()>0 && jourE==Integer.parseInt(jourExpiration))
+					|| (moisExpiration.length()>0 && moisE==Integer.parseInt(moisExpiration))
+					|| (anneeExpiration.length()>0 && anneeE==Integer.parseInt(anneeExpiration))
+					|| (idContractant.length()>0 && c.getContractant().getId().contains(idContractant))
+					|| (modeReglement.length()>0 && c.getModeReglement().contains(modeReglement))
+					|| (type.length()>0 && c.getType().contains(type))) {
 					
 					vContrat.addElement(c.getAttributesDictionary());
 				}
@@ -2248,13 +2276,13 @@ public class Systeme {
 			String mail, String type) {
 
 		logger.info("Recherche d'un contractant");
-
+		
+		//Vecteur de contractants à retourner
+		Vector vContractant = new Vector();
+		
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "rechercherContractant")) {
 			
-			//Vecteur de contractants à retourner
-			Vector vContractant = new Vector();
-		
 			Enumeration listeContractant = ContractantFactory.getInstances().elements();
 			Contractant c;
 			
@@ -2262,17 +2290,26 @@ public class Systeme {
 				c = (Contractant)listeContractant.nextElement();
 				
 				if ((id.length()>0 && c.getId().contains(id))
-					|| (nom.length()>0 && c.getNom().contains(nom))) {
+					|| (nom.length()>0 && c.getNom().contains(nom))
+					|| (adresse.length()>0 && c.getAdresse().contains(adresse))
+					|| (codePostal.length()>0 && c.getCodePostal().contains(codePostal))
+					|| (ville.length()>0 && c.getVille().contains(ville))
+					|| (telephone.length()>0 && c.getTelephone().contains(telephone))
+					|| (fax.length()>0 && c.getFax().contains(fax))
+					|| (mail.length()>0 && c.getMail().contains(mail))
+					|| (type.length()>0 && c.getType().contains(type))) {
 					
 					vContractant.addElement(c.getAttributesDictionary());
 				}
 			}
-			
+			logger.info("Recherche effectuée : "+vContractant.size()+" résultat(s)");
+			return vContractant;
+		} else {
+			// Sinon, opération refusée
+			logger.info("Permission non accordée. Recherche non effectuée");
+			//return null;
 			return vContractant;
 		}
-		// Sinon, opération refusée
-		logger.info("Permission non accordée. Recherche non effectuées");
-		return null;
 	}	
 	
 	/**
@@ -2285,11 +2322,11 @@ public class Systeme {
 
 		logger.info("Liste des contractants disponibles");
 
+		//On crée le vecteur
+		Vector vContractants = new Vector();
+		
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerContractants")) {
-		
-			//On crée le vecteur
-			Vector vContractants = new Vector();
 			
 			//On récupère la liste des documents
 			Enumeration listeContractants = ContractantFactory.getInstances().elements();
@@ -2300,10 +2337,11 @@ public class Systeme {
 			}
 			
 			return vContractants;
+		} else {
+			// Sinon, opération refusée
+			logger.info("Permission non accordée. Contractants non listés");
+			return vContractants;
 		}
-		// Sinon, opération refusée
-		logger.info("Permission non accordée. Contractants non listés");
-		return null;
 	}
 	
 	/**

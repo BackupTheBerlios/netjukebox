@@ -1918,8 +1918,7 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.rechercherContractants",
-						params);
+				return (Vector) clientXML.execute("Systeme.rechercherContractants", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);

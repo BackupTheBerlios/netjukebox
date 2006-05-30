@@ -422,8 +422,8 @@ public class Document {
 	 * Retourne la date de création du document
 	 * @return Date
 	 */
-	public /*pure*/ Date getDateCreation() {
-		
+	//public /*pure*/ Date getDateCreation() {
+	/*	
 		int jour = dateParution.get(GregorianCalendar.DATE);
 		int mois = dateParution.get(GregorianCalendar.MONTH);
 		int annee = dateParution.get(GregorianCalendar.YEAR);
@@ -432,6 +432,14 @@ public class Document {
 		TransformeDate TD = new TransformeDate(date);
 		logger.info(TD.d);
 		return TD.d;
+	}*/
+	
+	/**
+	 * Retourne la date de création du document
+	 * @return GregorianCalendar
+	 */
+	public GregorianCalendar getDate() {
+		return dateParution;
 	}
 	
 	/**
