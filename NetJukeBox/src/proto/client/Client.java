@@ -94,7 +94,7 @@ public class Client {
 		if (clientXML == null) {
 		
 			//On initialise le client
-			clientXML = new XMLClient(ip, port);
+			clientXML = XMLClient.getInstance(ip, port);
 			
 			try {
 				//On essaye de se connecter au serveur XML
@@ -1894,7 +1894,7 @@ public class Client {
 				
 				// END
 				if (ligne.equalsIgnoreCase("end")) {
-					if (etatConnecte) clientXML.deconnexion();
+					if (etatConnecte) clientXML.deconnexion(login);
 					System.out.println();
 					System.out.println("###########################################");
 					System.out.println("Fermeture du client");

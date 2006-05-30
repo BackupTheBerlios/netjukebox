@@ -9,6 +9,8 @@ import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
 
+import proto.serveur.Jdbc;
+
 /**
  * Client XML (envoie les requêtes au serveur XML du serveur principal)
  * 
@@ -19,6 +21,11 @@ public class XMLClient {
 // ATTRIBUTS
 // **************************************
 
+	/**
+	 * Singleton
+	 */
+	private static XMLClient instance;
+	
 	/**
 	 * Client XMLRPC
 	 */
@@ -34,6 +41,25 @@ public class XMLClient {
 	 */
 	//private String login;
 
+	
+// METHODE STATIQUE
+//***************************************
+	/**
+     *	Retourne l'instance du Singleton
+     */
+	public static synchronized XMLClient getInstance(){
+		return instance;
+	}
+	
+	/**
+     *	Initiliase l'instance du Singleton
+     */
+	public static synchronized XMLClient getInstance(String ip, String port){
+		if (instance == null)
+			instance = new XMLClient(ip, port);
+		return instance;
+	}
+	
 // CONSTRUCTEUR
 // **************************************
 
