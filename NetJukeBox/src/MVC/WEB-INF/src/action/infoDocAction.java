@@ -1,10 +1,11 @@
 package action;
 
 import java.util.Dictionary;
+import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.rechercheDocForm;
+import form.infoForm;
 
 public class infoDocAction extends Action {
 
@@ -27,6 +28,7 @@ public class infoDocAction extends Action {
 	 * @return ActionForward
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping,	ActionForm form,
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
@@ -34,16 +36,19 @@ public class infoDocAction extends Action {
 		clientXML = (XMLClient) session.getAttribute("client");
 		sessionLogin = (String) session.getAttribute("login");
 		
-		rechercheDocForm DocForm = (rechercheDocForm)form;
+		infoForm DocForm = (infoForm)form;
 
 		String id = DocForm.getId();
 				
 		response.setContentType("text/html");
 		
-		Dictionary ddoc = clientXML.infoDocument(sessionLogin, id);
+		Dictionary dDoc = clientXML.infoDocument(sessionLogin, id);
+		Vector vDoc = new Vector();
 		
-		if (ddoc!=null) {
-			session.setAttribute("Resultat" , ddoc);
+		if (dDoc!=null) {
+			vDoc.add(dDoc);
+			
+			session.setAttribute("Resultat" , vDoc);
 			return mapping.findForward("ok");
 		} else {
 			String erreur = "WARNING: Aucun document disponible";

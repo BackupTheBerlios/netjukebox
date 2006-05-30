@@ -23,7 +23,7 @@ public class LoginAction extends Action {
 	/**
 	 * Chemin du fichier d'initialisation
 	 */
-	private String filename = "/home/admindg/Workspace/MVC/WEB-INF/src/plugin/client.ini";
+	private String filename = "/home/netjukebox/Workspace/MVC/WEB-INF/src/plugin/client.ini";
 	
 	/**
 	 * Client XMLRPC

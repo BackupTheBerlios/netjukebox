@@ -31,7 +31,7 @@ public class NewCanalAction extends Action {
 		
 		HttpSession session = request.getSession();
 		clientXML = (XMLClient) session.getAttribute("client");
-		sessionLogin = session.getAttribute("login");
+		sessionLogin = (String) session.getAttribute("login");
 		
 		NewCanalForm canalForm = (NewCanalForm)form;
 

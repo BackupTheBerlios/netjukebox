@@ -3,7 +3,7 @@ package action;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.recherchePermForm;
+import form.modifierPermForm;
 
 public class validemodifPermAction extends Action {
 
@@ -33,7 +33,7 @@ public class validemodifPermAction extends Action {
 		clientXML = (XMLClient) session.getAttribute("client");
 		sessionLogin = (String) session.getAttribute("login");
 		
-		recherchePermForm permForm = (recherchePermForm)form;
+		modifierPermForm permForm = (modifierPermForm)form;
 
 		String id = permForm.getId();
 		String libelle = permForm.getLibelle();

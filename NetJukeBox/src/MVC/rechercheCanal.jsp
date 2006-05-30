@@ -22,7 +22,7 @@
 			</tr>
 			<tr>
 				<td><bean:message key='attr.nbmaxutil' /></td>
-				<td><html:text property="nbmaxutil" /></td>
+				<td><html:text property="utilMax" /></td>
 			</tr>
 				<td colspan="2" align="center"><html:submit /></td>
 			</tr>

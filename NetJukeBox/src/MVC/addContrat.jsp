@@ -21,7 +21,7 @@
 				<td><html:text property="joursig" /></td>
 			</tr>
 			<tr>
-				<td><bean:message key='adttr.moissig' /></td>
+				<td><bean:message key='attr.moissig' /></td>
 				<td><html:text property="moissig" /></td>
 			</tr>
 			<tr>

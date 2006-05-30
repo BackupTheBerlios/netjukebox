@@ -39,7 +39,7 @@ public class supprProgAction extends Action {
 
 		response.setContentType("text/html");
 		
-		boolean suppr = clientXML.supprimerDocument(sessionLogin, id);
+		boolean suppr = clientXML.supprimerProgramme(sessionLogin, id);
 		
 		if (suppr) {
 			String result = "INFO: Programme supprimé";

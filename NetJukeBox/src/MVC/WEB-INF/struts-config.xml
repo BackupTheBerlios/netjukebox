@@ -91,7 +91,7 @@
 		<form-bean name="rechercheCanalForm" type="form.rechercheCanalForm">
 			<form-property name="id" type="java.lang.String" />
             <form-property name="nom" type="java.lang.String" />
-			<form-property name="nbmaxutil" type="java.lang.String" />
+			<form-property name="utilMax" type="java.lang.String" />
         </form-bean>
 		    
 		<form-bean name="rechercheProgForm" type="form.rechercheProgForm">
@@ -159,6 +159,70 @@
 		<form-bean name="supprUtilForm" type="form.supprUtilForm">
             <form-property name="login" type="java.lang.String" />
         </form-bean>		
+		
+		<!--MODIFIER-->
+		<form-bean name="modifierCanalForm" type="form.modifierCanalForm">
+			<form-property name="id" type="java.lang.String" />
+            <form-property name="nom" type="java.lang.String" />
+			<form-property name="utilMax" type="java.lang.String" />
+        </form-bean>
+		    
+		<form-bean name="modifierProgForm" type="form.modifierProgForm">
+			<form-property name="id" type="java.lang.String" />
+            <form-property name="titre" type="java.lang.String" />
+			<form-property name="thematique" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="modifierDocForm" type="form.modifierDocForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="titre" type="java.lang.String" />
+			<form-property name="duree" type="java.lang.String" />
+			<form-property name="jour" type="java.lang.String" />
+			<form-property name="mois" type="java.lang.String" />
+			<form-property name="annee" type="java.lang.String" />
+			<form-property name="source" type="java.lang.String" />
+			<form-property name="langue" type="java.lang.String" />
+			<form-property name="genre" type="java.lang.String" />
+			<form-property name="fichier" type="NewDocAction" />
+			<form-property name="artiste" type="java.lang.String" />
+			<form-property name="interprete" type="java.lang.String" />
+			<form-property name="compositeur" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="modifierContractantForm" type="form.modifierContractantForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="nom" type="java.lang.String" />
+			<form-property name="adresse" type="java.lang.String" />
+			<form-property name="codepostal" type="java.lang.String" />
+			<form-property name="ville" type="java.lang.String" />
+			<form-property name="telephone" type="java.lang.String" />
+			<form-property name="fax" type="java.lang.String" />
+			<form-property name="mail" type="java.lang.String" />
+			<form-property name="type" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="modifierContratForm" type="form.modifierContratForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="titre" type="java.lang.String" />
+			<form-property name="joursig" type="java.lang.String" />
+			<form-property name="moissig" type="java.lang.String" />
+			<form-property name="anneesig" type="java.lang.String" />
+			<form-property name="jourexp" type="java.lang.String" />
+			<form-property name="moisexp" type="java.lang.String" />
+			<form-property name="anneeexp" type="java.lang.String" />
+			<form-property name="idcontractant" type="java.lang.String" />
+			<form-property name="reg" type="java.lang.String" />
+			<form-property name="type" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="modifierPermForm" type="form.modifierPermForm">
+			<form-property name="id" type="java.lang.String" />
+            <form-property name="libelle" type="java.lang.String" />
+        </form-bean>
+		
+		<form-bean name="modifierRoleForm" type="form.modifierRoleForm">
+			<form-property name="id" type="java.lang.String" />
+        </form-bean>
 		
 		<!--INFOS-->
 		<form-bean name="infoForm" type="form.infoForm">
@@ -645,7 +709,7 @@
 		<action
    		    path="/validemodifCanal"
        		input="/validemodifCanal.jsp"
-			name="rechercheCanalForm"
+			name="modifierCanalForm"
        		type="action.validemodifCanalAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
@@ -654,7 +718,7 @@
 		<action
             path="/validemodifProg"
             input="/validemodifProg.jsp"
-            name="rechercheProgForm"
+            name="modifierProgForm"
             type="action.validemodifProgAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
@@ -663,7 +727,7 @@
 		<action
             path="/validemodifDoc"
             input="/validemodifDoc.jsp"
-            name="rechercheDocForm"
+            name="modifierDocForm"
             type="action.validemodifDocAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
@@ -672,7 +736,7 @@
 		<action
             path="/validemodifContractant"
             input="/validemodifContractant.jsp"
-            name="rechercheContractantForm"
+            name="modifierContractantForm"
             type="action.validemodifContractantAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
@@ -681,7 +745,7 @@
 		<action
             path="/validemodifContrat"
             input="/validemodifContrat.jsp"
-            name="rechercheContratForm"
+            name="modifierContratForm"
             type="action.validemodifContratAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
@@ -690,7 +754,7 @@
 		<action
             path="/validemodifPerm"
             input="/validemodifPerm.jsp"
-            name="recherchePermForm"
+            name="modifierPermForm"
             type="action.validemodifPermAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creationPerm.jsp" />
@@ -699,7 +763,7 @@
 		<action
             path="/validemodifRole"
             input="/validemodifRole.jsp"
-            name="rechercheRoleForm"
+            name="modifierRoleForm"
             type="action.validemodifRoleAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />

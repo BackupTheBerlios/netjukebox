@@ -41,7 +41,7 @@
 				<td><bean:write name = "contractant" property = "id" /></td>
 				<td><bean:write name = "contractant" property = "nom" /></td>
 				<td><bean:write name = "contractant" property = "adresse" /></td>
-				<td><bean:write name = "contractant" property = "codepostal" /></td>
+				<td><bean:write name = "contractant" property = "codePostal" /></td>
 				<td><bean:write name = "contractant" property = "ville" /></td>
 				<td><bean:write name = "contractant" property = "telephone" /></td>
 				<td><bean:write name = "contractant" property = "fax" /></td>

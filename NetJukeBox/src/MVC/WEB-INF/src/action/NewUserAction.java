@@ -31,7 +31,7 @@ public class NewUserAction extends Action {
 		
 		HttpSession session = request.getSession();
 		clientXML = (XMLClient) session.getAttribute("client");
-		sessionLogin = session.getAttribute("login");
+		sessionLogin = (String) session.getAttribute("login");
 		
 		NewUserForm userForm = (NewUserForm)form;
 		

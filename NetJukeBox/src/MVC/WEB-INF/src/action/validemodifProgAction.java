@@ -3,7 +3,7 @@ package action;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.rechercheProgForm;
+import form.modifierProgForm;
 
 public class validemodifProgAction extends Action {
 
@@ -29,7 +29,7 @@ public class validemodifProgAction extends Action {
 	public ActionForward execute(ActionMapping mapping,	ActionForm form,
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
-		rechercheProgForm progForm = (rechercheProgForm)form;
+		modifierProgForm progForm = (modifierProgForm)form;
 		
 		HttpSession session = request.getSession();
 		clientXML = (XMLClient) session.getAttribute("client");

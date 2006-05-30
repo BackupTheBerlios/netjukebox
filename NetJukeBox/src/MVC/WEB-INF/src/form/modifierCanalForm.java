@@ -4,7 +4,7 @@ import javax.servlet.http.*;
 import org.apache.struts.action.*;
 
 @SuppressWarnings("serial")
-public class rechercheCanalForm extends ActionForm {
+public class modifierCanalForm extends ActionForm {
 	// --------------------------------------------------------- Instance Variables
 	private String id;
 	private String nom;
@@ -26,6 +26,17 @@ public class rechercheCanalForm extends ActionForm {
 	@SuppressWarnings("deprecation")
 	public ActionErrors validate(ActionMapping mapping,	HttpServletRequest request)	{
 		ActionErrors ae = new ActionErrors();
+		
+		if (id.length() == 0) {
+			ae.add(id, new ActionError("error.id"));
+		}
+		if (nom.length() == 0) {
+			ae.add(id, new ActionError("error.id"));
+		}
+		if (utilMax.length() == 0) {
+			ae.add(id, new ActionError("error.nbmaxutil"));
+		}
+		
 		return ae;
 	}
 

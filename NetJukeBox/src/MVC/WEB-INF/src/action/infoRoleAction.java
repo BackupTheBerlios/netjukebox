@@ -1,10 +1,11 @@
 package action;
 
 import java.util.Dictionary;
+import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.rechercheRoleForm;
+import form.infoForm;
 
 public class infoRoleAction extends Action {
 
@@ -27,6 +28,7 @@ public class infoRoleAction extends Action {
 	 * @return ActionForward
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping,	ActionForm form,
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
@@ -34,16 +36,19 @@ public class infoRoleAction extends Action {
 		clientXML = (XMLClient) session.getAttribute("client");
 		sessionLogin = (String) session.getAttribute("login");
 		
-		rechercheRoleForm roleForm = (rechercheRoleForm)form;
+		infoForm roleForm = (infoForm)form;
 
 		String id = roleForm.getId();
 
 		response.setContentType("text/html");
 		
 		Dictionary dRole = clientXML.infoRole(sessionLogin, id);
+		Vector vRole = new Vector();
 		
 		if (dRole!=null) {
-			session.setAttribute("Resultat" , dRole);
+			vRole.add(dRole);
+			
+			session.setAttribute("Resultat" , vRole);
 			return mapping.findForward("ok");
 		} else {
 			String erreur = "WARNING: Aucun role disponible";

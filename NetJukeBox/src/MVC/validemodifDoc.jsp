@@ -53,7 +53,7 @@
 			</tr>
 			<tr>
 				<td><bean:message key='attr.fichier' /></td>
-				<td><html:file name="doc" property="fichier" /></td>				
+				<td><html:text name="doc" property="fichier" /></td>				
 			</tr>
 			<tr>
 				<td><bean:message key='attr.artiste' /></td>

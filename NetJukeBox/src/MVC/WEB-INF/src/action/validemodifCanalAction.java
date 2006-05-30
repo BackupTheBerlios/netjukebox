@@ -3,7 +3,7 @@ package action;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.rechercheCanalForm;
+import form.modifierCanalForm;
 
 public class validemodifCanalAction extends Action {
 
@@ -33,11 +33,11 @@ public class validemodifCanalAction extends Action {
 		clientXML = (XMLClient) session.getAttribute("client");
 		sessionLogin = (String) session.getAttribute("login");
 		
-		rechercheCanalForm canalForm = (rechercheCanalForm)form;
+		modifierCanalForm canalForm = (modifierCanalForm)form;
 
 		String id = canalForm.getId();
 		String nom = canalForm.getNom();
-		String utilMax = canalForm.getNbmaxutil();
+		String utilMax = canalForm.getutilMax();
 
 		response.setContentType("text/html");
 		

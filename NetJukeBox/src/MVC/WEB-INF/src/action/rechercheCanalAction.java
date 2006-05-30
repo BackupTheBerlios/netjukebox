@@ -38,7 +38,7 @@ public class rechercheCanalAction extends Action {
 
 		String id = canalForm.getId();
 		String nom = canalForm.getNom();
-		String nbmaxutil = canalForm.getNbmaxutil();
+		String nbmaxutil = canalForm.getutilMax();
 
 		response.setContentType("text/html");
 		

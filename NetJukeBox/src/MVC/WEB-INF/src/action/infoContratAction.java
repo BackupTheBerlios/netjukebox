@@ -1,10 +1,11 @@
 package action;
 
 import java.util.Dictionary;
+import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.rechercheContratForm;
+import form.infoForm;
 
 public class infoContratAction extends Action {
 
@@ -27,6 +28,7 @@ public class infoContratAction extends Action {
 	 * @return ActionForward
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping,	ActionForm form,
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
@@ -34,16 +36,19 @@ public class infoContratAction extends Action {
 		clientXML = (XMLClient) session.getAttribute("client");
 		sessionLogin = (String) session.getAttribute("login");
 		
-		rechercheContratForm contratForm = (rechercheContratForm)form;
+		infoForm contratForm = (infoForm)form;
 
 		String id = contratForm.getId();
 		
 		response.setContentType("text/html");
 		
 		Dictionary dContrat = clientXML.infoContrat(sessionLogin, id);
+		Vector vContrat = new Vector();
 		
 		if (dContrat!=null) {
-			session.setAttribute("Resultat" , dContrat);
+			vContrat.add(dContrat);
+			
+			session.setAttribute("Resultat" , vContrat);
 			return mapping.findForward("ok");
 		} else {
 			String erreur = "WARNING: Aucun contrat disponible";

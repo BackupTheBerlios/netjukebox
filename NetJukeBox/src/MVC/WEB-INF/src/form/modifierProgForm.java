@@ -4,17 +4,17 @@ import javax.servlet.http.*;
 import org.apache.struts.action.*;
 
 @SuppressWarnings("serial")
-public class rechercheCanalForm extends ActionForm {
+public class modifierProgForm extends ActionForm {
 	// --------------------------------------------------------- Instance Variables
 	private String id;
-	private String nom;
-	private String utilMax;
+	private String titre;
+	private String thematique;
 
 	// --------------------------------------------------------- Methods
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		id = null;
-		nom = null;
-		utilMax = null;
+		titre = null;
+		thematique = null;
 	}
 
 	/** 
@@ -26,6 +26,17 @@ public class rechercheCanalForm extends ActionForm {
 	@SuppressWarnings("deprecation")
 	public ActionErrors validate(ActionMapping mapping,	HttpServletRequest request)	{
 		ActionErrors ae = new ActionErrors();
+		
+		if (id.length() == 0) {
+			ae.add(id, new ActionError("error.id"));
+		}
+		if (titre.length() == 0) {
+			ae.add(id, new ActionError("error.titre"));
+		}
+		if (thematique.length() == 0) {
+			ae.add(id, new ActionError("error.thematique"));
+		}
+		
 		return ae;
 	}
 
@@ -37,19 +48,19 @@ public class rechercheCanalForm extends ActionForm {
 		this.id = id;
 	}
 	
-	public String getNom()	{
-		return nom;
+	public String getTitre()	{
+		return titre;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setTitre(String titre) {
+		this.titre = titre;
 	}
 
-	public String getutilMax() {
-		return utilMax;
+	public String getThematique() {
+		return thematique;
 	}
 
-	public void setutilMax(String utilMax) {
-		this.utilMax = utilMax;
+	public void setThematique(String thematique) {
+		this.thematique = thematique;
 	}
 }

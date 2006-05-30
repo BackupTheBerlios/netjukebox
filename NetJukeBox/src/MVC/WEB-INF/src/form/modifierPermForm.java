@@ -4,17 +4,14 @@ import javax.servlet.http.*;
 import org.apache.struts.action.*;
 
 @SuppressWarnings("serial")
-public class rechercheCanalForm extends ActionForm {
+public class modifierPermForm extends ActionForm {
 	// --------------------------------------------------------- Instance Variables
 	private String id;
-	private String nom;
-	private String utilMax;
-
+	private String libelle;
 	// --------------------------------------------------------- Methods
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		id = null;
-		nom = null;
-		utilMax = null;
+		libelle = null;
 	}
 
 	/** 
@@ -26,6 +23,14 @@ public class rechercheCanalForm extends ActionForm {
 	@SuppressWarnings("deprecation")
 	public ActionErrors validate(ActionMapping mapping,	HttpServletRequest request)	{
 		ActionErrors ae = new ActionErrors();
+		
+		if (id.length() == 0) {
+			ae.add(id, new ActionError("error.id"));
+		}
+		if (libelle.length() == 0) {
+			ae.add(id, new ActionError("error.libelle"));
+		}
+		
 		return ae;
 	}
 
@@ -37,19 +42,11 @@ public class rechercheCanalForm extends ActionForm {
 		this.id = id;
 	}
 	
-	public String getNom()	{
-		return nom;
+	public String getLibelle()	{
+		return libelle;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public String getutilMax() {
-		return utilMax;
-	}
-
-	public void setutilMax(String utilMax) {
-		this.utilMax = utilMax;
+	public void setLibelle(String libelle) {
+		this.libelle = libelle;
 	}
 }

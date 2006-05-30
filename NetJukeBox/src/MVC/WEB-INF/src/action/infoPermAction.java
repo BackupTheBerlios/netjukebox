@@ -1,10 +1,11 @@
 package action;
 
 import java.util.Dictionary;
+import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.recherchePermForm;
+import form.infoForm;
 
 public class infoPermAction extends Action {
 
@@ -27,22 +28,26 @@ public class infoPermAction extends Action {
 	 * @return ActionForward
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping,	ActionForm form,
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
 		clientXML = (XMLClient) session.getAttribute("client");
 		sessionLogin = (String) session.getAttribute("login");
-		recherchePermForm permForm = (recherchePermForm)form;
+		infoForm permForm = (infoForm)form;
 
 		String id = permForm.getId();
 
 		response.setContentType("text/html");
 		
 		Dictionary dPerm = clientXML.infoPermission(sessionLogin, id);
+		Vector vPerm = new Vector();
 		
 		if (dPerm!=null) {
-			session.setAttribute("Resultat" , dPerm);
+			vPerm.add(dPerm);
+			
+			session.setAttribute("Resultat" , vPerm);
 			return mapping.findForward("ok");
 		} else {
 			String erreur = "WARNING: Aucune permission disponible";

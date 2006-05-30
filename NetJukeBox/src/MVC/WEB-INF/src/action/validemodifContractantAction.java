@@ -3,7 +3,7 @@ package action;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.rechercheContractantForm;
+import form.modifierContractantForm;
 
 public class validemodifContractantAction extends Action {
 
@@ -33,7 +33,7 @@ public class validemodifContractantAction extends Action {
 		clientXML = (XMLClient) session.getAttribute("client");
 		sessionLogin = (String) session.getAttribute("login");
 		
-		rechercheContractantForm contractantForm = (rechercheContractantForm)form;
+		modifierContractantForm contractantForm = (modifierContractantForm)form;
 
 		String id = contractantForm.getId();
 		String nom = contractantForm.getNom();

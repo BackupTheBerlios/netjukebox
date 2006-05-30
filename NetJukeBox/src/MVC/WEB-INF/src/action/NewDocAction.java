@@ -18,7 +18,7 @@ public class NewDocAction extends Action {
 	/**
 	 * Chemin pour déposer le fichier audio
 	 */
-	private String chemin = "/home/admindg/";
+	private String chemin = "/home/netjukebox/";
 	
 	/**
 	 * Booléen validant le dépôt du fichier
