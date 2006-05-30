@@ -216,6 +216,7 @@ public class Contractant {
 			c = (Contrat)contrats.get(i);
 			c.supprimer();
 		}
+		ContractantFactory.deleteById(this.id);
 		
 		//On supprime les infos de la base
 		logger.debug("Arrêt: supprimer");
