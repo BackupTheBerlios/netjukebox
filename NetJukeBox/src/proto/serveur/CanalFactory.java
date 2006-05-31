@@ -66,7 +66,7 @@ public class CanalFactory {
 	public static Canal create(String nom, int utilmax) /*throws SQLException*/ {
 		logger.debug("Démarrage: create");
 				
-		String requete = "INSERT INTO canal (nom, utilmax) VALUES ('" + nom + "', '" + utilmax + "');";
+		String requete = "INSERT INTO canal (nom, utilmax) VALUES ('" + nom.replace("'", "''") + "', '" + utilmax + "');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -100,9 +100,9 @@ public class CanalFactory {
 		
 		//Sinon, on crée l'instance
 		else {
-		
+
 			//On va chercher les infos depuis la base, en partant d'un nom
-			String requete = "SELECT * FROM canal WHERE nom = '" + nom + "';";
+			String requete = "SELECT * FROM canal WHERE nom = '" + nom.replace("'", "''") + "';";
 			Jdbc base = Jdbc.getInstance();
 			Vector resultats = base.executeQuery(requete);
 			
@@ -170,7 +170,7 @@ public class CanalFactory {
 				Dictionary dico = (Dictionary) resultats.firstElement();
 				
 				//On mappe les champs
-				String nom = (String)dico.get("nom");
+				String nom = ((String)dico.get("nom")).replace("''", "'");
 				int utilMax = (int)(Integer)dico.get("utilmax");
 				
 				System.out.println("-------- Canal -----------");

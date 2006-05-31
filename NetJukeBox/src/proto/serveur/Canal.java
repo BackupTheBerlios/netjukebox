@@ -546,7 +546,7 @@ public class Canal {
 	 */
 	public boolean setNom(String nom) /*throws SQLException*/ {
 		logger.debug("Démarrage: setNom");
-		String requete = "UPDATE canal SET nom = '" + nom + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE canal SET nom = '" + nom.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -603,20 +603,6 @@ class DiffusionTask extends TimerTask {
 		logger.debug("Démarrage: run");
 		logger.error("TIMER: Lancement de la tâche "+programme.getId());				
 		canal.diffuserProgramme(programme);
-		
-		/*
-		Vector medias = new Vector();
-		Enumeration cles = programme.getDocuments().keys();
-		
-		for(int i = 0; i < programme.getDocuments().size(); i++) {
-			medias.addElement(((Document)programme.getDocuments().get(cles.nextElement())).getFichier());
-		}
-		if (RTP!=null) {
-			System.err.println("TIMER: On programme le RTP pour la tâche "+programme.getId());
-			RTP.programmer(medias);
-			RTP.diffuser();
-		}
-		*/
 		
 		logger.debug("Démarrage: run");
 	}

@@ -222,6 +222,11 @@ public class RTPServer implements ControllerListener {
 		pRealized = false;
 		pConfigured = false;
 		try {
+			if (!filename.startsWith("file:/")) {
+				String chem = "file:/";
+				chem.concat(filename);
+				filename = chem;
+			}
 			MediaLocator src = new MediaLocator(filename);
 			Processor p;
 			p = Manager.createProcessor(src);

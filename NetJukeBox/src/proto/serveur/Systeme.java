@@ -56,31 +56,6 @@ public class Systeme {
 	private Hashtable utilisateurs = new Hashtable();
 	
 	/**
-	 * Canaux de diffusion
-	 */
-	//private Hashtable canaux = new Hashtable();
-	
-	/**
-	 * Documents
-	 */
-	//private Hashtable documents = new Hashtable();
-	
-	/**
-	 * Programmes
-	 */
-	//private Hashtable programmes = new Hashtable();
-	
-	/**
-	 * Contrats
-	 */
-	//private Hashtable contrats = new Hashtable();
-	
-	/**
-	 * Contractants
-	 */
-	//private Hashtable contractants = new Hashtable();
-	
-	/**
 	 * Connexion à la base de données
 	 */
 	private Jdbc base;
@@ -182,11 +157,11 @@ public class Systeme {
 		logger.info("Mail envoyeur depuis le serveur SMTP : " + from);
 		
 		//On initialise les listes de canaux, programmes, documents
-		/*this.canaux = */CanalFactory.getAll();
-		/*this.programmes = */ProgrammeFactory.getAll();
-		/*this.documents = */DocumentFactory.getAll();
-		/*this.contractants = */ContractantFactory.getAll();
-		/*this.contrats = */ContratFactory.getAll();
+		CanalFactory.getAll();
+		ProgrammeFactory.getAll();
+		DocumentFactory.getAll();
+		ContractantFactory.getAll();
+		ContratFactory.getAll();
 		
 		//"Ping" des clients
 		this.timer = new Timer(true);
@@ -702,12 +677,12 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerDocuments(String login) {
+	public Vector listerDocument(String login) {
 
 		logger.info("Liste des documents disponibles");
 
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "listerDocuments")) {
+		if (verifPermission(login, "listerDocument")) {
 		
 			//On crée le vecteur
 			Vector vDocuments = new Vector();
@@ -899,7 +874,7 @@ public class Systeme {
      * @throws MessagingException
      * @throws AddressException
      */
-    public String rechercherpwd(String login) throws NamingException, AddressException, MessagingException {
+    public String rechercherPwd(String login) throws NamingException, AddressException, MessagingException {
         //On vérifie que l'utilisateur a la permission
         if (Utilisateur.verifierLogin(login)) {
            
@@ -1087,12 +1062,12 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerProgrammes(String login) {
+	public Vector listerProgramme(String login) {
 
 		logger.info("Liste des programmes disponibles");
 
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "listerProgrammes")) {
+		if (verifPermission(login, "listerProgramme")) {
 		
 			//On crée le vecteur
 			Vector vProgrammes = new Vector();
@@ -1564,12 +1539,12 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerCanaux(String login) {
+	public Vector listerCanal(String login) {
 
 		logger.info("Liste des canaux disponibles");
 
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "listerCanaux")) {
+		if (verifPermission(login, "listerCanal")) {
 		
 			//On crée le vecteur
 			Vector vCanaux = new Vector();
@@ -1929,7 +1904,7 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherContrats(String login, String id, String titre, String jourSignature, 
+	public Vector rechercherContrat(String login, String id, String titre, String jourSignature, 
 			String moisSignature, String anneeSignature, String jourExpiration, String moisExpiration, 
 			String anneeExpiration, String idContractant, String modeReglement, String type) {
 
@@ -1983,12 +1958,12 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerContrats(String login) {
+	public Vector listerContrat(String login) {
 
 		logger.info("Liste des contrats disponibles");
 
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "listerContrats")) {
+		if (verifPermission(login, "listerContrat")) {
 		
 			//On crée le vecteur
 			Vector vContrats = new Vector();
@@ -2271,7 +2246,7 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherContractants(String login, String id, String nom, String adresse,
+	public Vector rechercherContractant(String login, String id, String nom, String adresse,
 			String codePostal, String ville, String telephone, String fax,
 			String mail, String type) {
 
@@ -2318,7 +2293,7 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerContractants(String login) {
+	public Vector listerContractant(String login) {
 
 		logger.info("Liste des contractants disponibles");
 
@@ -2326,7 +2301,7 @@ public class Systeme {
 		Vector vContractants = new Vector();
 		
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "listerContractants")) {
+		if (verifPermission(login, "listerContractant")) {
 			
 			//On récupère la liste des documents
 			Enumeration listeContractants = ContractantFactory.getInstances().elements();
@@ -2502,12 +2477,12 @@ public class Systeme {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public Vector rechercherPermissions(String login, String id, String libelle) {
+	public Vector rechercherPermission(String login, String id, String libelle) {
 
 		logger.info("Recherche d'une permission");
 
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "rechercherPermissions")) {
+		if (verifPermission(login, "rechercherPermission")) {
 			
 			//Vecteur de contractants à retourner
 			Vector vPerm = new Vector();
@@ -2540,12 +2515,12 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerPermissions(String login) {
+	public Vector listerPermission(String login) {
 
 		logger.info("Liste des permissions disponibles");
 		
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "listerPermissions")) {
+		if (verifPermission(login, "listerPermission")) {
 		
 			//On crée le vecteur
 			Vector vPermissions = new Vector();
@@ -2717,12 +2692,12 @@ public class Systeme {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerRoles(String login) {
+	public Vector listerRole(String login) {
 
 		logger.info("Liste des rôles disponibles");
 
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "listerRoles")) {
+		if (verifPermission(login, "listerRole")) {
 					
 			//On crée le vecteur
 			Vector vRoles = new Vector();

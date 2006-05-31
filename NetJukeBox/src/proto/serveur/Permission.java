@@ -2,6 +2,7 @@ package proto.serveur;
 
 import java.sql.SQLException;
 import java.util.Dictionary;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 
 /**
@@ -86,7 +87,17 @@ public class Permission {
 	 * @param String libelle
 	 */
 	public boolean setLibelle(String libelle) {
-		this.libelle = libelle;
-		return true;
+		
+		String requete = "UPDATE permission SET libelle = '" + libelle.replace("'", "''")  + "' WHERE id = '" + id + "';";
+		
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		
+		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
+		if (nbRows>0) {
+			this.libelle = libelle;
+		}
+		return nbRows>0;
 	}
 }

@@ -179,9 +179,9 @@ public class Contractant {
 			String telephone, String fax, String mail, String type) {
 		logger.debug("Démarrage: modifier");
 
-		String requete = "UPDATE contractant SET nom = '" + nom + "', adresse = '" + adresse +
-			"', cp = '"+ codePostal + "', ville = '" + ville + "', telephone = '" + telephone +
-			"', fax = '" + fax + "', mail = '" + mail + "', type = '"+ type + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET nom = '" + nom.replace("'", "''") + "', adresse = '" + adresse.replace("'", "''") +
+			"', cp = '"+ codePostal.replace("'", "''") + "', ville = '" + ville.replace("'", "''") + "', telephone = '" + telephone.replace("'", "''") +
+			"', fax = '" + fax.replace("'", "''") + "', mail = '" + mail.replace("'", "''") + "', type = '"+ type + "' WHERE id = '" + id + "';";
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -345,7 +345,7 @@ public class Contractant {
 	 */
 	public boolean setAdresse(String adresse) {
 		logger.debug("Démarrage: setAdresse");
-		String requete = "UPDATE contractant SET adresse = '" + adresse + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET adresse = '" + adresse.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -363,7 +363,7 @@ public class Contractant {
 	 */
 	public boolean setCodePostal(String codePostal) {
 		logger.debug("Démarrage: setCodePostal");
-		String requete = "UPDATE contractant SET cp = '" + codePostal + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET cp = '" + codePostal.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -380,7 +380,7 @@ public class Contractant {
 	 */
 	public boolean setFax(String fax) {
 		logger.debug("Démarrage: setFax");
-		String requete = "UPDATE contractant SET fax = '" + fax + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET fax = '" + fax.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -397,7 +397,7 @@ public class Contractant {
 	 */
 	public boolean setMail(String mail) {
 		logger.debug("Démarrage: setMail");
-		String requete = "UPDATE contractant SET mail = '" + mail + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET mail = '" + mail.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -415,7 +415,7 @@ public class Contractant {
 	 */
 	public boolean setNom(String nom) {
 		logger.debug("Démarrage: setNom");
-		String requete = "UPDATE contractant SET nom = '" + nom + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET nom = '" + nom.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -433,7 +433,7 @@ public class Contractant {
 	 */
 	public boolean setTelephone(String telephone) {
 		logger.debug("Démarrage: setTelephone");
-		String requete = "UPDATE contractant SET type = '" + type + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET telephone = '" + telephone + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -469,7 +469,7 @@ public class Contractant {
 	 */
 	public boolean setVille(String ville) {
 		logger.debug("Démarrage: setVille");
-		String requete = "UPDATE contractant SET ville = '" + ville + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE contractant SET ville = '" + ville.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		

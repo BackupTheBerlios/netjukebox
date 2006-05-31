@@ -251,10 +251,10 @@ public class Document {
 
 		GregorianCalendar date = new GregorianCalendar(annee, mois, jour);
 		
-		String requete = "UPDATE document SET titre = '" + titre + "', duree = '" + duree +
-			"', date = '"+ date.getTimeInMillis() + "', source = '" + source + "', langue = '" + langue +
-			"', genre = '" + langue + "', fichier = '" + fichier + "', artiste = '"+ artiste +
-			"', interprete = '" + interprete + "', compositeur = '"+ compositeur + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET titre = '" + titre.replace("'", "''") + "', duree = '" + duree +
+			"', date = '"+ date.getTimeInMillis() + "', source = '" + source.replace("'", "''") + "', langue = '" + langue.replace("'", "''") +
+			"', genre = '" + genre.replace("'", "''") + "', fichier = '" + fichier.replace("'", "''") + "', artiste = '"+ artiste.replace("'", "''") +
+			"', interprete = '" + interprete.replace("'", "''") + "', compositeur = '"+ compositeur.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -516,7 +516,7 @@ public class Document {
 	public boolean setCompositeur(String compositeur) {
 		logger.debug("Démarrage: setCompositeur");
 		
-		String requete = "UPDATE document SET compositeur = '" + compositeur + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET compositeur = '" + compositeur.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -533,7 +533,7 @@ public class Document {
 	public boolean setArtiste(String artiste) {
 		logger.debug("Démarrage: setArtiste");
 		
-		String requete = "UPDATE document SET artiste = '" + artiste + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET artiste = '" + artiste.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -550,7 +550,7 @@ public class Document {
 	public boolean setInterprete(String interprete) {
 		logger.debug("Démarrage: setInterprete");
 
-		String requete = "UPDATE document SET interprete = '" + interprete + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET interprete = '" + interprete.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -571,7 +571,7 @@ public class Document {
 	public boolean setFichier(String fichier) /*throws SQLException*/ {
 		logger.debug("Démarrage: setFichier");
 	
-		String requete = "UPDATE document SET fichier = '" + fichier + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET fichier = '" + fichier.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -592,7 +592,7 @@ public class Document {
 	public boolean setGenre(String genre) /*throws SQLException*/ {
 		logger.debug("Démarrage: setGenre");
 
-		String requete = "UPDATE document SET genre = '" + genre + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET genre = '" + genre.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -613,7 +613,7 @@ public class Document {
 	public boolean setLangue(String langue) /*throws SQLException*/ {
 		logger.debug("Démarrage: setLangue");
 		
-		String requete = "UPDATE document SET langue = '" + langue + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET langue = '" + langue.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -634,7 +634,7 @@ public class Document {
 	public boolean setSource(String source) /*throws SQLException*/ {
 		logger.debug("Démarrage: setSource");
 		
-		String requete = "UPDATE document SET source = '" + source + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET source = '" + source.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -680,7 +680,7 @@ public class Document {
 	public boolean setTitre(String titre) /*throws SQLException*/ {
 		logger.debug("Démarrage: setTitre");
 		
-		String requete = "UPDATE document SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE document SET titre = '" + titre.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		

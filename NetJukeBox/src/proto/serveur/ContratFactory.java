@@ -76,6 +76,9 @@ public class ContratFactory {
 		
 		logger.debug("Démarrage: create");
 		
+		//On échappe les ' du titre
+		String titreSQL = titre.replace("'", "''");
+		
 		//On assemble la date de signature
 		GregorianCalendar dateSignature = new GregorianCalendar(anneeSignature, moisSignature-1, jourSignature);
 		
@@ -84,7 +87,7 @@ public class ContratFactory {
 		
 		//On crée le contractant dans la base
 		String requete = "INSERT INTO contrat (titre, signature, expiration, id_contractant, reglement, type) VALUES ('" +
-			titre + "', '" + dateSignature.getTimeInMillis() + "', '" + dateExpiration.getTimeInMillis() +
+			titreSQL + "', '" + dateSignature.getTimeInMillis() + "', '" + dateExpiration.getTimeInMillis() +
 			"', '" + idContractant + "', '" + modeReglement + "', '" + type + "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
@@ -141,6 +144,7 @@ public class ContratFactory {
 				
 				//On mappe les champs
 				String titre = (String)dico.get("titre");
+				titre.replace("''", "'");
 				String idContractant = (String)dico.get("id_contractant");
 				String modeReglement = (String)dico.get("reglement");
 				String type = (String)dico.get("type");
@@ -202,8 +206,8 @@ public class ContratFactory {
 		
 		//Sinon, on crée l'instance
 		else {
-		
-			String requete = "SELECT * FROM contrat WHERE titre = '" + titre + "';";
+			String titreSQL = titre.replace("'", "''");
+			String requete = "SELECT * FROM contrat WHERE titre = '" + titreSQL + "';";
 	
 			Jdbc base = Jdbc.getInstance();
 			Vector resultats = base.executeQuery(requete);

@@ -86,7 +86,7 @@ public class Role {
 	public void ajouterPermission(Permission perm) {
 		logger.debug("Démarrage: ajouterPermission");
 		//On ajoute la permission au rôle
-		String requete = "INSERT INTO attribuer (login, id_permission) VALUES ('" + id + "', '" + perm.getId()+"');";
+		String requete = "INSERT INTO attribuer (login, id_permission) VALUES ('" + id.replace("'", "''") + "', '" + perm.getId()+"');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -109,7 +109,7 @@ public class Role {
 		logger.debug("Démarrage: retirerPermission");
 		
 		// On retire la permission du rôle
-		String requete = "DELETE FROM attribuer WHERE login='"+id+"' AND id_permission='"+idPerm+"';";
+		String requete = "DELETE FROM attribuer WHERE login='"+id.replace("'", "''")+"' AND id_permission='"+idPerm+"';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -159,7 +159,7 @@ public class Role {
 		Hashtable perms = new Hashtable();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
-		String requete = "SELECT id_permission FROM attribuer WHERE login = '"+id+"';";
+		String requete = "SELECT id_permission FROM attribuer WHERE login = '"+id.replace("'", "''")+"';";
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		

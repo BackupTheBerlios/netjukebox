@@ -85,8 +85,8 @@ public class DocumentFactory {
 		
 		//On crée le document dans la base
 		String requete = "INSERT INTO document (titre, duree, date, source, langue, genre, fichier, artiste, interprete, compositeur) VALUES ('" +
-			titre + "', '" + duree + "', '" + date.getTimeInMillis() + "', '" + source + "', '" +langue + "', '" +
-			genre + "', '" + fichier + "', '"+ artiste + "', '"+ interprete + "', '" + compositeur + "');"; 
+			titre.replace("'", "''") + "', '" + duree + "', '" + date.getTimeInMillis() + "', '" + source.replace("'", "''") + "', '" +langue.replace("'", "''") + "', '" +
+			genre.replace("'", "''") + "', '" + fichier.replace("'", "''") + "', '"+ artiste.replace("'", "''") + "', '"+ interprete.replace("'", "''") + "', '" + compositeur.replace("'", "''") + "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -122,7 +122,7 @@ public class DocumentFactory {
 		//Sinon, on crée l'instance
 		else {
 		
-			String requete = "SELECT * FROM document WHERE titre = '" + titre + "';";
+			String requete = "SELECT * FROM document WHERE titre = '" + titre.replace("'", "''") + "';";
 	
 			Jdbc base = Jdbc.getInstance();
 			Vector resultats = base.executeQuery(requete);
@@ -135,12 +135,11 @@ public class DocumentFactory {
 				
 				//On mappe les champs
 				String id = String.valueOf((Integer)dico.get("id"));
-				String titreDoc = (String)dico.get("titre");
 				int duree = (int)(Integer)dico.get("duree");
-				String source = (String)dico.get("source");
-				String langue = (String)dico.get("langue");
-				String genre = (String)dico.get("genre");
-				String fichier = (String)dico.get("fichier");
+				String source = ((String)dico.get("source")).replace("''", "'");
+				String langue = ((String)dico.get("langue")).replace("''", "'");
+				String genre = ((String)dico.get("genre")).replace("''", "'");
+				String fichier = ((String)dico.get("fichier")).replace("''", "'");
 				
 				//On assemble la date
 				GregorianCalendar date = new GregorianCalendar();
@@ -149,9 +148,9 @@ public class DocumentFactory {
 				int mois = date.get(GregorianCalendar.MONTH);
 				int annee = date.get(GregorianCalendar.YEAR);
 				
-				String artiste = (String)dico.get("artiste");
-				String interprete = (String)dico.get("interprete");
-				String compositeur = (String)dico.get("compositeur");
+				String artiste = ((String)dico.get("artiste")).replace("''", "'");
+				String interprete = ((String)dico.get("interprete")).replace("''", "'");
+				String compositeur = ((String)dico.get("compositeur")).replace("''", "'");
 				
 				System.out.println("-------- Document -----------");
 				System.out.println("Nb de champs: "+dico.size());
@@ -215,17 +214,16 @@ public class DocumentFactory {
 				Dictionary dico = (Dictionary) resultats.firstElement();
 				
 				//On mappe les champs
-				String idDoc = String.valueOf((Integer)dico.get("id"));
-				String titre = (String)dico.get("titre");
+				String titre = ((String)dico.get("titre")).replace("''", "'");
 				int duree = (int)(Integer)dico.get("duree");
-				String source = (String)dico.get("source");
-				String langue = (String)dico.get("langue");
-				String genre = (String)dico.get("genre");
-				String fichier = (String)dico.get("fichier");
+				String source = ((String)dico.get("source")).replace("''", "'");
+				String langue = ((String)dico.get("langue")).replace("''", "'");
+				String genre = ((String)dico.get("genre")).replace("''", "'");
+				String fichier = ((String)dico.get("fichier")).replace("''", "'");
 				
-				String artiste = (String)dico.get("artiste");
-				String interprete = (String)dico.get("interprete");
-				String compositeur = (String)dico.get("compositeur");
+				String artiste = ((String)dico.get("artiste")).replace("''", "'");
+				String interprete = ((String)dico.get("interprete")).replace("''", "'");
+				String compositeur = ((String)dico.get("compositeur")).replace("''", "'");
 				
 				//On assemble la date
 				GregorianCalendar date = new GregorianCalendar();

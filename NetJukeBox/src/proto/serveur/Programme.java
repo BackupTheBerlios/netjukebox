@@ -86,7 +86,7 @@ public class Programme {
 	 */
 	public boolean modifier(String titre, String thematique) {
 		logger.debug("Démarrage: modifier");
-		String requete = "UPDATE programme SET titre = '" + titre + "', thematique = '" + thematique + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE programme SET titre = '" + titre.replace("'", "''") + "', thematique = '" + thematique.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -390,7 +390,7 @@ public class Programme {
 	 */
 	public boolean setTitre(String titre) /*throws SQLException*/ {
 		logger.debug("Démarrage: setTitre");
-		String requete = "UPDATE programme SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE programme SET titre = '" + titre.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -411,7 +411,7 @@ public class Programme {
 	 */
 	public boolean setThematique(String thematique) /*throws SQLException*/ {
 		logger.debug("Démarrage: setThematique");
-		String requete = "UPDATE programme SET thematique = '" + thematique + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE programme SET thematique = '" + thematique.replace("'", "''") + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		

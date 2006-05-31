@@ -69,7 +69,7 @@ public class ProgrammeFactory {
 		
 		logger.debug("Démarrage: Programme.create");
 		
-		String requete = "INSERT INTO programme (titre, thematique, duree) VALUES ('" + titre + "', '" + thematique + "', '0');";
+		String requete = "INSERT INTO programme (titre, thematique, duree) VALUES ('" + titre.replace("'", "''") + "', '" + thematique.replace("'", "''") + "', '0');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -105,7 +105,7 @@ public class ProgrammeFactory {
 		//Sinon, on crée l'instance
 		else {
 		
-			String requete = "SELECT * FROM programme WHERE titre = '" + titre + "';";
+			String requete = "SELECT * FROM programme WHERE titre = '" + titre.replace("'", "''") + "';";
 			Jdbc base = Jdbc.getInstance();
 			Vector resultats = base.executeQuery(requete);
 			
@@ -117,7 +117,7 @@ public class ProgrammeFactory {
 				
 				//On mappe les champs
 				String id = String.valueOf((Integer)dico.get("id"));
-				String thematique = (String)dico.get("thematique");
+				String thematique = ((String)dico.get("thematique")).replace("''", "'");
 				long duree = (long)(Long)dico.get("duree");
 				
 				System.out.println("-------- Programme -----------");
@@ -174,8 +174,8 @@ public class ProgrammeFactory {
 				Dictionary dico = (Dictionary) resultats.firstElement();
 				
 				//On mappe les champs
-				String titre = (String)dico.get("titre");
-				String thematique = (String)dico.get("thematique");
+				String titre = ((String)dico.get("titre")).replace("''", "'");
+				String thematique = ((String)dico.get("thematique")).replace("''", "'");
 				long duree = (long)(Long)dico.get("duree");
 				
 				System.out.println("-------- Programme -----------");

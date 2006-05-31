@@ -73,8 +73,8 @@ public class ContractantFactory {
 		
 		//On crée le contractant dans la base
 		String requete = "INSERT INTO contractant (nom, adresse, cp, ville, telephone, fax, mail, type) VALUES ('" +
-			nom + "', '" + adresse + "', '" + codePostal + "', '" + ville + "', '" +telephone + "', '" +
-			fax + "', '" + mail + "', '"+ type + "');"; 
+			nom.replace("'", "''") + "', '" + adresse.replace("'", "''") + "', '" + codePostal.replace("'", "''") + "', '" +
+			ville.replace("'", "''") + "', '" +telephone.replace("'", "''") + "', '" + fax.replace("'", "''") + "', '" + mail.replace("'", "''") + "', '"+ type + "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -121,14 +121,14 @@ public class ContractantFactory {
 				Dictionary dico = (Dictionary) resultats.firstElement();
 				
 				//On mappe les champs
-				String nom = (String)dico.get("nom");
-				String adresse = (String)dico.get("adresse");
-				String codePostal = (String)dico.get("cp");
-				String ville = (String)dico.get("ville");
-				String telephone = (String)dico.get("telephone");
-				String fax = (String)dico.get("fax");
-				String mail = (String)dico.get("mail");
-				String type = (String)dico.get("type");
+				String nom = ((String)dico.get("nom")).replace("''", "'");
+				String adresse = ((String)dico.get("adresse")).replace("''", "'");
+				String codePostal = ((String)dico.get("cp")).replace("''", "'");
+				String ville = ((String)dico.get("ville")).replace("''", "'");
+				String telephone = ((String)dico.get("telephone")).replace("''", "'");
+				String fax = ((String)dico.get("fax")).replace("''", "'");
+				String mail = ((String)dico.get("mail")).replace("''", "'");
+				String type = ((String)dico.get("type")).replace("''", "'");
 				
 				System.out.println("-------- Contractant -----------");
 				System.out.println("ID: "+id);
@@ -174,7 +174,7 @@ public class ContractantFactory {
 		
 		//Sinon, on crée l'instance
 		else {
-		
+			String nomSQL = nom.replace("'", "''");
 			String requete = "SELECT * FROM contractant WHERE nom = '" + nom + "';";
 	
 			Jdbc base = Jdbc.getInstance();
@@ -188,13 +188,13 @@ public class ContractantFactory {
 				
 				//On mappe les champs
 				String id = String.valueOf((Integer)dico.get("id"));
-				String adresse = (String)dico.get("adresse");
-				String codePostal = (String)dico.get("cp");
-				String ville = (String)dico.get("ville");
-				String telephone = (String)dico.get("telephone");
-				String fax = (String)dico.get("fax");
-				String mail = (String)dico.get("mail");
-				String type = (String)dico.get("type");
+				String adresse = ((String)dico.get("adresse")).replace("''", "'");
+				String codePostal = ((String)dico.get("cp")).replace("''", "'");
+				String ville = ((String)dico.get("ville")).replace("''", "'");
+				String telephone = ((String)dico.get("telephone")).replace("''", "'");
+				String fax = ((String)dico.get("fax")).replace("''", "'");
+				String mail = ((String)dico.get("mail")).replace("''", "'");
+				String type = ((String)dico.get("type")).replace("''", "'");
 
 				System.out.println("-------- Contractant -----------");
 				System.out.println("ID: "+id);

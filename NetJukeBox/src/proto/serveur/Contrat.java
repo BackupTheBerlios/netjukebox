@@ -192,6 +192,8 @@ public class Contrat {
 			String modeReglement, String type) {
 		logger.debug("Démarrage: modifier");
 		
+		String titreSQL = titre.replace("'", "''");
+		
 		//On assemble la date de signature
 		GregorianCalendar dateSignature = new GregorianCalendar(anneeSignature, moisSignature-1, jourSignature);
 		
@@ -199,7 +201,7 @@ public class Contrat {
 		GregorianCalendar dateExpiration = new GregorianCalendar(anneeExpiration, moisExpiration-1, jourExpiration);
 		
 		String requete = "UPDATE contrat SET signature = '" + dateSignature.getTimeInMillis() + "', expiration = '" + dateExpiration.getTimeInMillis() +
-			"', id_contractant = '"+ idContractant + "', reglement = '" + modeReglement + "', type = '" + type + "', titre = '" + titre + "' WHERE id = '" + id + "';";
+			"', id_contractant = '"+ idContractant + "', reglement = '" + modeReglement + "', type = '" + type + "', titre = '" + titreSQL + "' WHERE id = '" + id + "';";
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -260,8 +262,8 @@ public class Contrat {
 		
 		dico.put("id", id);
 		dico.put("titre", titre);
-		dico.put("dateSignature", dateSignature.get(GregorianCalendar.DAY_OF_MONTH)+"/"+dateSignature.get(GregorianCalendar.MONTH)+"/"+dateSignature.get(GregorianCalendar.YEAR));
-		dico.put("dateExpiration", dateExpiration.get(GregorianCalendar.DAY_OF_MONTH)+"/"+dateExpiration.get(GregorianCalendar.MONTH)+"/"+dateExpiration.get(GregorianCalendar.YEAR));
+		dico.put("dateSignature", dateSignature.get(GregorianCalendar.DAY_OF_MONTH)+"/"+(dateSignature.get(GregorianCalendar.MONTH)+1)+"/"+dateSignature.get(GregorianCalendar.YEAR));
+		dico.put("dateExpiration", dateExpiration.get(GregorianCalendar.DAY_OF_MONTH)+"/"+(dateExpiration.get(GregorianCalendar.MONTH)+1)+"/"+dateExpiration.get(GregorianCalendar.YEAR));
 		dico.put("modeReglement", modeReglement);
 		dico.put("type", type);
 		
@@ -443,7 +445,8 @@ public class Contrat {
 	 */
 	public boolean setTitre(String titre) {
 		logger.debug("Démarrage: setTitre");
-		String requete = "UPDATE contrat SET titre = '" + titre + "' WHERE id = '" + id + "';";
+		String titreSQL = titre.replace("'", "''");
+		String requete = "UPDATE contrat SET titre = '" + titreSQL + "' WHERE id = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
