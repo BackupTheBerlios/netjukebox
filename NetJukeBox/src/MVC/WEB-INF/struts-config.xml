@@ -193,7 +193,7 @@
 			<form-property name="id" type="java.lang.String" />
 			<form-property name="nom" type="java.lang.String" />
 			<form-property name="adresse" type="java.lang.String" />
-			<form-property name="codepostal" type="java.lang.String" />
+			<form-property name="codePostal" type="java.lang.String" />
 			<form-property name="ville" type="java.lang.String" />
 			<form-property name="telephone" type="java.lang.String" />
 			<form-property name="fax" type="java.lang.String" />

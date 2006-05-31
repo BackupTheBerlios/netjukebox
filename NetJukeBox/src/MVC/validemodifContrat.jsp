@@ -28,7 +28,7 @@
 				<td><html:text name="contrat" property="joursig" /></td>
 			</tr>
 			<tr>
-				<td><bean:message key='adttr.moissig' /></td>
+				<td><bean:message key='attr.moissig' /></td>
 				<td><html:text name="contrat" property="moissig" /></td>
 			</tr>
 			<tr>

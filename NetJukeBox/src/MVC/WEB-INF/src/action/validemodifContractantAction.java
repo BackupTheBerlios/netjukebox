@@ -38,7 +38,7 @@ public class validemodifContractantAction extends Action {
 		String id = contractantForm.getId();
 		String nom = contractantForm.getNom();
 		String adresse = contractantForm.getAdresse();
-		String codepostal = contractantForm.getCodepostal();
+		String codepostal = contractantForm.getCodePostal();
 		String ville = contractantForm.getVille();
 		String telephone = contractantForm.getTelephone();
 		String fax = contractantForm.getFax();

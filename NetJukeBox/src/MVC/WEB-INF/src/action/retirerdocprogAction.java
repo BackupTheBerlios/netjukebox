@@ -35,12 +35,12 @@ public class retirerdocprogAction extends Action {
 		
 		ajoutsuppressionForm ajoutForm = (ajoutsuppressionForm)form;
 
-		String iddoc = ajoutForm.getId1();
+		String calage = ajoutForm.getId1();
 		String idprog = ajoutForm.getId2();
 
 		response.setContentType("text/html");
 		
-		boolean retrait = clientXML.retirerDocumentProgramme(sessionLogin, iddoc, idprog);
+		boolean retrait = clientXML.retirerDocumentProgramme(sessionLogin, idprog, calage);
 		
 		if (retrait) {
 			String result = "INFO: Document retiré du programme";

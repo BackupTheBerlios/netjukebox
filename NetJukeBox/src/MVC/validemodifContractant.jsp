@@ -29,7 +29,7 @@
 			</tr>
 			<tr>
 				<td><bean:message key='attr.codepostal' /></td>
-				<td><html:text name="contractant" property="codepostal" /></td>
+				<td><html:text name="contractant" property="codePostal" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.ville' /></td>

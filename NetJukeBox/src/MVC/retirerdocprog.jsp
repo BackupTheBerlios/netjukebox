@@ -13,7 +13,7 @@
 
 		<table width="45%" border="0">
 			<tr>
-				<td><bean:message key='attr.iddoc' /></td>
+				<td><bean:message key='attr.doccaler' /></td>
 				<td><html:text property="id1" /></td>
 			</tr>
 			<tr>

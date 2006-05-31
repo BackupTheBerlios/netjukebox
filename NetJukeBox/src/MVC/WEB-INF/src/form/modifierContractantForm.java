@@ -9,7 +9,7 @@ public class modifierContractantForm extends ActionForm {
 	private String id;
 	private String nom;
 	private String adresse;
-	private String codepostal;
+	private String codePostal;
 	private String ville;
 	private String telephone;
 	private String fax;
@@ -21,7 +21,7 @@ public class modifierContractantForm extends ActionForm {
 		id = null;
 		nom = null;
 		adresse = null;
-		codepostal = null;
+		codePostal = null;
 		ville = null;
 		telephone = null;
 		fax = null;
@@ -48,7 +48,7 @@ public class modifierContractantForm extends ActionForm {
 		if (adresse.length() == 0) {
 			ae.add(id, new ActionError("error.adresse"));
 		}
-		if (codepostal.length() == 0) {
+		if (codePostal.length() == 0) {
 			ae.add(id, new ActionError("error.codepostal"));
 		}
 		if (ville.length() == 0) {
@@ -94,12 +94,12 @@ public class modifierContractantForm extends ActionForm {
 		this.adresse = adresse;
 	}
 	
-	public String getCodepostal() {
-		return codepostal;
+	public String getCodePostal() {
+		return codePostal;
 	}
 
-	public void setCodepostal(String codepostal) {
-		this.codepostal = codepostal;
+	public void setCodePostal(String codePostal) {
+		this.codePostal = codePostal;
 	}
 	
 	public String getVille() {
