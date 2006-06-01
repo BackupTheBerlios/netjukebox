@@ -38,14 +38,14 @@ public class validemodifContratAction extends Action {
 
 		String id = contratForm.getId();
 		String titre = contratForm.getTitre();
-		String joursig = contratForm.getJoursig();
-		String moissig = contratForm.getMoissig();
-		String anneesig = contratForm.getAnneesig();
-		String jourexp = contratForm.getJourexp();
-		String moisexp = contratForm.getMoisexp();
-		String anneeexp = contratForm.getAnneeexp();
-		String idcontractant = contratForm.getIdcontractant();
-		String reg = contratForm.getReg();
+		String joursig = contratForm.getJourSignature();
+		String moissig = contratForm.getMoisSignature();
+		String anneesig = contratForm.getAnneeSignature();
+		String jourexp = contratForm.getJourExpiration();
+		String moisexp = contratForm.getMoisExpiration();
+		String anneeexp = contratForm.getAnneeExpiration();
+		String idcontractant = contratForm.getContractant();
+		String reg = contratForm.getModeReglement();
 		String type = contratForm.getType();
 
 		response.setContentType("text/html");

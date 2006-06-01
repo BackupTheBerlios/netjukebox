@@ -3,9 +3,9 @@ package action;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.NewCanalForm;
+import form.deconnectForm;
 
-public class NewCanalAction extends Action {
+public class deconnectAction extends Action {
 
 	/**
 	 * Client XMLRPC
@@ -34,22 +34,17 @@ public class NewCanalAction extends Action {
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
-		NewCanalForm canalForm = (NewCanalForm)form;
+		@SuppressWarnings("unused") deconnectForm deconnectForm = (deconnectForm)form;
 
-		String nom = canalForm.getNom();
-		String nbmaxutil = canalForm.getNbmaxutil();
-		//canalForm.reset();
 		response.setContentType("text/html");
 		
-		boolean cree = clientXML.creerCanal(sessionLogin, nom, nbmaxutil);
+		boolean etatConnecte = !clientXML.deconnexion(sessionLogin);
 		
-		if (cree) {
-			String result = "INFO: Canal créé";
-			
-			session.setAttribute("Resultat" , result);
+		if (!etatConnecte) {
+			session.invalidate();
 			return mapping.findForward("ok");
 		} else {
-			String erreur = "ERREUR: Canal non créé";
+			String erreur = "ERREUR: Utilisateur toujours connecté";
 			
 			session.setAttribute("Resultat" , erreur);
 			return mapping.findForward("failed");

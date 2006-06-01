@@ -25,27 +25,27 @@
 			</tr>
 			<tr>
 				<td><bean:message key='attr.joursig' /></td>
-				<td><html:text name="contrat" property="joursig" /></td>
+				<td><html:text name="contrat" property="jourSignature" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.moissig' /></td>
-				<td><html:text name="contrat" property="moissig" /></td>
+				<td><html:text name="contrat" property="moisSignature" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.anneesig' /></td>
-				<td><html:text name="contrat" property="anneesig" /></td>
+				<td><html:text name="contrat" property="anneeSignature" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.jourexp' /></td>
-				<td><html:text name="contrat" property="jourexp" /></td>
+				<td><html:text name="contrat" property="jourExpiration" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.moisexp' /></td>
-				<td><html:text name="contrat" property="moisexp" /></td>
+				<td><html:text name="contrat" property="moisExpiration" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.anneeexp' /></td>
-				<td><html:text name="contrat" property="anneeexp" /></td>
+				<td><html:text name="contrat" property="anneeExpiration" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.idcontractant' /></td>

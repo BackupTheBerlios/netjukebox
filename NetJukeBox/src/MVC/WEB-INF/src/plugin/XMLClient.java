@@ -859,7 +859,7 @@ public class XMLClient {
 				params.addElement(artiste);
 				params.addElement(interprete);
 				params.addElement(compositeur);
-
+				
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute("Systeme.creerDocument", params);
 				return Boolean.parseBoolean(result);

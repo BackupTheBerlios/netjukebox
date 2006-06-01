@@ -18,7 +18,7 @@ public class NewDocAction extends Action {
 	/**
 	 * Chemin pour déposer le fichier audio
 	 */
-	private String chemin = "/home/netjukebox/Audio/";
+	private String chemin = "/home/admindg/Audio/";
 	
 	/**
 	 * Booléen validant le dépôt du fichier
@@ -46,7 +46,8 @@ public class NewDocAction extends Action {
 		
 		NewDocForm docForm = (NewDocForm)form;
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		FormFile fichier = docForm.getFichier();

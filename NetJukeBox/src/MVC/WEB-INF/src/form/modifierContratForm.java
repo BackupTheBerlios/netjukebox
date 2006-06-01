@@ -8,12 +8,12 @@ public class modifierContratForm extends ActionForm {
 	// --------------------------------------------------------- Instance Variables
 	private String id;
 	private String titre;
-	private String joursig;
-	private String moissig;
-	private String anneesig;
-	private String jourexp;
-	private String moisexp;
-	private String anneeexp;
+	private String jourSignature;
+	private String moisSignature;
+	private String anneeSignature;
+	private String jourExpiration;
+	private String moisExpiration;
+	private String anneeExpiration;
 	private String contractant;
 	private String modeReglement;
 	private String type;
@@ -22,12 +22,12 @@ public class modifierContratForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		id = null;
 		titre = null;
-		joursig = null;
-		moissig = null;
-		anneesig = null;
-		jourexp = null;
-		moisexp = null;
-		anneeexp = null;
+		jourSignature = null;
+		moisSignature = null;
+		anneeSignature = null;
+		jourExpiration = null;
+		moisExpiration = null;
+		anneeExpiration = null;
 		contractant = null;
 		modeReglement = null;
 		type = null;
@@ -49,22 +49,22 @@ public class modifierContratForm extends ActionForm {
 		if (titre.length() == 0) {
 			ae.add(id, new ActionError("error.titre"));
 		}
-		if (joursig.length() == 0) {
+		if (jourSignature.length() == 0) {
 			ae.add(id, new ActionError("error.joursig"));
 		}
-		if (moissig.length() == 0) {
+		if (moisSignature.length() == 0) {
 			ae.add(id, new ActionError("error.moissig"));
 		}
-		if (anneesig.length() == 0) {
+		if (anneeSignature.length() == 0) {
 			ae.add(id, new ActionError("error.anneesig"));
 		}
-		if (jourexp.length() == 0) {
+		if (jourExpiration.length() == 0) {
 			ae.add(id, new ActionError("error.jourexp"));
 		}
-		if (moisexp.length() == 0) {
+		if (moisExpiration.length() == 0) {
 			ae.add(id, new ActionError("error.moisexp"));
 		}
-		if (anneeexp.length() == 0) {
+		if (anneeExpiration.length() == 0) {
 			ae.add(id, new ActionError("error.anneeexp"));
 		}
 		if (contractant.length() == 0) {
@@ -96,52 +96,52 @@ public class modifierContratForm extends ActionForm {
 		this.titre = titre;
 	}
 
-	public String getJoursig() {
-		return joursig;
+	public String getJourSignature() {
+		return jourSignature;
 	}
 
-	public void setJoursig(String joursig) {
-		this.joursig = joursig;
+	public void setJourSignature(String jourSignature) {
+		this.jourSignature = jourSignature;
 	}
 	
-	public String getMoissig() {
-		return moissig;
+	public String getMoisSignature() {
+		return moisSignature;
 	}
 
-	public void setMoissig(String moissig) {
-		this.moissig = moissig;
+	public void setMoisSignature(String moisSignature) {
+		this.moisSignature = moisSignature;
 	}
 	
-	public String getAnneesig() {
-		return anneesig;
+	public String getAnneeSignature() {
+		return anneeSignature;
 	}
 
-	public void setAnneesig(String anneesig) {
-		this.anneesig = anneesig;
+	public void setAnneeSignature(String anneeSignature) {
+		this.anneeSignature = anneeSignature;
 	}
 	
-	public String getJourexp() {
-		return jourexp;
+	public String getJourExpiration() {
+		return jourExpiration;
 	}
 
-	public void setJourexp(String jourexp) {
-		this.jourexp = jourexp;
+	public void setJourExpiration(String jourExpiration) {
+		this.jourExpiration = jourExpiration;
 	}
 	
-	public String getMoisexp() {
-		return moisexp;
+	public String getMoisExpiration() {
+		return moisExpiration;
 	}
 
-	public void setMoisexp(String moisexp) {
-		this.moisexp = moisexp;
+	public void setMoisExpiration(String moisExpiration) {
+		this.moisExpiration = moisExpiration;
 	}
 	
-	public String getAnneeexp() {
-		return anneeexp;
+	public String getAnneeExpiration() {
+		return anneeExpiration;
 	}
 
-	public void setAnneeexp(String anneeexp) {
-		this.anneeexp = anneeexp;
+	public void setAnneeExpiration(String anneeExpiration) {
+		this.anneeExpiration = anneeExpiration;
 	}
 	
 	public String getContractant() {

@@ -4,6 +4,16 @@
 <html>
 	
 	<body>
-	<center><h1>SITE NETJUKEBOX</h1></center>
+	<center>
+	<h1>SITE NETJUKEBOX</h1>
+
+	<html:errors />
+	<html:form action="/deconnect" target="_parent">
+	
+	<html:submit value="déconnexion" />
+	
+	</html:form>
+	
+	</center>
 	</body>
 </html>

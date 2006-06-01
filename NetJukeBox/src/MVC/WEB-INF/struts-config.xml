@@ -200,12 +200,12 @@
 		<form-bean name="modifierContratForm" type="form.modifierContratForm">
 			<form-property name="id" type="java.lang.String" />
 			<form-property name="titre" type="java.lang.String" />
-			<form-property name="joursig" type="java.lang.String" />
-			<form-property name="moissig" type="java.lang.String" />
-			<form-property name="anneesig" type="java.lang.String" />
-			<form-property name="jourexp" type="java.lang.String" />
-			<form-property name="moisexp" type="java.lang.String" />
-			<form-property name="anneeexp" type="java.lang.String" />
+			<form-property name="jourSignature" type="java.lang.String" />
+			<form-property name="moisSignature" type="java.lang.String" />
+			<form-property name="anneeSignature" type="java.lang.String" />
+			<form-property name="jourExpiration" type="java.lang.String" />
+			<form-property name="moisExpiration" type="java.lang.String" />
+			<form-property name="anneeExpiration" type="java.lang.String" />
 			<form-property name="contractant" type="java.lang.String" />
 			<form-property name="modeReglement" type="java.lang.String" />
 			<form-property name="type" type="java.lang.String" />
@@ -227,6 +227,10 @@
 		
 		<!--LISTER-->
 		<form-bean name="listeForm" type="form.listeForm">
+        </form-bean>
+		
+		<!--DECONNEXION-->
+		<form-bean name="deconnectForm" type="form.deconnectForm">
         </form-bean>
 		
 		<!--PLANIFIER-->
@@ -278,6 +282,16 @@
             type="action.LoginAction">
             <forward name="failed" path="/index.jsp" />
             <forward name="ok" path="/mainPage.jsp" />
+        </action>
+		
+		<!--DECONNEXION-->
+        <action
+            path="/deconnect"
+            input="/head.jsp"
+            name="deconnectForm"
+            type="action.deconnectAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/index.jsp" />
         </action>
         
 		<!--MOT DE PASSE PERDU-->
