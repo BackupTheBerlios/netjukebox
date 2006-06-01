@@ -264,6 +264,14 @@ public class Contrat {
 		dico.put("titre", titre);
 		dico.put("dateSignature", dateSignature.get(GregorianCalendar.DAY_OF_MONTH)+"/"+(dateSignature.get(GregorianCalendar.MONTH)+1)+"/"+dateSignature.get(GregorianCalendar.YEAR));
 		dico.put("dateExpiration", dateExpiration.get(GregorianCalendar.DAY_OF_MONTH)+"/"+(dateExpiration.get(GregorianCalendar.MONTH)+1)+"/"+dateExpiration.get(GregorianCalendar.YEAR));
+		
+		dico.put("jourSignature", dateSignature.get(GregorianCalendar.DAY_OF_MONTH));
+		dico.put("moisSignature", (dateSignature.get(GregorianCalendar.MONTH)+1));
+		dico.put("anneeSignature", dateSignature.get(GregorianCalendar.YEAR));
+		dico.put("jourExpiration", dateExpiration.get(GregorianCalendar.DAY_OF_MONTH));
+		dico.put("moisExpiration", (dateExpiration.get(GregorianCalendar.MONTH)+1));
+		dico.put("anneeExpiration", dateExpiration.get(GregorianCalendar.YEAR));
+		
 		dico.put("modeReglement", modeReglement);
 		dico.put("type", type);
 		

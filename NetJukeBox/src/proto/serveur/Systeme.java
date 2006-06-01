@@ -1040,11 +1040,15 @@ public class Systeme {
 				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
 				//On ajoute le document au programme
-				p.retirerDocument(Long.parseLong(calage));
+				if (p.retirerDocument(Long.parseLong(calage))) {
 				
-				logger.info("Document retiré du programme "+idProg);
-				return Boolean.toString(true);
-				
+					logger.info("Document retiré du programme "+idProg);
+					return Boolean.toString(true);
+					
+				} else {
+					logger.info("Document non retiré du programme "+idProg);
+					return Boolean.toString(false);
+				}
 			}
 			
 			//Sinon, ajout refusé
