@@ -1,13 +1,19 @@
 package proto.serveur;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameClassPair;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -549,37 +555,62 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * Création d'un groupe de l'annuaire
 	 */
 
-/**	public boolean CreationGroupe(String groupe) {
+public void CreationGroupe(String groupe) {
 		logger.debug("Démarrage: CreationGroupe");
 		
-			try {
-				 Attributes attrs = new BasicAttributes(); 
-				    attrs.put("MUST","ou");
-				    attrs.put("NUMERICOID", "2.5.6.5");
-				    attrs.put("NAME", "organizationalUnit");
-				    attrs.put("SUP", "top");
-				    attrs.put("STRUCTURAL", "true");
-				    attrs.put("DESC", "RFC2256: an organizational unit");
-				  
-				    //Attribute must = new BasicAttribute("MUST", "ou");
-				    //must.add("objectclass");
-				    //attrs.put(must);
-/
-				    System.out.println(attrs);
-				   // System.out.println(must);
-			    
-				    DirContext schema = connectanonyme.getSchema("");
-			    
-			    DirContext newClass = schema.createSubcontext("ClassDefinition/organizationalUnit", attrs);
+		try {
+			Attributes attrs = new BasicAttributes(true); 
+		    Attribute objclass = new BasicAttribute("objectclass");
+		    objclass.add("top");
+		    objclass.add("organizationalUnit");
+		    attrs.put(objclass);
 
-		    	logger.debug("Arrêt: CreationGroupe");
-		    	return true;
-		    	
-		} catch (Exception e) {
+		    Context result = connectanonyme.createSubcontext("ou="+"groupe", attrs);
+
+		    NamingEnumeration list = connectanonyme.list("");
+
+		    while (list.hasMore()) {
+			NameClassPair nc = (NameClassPair)list.next();
+			logger.info(nc);
+		    }
+		    
+		    logger.error("La création du groupe "+ groupe +"a échoué!");
+		    logger.debug("Arrêt: CréationGroupe");
+		    result.close();
+
+		} catch (NamingException e) {
 			logger.error("ERREUR: "+ e);
-			logger.debug("Arrêt: CreationGroupe");
-			return false;
+		    logger.error("La création du groupe "+ groupe +"a échoué!");
+		    logger.debug("Arrêt: CréationGroupe");
 		}
-	}*/
-
 }
+    /**
+	 * Suppression d'un groupe de l'annuaire
+	 */
+
+public void SupprimerGroupe(String groupe) {
+		logger.debug("Démarrage: SupprimerGroupe");
+	
+ 				try {
+				    connect.destroySubcontext("ou=test");
+				    NamingEnumeration list = connect.list("");
+
+				    while (list.hasMore()) {
+					NameClassPair nc = (NameClassPair)list.next();
+					System.out.println(nc);
+				    }
+
+				    logger.info("Le groupe "+groupe+" a été supprimé!");
+					logger.debug("Arrêt: SupprimerGroupe");
+				    
+				
+		} catch (Exception e) {
+			logger.error("ERREUR SupprimerGroupe: "+ e);
+			logger.info("Le groupe "+groupe+" n'a pas pu être supprimé!");
+			logger.debug("Arrêt: SupprimerGroupe");
+
+		}
+}    
+}
+
+
