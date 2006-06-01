@@ -31,7 +31,8 @@ public class modifierPermAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		infoForm permForm = (infoForm)form;
@@ -42,7 +43,7 @@ public class modifierPermAction extends Action {
 		
 		Vector vPerm = clientXML.rechercherPermission(sessionLogin, id, "");
 		
-		if (vPerm!=null) {
+		if (vPerm!=null && vPerm.size()>0) {
 			session.setAttribute("Resultat" , vPerm);
 			return mapping.findForward("ok");
 		} else {

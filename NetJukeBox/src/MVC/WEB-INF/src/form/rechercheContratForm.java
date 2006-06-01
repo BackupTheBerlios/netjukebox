@@ -14,8 +14,8 @@ public class rechercheContratForm extends ActionForm {
 	private String jourexp;
 	private String moisexp;
 	private String anneeexp;
-	private String idcontractant;
-	private String reg;
+	private String contractant;
+	private String modeReglement;
 	private String type;
 
 	// --------------------------------------------------------- Methods
@@ -24,12 +24,12 @@ public class rechercheContratForm extends ActionForm {
 		titre = null;
 		joursig = null;
 		moissig = null;
-		anneesig = null;
+		anneesig= null;
 		jourexp = null;
 		moisexp = null;
 		anneeexp = null;
-		idcontractant = null;
-		reg = null;
+		contractant = null;
+		modeReglement = null;
 		type = null;
 	}
 
@@ -109,20 +109,20 @@ public class rechercheContratForm extends ActionForm {
 		this.anneeexp = anneeexp;
 	}
 	
-	public String getIdcontractant() {
-		return idcontractant;
+	public String getContractant() {
+		return contractant;
 	}
 
-	public void setIdcontractant(String idcontractant) {
-		this.idcontractant = idcontractant;
+	public void setContractant(String contractant) {
+		this.contractant = contractant;
 	}
 	
-	public String getReg() {
-		return reg;
+	public String getModeReglement() {
+		return modeReglement;
 	}
 
-	public void setReg(String reg) {
-		this.reg = reg;
+	public void setmodeReglement(String modeReglement) {
+		this.modeReglement = modeReglement;
 	}
 	
 	public String getType() {

@@ -131,14 +131,10 @@
 		<form-bean name="rechercheContratForm" type="form.rechercheContratForm">
 			<form-property name="id" type="java.lang.String" />
 			<form-property name="titre" type="java.lang.String" />
-			<form-property name="joursig" type="java.lang.String" />
-			<form-property name="moissig" type="java.lang.String" />
-			<form-property name="anneesig" type="java.lang.String" />
-			<form-property name="jourexp" type="java.lang.String" />
-			<form-property name="moisexp" type="java.lang.String" />
-			<form-property name="anneeexp" type="java.lang.String" />
-			<form-property name="idcontractant" type="java.lang.String" />
-			<form-property name="reg" type="java.lang.String" />
+			<form-property name="dateSignature" type="java.lang.String" />
+			<form-property name="dateExpiration" type="java.lang.String" />
+			<form-property name="contractant" type="java.lang.String" />
+			<form-property name="modeReglement" type="java.lang.String" />
 			<form-property name="type" type="java.lang.String" />
         </form-bean>
 		
@@ -210,8 +206,8 @@
 			<form-property name="jourexp" type="java.lang.String" />
 			<form-property name="moisexp" type="java.lang.String" />
 			<form-property name="anneeexp" type="java.lang.String" />
-			<form-property name="idcontractant" type="java.lang.String" />
-			<form-property name="reg" type="java.lang.String" />
+			<form-property name="contractant" type="java.lang.String" />
+			<form-property name="modeReglement" type="java.lang.String" />
 			<form-property name="type" type="java.lang.String" />
         </form-bean>
 		
@@ -757,7 +753,7 @@
             name="modifierPermForm"
             type="action.validemodifPermAction">
             <forward name="failed" path="/erreur.jsp" />
-            <forward name="ok" path="/creationPerm.jsp" />
+            <forward name="ok" path="/creation.jsp" />
         </action>
 		
 		<action

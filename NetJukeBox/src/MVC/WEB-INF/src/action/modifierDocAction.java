@@ -31,7 +31,8 @@ public class modifierDocAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		infoForm DocForm = (infoForm)form;
@@ -42,7 +43,7 @@ public class modifierDocAction extends Action {
 		
 		Vector vDoc = clientXML.rechercherDocument(sessionLogin, id, "", "", "", "", "", "", "", "", "", "", "", "");
 		
-		if (vDoc!=null) {
+		if (vDoc!=null && vDoc.size()>0) {
 			session.setAttribute("Resultat" , vDoc);
 			return mapping.findForward("ok");
 		} else {

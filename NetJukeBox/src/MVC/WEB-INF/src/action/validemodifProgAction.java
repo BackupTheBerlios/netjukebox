@@ -32,7 +32,8 @@ public class validemodifProgAction extends Action {
 		modifierProgForm progForm = (modifierProgForm)form;
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		String id = progForm.getId();

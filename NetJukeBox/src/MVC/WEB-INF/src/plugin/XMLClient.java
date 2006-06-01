@@ -9,7 +9,6 @@ import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
 
-//import proto.serveur.Jdbc;
 
 /**
  * Client XML (envoie les requêtes au serveur XML du serveur principal)
@@ -400,7 +399,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.listerCanaux",
+				return (Vector) clientXML.execute("Systeme.listerCanal",
 						params);
 
 			} catch (Exception e) {
@@ -436,8 +435,7 @@ public class XMLClient {
 				params.addElement(utilMax);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.rechercherCanal",
-						params);
+				return (Vector) clientXML.execute("Systeme.rechercherCanal", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -468,8 +466,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.supprimerCanal", params);
+				String result = (String) clientXML.execute("Systeme.supprimerCanal", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -505,8 +502,7 @@ public class XMLClient {
 				params.addElement(utilMax);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.modifierCanal", params);
+				String result = (String) clientXML.execute("Systeme.modifierCanal", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -538,8 +534,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				return (Dictionary) clientXML.execute("Systeme.infoCanal",
-						params);
+				return (Dictionary) clientXML.execute("Systeme.infoCanal", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -575,8 +570,7 @@ public class XMLClient {
 				params.addElement(thematique);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.creerProgramme", params);
+				String result = (String) clientXML.execute("Systeme.creerProgramme", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -610,8 +604,7 @@ public class XMLClient {
 				params.addElement(idProg);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.ajouterDocumentProgramme", params);
+				String result = (String) clientXML.execute("Systeme.ajouterDocumentProgramme", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -645,8 +638,7 @@ public class XMLClient {
 				params.addElement(calage);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.retirerDocumentProgramme", params);
+				String result = (String) clientXML.execute("Systeme.retirerDocumentProgramme", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -676,8 +668,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.listerProgrammes",
-						params);
+				return (Vector) clientXML.execute("Systeme.listerProgramme", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -712,8 +703,7 @@ public class XMLClient {
 				params.addElement(thematique);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute(
-						"Systeme.rechercherProgramme", params);
+				return (Vector) clientXML.execute("Systeme.rechercherProgramme", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -744,8 +734,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.supprimerProgramme", params);
+				String result = (String) clientXML.execute("Systeme.supprimerProgramme", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -781,8 +770,7 @@ public class XMLClient {
 				params.addElement(thematique);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.modifierProgramme", params);
+				String result = (String) clientXML.execute("Systeme.modifierProgramme", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -814,8 +802,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				return (Dictionary) clientXML.execute("Systeme.infoProgramme",
-						params);
+				return (Dictionary) clientXML.execute("Systeme.infoProgramme", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -874,8 +861,7 @@ public class XMLClient {
 				params.addElement(compositeur);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.creerDocument", params);
+				String result = (String) clientXML.execute("Systeme.creerDocument", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -905,8 +891,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.listerDocuments",
-						params);
+				return (Vector) clientXML.execute("Systeme.listerDocument", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -964,8 +949,7 @@ public class XMLClient {
 				params.addElement(compositeur);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.rechercherDocument",
-						params);
+				return (Vector) clientXML.execute("Systeme.rechercherDocument", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -996,8 +980,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.supprimerDocument", params);
+				String result = (String) clientXML.execute("Systeme.supprimerDocument", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1056,8 +1039,7 @@ public class XMLClient {
 				params.addElement(compositeur);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.modifierDocument", params);
+				String result = (String) clientXML.execute("Systeme.modifierDocument", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1089,8 +1071,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				return (Dictionary) clientXML.execute("Systeme.infoDocument",
-						params);
+				return (Dictionary) clientXML.execute("Systeme.infoDocument", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1127,8 +1108,7 @@ public class XMLClient {
 				params.addElement(InetAddress.getLocalHost().getHostAddress());
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute("Systeme.connexion",
-						params);
+				String result = (String) clientXML.execute("Systeme.connexion", params);
 
 				//etatConnecte = Boolean.parseBoolean(result);
 				//return etatConnecte;
@@ -1163,8 +1143,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.deconnexion", params);
+				String result = (String) clientXML.execute("Systeme.deconnexion", params);
 				
 				/*boolean estDeconnecte = Boolean.parseBoolean(result);
 				etatConnecte = !estDeconnecte;
@@ -1214,8 +1193,7 @@ public class XMLClient {
 				params.addElement(pays);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.inscription", params);
+				String result = (String) clientXML.execute("Systeme.inscription", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1246,8 +1224,7 @@ public class XMLClient {
 				params.addElement(log);
 				
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.supprimerUtilisateur", params);
+				String result = (String) clientXML.execute("Systeme.supprimerUtilisateur", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1276,8 +1253,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute(
-						"Systeme.rechercherUtilisateur", params);
+				return (Vector) clientXML.execute("Systeme.rechercherUtilisateur", params);
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
 				return null;
@@ -1317,8 +1293,7 @@ public class XMLClient {
 				params.addElement(Pays);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.modifierUtilisateur", params);
+				String result = (String) clientXML.execute("Systeme.modifierUtilisateur", params);
 
 				// return Boolean.parseBoolean(result);
 				return true;
@@ -1352,8 +1327,7 @@ public class XMLClient {
 				params.addElement(log);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.rechercherpwd", params);
+				String result = (String) clientXML.execute("Systeme.rechercherPwd", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1481,8 +1455,7 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.creerContrat", params);
+				String result = (String) clientXML.execute("Systeme.creerContrat", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1512,8 +1485,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.listerContrats",
-						params);
+				return (Vector) clientXML.execute("Systeme.listerContrat", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1544,8 +1516,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				return (Dictionary) clientXML.execute("Systeme.infoContrat",
-						params);
+				return (Dictionary) clientXML.execute("Systeme.infoContrat", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1598,8 +1569,7 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.rechercherContrats",
-						params);
+				return (Vector) clientXML.execute("Systeme.rechercherContrat", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1630,8 +1600,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.supprimerContrat", params);
+				String result = (String) clientXML.execute("Systeme.supprimerContrat", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1684,8 +1653,7 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.modifierContrat", params);
+				String result = (String) clientXML.execute("Systeme.modifierContrat", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1719,8 +1687,7 @@ public class XMLClient {
 				params.addElement(idDoc);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.ajouterDocumentContrat", params);
+				String result = (String) clientXML.execute("Systeme.ajouterDocumentContrat", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1754,8 +1721,7 @@ public class XMLClient {
 				params.addElement(idDoc);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.retirerDocumentContrat", params);
+				String result = (String) clientXML.execute("Systeme.retirerDocumentContrat", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1805,8 +1771,7 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.creerContractant", params);
+				String result = (String) clientXML.execute("Systeme.creerContractant", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -1836,8 +1801,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.listerContractants",
-						params);
+				return (Vector) clientXML.execute("Systeme.listerContractant", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1868,8 +1832,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				return (Dictionary) clientXML.execute("Systeme.infoContractant",
-						params);
+				return (Dictionary) clientXML.execute("Systeme.infoContractant", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1918,7 +1881,7 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.rechercherContractants", params);
+				return (Vector) clientXML.execute("Systeme.rechercherContractant", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1949,8 +1912,7 @@ public class XMLClient {
 				params.addElement(id);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.supprimerContractant", params);
+				String result = (String) clientXML.execute("Systeme.supprimerContractant", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -2000,8 +1962,7 @@ public class XMLClient {
 				params.addElement(type);
 
 				// Adresse la requête et affiche les résultats
-				String result = (String) clientXML.execute(
-						"Systeme.modifierContractant", params);
+				String result = (String) clientXML.execute("Systeme.modifierContractant", params);
 				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
@@ -2068,7 +2029,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.listerRoles", params);
+				return (Vector) clientXML.execute("Systeme.listerRole", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -2270,7 +2231,7 @@ public class XMLClient {
 				params.addElement(login);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.listerPermissions", params);
+				return (Vector) clientXML.execute("Systeme.listerPermission", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -2369,7 +2330,7 @@ public class XMLClient {
 				params.addElement(libelle);
 
 				// Adresse la requête et affiche les résultats
-				return (Vector) clientXML.execute("Systeme.rechercherPermissions", params);
+				return (Vector) clientXML.execute("Systeme.rechercherPermission", params);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);

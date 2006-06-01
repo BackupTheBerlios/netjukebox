@@ -32,7 +32,8 @@ public class modifierProgAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		infoForm progForm = (infoForm)form;
@@ -43,7 +44,7 @@ public class modifierProgAction extends Action {
 		
 		Vector vProg = clientXML.rechercherProgramme(sessionLogin, id, "", "");
 		
-		if (vProg!=null) {
+		if (vProg!=null && vProg.size()>0) {
 			session.setAttribute("Resultat" , vProg);			
 			return mapping.findForward("ok");
 		} else {

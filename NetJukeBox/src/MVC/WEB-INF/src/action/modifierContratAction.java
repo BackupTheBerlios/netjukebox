@@ -31,7 +31,8 @@ public class modifierContratAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		infoForm contratForm = (infoForm)form;
@@ -42,7 +43,7 @@ public class modifierContratAction extends Action {
 		
 		Vector vContrat = clientXML.rechercherContrat(sessionLogin, id, "", "", "", "", "", "", "", "", "", "");
 		
-		if (vContrat!=null) {
+		if (vContrat!=null && vContrat.size()>0) {
 			session.setAttribute("Resultat" , vContrat);
 			return mapping.findForward("ok");
 		} else {

@@ -32,7 +32,8 @@ public class NewProgAction extends Action {
 		NewProgForm progForm = (NewProgForm)form;
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		String titre = progForm.getTitre();

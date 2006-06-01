@@ -33,7 +33,8 @@ public class validemodifDocAction extends Action {
 		
 		modifierDocForm docForm = (modifierDocForm)form;
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		String id = docForm.getId();

@@ -46,11 +46,11 @@
 			</tr>
 			<tr>
 				<td><bean:message key='attr.idcontractant' /></td>
-				<td><html:text property="idcontractant" /></td>
+				<td><html:text property="contractant" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.reg' /></td>
-				<td><html:text property="reg" /></td>
+				<td><html:text property="modeReglement" /></td>
 			</tr>
 			<tr>
 				<td><bean:message key='attr.type' /></td>

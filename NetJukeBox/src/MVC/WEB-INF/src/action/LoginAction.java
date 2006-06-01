@@ -1,8 +1,8 @@
 package action;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.util.prefs.BackingStoreException;
+//import java.net.InetAddress;
+//import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.servlet.http.*;
 import org.apache.struts.action.Action;
@@ -23,12 +23,12 @@ public class LoginAction extends Action {
 	/**
 	 * Chemin du fichier d'initialisation
 	 */
-	private String filename = "/home/netjukebox/Workspace/MVC/WEB-INF/src/plugin/client.ini";
+	private String filename = "/home/admindg/Workspace/MVC/WEB-INF/src/plugin/client.ini";
 	
 	/**
 	 * Client XMLRPC
 	 */
-	private XMLClient newClient = null;
+	//private XMLClient newClient = null;
 	
 	/**
 	 * Connection
@@ -53,7 +53,13 @@ public class LoginAction extends Action {
 		String login = loginForm.getLogin();
 		String password = loginForm.getPass();
 		
-		clientXML = initializeXML();
+		//clientXML = initializeXML();
+		
+		Preferences prefs = new IniFile(new File(filename));
+		String port = prefs.node("serveur").get("port", null);
+		String ip = prefs.node("serveur").get("ip", null);
+		
+		clientXML = XMLClient.getInstance(ip, port);
 		etatConnecte = ((XMLClient) clientXML).connexion(login, password);
 		
 		System.out.println(etatConnecte);
@@ -61,7 +67,7 @@ public class LoginAction extends Action {
 		if (etatConnecte) {
 			//Création d'une session de connexion
 			HttpSession session = request.getSession(true);
-			session.setAttribute("client", clientXML);
+			//session.setAttribute("client", clientXML);
 			session.setAttribute("login", login);
 			//Redirection vers le sommaire
 			return mapping.findForward("ok");    
@@ -73,7 +79,7 @@ public class LoginAction extends Action {
 	/**
 	 * Initialisation du client XMLRPC
 	 * @return Object
-	 */
+	 *//**
 	private Object initializeXML() {
 		
 		//Si le client XML n'est pas déjà initialisé
@@ -108,5 +114,5 @@ public class LoginAction extends Action {
 			System.err.println("WARNING: Client XML déjà initialisé !");
 			return false;
 		}
-	}
+	}*/
 }

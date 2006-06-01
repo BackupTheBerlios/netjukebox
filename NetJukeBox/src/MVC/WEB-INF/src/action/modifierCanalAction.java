@@ -32,7 +32,8 @@ public class modifierCanalAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		infoForm canalForm = (infoForm)form;
@@ -43,7 +44,7 @@ public class modifierCanalAction extends Action {
 		
 		Vector vCanaux = clientXML.rechercherCanal(sessionLogin, id, "", "");
 		
-		if (vCanaux!=null) {		
+		if (vCanaux!=null && vCanaux.size()>0) {		
 			session.setAttribute("Resultat" , vCanaux);
 			return mapping.findForward("ok");
 		} else {

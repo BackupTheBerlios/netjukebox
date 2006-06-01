@@ -32,7 +32,7 @@ public class stopplayerAction extends Action {
 		
 		HttpSession session = request.getSession();
 		//clientXML = (XMLClient) session.getAttribute("client");
-		
+		clientXML = XMLClient.getInstance();
 		//RTPClient2 player = RTPClient2.getInstance();
 		//player.stop();
 		

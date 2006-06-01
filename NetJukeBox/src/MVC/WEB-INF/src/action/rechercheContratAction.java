@@ -31,7 +31,8 @@ public class rechercheContratAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		clientXML = (XMLClient) session.getAttribute("client");
+		//clientXML = (XMLClient) session.getAttribute("client");
+		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
 		rechercheContratForm contratForm = (rechercheContratForm)form;
@@ -44,8 +45,8 @@ public class rechercheContratAction extends Action {
 		String jourexp = contratForm.getJourexp();
 		String moisexp = contratForm.getMoisexp();
 		String anneeexp = contratForm.getAnneeexp();
-		String idcontractant = contratForm.getIdcontractant();
-		String reg = contratForm.getReg();
+		String idcontractant = contratForm.getContractant();
+		String reg = contratForm.getModeReglement();
 		String type = contratForm.getType();
 		
 		response.setContentType("text/html");

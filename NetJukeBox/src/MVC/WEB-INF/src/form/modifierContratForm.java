@@ -14,8 +14,8 @@ public class modifierContratForm extends ActionForm {
 	private String jourexp;
 	private String moisexp;
 	private String anneeexp;
-	private String idcontractant;
-	private String reg;
+	private String contractant;
+	private String modeReglement;
 	private String type;
 
 	// --------------------------------------------------------- Methods
@@ -28,8 +28,8 @@ public class modifierContratForm extends ActionForm {
 		jourexp = null;
 		moisexp = null;
 		anneeexp = null;
-		idcontractant = null;
-		reg = null;
+		contractant = null;
+		modeReglement = null;
 		type = null;
 	}
 
@@ -67,10 +67,10 @@ public class modifierContratForm extends ActionForm {
 		if (anneeexp.length() == 0) {
 			ae.add(id, new ActionError("error.anneeexp"));
 		}
-		if (idcontractant.length() == 0) {
+		if (contractant.length() == 0) {
 			ae.add(id, new ActionError("error.idcontractant"));
 		}
-		if (reg.length() == 0) {
+		if (modeReglement.length() == 0) {
 			ae.add(id, new ActionError("error.reg"));
 		}
 		if (type.length() == 0) {
@@ -144,20 +144,20 @@ public class modifierContratForm extends ActionForm {
 		this.anneeexp = anneeexp;
 	}
 	
-	public String getIdcontractant() {
-		return idcontractant;
+	public String getContractant() {
+		return contractant;
 	}
 
-	public void setIdcontractant(String idcontractant) {
-		this.idcontractant = idcontractant;
+	public void setContractant(String contractant) {
+		this.contractant = contractant;
 	}
 	
-	public String getReg() {
-		return reg;
+	public String getModeReglement() {
+		return modeReglement;
 	}
 
-	public void setReg(String reg) {
-		this.reg = reg;
+	public void setModeReglement(String modeReglement) {
+		this.modeReglement = modeReglement;
 	}
 	
 	public String getType() {
