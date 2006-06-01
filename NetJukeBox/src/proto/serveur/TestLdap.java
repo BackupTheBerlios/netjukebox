@@ -1,5 +1,6 @@
 package proto.serveur;
 
+import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -12,9 +13,9 @@ import javax.naming.directory.Attributes;
 public class TestLdap {
 		
 	@SuppressWarnings("static-access")
-	public static void main(String[] args) throws NamingException {
+	public static void main(String[] args) throws NamingException, IOException {
 		Ldap ldap = Ldap.getInstance();
-		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory","ldap://55.24.8.10:389/dc=netjukebox,dc=com","simple", "gentaz", "domi","admin");
+		ldap.openLdap("com.sun.jndi.ldap.LdapCtxFactory","ldap://55.24.8.10:389/dc=netjukebox,dc=com","simple", "admin", "admin","mot2passe");
 		//ldap.executeSupprimer("bollard");
 		//ldap.executeCreer("new", "new", "new", "new", "netjukebox@gmail.com", "Pays", "usager");
 		//ldap.executeCreer("login", "password", "toto", "titi", "toto@gmail.com", "france", "usager");
@@ -24,15 +25,16 @@ public class TestLdap {
 		//ldap.ModifieAttributs("mail", "new@gmail", "login", "admin");
 		
 //CODE POUR LE LISTAGE DES GROUPES
-	     /**	 Vector vect= ldap.getSchema();
+	     	 Vector vect= ldap.ListeGroupe();
 	         for(int i=0; i < vect.size(); i++)
 	            if(vect.elementAt(i) != null)
 	               System.out.println (vect.elementAt(i));
 	            else System.out.println("vect[" + i + "] est null");
-	         */
+	         
 //CODE POUR LA SUPPRESSION D'UN GROUPE
-			//ldap.CreationGroupe("usager");
-	   
+				
+			ldap.CreationGroupe("test");
+			ldap.SupprimerGroupe("test");
 	        
 	         /**if(vect.elementAt(1) != null){
 	              vect.set(1, new Integer(1000));
