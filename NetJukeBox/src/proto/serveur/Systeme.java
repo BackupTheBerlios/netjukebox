@@ -740,7 +740,7 @@ public class Systeme {
 				d = (Document)listeDocs.nextElement();
 				
 				int jourP = d.getDate().get(GregorianCalendar.DAY_OF_MONTH);
-				int moisP = d.getDate().get(GregorianCalendar.MONTH);
+				int moisP = d.getDate().get(GregorianCalendar.MONTH)+1;
 				int anneeP = d.getDate().get(GregorianCalendar.YEAR);
 				
 				if ((id.length()>0 && d.getId().contains(id))
@@ -1927,17 +1927,17 @@ public class Systeme {
 				c = (Contrat)listeContrat.nextElement();
 				
 				int jourS = c.getDateSignature().get(GregorianCalendar.DAY_OF_MONTH);
-				int moisS = c.getDateSignature().get(GregorianCalendar.MONTH);
+				int moisS = c.getDateSignature().get(GregorianCalendar.MONTH)+1;
 				int anneeS = c.getDateSignature().get(GregorianCalendar.YEAR);
 				int jourE = c.getDateExpiration().get(GregorianCalendar.DAY_OF_MONTH);
-				int moisE = c.getDateExpiration().get(GregorianCalendar.MONTH);
+				int moisE = c.getDateExpiration().get(GregorianCalendar.MONTH)+1;
 				int anneeE = c.getDateExpiration().get(GregorianCalendar.YEAR);
 				
 				if ((id.length()>0 && c.getId().contains(id))
 					|| (titre.length()>0 && c.getTitre().contains(titre))
 					|| (jourSignature.length()>0 && jourS==Integer.parseInt(jourSignature))
 					|| (moisSignature.length()>0 && moisS==Integer.parseInt(moisSignature))
-					|| (anneeSignature.length()>0 && anneeS==Integer.parseInt(anneeExpiration))
+					|| (anneeSignature.length()>0 && anneeS==Integer.parseInt(anneeSignature))
 					|| (jourExpiration.length()>0 && jourE==Integer.parseInt(jourExpiration))
 					|| (moisExpiration.length()>0 && moisE==Integer.parseInt(moisExpiration))
 					|| (anneeExpiration.length()>0 && anneeE==Integer.parseInt(anneeExpiration))
