@@ -52,28 +52,29 @@ ControllerListener, ReceiveStreamListener, ActionListener{
     String address;
     String portstr;
     String media;
+    Player videoplayer = null;
+    //SessionManager videomgr = null;
     SessionManager audiomgr = null;
-    Component visualComponent = null;
+    //Component visualComponent = null;
     Component controlComponent = null;
     Panel panel = null;
-    Button audiobutton = null;
+    //Button audiobutton = null;
     //Button videobutton = null;
     GridBagLayout gridbag = null;
     GridBagConstraints c = null;
+    //ParticipantListWindow videogui = null;
     //ParticipantListWindow audiogui = null;
     int width = 320;
     int height =0;
     Vector playerlist = new Vector();
-    
-    //Instance du player
-    Player player = null;
    
     
     public void init(){
         setLayout( new BorderLayout() );
-        Panel buttonPanel = new Panel();
-        buttonPanel.setLayout( new FlowLayout() );
-        add("North", buttonPanel);
+        //Panel buttonPanel = new Panel();
+        //buttonPanel.setLayout( new FlowLayout() );
+        //add("North", buttonPanel);
+        
         media = getParameter("audio");
         if (media.equals("On")){
             address = getParameter("audiosession");
@@ -85,23 +86,26 @@ ControllerListener, ReceiveStreamListener, ActionListener{
                 System.err.println("null audio manager");
                 return;
             }
-            //audiogui = new ParticipantListWindow(audiomgr);
             // add a button for the audio RTP monitor
-            audiobutton = new Button("Audio RTP Monitor");
-            audiobutton.addActionListener(this);
-            buttonPanel.add(audiobutton);
+            //audiobutton = new Button("Audio RTP Monitor");
+            //audiobutton.addActionListener(this);
+            //buttonPanel.add(audiobutton);
         }
     }// end of constructor
 
     public void start(){
-        if (player == null) {
-        	new PlayerWindow(player);
+        // The applet only controls the first video player by adding
+        // its visual and control component to the applet canvas. Thus
+        // only this player needs to be controlled when this applet is
+        // swiched in browser pages etc.
+        if (videoplayer != null){
+            videoplayer.start();
         }
     }
     // applet has been stopped, stop and deallocate all the RTP players.
     public void stop(){
-        if (player != null) {
-        	player.close();
+        if (videoplayer != null){
+            videoplayer.close();
         }
     }
 
@@ -110,8 +114,9 @@ ControllerListener, ReceiveStreamListener, ActionListener{
     public void destroy(){
         // close the video and audio RTP SessionManagers
         String reason = "Shutdown RTP Player";
-  
+        
         if (audiomgr != null){
+        	videoplayer = null;
             audiomgr.closeSession(reason);
             audiomgr = null;
         }
@@ -120,10 +125,6 @@ ControllerListener, ReceiveStreamListener, ActionListener{
             
    
     public void actionPerformed(ActionEvent event){
-        Button button = (Button)event.getSource();
-        if ((button == audiobutton) && (audiomgr != null)) ;
-            //audiogui = new ParticipantListWindow(audiomgr);
-            //audiogui.Show();
     }
     
     public String getAddress(){
@@ -157,9 +158,13 @@ ControllerListener, ReceiveStreamListener, ActionListener{
         
         
         if (event instanceof RealizeCompleteEvent) {
-            // add the player's control component to the applet
-            if (( controlComponent = 
-                  player.getControlPanelComponent()) != null){
+            
+        	//remove the previous control component
+            if (controlComponent!=null) {
+            	panel.remove(controlComponent);
+            }
+            //add the player's control component to the applet
+            if ((controlComponent = player.getControlPanelComponent()) != null){
                 height += controlComponent.getPreferredSize().height;
                 if (panel == null) {
                     panel = new Panel();
@@ -207,28 +212,28 @@ ControllerListener, ReceiveStreamListener, ActionListener{
 
     public void update( ReceiveStreamEvent event){
         SessionManager source =(SessionManager)event.getSource();
-
+       
+        Player newplayer = null;
+        
         // create a new player if a new recvstream is detected
         if (event instanceof NewReceiveStreamEvent){
             try{
                 ReceiveStream stream = ((NewReceiveStreamEvent)event).getReceiveStream();
                 DataSource dsource = stream.getDataSource();
-                if (player!=null) {
-                	player.stop();
-                	player.setSource(dsource);
-                	player.start();
+                newplayer = Manager.createPlayer(dsource);
+                
+                if (newplayer!=null) {
+                	
+                	videoplayer = newplayer;
+                    newplayer.addControllerListener(this);
+                    newplayer.start();
                 }
+                
             }catch (Exception e){
-            	System.err.println("RTPPlayerApplet Exception " + e.getMessage());
-            	e.printStackTrace();
+	          System.err.println("RTPPlayerApplet Exception " + e.getMessage());
+	          e.printStackTrace();
             }
-            /*if (source == audiomgr){
-                if (playerlist != null)
-                        playerlist.addElement((Object)newplayer);
-                new PlayerWindow(newplayer);
-            }*/
-        }// if (event instanceof NewReceiveStreamEvent)
-        
+        }// if (event instanceof NewReceiveStreamEvent)        
     }// end of RTPSessionUpdate
         
     private SessionManager StartSessionManager(String destaddrstr,
