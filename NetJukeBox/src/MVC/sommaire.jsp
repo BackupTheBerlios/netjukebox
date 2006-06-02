@@ -88,7 +88,7 @@
 	<a href="ajouterdoccontrat.jsp" target="droite"><bean:message key='ajoutdocumentcontrat'/></a><br />
 	<a href="retirerdoccontrat.jsp" target="droite"><bean:message key='retirerdocumentcontrat'/></a><br />
 	
-	<b>START STOP CANAL :</b><br>
+	<b>START STOP PLAYER :</b><br>
 	<a href="startplayer.jsp" target="droite"><bean:message key='startplayer'/></a><br />
 	<a href="stopplayer.jsp" target="droite"><bean:message key='stopplayer'/></a><br />
 	
