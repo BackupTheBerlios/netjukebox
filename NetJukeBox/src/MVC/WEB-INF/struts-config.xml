@@ -872,7 +872,7 @@
             name="infoForm"
             type="action.startplayerAction">
             <forward name="failed" path="/erreur.jsp" />
-            <forward name="ok" path="/creation.jsp" />
+            <forward name="ok" path="/player.jsp" />
         </action>
 		
 		<action
@@ -883,6 +883,8 @@
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
         </action>
+		
+		
 		
     </action-mappings>
     
