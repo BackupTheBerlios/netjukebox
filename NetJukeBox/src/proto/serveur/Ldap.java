@@ -86,9 +86,10 @@ public class Ldap{
 	/**
 	 * Connection via login & mot de passe à l'annuaire
 	 */
+	public DirContext root = null;
 	public DirContext connect = null;
 	
-//	 CONSTRUCTEUR
+//	 CONSTRUCTEUR	
 //	********************************************
 	/**
 	 * Constructeur vide (Singleton)
@@ -123,7 +124,6 @@ public class Ldap{
     	this.login = login;
     	this.pwd = pwd;
     	this.auth = auth;
-    	this.role = role;
     	this.base = base;
     	
     	return this.openLdap();
@@ -134,7 +134,7 @@ public class Ldap{
 	 * @return boolean
 	 */
 public boolean openLdap() {
-			//PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
+			PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
 			logger.debug("Démarrage: openLdap");
 			
 		String role = null;
@@ -146,7 +146,6 @@ public boolean openLdap() {
 	    	try {
 	    		//Connexion à l'annuaire
 	    		connectanonyme = new InitialDirContext(env);
-	    		
 	    		Dictionary resultats = getLogin(login);
 				logger.info("login :"+ login);
 				logger.info(resultats);
@@ -163,12 +162,18 @@ public boolean openLdap() {
 				logger.info("role: "+ role);			
 	    		String log = "uid=" + login + ",ou=" + role + "," + base;
 	    		
-	      		connect = (DirContext) connectanonyme.lookup("");
-	    		connect.addToEnvironment(Context.SECURITY_AUTHENTICATION, auth);
-	    		connect.addToEnvironment(Context.SECURITY_PRINCIPAL, log);
-	    		connect.addToEnvironment(Context.SECURITY_CREDENTIALS, pwd);
-	    
-				logger.info("Vous avez été connecté à la base " + env);								
+	    		Hashtable<String,String> env2 = new Hashtable<String,String>();
+	    		
+	    		env2.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
+	    		env2.put(DirContext.PROVIDER_URL, url);	
+	    		env2.put(DirContext.SECURITY_AUTHENTICATION, auth);
+	    		env2.put(DirContext.SECURITY_PRINCIPAL, log);
+	    		env2.put(DirContext.SECURITY_CREDENTIALS, pwd);
+	    		
+	    		connectanonyme = new InitialDirContext(env2);
+	    		connect=connectanonyme;
+	    		
+	    		logger.info("Vous avez été connecté à la base " + env2);								
 				logger.debug("Arrêt: openLdap");				
 	    		return true;
 	    		
@@ -179,8 +184,9 @@ public boolean openLdap() {
 	    	}
 	    }
 		logger.debug("Arrêt: openLdap");
+		
 		return false;
-	}
+}
 	
 	/**
 	 * Ferme la connexion à la base de données
@@ -514,12 +520,12 @@ public boolean executeSupprimer(String login) throws NamingException {
 		logger.debug("Démarrage: getSchema");
 		Vector result=new Vector();
 		try {
-	    	String searchBase    = "";
+			String searchBase    = "";
 			String searchFilter  = "(objectclass=*)";
 			SearchControls constraints = new SearchControls();
 			constraints.setSearchScope( SearchControls.ONELEVEL_SCOPE );
 			    
-	        NamingEnumeration answer = connectanonyme.search( searchBase,searchFilter,constraints );
+	        NamingEnumeration answer = connect.search( searchBase,searchFilter,constraints );
 	       
 	           	while (answer.hasMore()) {
 		       		result = printSearchEnumeration2(answer);
@@ -565,22 +571,15 @@ public void CreationGroupe(String groupe) {
 		    objclass.add("organizationalUnit");
 		    attrs.put(objclass);
 
-		    Context result = connectanonyme.createSubcontext("ou="+"groupe", attrs);
+		    Context result = connect.createSubcontext("ou="+ groupe, attrs);
 
-		    NamingEnumeration list = connectanonyme.list("");
-
-		    while (list.hasMore()) {
-			NameClassPair nc = (NameClassPair)list.next();
-			logger.info(nc);
-		    }
-		    
-		    logger.error("La création du groupe "+ groupe +"a échoué!");
+		    logger.error("La création du groupe "+ groupe +" a reussi!");
 		    logger.debug("Arrêt: CréationGroupe");
 		    result.close();
 
 		} catch (NamingException e) {
 			logger.error("ERREUR: "+ e);
-		    logger.error("La création du groupe "+ groupe +"a échoué!");
+		    logger.error("La création du groupe "+ groupe +" a échoué!");
 		    logger.debug("Arrêt: CréationGroupe");
 		}
 }
@@ -592,14 +591,7 @@ public void SupprimerGroupe(String groupe) {
 		logger.debug("Démarrage: SupprimerGroupe");
 	
  				try {
-				    connect.destroySubcontext("ou=test");
-				    NamingEnumeration list = connect.list("");
-
-				    while (list.hasMore()) {
-					NameClassPair nc = (NameClassPair)list.next();
-					System.out.println(nc);
-				    }
-
+				    connect.destroySubcontext("ou="+groupe);
 				    logger.info("Le groupe "+groupe+" a été supprimé!");
 					logger.debug("Arrêt: SupprimerGroupe");
 				    
