@@ -133,19 +133,20 @@ public class Systeme {
 		String ipldap = prefs.node("ldap").get("ip", null);
 		String portldap = prefs.node("ldap").get("port", null);
 		String baseNameldap = prefs.node("ldap").get("base", null);
+		String authldap = prefs.node("ldap").get("auth", null);
 		String loginldap = prefs.node("ldap").get("login", null);
 		String pwdldap = prefs.node("ldap").get("pwd", null);
-		@SuppressWarnings("unused") String role = prefs.node("ldap").get("role", null);
-		
+				
 		String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
 		
 		logger.info("LDAP Driver: " + driverldap);
 		logger.info("LDAP URL: " + urlldap);
+		logger.info("LDAP Authentification:" + authldap);
 		logger.info("LDAP Login: " + loginldap);
 		logger.info("LDAP Pwd: " + pwdldap);
 		
-		//ldap = Ldap.getInstance();
-		//ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, role, baseNameldap);
+		ldap = Ldap.getInstance();
+		//ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, baseNameldap);
 	
 		//Récupération des information du serveur SMTP
 		this.host = prefs.node("smtp").get("host", null);
@@ -224,10 +225,9 @@ public class Systeme {
 			String portldap = prefs.node("ldap").get("port", null);
 			String baseNameldap = prefs.node("ldap").get("base", null);
 			String authldap = prefs.node("ldap").get("auth", null);
-				//String loginldap = prefs.node("ldap").get("login", null);
-				//String pwdldap = prefs.node("ldap").get("pwd", null);
-				//String role = prefs.node("ldap").get("role", null);
-				
+			String login = prefs.node("ldap").get("login", null);
+			String pwdldap = prefs.node("ldap").get("pwd", null);
+							
 			String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
 				
 			logger.info("LDAP Driver: " + driverldap);
