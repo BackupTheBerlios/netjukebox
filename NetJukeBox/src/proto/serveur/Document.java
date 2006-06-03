@@ -82,7 +82,7 @@ public class Document {
 	/**
 	 * Contrats relatifs au document
 	 */
-	private Hashtable contrats;
+	private Hashtable contrats= new Hashtable();
 	
 	/**
 	 * Artiste
@@ -327,6 +327,36 @@ public class Document {
 		dico.put("artiste", artiste);
 		dico.put("interprete", interprete);
 		dico.put("compositeur", compositeur);
+		
+//		Liste des programmes
+		Vector vProgs = new Vector();
+		Dictionary dicoProg;
+		Programme prog;
+		Enumeration listeProgs = programmes.elements();
+		while (listeProgs.hasMoreElements()) {
+			prog = (Programme)listeProgs.nextElement();
+			dicoProg = new Hashtable();
+			dicoProg.put("id", prog.getId());
+			dicoProg.put("titre", prog.getTitre());
+			vProgs.add(dicoProg);
+		}
+		dico.put("programmes", vProgs);
+		
+		
+//		Liste des contrats
+		Vector vConts = new Vector();
+		Dictionary dicoCont;
+		Contrat cont;
+		Enumeration listeConts = contrats.elements();
+		while (listeConts.hasMoreElements()) {
+			cont = (Contrat)listeConts.nextElement();
+			dicoCont = new Hashtable();
+			dicoCont.put("id", cont.getId());
+			dicoCont.put("titre", cont.getTitre());
+			vConts.add(dicoCont);
+		}
+		dico.put("contrats", vConts);
+		
 
 		return dico;
 	}
@@ -487,7 +517,7 @@ public class Document {
 	 * @return Hastable
 	 */
 	public /*pure*/ void setProgrammesAssocies() {
-		logger.info("Programme.getProgrammesAssocies()");
+		logger.info("Document.getProgrammesAssocies()");
 		
 		//On crée un vecteur pour contenir les objets programmes instanciés
 		Hashtable progs = new Hashtable();
@@ -497,8 +527,8 @@ public class Document {
 		Jdbc base = Jdbc.getInstance();
 		Vector resultats = base.executeQuery(requete);
 		
-		System.out.println("Programme.getProgrammesAssocies() : "+resultats.size()+" programme(s) trouvé(s)");
-		logger.info("Programme.getProgrammesAssocies() : "+resultats.size()+" programme(s) trouvé(s)");
+		System.out.println("Document.getProgrammesAssocies() : "+resultats.size()+" programme(s) trouvé(s)");
+		logger.info("Document.getProgrammesAssocies() : "+resultats.size()+" programme(s) trouvé(s)");
 		
 		// Pour chaque programme, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
@@ -508,6 +538,34 @@ public class Document {
 		}
 		
 		this.programmes=progs;
+	}
+	
+	/**
+	 * Retourne la liste des contrats associés
+	 * @return Hastable
+	 */
+	public /*pure*/ void setContratsAssocies() {
+		logger.info("Document.getContratsAssocies()");
+		
+		//On crée un vecteur pour contenir les objets programmes instanciés
+		Hashtable conts = new Hashtable();
+		
+		//On va chercher dans la base la liste des id de tous les contrats
+		String requete = "SELECT DISTINCT id_contrat FROM contratdoc WHERE id_doc = '"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		System.out.println("Document.getContratsAssocies() : "+resultats.size()+" contrat(s) trouvé(s)");
+		logger.info("Document.getContratsAssocies() : "+resultats.size()+" contrat(s) trouvé(s)");
+		
+		// Pour chaque contrat, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			String id = String.valueOf((Integer)dico.get("id_contrat"));
+			conts.put(id, ContratFactory.getById(id));
+		}
+		
+		this.contrats=conts;
 	}
 	
 	/**

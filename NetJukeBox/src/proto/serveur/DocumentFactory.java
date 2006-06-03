@@ -172,6 +172,7 @@ public class DocumentFactory {
 				instancesById.put(doc.getId(), doc);
 				instancesByTitre.put(doc.getTitre(), doc);
 				doc.setProgrammesAssocies();
+				doc.setContratsAssocies();
 				logger.debug("Arrêt: Document.getByTitre");
 				return doc;
 			}
@@ -255,6 +256,7 @@ public class DocumentFactory {
 				instancesById.put(doc.getId(), doc);
 				instancesByTitre.put(doc.getTitre(), doc);
 				doc.setProgrammesAssocies();
+				doc.setContratsAssocies();
 				logger.debug("Arrêt: Document.getById");
 				return doc;
 			}
