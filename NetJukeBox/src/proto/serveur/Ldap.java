@@ -71,7 +71,7 @@ public class Ldap{
 	/**
 	 * Role de l'usager
 	 */
-	private String role; // = "usager";
+	//private String role; // = "usager";
 	
 	/**
 	 * Nom de l'annuaire ldap
@@ -86,7 +86,6 @@ public class Ldap{
 	/**
 	 * Connection via login & mot de passe à l'annuaire
 	 */
-	public DirContext root = null;
 	public DirContext connect = null;
 	
 //	 CONSTRUCTEUR	
@@ -119,7 +118,7 @@ public class Ldap{
      * @param String pwd
 	 */
 	public boolean openLdap(String driver, String url, String auth, String login, String pwd, String base) {
-    	this.driver = driver;
+		this.driver = driver;
     	this.url = url;
     	this.login = login;
     	this.pwd = pwd;
@@ -134,8 +133,7 @@ public class Ldap{
 	 * @return boolean
 	 */
 public boolean openLdap() {
-			PropertyConfigurator.configure("C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/serveur/log4j.prop");
-			logger.debug("Démarrage: openLdap");
+		logger.debug("Démarrage: openLdap");
 			
 		String role = null;
 		Hashtable<String,String> env = new Hashtable<String,String>();
@@ -149,16 +147,13 @@ public boolean openLdap() {
 	    		Dictionary resultats = getLogin(login);
 				logger.info("login :"+ login);
 				logger.info(resultats);
-					    		
-	    		try {
+				    		
+	    		
 	    			Enumeration donnee = resultats.elements();
 	    			Attributes result = (Attributes) donnee.nextElement();
 	    			Attribute ou = result.get("ou");
 	    			role = (String) ou.get();
-	    		} catch(Exception e) {
-					logger.fatal("openLdap :", e);
-					}
-
+	    	
 				logger.info("role: "+ role);			
 	    		String log = "uid=" + login + ",ou=" + role + "," + base;
 	    		
@@ -171,12 +166,12 @@ public boolean openLdap() {
 	    		env2.put(DirContext.SECURITY_CREDENTIALS, pwd);
 	    		
 	    		connectanonyme = new InitialDirContext(env2);
-	    		connect=connectanonyme;
+	    		connect = connectanonyme;
 	    		
 	    		logger.info("Vous avez été connecté à la base " + env2);								
 				logger.debug("Arrêt: openLdap");				
 	    		return true;
-	    		
+	    			
 	    	} catch (NamingException e) {
 				logger.error("openLdap: "+ e);			
 				logger.debug("Arrêt: openLdap");
@@ -184,7 +179,6 @@ public boolean openLdap() {
 	    	}
 	    }
 		logger.debug("Arrêt: openLdap");
-		
 		return false;
 }
 	
@@ -430,7 +424,16 @@ public boolean executeSupprimer(String login) throws NamingException {
 
 			String filter = "uid=" + login;
 			// Search for objects using filter
-			NamingEnumeration answer = connectanonyme.search("", filter, ctls);
+			
+			NamingEnumeration answer = null;
+			
+			if (connect==null){
+			answer = connectanonyme.search("", filter, ctls);
+			}
+			else {answer = connect.search("", filter, ctls);
+			}
+						
+			
 			//Print the answer
 			Dictionary resultat = printSearchEnumeration(answer);
 			logger.debug("Arrêt: getLogin");
@@ -473,7 +476,10 @@ public boolean executeSupprimer(String login) throws NamingException {
 	public Dictionary getAttributs(String login, String role) {
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
-			Attributes answer = connect.getAttributes(requete);
+			Attributes answer = null;
+			if (connect==null)
+			answer = connectanonyme.getAttributes(requete);
+			else answer = connect.getAttributes(requete);
 			Dictionary ligne = printAttrs(answer);
 			return ligne;
 		} catch (Exception e) {
