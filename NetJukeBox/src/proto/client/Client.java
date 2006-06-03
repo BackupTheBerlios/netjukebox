@@ -404,6 +404,22 @@ public class Client {
 							System.out.println("Artiste: "+d.get("artiste"));
 							System.out.println("Interprète: "+d.get("interprete"));
 							System.out.println("Compositeur: "+d.get("compositeur"));
+							System.out.println("------------ Programmes associés --------------");
+							
+							Vector vProgs = (Vector)d.get("programmes");
+							Dictionary prog;
+							for (int i=0; i<vProgs.size(); i++) {
+								prog = (Dictionary)vProgs.get(i);
+								System.out.println("Prog: "+prog);
+							}
+							System.out.println("------------ Contrats associés --------------");
+							
+							Vector vConts = (Vector)d.get("contrats");
+							Dictionary cont;
+							for (int i=0; i<vConts.size(); i++) {
+								cont = (Dictionary)vConts.get(i);
+								System.out.println("Contrat: "+cont);
+							}
 							System.out.println("----------------------------------------------");
 							System.out.println();
 							System.err.println("INFO: Document affiché");
