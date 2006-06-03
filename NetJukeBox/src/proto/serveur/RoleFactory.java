@@ -53,11 +53,11 @@ public class RoleFactory {
 	public static Role create(String id) {
 		logger.debug("Démarrage: create");
 		
-		//------------
-		// LDAP
-		//------------
+		//On crée dans LDAP un nouveau role
+		Ldap ldap = Ldap.getInstance();
+		ldap.CreationGroupe(id);		
 		
-		//On retourne ensuite un objet pour ce contractant
+		//On retourne ensuite un objet pour ce role
 		logger.debug("Arrêt: create");
 		return getById(id);
 		
@@ -74,7 +74,7 @@ public class RoleFactory {
 	public static Role getById(String id) /*throws SQLException*/ {
 		logger.debug("Démarrage: getById("+id+")");
 		
-		//Si le contractant est déjà instancié
+		//Si le rôle est déjà instancié
 		if (instances.containsKey(id)) {
 			logger.info("Instance trouvée pour Role "+id);
 			logger.debug("Arrêt: getById");
@@ -85,9 +85,8 @@ public class RoleFactory {
 		else {
 			logger.info("Nouvelle instance pour Role "+id);
 			
-			//------------
-			// LDAP
-			//------------
+			Ldap ldap = Ldap.getInstance();
+			ldap.CreationGroupe(id);
 				
 				System.out.println("----------- Role ------------");
 				System.out.println("ID: "+id);
@@ -118,16 +117,22 @@ public class RoleFactory {
 		Hashtable roles = new Hashtable();
 		
 		//On va chercher dans la liste des id de tous les rôles
+		Ldap ldap = Ldap.getInstance();
+		ldap.ListeGroupe();	
+		Vector vect= ldap.ListeGroupe();
+     	 
+		 for(int i=0; i < vect.size(); i++)
+        	if(vect.elementAt(i) != null){
+            String r=(String) vect.elementAt(i);
+           	//Pour chaque role, on instancie un objet que l'on stocke dans le vecteur
+         	roles.put(r.substring(3), getById(r.substring(3)));
+        	}
+         	else looger.info("Il n'y a pas de rôle dans l'annuaire LDAP!");
+         
 		
-		//---------------
-		// LDAP
-		//---------------
-		
-		//Pour chaque document, on instancie un objet que l'on stocke dans le vecteur
-		
-			roles.put("usager", getById("usager"));
-			roles.put("respprog", getById("respprog"));
-			roles.put("admin", getById("admin"));
+		//	roles.put("usager", getById("usager"));
+		//	roles.put("respprog", getById("respprog"));
+		//	roles.put("admin", getById("admin"));
 		
 		//On retourne le vecteur contenant les objets permissions instanciés
 		logger.debug("Arrêt: getAll");
@@ -143,9 +148,8 @@ public class RoleFactory {
 	public static boolean deleteById(String id) /*throws SQLException*/ {
 		logger.debug("Démarrage: deleteById");
 		//On supprime le rôle de LDAP
-		//--------------
-		// LDAP
-		//--------------
+		Ldap ldap = Ldap.getInstance();
+		ldap.SupprimerGroupe(id);
 		
 		//On supprime les droits de la base, en partant d'un id
 		String requete = "DELETE FROM attribuer WHERE login = '" + id + "';";
