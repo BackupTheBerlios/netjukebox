@@ -567,7 +567,7 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 * Création d'un groupe de l'annuaire
 	 */
 
-public void CreationGroupe(String groupe) {
+public boolean CreationGroupe(String groupe) {
 		logger.debug("Démarrage: CreationGroupe");
 		
 		try {
@@ -582,31 +582,33 @@ public void CreationGroupe(String groupe) {
 		    logger.error("La création du groupe "+ groupe +" a reussi!");
 		    logger.debug("Arrêt: CréationGroupe");
 		    result.close();
+		    return true;
 
 		} catch (NamingException e) {
 			logger.error("ERREUR: "+ e);
 		    logger.error("La création du groupe "+ groupe +" a échoué!");
 		    logger.debug("Arrêt: CréationGroupe");
+		    return false;
 		}
 }
     /**
 	 * Suppression d'un groupe de l'annuaire
 	 */
 
-public void SupprimerGroupe(String groupe) {
+public boolean SupprimerGroupe(String groupe) {
 		logger.debug("Démarrage: SupprimerGroupe");
 	
- 				try {
-				    connect.destroySubcontext("ou="+groupe);
-				    logger.info("Le groupe "+groupe+" a été supprimé!");
-					logger.debug("Arrêt: SupprimerGroupe");
-				    
+ 		try {
+		    connect.destroySubcontext("ou="+groupe);
+		    logger.info("Le groupe "+groupe+" a été supprimé!");
+			logger.debug("Arrêt: SupprimerGroupe");
+		    return true;
 				
 		} catch (Exception e) {
 			logger.error("ERREUR SupprimerGroupe: "+ e);
 			logger.info("Le groupe "+groupe+" n'a pas pu être supprimé!");
 			logger.debug("Arrêt: SupprimerGroupe");
-
+			return false;
 		}
 }    
 }

@@ -52,7 +52,18 @@ public class Role {
 	 * @throws SQLException 
 	 */
 	public boolean supprimer() /*throws SQLException*/ {
-		return RoleFactory.deleteById(id);
+		
+		if (RoleFactory.deleteById(id)) {
+		
+			//On supprime les associations role/permission
+			Enumeration idPerms = permissions.keys();
+			while (idPerms.hasMoreElements()) {
+				retirerPermission((String)idPerms.nextElement());
+			}
+			
+			return true;
+		}
+		else return false;
 	}
 	
 	/**

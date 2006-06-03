@@ -123,11 +123,11 @@ public class RoleFactory {
      	 
 		 for(int i=0; i < vect.size(); i++)
         	if(vect.elementAt(i) != null){
-            String r=(String) vect.elementAt(i);
-           	//Pour chaque role, on instancie un objet que l'on stocke dans le vecteur
-         	roles.put(r.substring(3), getById(r.substring(3)));
-        	}
-         	else looger.info("Il n'y a pas de rôle dans l'annuaire LDAP!");
+	            String r=(String) vect.elementAt(i);
+	           	//Pour chaque role, on instancie un objet que l'on stocke dans le vecteur
+	         	roles.put(r.substring(3), getById(r.substring(3)));
+	         	
+        	} else logger.info("Il n'y a pas de rôle dans l'annuaire LDAP!");
          
 		
 		//	roles.put("usager", getById("usager"));
@@ -149,8 +149,9 @@ public class RoleFactory {
 		logger.debug("Démarrage: deleteById");
 		//On supprime le rôle de LDAP
 		Ldap ldap = Ldap.getInstance();
-		ldap.SupprimerGroupe(id);
+		return ldap.SupprimerGroupe(id);
 		
+		/*
 		//On supprime les droits de la base, en partant d'un id
 		String requete = "DELETE FROM attribuer WHERE login = '" + id + "';";
 		Jdbc base = Jdbc.getInstance();
@@ -167,6 +168,6 @@ public class RoleFactory {
 		
 		//Sinon, suppression invalide
 		logger.debug("Arrêt: deleteById");
-		return false;
+		return false;*/
 	}
 }
