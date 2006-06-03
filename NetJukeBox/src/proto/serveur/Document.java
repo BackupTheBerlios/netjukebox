@@ -561,7 +561,7 @@ public class Document {
 		// Pour chaque contrat, on instancie un objet que l'on stocke dans le vecteur
 		for (int j = 0; j < resultats.size(); j++) {
 			Dictionary dico = (Dictionary) resultats.elementAt(j);
-			String id = String.valueOf((Integer)dico.get("id_contrat"));
+			String id = (String)dico.get("id_contrat");
 			conts.put(id, ContratFactory.getById(id));
 		}
 		
