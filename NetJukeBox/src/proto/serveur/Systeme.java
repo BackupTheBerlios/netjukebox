@@ -1336,14 +1336,21 @@ public class Systeme {
 				Canal c = (Canal)CanalFactory.getById(idCanal);
 				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
-				//On planifie le programme
-				if (c.planifierProgramme(p, Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), Integer.parseInt(heure), Integer.parseInt(minute), Integer.parseInt(seconde))) {
+				if (p.getDuree() >= Long.parseLong(prefs.node("streaming").get("dureeProgMin", null))) {
 				
-					logger.info("Programme "+idProg+" planifié sur le canal "+idCanal);
-					return Boolean.toString(true);
+					//On planifie le programme
+					if (c.planifierProgramme(p, Integer.parseInt(jour), Integer.parseInt(mois), Integer.parseInt(annee), Integer.parseInt(heure), Integer.parseInt(minute), Integer.parseInt(seconde))) {
+					
+						logger.info("Programme "+idProg+" planifié sur le canal "+idCanal);
+						return Boolean.toString(true);
+					}
+					else {
+						logger.info("Programme "+idProg+" non planifié sur le canal "+idCanal);
+						return Boolean.toString(false);
+					}
 				}
 				else {
-					logger.info("Programme "+idProg+" non planifié sur le canal "+idCanal);
+					logger.info("Programme "+idProg+"trop court. Non planifié sur le canal "+idCanal);
 					return Boolean.toString(false);
 				}
 				
@@ -1423,12 +1430,20 @@ public class Systeme {
 				Canal c = (Canal)CanalFactory.getById(idCanal);
 				Programme p = (Programme)ProgrammeFactory.getById(idProg);
 				
-				//On diffuse le programme
-				if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
-				c.diffuserProgramme(p);
+				if (p.getDuree() >= Long.parseLong(prefs.node("streaming").get("dureeProgMin", null))) {
 				
-				logger.info("Programme "+idProg+" en diffusion sur le canal "+idCanal);
-				return Boolean.toString(true);
+					//On diffuse le programme
+					if (!c.isRTPstarted()) c.createRTPServer(ipStreaming, portStreaming++, prefs.node("streaming").get("publicite", null));
+					c.diffuserProgramme(p);
+					
+					logger.info("Programme "+idProg+" en diffusion sur le canal "+idCanal);
+					return Boolean.toString(true);
+				}
+				else {
+					//Sinon, ajout refusé
+					logger.info("Programme trop court. La diffusion du programme "+idProg+" n'a pas été lancée sur le canal "+idCanal);
+					return Boolean.toString(false);
+				}
 				
 			}
 			
