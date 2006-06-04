@@ -15,6 +15,10 @@ import java.util.prefs.Preferences;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.media.Manager;
+import javax.media.MediaLocator;
+import javax.media.Player;
+import javax.media.Time;
 import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
@@ -641,7 +645,7 @@ public class Systeme {
 						String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + " " + fichierInit;
 						//String commande = mplayer + " " + fichierInit+ " -af resample=22050:0:0 -ao pcm:file=" +fichierResult;
 						//mplayer -vo null "/home/philippe/sinnerman.mp3" -ao pcm:file="/home/philippe/sinnerman.wav"
-						logger.error(commande);
+						logger.info(commande);
 						//Execution de la conversion
 						@SuppressWarnings("unused")
 						Process proc = Runtime.getRuntime().exec(commande);
@@ -653,6 +657,22 @@ public class Systeme {
 						//Suppression du fichier initial
 						File f = new File(fichierInit);
 						f.delete();
+						
+						
+						//On détermine la durée
+						String src = fichierResult;
+						if (!fichierResult.startsWith("file:/")) {
+							src = "file:/"+fichierResult;
+						}
+
+						try {
+							Player p = Manager.createRealizedPlayer(new MediaLocator(src));
+							Time dureeFichier = p.getDuration();
+							d.setDuree((int)dureeFichier.getSeconds());
+						} catch (Exception e) {
+							logger.error("ERREUR: ", e);
+						}
+						
 					//}
 					
 					logger.info("Document '"+titre+"' créé");
