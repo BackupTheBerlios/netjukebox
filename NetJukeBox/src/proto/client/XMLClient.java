@@ -3,13 +3,13 @@ package proto.client;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.Dictionary;
-import java.util.TimerTask;
+//import java.util.TimerTask;
 import java.util.Vector;
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
 
-import proto.serveur.Jdbc;
+//import proto.serveur.Jdbc;
 
 /**
  * Client XML (envoie les requêtes au serveur XML du serveur principal)
@@ -1296,8 +1296,7 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute("Systeme.modifierUtilisateur", params);
 
-				// return Boolean.parseBoolean(result);
-				return true;
+				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1311,6 +1310,36 @@ public class XMLClient {
 		}*/
 	}
 
+	/**
+	 * Lister les Utilisateur du système
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector listerUtilisateurs(String login) {
+		// Si l'utilisateur est connecté au seveur
+		//if (etatConnecte) {
+			System.out.println("INFO: Liste des utilisateur...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+
+				// Adresse la requête et affiche les résultats
+				return (Vector) clientXML.execute("Systeme.listerUtilisateur", params);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+
+		/*	// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}*/
+	}
+	
+	
 	/**
 	 * Recherche du mot de passe de l'utilisateur
 	 * @param String login

@@ -84,9 +84,6 @@ public class RoleFactory {
 		//Sinon, on crée l'instance
 		else {
 			logger.info("Nouvelle instance pour Role "+id);
-			
-			Ldap ldap = Ldap.getInstance();
-			ldap.CreationGroupe(id);
 				
 				System.out.println("----------- Role ------------");
 				System.out.println("ID: "+id);

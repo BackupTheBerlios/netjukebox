@@ -131,6 +131,7 @@ public class Systeme {
 		base = Jdbc.getInstance();
 		base.openDB(driverjdbc, urljdbc, loginjdbc, pwdjdbc);
 		
+		
 		//On initialise la connection à l'annuaire LDAP
 		String driverldap = prefs.node("ldap").get("driver", null);
 		String typeldap = prefs.node("ldap").get("type", null);
@@ -150,7 +151,8 @@ public class Systeme {
 		logger.info("LDAP Pwd: " + pwdldap);
 		
 		ldap = Ldap.getInstance();
-		//ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, baseNameldap);
+		ldap.openLdap(driverldap, urlldap, authldap, loginldap, pwdldap, baseNameldap);
+		 
 	
 		//Récupération des information du serveur SMTP
 		this.host = prefs.node("smtp").get("host", null);
@@ -167,6 +169,7 @@ public class Systeme {
 		DocumentFactory.getAll();
 		ContractantFactory.getAll();
 		ContratFactory.getAll();
+		RoleFactory.getAll();
 		
 		//"Ping" des clients
 		this.timer = new Timer(true);
@@ -386,21 +389,29 @@ public class Systeme {
 	 */
 	public String supprimerUtilisateur(String Login) throws NamingException {
 		
-		logger.info("Suppression de l'utilisateur "+Login);
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(Login, "supprimerUtilisateur")) {
 		
-		//Vérification de l'existance du login à supprimer et suppression 
-		if (Utilisateur.verifierLogin(Login)) {
-			Utilisateur.deleteByLogin(Login);
+			logger.info("Suppression de l'utilisateur "+Login);
+		
+			//Vérification de l'existance du login à supprimer et suppression 
+			if (Utilisateur.verifierLogin(Login)) {
+				Utilisateur.deleteByLogin(Login);
 			
-			return Boolean.toString(true);
+				return Boolean.toString(true);
+			} else {
+				//Sinon annulation
+				return Boolean.toString(false);
+			}
 		} else {
-		//Sinon annulation
+			//Sinon, opération refusée
+			logger.info("Permission non accordée. Suppression annulée");
 			return Boolean.toString(false);
 		}
 	}
 
 	/**
-	 * Récupération de l'objet à modifier
+	 * Récupération de l'objet recherché
 	 * @param login
 	 * @return Vector
 	 * @throws NamingException
@@ -410,7 +421,7 @@ public class Systeme {
 		logger.info("Recherche des attributs de l'utilisateur : " + login);
 
 		//On vérifie que l'utilisateur a la permission
-			if (Utilisateur.verifierLogin(login)) {
+		if (verifPermission(login, "rechercherUtilisateur")) {
 				Utilisateur u = Utilisateur.getByLogin(login);
 			
 				//Vecteur d'attributs à retourner
@@ -431,6 +442,30 @@ public class Systeme {
 				return null;
 			}
 	}
+	
+	/**
+	 * Lister les utilisateur
+	 * @param String login
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector listerUtilisateur(String login) {
+
+		logger.info("Liste des utilisateurs");
+
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "listerUtilisateur")) {
+		
+			//On crée le vecteur
+			Vector vUtilisateurs = Utilisateur.listerUtilisateur();
+			
+			return vUtilisateurs;
+		} else {
+			// Sinon, opération refusée
+			logger.info("Permission non accordée. Utilisateurs non listés");
+			return null;
+		}
+	}
 
 	/**
 	 * Modification des attributs d'un utilisateur
@@ -444,8 +479,8 @@ public class Systeme {
 	 */
 	 public String modifierUtilisateur(String login, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
 
-		//On vérifie que l'utilisateur a la permission
-		if (Utilisateur.verifierLogin(login)) {
+			//On vérifie que l'utilisateur a la permission
+			if (verifPermission(login, "modifierUtilisateur")) {
 			
 			//On récupère les attributs
 			Utilisateur u = Utilisateur.getByLogin(login);
@@ -501,7 +536,7 @@ public class Systeme {
 	public String changerRole(String login, String role) throws NamingException {
 		
 		//On vérifie que l'utilisateur a la permission
-		if (Utilisateur.verifierLogin(login)) {
+		if (verifPermission(login, "changerRole")) {
 			
 			//On récupère l'utilisateur
 			Utilisateur u = Utilisateur.getByLogin(login);
