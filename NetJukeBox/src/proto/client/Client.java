@@ -977,7 +977,7 @@ public class Client {
 							Dictionary v;
 							for (int i=0; i<vUtilisateur.size(); i++){
 								System.out.println(vUtilisateur.get(i));
-								/**
+								
 								v = (Dictionary)vUtilisateur.get(i);
 								System.out.println("----------------- Utilisateur -------------------");
 								System.out.println("Id: "+v.get("login"));
@@ -985,9 +985,10 @@ public class Client {
 								System.out.println("Durée: "+v.get("prenom"));
 								System.out.println("Date: "+v.get("mail"));
 								System.out.println("Genre: "+v.get("pays"));
+								System.out.println("Role: "+v.get("role"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
-								*/
+								
 							}
 							System.err.println("INFO: Utilisateur recherché");
 						}
@@ -1011,7 +1012,7 @@ public class Client {
 								
 								System.out.println(vUtilisateur.get(i));
 								
-								/**
+								
 								d = (Dictionary)vUtilisateur.get(i);
 								System.out.println("----------------- Utilisateur -------------------");
 								System.out.println("Login: "+d.get("login"));
@@ -1020,7 +1021,7 @@ public class Client {
 								System.out.println("Email: "+d.get("mail"));
 								System.out.println("Pays: "+d.get("pays"));
 								System.out.println("----------------------------------------------");
-								System.out.println();*/
+								System.out.println();
 								
 								
 							}		
@@ -1046,6 +1047,35 @@ public class Client {
 						else System.err.println("WARNING: Aucun Attributs disponibles");
 					}
 					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				//LISTERUTILISATEUR
+				if  (ligne.equalsIgnoreCase("listerUtilisateur")) {
+					if (etatConnecte) {
+						
+						Vector vUtilisateurs = clientXML.listerUtilisateurs(login);
+						if (vUtilisateurs!=null && vUtilisateurs.size()>0) {
+							//Parcours du vecteur, affichage des infos
+							Dictionary d;
+							for (int i=0; i<vUtilisateurs.size(); i++){
+								d = (Dictionary)vUtilisateurs.get(i);
+								System.out.println("----------------- Contrat -------------------");
+								System.out.println("Id: "+d.get("login"));
+								System.out.println("Titre: "+d.get("passwd"));
+								System.out.println("Signature: "+d.get("nom"));
+								System.out.println("Expiration: "+d.get("prenom"));
+								System.out.println("Contractant: "+d.get("mail"));
+								System.out.println("Règlement: "+d.get("pays"));
+								System.out.println("Type: "+d.get("role"));
+								System.out.println("----------------------------------------------");
+								System.out.println();
+							}
+							System.err.println("INFO: Utilisateurs listés");
+						} else System.err.println("WARNING: Aucun contrat disponible");
+						
+					} else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
 					}
 				}
@@ -1871,6 +1901,7 @@ public class Client {
 					System.out.println(" modifierUtilisateur : modifier vos attributs");
 					System.out.println(" supprimerUtilisateur : suppression d'un utilisateur");
 					System.out.println(" rechercherUtilisateur : rechercher vos attributs");
+					System.out.println(" listerUtilisateur : lister les utilisateurs");
 					System.out.println(" ajouterPermissionUtilisateur : ajouter une permission à un utilisateur");
 					System.out.println(" retirerPermissionUtilisateur : retirer une permission d'un utilisateur");
 					
@@ -1949,6 +1980,7 @@ public class Client {
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
 		String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
+		//String filename = args.length > 0 ? args[0] : "/home/admindg/Workspace/NetJukeBox/proto/client/client.ini";
 		//String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
 		Preferences prefs = new IniFile(new File(filename));
 		

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -325,6 +326,16 @@ public class Utilisateur {
 		return true;
 	}
 
+	/**
+	 * Lister les utilisateurs
+	 * @return Vector
+	 */
+	public static Vector listerUtilisateur() {
+		Ldap ldap = Ldap.getInstance();
+		Vector liste = ldap.listerUtilisateur();
+		return liste;
+		
+	}
 
 	/**
 	 * Modifier les informations de l'utilisateur
