@@ -99,6 +99,11 @@ public class Document {
 	 */
 	private String compositeur;
 	
+	/**
+	 * Diffusions
+	 */
+	private Hashtable diffusions = new Hashtable();
+	
 	
 // CONSTRUCTEUR
 //********************************************
@@ -296,6 +301,39 @@ public class Document {
 		logger.debug("Arrêt: supprimer");
 		return DocumentFactory.deleteById(id);
 	}
+	
+	public void startDiffusion(String idCanal) {
+		setEtat("EN_LECTURE");
+		
+		//Date et heure courante
+		GregorianCalendar date = (GregorianCalendar)GregorianCalendar.getInstance();
+		long horaire = date.getTimeInMillis();
+		
+		//On insère la diffusion dans la base
+		String requete = "INSERT INTO audimat (id_doc, id_canal, date) VALUES ('"+id+"', '"+idCanal+"', '"+horaire+"');";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//On ajoute la diffusion à la liste
+		diffusions.put(idCanal, horaire);
+	}
+	
+	public void stopDiffusion(String idCanal, int audimat) {
+		
+		//On récupère l'horaire
+		long horaire = (Long)diffusions.get(idCanal);
+		
+		//On insère l'audimat dans la base
+		String requete = "UPDATE audimat SET audimat = '" + audimat + "' WHERE id_doc = '"+id+"' AND id_canal='"+idCanal+"' AND date='"+horaire+"';";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//On enlève la diffusion de la liste
+		diffusions.remove(idCanal);
+		
+		//S'il n'y a plus de diffusion dans la liste, on change l'état
+		if (diffusions.size()==0) setEtat("ARRETE");
+	}
 
 //#### GETTERS ####
 //#################
@@ -328,7 +366,7 @@ public class Document {
 		dico.put("interprete", interprete);
 		dico.put("compositeur", compositeur);
 		
-//		Liste des programmes
+		//Liste des programmes
 		Vector vProgs = new Vector();
 		Dictionary dicoProg;
 		Programme prog;
@@ -343,7 +381,7 @@ public class Document {
 		dico.put("programmes", vProgs);
 		
 		
-//		Liste des contrats
+		//Liste des contrats
 		Vector vConts = new Vector();
 		Dictionary dicoCont;
 		Contrat cont;
@@ -511,6 +549,13 @@ public class Document {
 		
 //#### SETTERS ####
 //#################
+	
+	/**
+	 * Définit l'état
+	 */
+	public void setEtat(String etat) {
+		this.etat = etat;
+	}
 	
 	/**
 	 * Retourne la liste des documents programmés

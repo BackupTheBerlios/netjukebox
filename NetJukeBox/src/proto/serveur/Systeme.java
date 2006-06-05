@@ -293,6 +293,13 @@ public class Systeme {
 				//On le déconnecte
 				util.deconnecter();
 				
+				//On le retire l'auditeur des canaux
+				Enumeration canaux = CanalFactory.getInstances().elements();
+				while (canaux.hasMoreElements()) {
+					Canal c = (Canal)canaux.nextElement();
+					c.deconnecterAuditeur(login);
+				}
+				
 				//On le supprime de la liste des utilisateurs connectés au système
 				utilisateurs.remove(login);
 				
@@ -1492,17 +1499,35 @@ public class Systeme {
 			//On vérifie que le canal et le programme existent
 			if (CanalFactory.containsId(idCanal)) {
 				
-				//On récupère l'objet canal
+				//On retire l'auditeur des canaux
+				Enumeration canaux = CanalFactory.getInstances().elements();
+				while (canaux.hasMoreElements()) {
+					Canal c = (Canal)canaux.nextElement();
+					c.deconnecterAuditeur(login);
+				}
+				
+				//On récupère l'objet canal sélectionné
 				Canal c = (Canal)CanalFactory.getById(idCanal);
-				logger.info("Construction de l'url du canal "+idCanal);
-				String url = c.getUrlStreaming();
-				logger.info("URL: "+url);
-				return url;
+				
+				//S'il y a encore de la place sur le canal
+				if (c.getAuditeurs().size() < c.getUtilMax()) {
+					//On le connecte au canal sélectionné
+					c.connecterAuditeur(login);
+					
+					logger.info("Construction de l'url du canal "+idCanal);
+					String url = c.getUrlStreaming();
+					logger.info("URL: "+url);
+					return url;
+				}
+				else {
+					logger.info("Canal plein");
+					return "";
+				}
 			}
 			
 			//Sinon, ajout refusé
 			logger.info("Canal "+idCanal+" inconnu");
-			return null;
+			return "";
 		}
 		
 		//Sinon, ajout refusé

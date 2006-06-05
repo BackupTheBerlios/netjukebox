@@ -67,6 +67,11 @@ public class Canal {
 	private Vector auditeurs;
 	
 	/**
+	 * Audimat du canal sur le média courant
+	 */
+	private int audimat;
+	
+	/**
 	 * RTP Server
 	 */
 	private RTPServer RTP = null;
@@ -102,6 +107,7 @@ public class Canal {
 		this.utilMax = utilMax;
 		this.timer = new Timer(true);
 		this.tasks = new Hashtable();
+		this.audimat = auditeurs.size();
 		
 		//this.programmes = getProgrammesPlanifies();
 	}
@@ -110,6 +116,27 @@ public class Canal {
 // METHODES DYNAMIQUES
 // *************************************************
 
+	/**
+	 * Retourne l'audimat courant
+	 */
+	public int getAudimat() {
+		return audimat;
+	}
+	
+	/**
+	 * Met à jour l'audimat
+	 */
+	public void updateAudimat() {
+		audimat = auditeurs.size();
+	}
+	
+	/**
+	 * Retourne la liste des auditeurs courants
+	 */
+	public Vector getAuditeurs() {
+		return auditeurs;
+	}
+	
 	/**
 	 * Relance la diffusion d'un canal
 	 * @param idCanal
@@ -385,7 +412,7 @@ public class Canal {
 	public void createRTPServer(String ip, int port, String publicite) {
 		logger.debug("Démarrage: createRTPServer");
 		//Si le RTPServer n'existe pas, on le crée
-		if (this.RTP == null) this.RTP = new RTPServer(ip, port, publicite);
+		if (this.RTP == null) this.RTP = new RTPServer(ip, port, publicite, this);
 		logger.debug("Arrêt: createRTPServer");
 	}
 	
@@ -495,10 +522,10 @@ public class Canal {
 		logger.info("Le programme " +  p.getTitre() + " est en cours de diffusion");
 		
 		Vector medias = new Vector();
-		Enumeration cles = p.getDocuments().keys();
+		Enumeration docs = p.getDocuments().elements();
 		
 		for(int i = 0; i < p.getDocuments().size(); i++) {
-			medias.addElement(((Document)p.getDocuments().get(cles.nextElement())).getFichier());
+			medias.addElement(docs.nextElement());
 		}
 		
 		if (RTP!=null) {
@@ -534,7 +561,10 @@ public class Canal {
 	 */
 	public void connecterAuditeur(String idAuditeur) {
 		logger.debug("Démarrage: connecterAuditeur");
-		if (!auditeurs.contains(idAuditeur)) auditeurs.addElement(idAuditeur);
+		if (!auditeurs.contains(idAuditeur)) {
+			auditeurs.addElement(idAuditeur);
+			audimat++;
+		}
 		logger.debug("Arrêt: connecterAuditeur");
 	}
 	

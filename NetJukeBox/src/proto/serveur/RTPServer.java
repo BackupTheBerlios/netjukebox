@@ -42,6 +42,11 @@ public class RTPServer implements ControllerListener {
 	 * Etat du canal : DIFFUSE
 	 */
 	private boolean cDiffuse = false;
+	
+	/**
+	 * Etat du canal : DIFFUSE PUBLICITE
+	 */
+	private boolean cDiffusePub = false;
 
 	/**
 	 * Adresse IP de diffusion
@@ -87,6 +92,11 @@ public class RTPServer implements ControllerListener {
 	 * Indice du média en cours de diffusion
 	 */
 	private int mediaEnCours=0;
+	
+	/**
+	 * Canal associé
+	 */
+	private Canal canal;
 
 // CONSTRUCTEURS
 //***************************************************	
@@ -97,44 +107,21 @@ public class RTPServer implements ControllerListener {
 	 * @param port
 	 * @param piste
 	 */
-	public RTPServer(String ip, int port, String publicite) {
+	public RTPServer(String ip, int port, String publicite, Canal canal) {
 
 		System.out.println("Création d'un serveur RTP");
 		this.ip = ip;
 		this.port = port;
 		this.piste = "1";
 		this.publicite = publicite;
-		//this.publicite = "file://home/philippe/njb/pub.mp3";
 		this.medias = new Vector();
+		this.canal = canal;
 		
 		// Creation du MediaLocator pour l'Adresse de destination
 		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
 		System.out.println("Serveur RTP créé");
 
 	}
-
-	/**
-	 * Constructeur étendu (avec publicité)
-	 * @param ip
-	 * @param port
-	 * @param piste
-	 * @param publicite
-	 */
-/*	public RTPServer(String ip, int port, String piste, String publicite) {
-
-		System.out.println("Création d'un serveur RTP");
-		this.ip = ip;
-		this.port = port;
-		this.piste = piste;
-		this.publicite = publicite;
-		this.medias = new Vector();
-		
-		// Creation du MediaLocator pour l'Adresse de destination
-		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
-		System.out.println("Serveur RTP créé");
-
-	}
-*/
 
 // METHODES STATIQUES
 //***************************************************	
@@ -204,11 +191,15 @@ public class RTPServer implements ControllerListener {
 		
 		//Si on a des medias à diffuser
 		if (medias.size()>0 && mediaEnCours<medias.size()) {
-			sendStream((String)medias.elementAt(mediaEnCours++));
+			cDiffusePub=false;
+			Document d = (Document)medias.elementAt(mediaEnCours++);
+			d.startDiffusion(canal.getId());
+			sendStream(d.getFichier());
 		}
 		
 		//Sinon, on diffuse de la pub
 		else {
+			cDiffusePub=true;
 			sendStream(publicite);
 		}
 	}
@@ -375,12 +366,27 @@ public class RTPServer implements ControllerListener {
 		} else if (evt instanceof EndOfMediaEvent) {
 			if (cDiffuse) {
 				System.out.println("EVT: EndOfMedia");
+				
+				//On ferme le flux (version outputSink)
 				OutputSink.close();
 				OutputSink = null;
 				
+				//On ferme le flux (version outputStream)
 				//OutputStream.close();
 				//OutputStream = null;
 				
+				//Si on diffuse autre chose que la pub
+				if (!cDiffusePub && medias.size()>0 && mediaEnCours<medias.size()) {
+					
+					//On signale la fin de diffusion au document
+					Document d = (Document)medias.elementAt(mediaEnCours);
+					d.stopDiffusion(canal.getId(), canal.getAudimat());
+				}
+				
+				//On actualise le compteur d'audimat du canal
+				canal.updateAudimat();
+				
+				//On passe au média suivant
 				diffuser();
 			}
 			else {
