@@ -611,6 +611,50 @@ public boolean SupprimerGroupe(String groupe) {
 			return false;
 		}
 }    
+/**
+ * Récupère les utilisateurs de l'annuaire
+ */
+
+public Vector listerUtilisateur() {
+	logger.debug("Démarrage: getSchema");
+	Vector result=new Vector();
+	try {
+		String[] attrIDs = {"uid","ou","cn","sn","givenName","mail","pays"};
+		SearchControls ctls = new SearchControls();
+		ctls.setReturningAttributes(attrIDs); 
+		ctls.setSearchScope(SearchControls.SUBTREE_SCOPE );
+		String filter = "(uid=*)";
+		
+		NamingEnumeration answer = connect.search( "",filter,ctls);
+      
+          while (answer.hasMore()) {
+        	  result = printSearchEnumeration3(answer);
+          }
+        logger.debug("Arrêt: getSchema");
+       	return result;
+       	
+	} catch (Exception e) {
+		logger.error("getSchema: "+ e);
+		logger.debug("Arrêt: getSchema");
+		return null;
+	}
+}
+private Vector printSearchEnumeration3(NamingEnumeration answer) {
+	Vector vec = new Vector(100); int i=0;
+	try {
+		while (answer.hasMore()) {
+			SearchResult sr = (SearchResult) answer.next();
+			vec.insertElementAt(sr.getAttributes(),i);
+			
+			i++;
+		}
+		return vec;
+    
+	} catch (NamingException e) {
+		logger.error("printSearchEnumeration: ", e);
+		return  null;
+	}
+}
 }
 
 
