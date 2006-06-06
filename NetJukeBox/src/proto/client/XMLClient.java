@@ -1315,10 +1315,10 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerUtilisateurs(String login) {
+	public Vector listerUtilisateur(String login) {
 		// Si l'utilisateur est connecté au seveur
 		//if (etatConnecte) {
-			System.out.println("INFO: Liste des utilisateur...");
+			System.out.println("INFO: Liste des utilisateurs...");
 			try {
 				// Création de la requête
 				Vector params = new Vector();
