@@ -33,7 +33,7 @@
 	<a href="rechercheDoc.jsp" target="droite"><bean:message key='rechercheDoc'/></a><br />
 	<a href="rechercheProg.jsp" target="droite"><bean:message key='rechercheProg'/></a><br />
 	<a href="rechercheCanal.jsp" target="droite"><bean:message key='rechercheCanal'/></a><br />
-	<a href="rechercheUtil.jsp" target="droite"><bean:message key='rechercheUtil'/></a><br />
+	<a href="rechercheUtilisateur.jsp" target="droite"><bean:message key='rechercheUtil'/></a><br />
 	<a href="rechercheContrat.jsp" target="droite"><bean:message key='rechercheContrat'/></a><br />
 	<a href="rechercheContractant.jsp" target="droite"><bean:message key='rechercheContractant'/></a><br />
 	<a href="recherchePerm.jsp" target="droite"><bean:message key='recherchePerm'/></a><br />

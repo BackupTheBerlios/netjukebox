@@ -3,12 +3,13 @@ package plugin;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.Dictionary;
-import java.util.TimerTask;
+//import java.util.TimerTask;
 import java.util.Vector;
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
 
+//import proto.serveur.Jdbc;
 
 /**
  * Client XML (envoie les requêtes au serveur XML du serveur principal)
@@ -859,7 +860,7 @@ public class XMLClient {
 				params.addElement(artiste);
 				params.addElement(interprete);
 				params.addElement(compositeur);
-				
+
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute("Systeme.creerDocument", params);
 				return Boolean.parseBoolean(result);
@@ -1175,7 +1176,7 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean inscription(String login, String log, String pass, String role,
+	public boolean inscription(String login, String log, String pass,
 			String email, String nom, String prenom, String pays) {
 		// Si l'utilisateur est connecté au seveur
 		//if (etatConnecte) {
@@ -1186,7 +1187,6 @@ public class XMLClient {
 				params.addElement(login);
 				params.addElement(log);
 				params.addElement(pass);
-				params.addElement(role);
 				params.addElement(email);
 				params.addElement(nom);
 				params.addElement(prenom);
@@ -1243,7 +1243,7 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherUtilisateur(String login) {
+	public Vector rechercherUtilisateur(String login, String log) {
 		// Si l'utilisateur est connecté au seveur
 		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des attributs...");
@@ -1251,6 +1251,7 @@ public class XMLClient {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
+				params.addElement(log);
 
 				// Adresse la requête et affiche les résultats
 				return (Vector) clientXML.execute("Systeme.rechercherUtilisateur", params);
@@ -1295,8 +1296,7 @@ public class XMLClient {
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute("Systeme.modifierUtilisateur", params);
 
-				// return Boolean.parseBoolean(result);
-				return true;
+				return Boolean.parseBoolean(result);
 
 			} catch (Exception e) {
 				System.err.println("ERREUR : " + e);
@@ -1310,6 +1310,36 @@ public class XMLClient {
 		}*/
 	}
 
+	/**
+	 * Lister les Utilisateur du système
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector listerUtilisateurs(String login) {
+		// Si l'utilisateur est connecté au seveur
+		//if (etatConnecte) {
+			System.out.println("INFO: Liste des utilisateur...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+
+				// Adresse la requête et affiche les résultats
+				return (Vector) clientXML.execute("Systeme.listerUtilisateur", params);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return null;
+			}
+
+		/*	// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return null;
+		}*/
+	}
+	
+	
 	/**
 	 * Recherche du mot de passe de l'utilisateur
 	 * @param String login

@@ -1,11 +1,12 @@
 package action;
 
+import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.supprUtilForm;
+import form.rechercheUtilisateurForm;
 
-public class supprUtilAction extends Action {
+public class rechercheUtilisateurAction extends Action {
 
 	/**
 	 * Client XMLRPC
@@ -34,24 +35,24 @@ public class supprUtilAction extends Action {
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
-		supprUtilForm utillForm = (supprUtilForm)form;
+		rechercheUtilisateurForm utilForm = (rechercheUtilisateurForm)form;
 
-		String login = utillForm.getLogin();
-
+		String login = utilForm.getLogin();
+		
 		response.setContentType("text/html");
 		
-		boolean suppr = clientXML.supprimerUtilisateur(sessionLogin, login);
+		System.out.println("==================" + login);
 		
-		if (suppr) {	
-			String result = "INFO: Utilisateur supprimé";
-			
-			session.setAttribute("Resultat" , result);
+		Vector vUtil = clientXML.rechercherUtilisateur(sessionLogin, login);
+		
+		if (vUtil!=null && vUtil.size()>0) {
+			session.setAttribute("Resultat" , vUtil);
 			return mapping.findForward("ok");
 		} else {
-			String erreur = "ERREUR: Suppression de l'utilisateur échouée";
+			String erreur = "WARNING: Aucun Utilisateur disponible";
 			
 			session.setAttribute("Resultat" , erreur);
 			return mapping.findForward("failed");
-		}	
+		}
 	}
 }

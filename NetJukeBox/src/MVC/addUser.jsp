@@ -3,7 +3,7 @@
 
 <html>
 	<head>
-		<title><bean:message key='addUser.title'/></title>
+		<title><bean:message key='addUser'/></title>
 	</head>
 	<body>
 	

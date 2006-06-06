@@ -143,6 +143,10 @@
             <form-property name="libelle" type="java.lang.String" />
         </form-bean>
 		
+		<form-bean name="rechercheUtilisateurForm" type="form.rechercheUtilisateurForm">
+			<form-property name="login" type="java.lang.String" />
+        </form-bean>
+		
 		<!--SUPPRESSION-->
 		<form-bean name="supprForm" type="form.supprForm">
             <form-property name="id" type="java.lang.String" />
@@ -211,6 +215,15 @@
 			<form-property name="id" type="java.lang.String" />
             <form-property name="libelle" type="java.lang.String" />
         </form-bean>
+		
+		<form-bean name="userForm" type="form.NewUserForm">
+			<form-property name="login" type="java.lang.String" />
+			<form-property name="pass" type="java.lang.String" />
+            <form-property name="nom" type="java.lang.String" />
+            <form-property name="prenom" type="java.lang.String" />
+			<form-property name="mail" type="java.lang.String" />
+			<form-property name="pays" type="java.lang.String" />
+		</form-bean>
 		
 		<!--INFOS-->
 		<form-bean name="infoForm" type="form.infoForm">
@@ -497,6 +510,15 @@
             <forward name="ok" path="/affichePerm.jsp" />
         </action>
 		
+		<action
+            path="/rechercheUtilisateur"
+            input="/rechercheUtilisateur.jsp"
+            name="rechercheUtilisateurForm"
+            type="action.rechercheUtilisateurAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheUtilisateur.jsp" />
+        </action>
+		
 		<!--INFOS-->
 		<action
             path="/infoCanal"
@@ -689,6 +711,15 @@
             <forward name="ok" path="/validemodifPerm.jsp" />
         </action>
 		
+		<action
+            path="/modifierUtil"
+            input="/modifierUtil.jsp"
+            name="supprUtilForm"
+            type="action.modifierUtilAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/validemodifUtil.jsp" />
+        </action>
+		
 		<!--VALIDER MODIFICATION-->
 		<action
    		    path="/validemodifCanal"
@@ -740,6 +771,15 @@
             input="/validemodifPerm.jsp"
             name="modifierPermForm"
             type="action.validemodifPermAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+   		    path="/validemodifUtil"
+       		input="/validemodifUtil.jsp"
+			name="modifierUtilForm"
+       		type="action.validemodifUtilAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
         </action>
@@ -830,7 +870,7 @@
             <forward name="ok" path="/creation.jsp" />
         </action>
 		
-		<!--AJOUT SUPPRESSION PERM ROLE-->
+		<!--AJOUT SUPPRESSION PERMISSION ROLE-->
 		<action
             path="/ajouterpermrole"
             input="/ajouterpermrole.jsp"
@@ -845,6 +885,25 @@
             input="/retirerpermrole.jsp"
             name="ajoutsuppressionForm"
             type="action.retirerpermroleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--AJOUT SUPPRESSION PERMISSION UTILISATEUR-->
+		<action
+            path="/ajouterpermutil"
+            input="/ajouterpermutile.jsp"
+            name="ajoutsuppressionForm"
+            type="action.ajouterpermutilAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/retirerpermutil"
+            input="/retirerpermutil.jsp"
+            name="ajoutsuppressionForm"
+            type="action.retirerpermutilAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
         </action>
