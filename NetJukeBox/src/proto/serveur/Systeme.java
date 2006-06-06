@@ -170,6 +170,7 @@ public class Systeme {
 		ContractantFactory.getAll();
 		ContratFactory.getAll();
 		RoleFactory.getAll();
+		PermissionFactory.getAll();
 		
 		//"Ping" des clients
 		this.timer = new Timer(true);
