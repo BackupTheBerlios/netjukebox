@@ -146,7 +146,6 @@ public class RoleFactory {
 		logger.debug("Démarrage: deleteById");
 		//On supprime le rôle de LDAP
 		Ldap ldap = Ldap.getInstance();
-		//return ldap.SupprimerGroupe(id);
 		
 		//Si la ligne est bien supprimée de la base
 		if (ldap.SupprimerGroupe(id)) {			
@@ -160,24 +159,5 @@ public class RoleFactory {
 		//Sinon, suppression invalide
 		logger.debug("Arrêt: deleteById");
 		return false;
-		
-		/*
-		//On supprime les droits de la base, en partant d'un id
-		String requete = "DELETE FROM attribuer WHERE login = '" + id + "';";
-		Jdbc base = Jdbc.getInstance();
-		int nbRows = base.executeUpdate(requete);
-		
-		//Si la ligne est bien supprimée de la base
-		if (nbRows>0) {			
-			
-			//On retire l'instance
-			instances.remove(id);
-			logger.debug("Arrêt: deleteById");
-			return true;
-		}
-		
-		//Sinon, suppression invalide
-		logger.debug("Arrêt: deleteById");
-		return false;*/
 	}
 }

@@ -123,6 +123,7 @@ public class Role {
 		
 		// On retire la permission du rôle
 		String requete = "DELETE FROM attribuer WHERE login='"+id+"' AND id_permission='"+idPerm+"';";
+		System.err.println(requete);
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
