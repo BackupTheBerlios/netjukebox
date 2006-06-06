@@ -146,7 +146,20 @@ public class RoleFactory {
 		logger.debug("Démarrage: deleteById");
 		//On supprime le rôle de LDAP
 		Ldap ldap = Ldap.getInstance();
-		return ldap.SupprimerGroupe(id);
+		//return ldap.SupprimerGroupe(id);
+		
+		//Si la ligne est bien supprimée de la base
+		if (ldap.SupprimerGroupe(id)) {			
+			
+			//On retire l'instance
+			instances.remove(id);
+			logger.debug("Arrêt: deleteById");
+			return true;
+		}
+		
+		//Sinon, suppression invalide
+		logger.debug("Arrêt: deleteById");
+		return false;
 		
 		/*
 		//On supprime les droits de la base, en partant d'un id
