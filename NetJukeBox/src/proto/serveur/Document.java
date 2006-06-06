@@ -339,6 +339,60 @@ public class Document {
 //#################
 	
 	/**
+	 * Retourne l'ensemble des diffusions et leur audimat
+	 * @return Vector
+	 */
+	public Vector getAudimats() {
+		logger.info("Document.getAudimat()");
+		
+		//On crée un vecteur pour contenir les audimats
+		Vector audimats = new Vector();
+		
+		//On va chercher dans la base la liste des audimats
+		String requete = "SELECT id_canal, date, audimat FROM audimat WHERE id_doc = '"+id+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		logger.info("Document.getAudimats() : "+resultats.size()+" diffusion(s) trouvée(s)");
+		
+		// Pour chaque contrat, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			
+			//On récupère la date/heure
+			GregorianCalendar dateHeure = (GregorianCalendar)GregorianCalendar.getInstance();
+			dateHeure.setTimeInMillis((Long)dico.get("date"));
+
+			//On rajoute les champs séparés dans le dico
+			int jour = dateHeure.get(GregorianCalendar.DAY_OF_MONTH);
+			int mois = (dateHeure.get(GregorianCalendar.MONTH)+1);
+			int annee = dateHeure.get(GregorianCalendar.YEAR);
+			int heure = dateHeure.get(GregorianCalendar.HOUR_OF_DAY);
+			int minute = dateHeure.get(GregorianCalendar.MINUTE);
+			int seconde = dateHeure.get(GregorianCalendar.SECOND);
+				
+			String date = jour+"/"+mois+"/"+annee+" "+heure+":"+minute+":"+seconde;
+			
+			dico.remove("date");
+			dico.put("date", date);
+			
+			/*// Champs supplémentaires (décommenter si besoin)
+			dico.put("jour", jour);
+			dico.put("mois", mois);
+			dico.put("annee", annee);
+			dico.put("heure", heure);
+			dico.put("minute", minute);
+			dico.put("seconde", seconde);
+			*/
+			
+			//On ajoute le dico au vecteur
+			audimats.addElement(dico);
+		}
+		
+		return audimats;
+	}
+	
+	/**
 	 * Retourne l'ensemble des attributs sous la forme d'un dictionnaire
 	 * @return Dictionary
 	 */
@@ -394,6 +448,9 @@ public class Document {
 			vConts.add(dicoCont);
 		}
 		dico.put("contrats", vConts);
+		
+		//Liste des diffusions
+		dico.put("audimats", this.getAudimats());
 		
 
 		return dico;
