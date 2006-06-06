@@ -94,7 +94,7 @@ public class Role {
 	 * Ajoute une permission au rôle
 	 * @param Permission perm
 	 */
-	public void ajouterPermission(Permission perm) {
+	public boolean ajouterPermission(Permission perm) {
 		logger.debug("Démarrage: ajouterPermission");
 		//On ajoute la permission au rôle
 		String requete = "INSERT INTO attribuer (login, id_permission) VALUES ('" + id.replace("'", "''") + "', '" + perm.getId()+"');";
@@ -107,8 +107,10 @@ public class Role {
 			//On met à jour le vecteurs d'association
 			permissions.put(perm.getId(), perm);
 			logger.debug("Arrêt: ajouterPermission");
+			return true;
 		}
 		logger.debug("Arrêt: ajouterPermission");
+		return false;
 	}
 
 	/**

@@ -2906,10 +2906,13 @@ public class Systeme {
 				Permission p = PermissionFactory.getById(permission);
 
 				//On attribue la permission
-				r.ajouterPermission(p);
-				
-				logger.info("Permission ajoutée au rôle '"+role+"'");
-				return Boolean.toString(true);
+				if (r.ajouterPermission(p)) {
+					logger.info("Permission ajoutée au rôle '"+role+"'");
+					return Boolean.toString(true);
+				} else {
+					logger.info("Permission non ajoutée au rôle '"+role+"'");
+					return Boolean.toString(false);
+				}
 			}
 			else {
 				//Sinon, opération refusée
@@ -2942,13 +2945,16 @@ public class Systeme {
 				Role r = RoleFactory.getById(role);
 	
 				//On retire la permission
-				r.retirerPermission(permission);
-				
-				logger.info("Permission retirée au role '"+role+"'");
-				return Boolean.toString(true);
+				if (r.retirerPermission(permission)) {
+					logger.info("Permission retirée au role '"+role+"'");
+					return Boolean.toString(true);
+				} else {
+					logger.info("Permission non retirée au role '"+role+"'");
+					return Boolean.toString(false);
+				}
 			} else {
 				// Sinon, opération refusée
-				logger.info("Permission non accordée. Permission non retirée");
+				logger.info("Role ou permission introuvable. Permission non retirée");
 				return Boolean.toString(false);
 			} 
 		}else {
