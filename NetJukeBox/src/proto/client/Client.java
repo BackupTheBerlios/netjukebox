@@ -9,6 +9,9 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+
 import org.ini4j.IniFile;
 
 //Arguments : 192.168.0.2 10000
@@ -1062,26 +1065,50 @@ public class Client {
 				//LISTERUTILISATEUR
 				if  (ligne.equalsIgnoreCase("listerUtilisateur")) {
 					if (etatConnecte) {
+						//On affiche ses infos
+						Vector vUtilisateurs = clientXML.listerUtilisateur(login);
 						
-						Vector vUtilisateurs = clientXML.listerUtilisateurs(login);
 						if (vUtilisateurs!=null && vUtilisateurs.size()>0) {
 							//Parcours du vecteur, affichage des infos
-							Dictionary d;
-							for (int i=0; i<vUtilisateurs.size(); i++){
-								d = (Dictionary)vUtilisateurs.get(i);
-								System.out.println("----------------- Contrat -------------------");
-								System.out.println("Id: "+d.get("login"));
-								System.out.println("Titre: "+d.get("passwd"));
-								System.out.println("Signature: "+d.get("nom"));
-								System.out.println("Expiration: "+d.get("prenom"));
-								System.out.println("Contractant: "+d.get("mail"));
-								System.out.println("Règlement: "+d.get("pays"));
-								System.out.println("Type: "+d.get("role"));
-								System.out.println("----------------------------------------------");
-								System.out.println();
+							
+							for(int i=0; i < vUtilisateurs.size(); i++)
+						            if(vUtilisateurs.elementAt(i) != null){
+						            	Attributes dico = (Attributes)vUtilisateurs.elementAt(i);
+						            	
+						            	Attribute uidAtt = (Attribute) dico.get("uid");
+						    			String uid = (String)uidAtt.get();
+						    			
+						    			Attribute pwdAtt = (Attribute) dico.get("pwd");
+						    			String pwd = (String)pwdAtt.get();
+						    			
+						    			Attribute snAtt = (Attribute) dico.get("sn");
+						    			String sn = (String)snAtt.get();
+						    			
+						    			Attribute givenNameAtt = (Attribute) dico.get("givenName");
+						    			String givenName = (String)givenNameAtt.get();
+						    			
+						    			Attribute mailAtt = (Attribute) dico.get("mail");
+						    			String mail = (String)mailAtt.get();
+						    			
+						    			Attribute stAtt = (Attribute) dico.get("st");
+						    			String st = (String)stAtt.get();
+						    			
+						    			Attribute ouAtt = (Attribute) dico.get("ou");
+						    			String ou = (String)ouAtt.get();
+								    	
+						    			System.out.println("----------------- Utilisateur -------------------");
+										System.out.println("Identifiant: "+uid);
+										System.out.println("Mot de passe: "+pwd);
+										System.out.println("Nom: "+sn);
+										System.out.println("Prénom: "+givenName);
+										System.out.println("Mail: "+mail);
+										System.out.println("Pays: "+st);
+										System.out.println("Rôle: "+ou);
+										System.out.println("----------------------------------------------");
+										System.out.println();
 							}
 							System.err.println("INFO: Utilisateurs listés");
-						} else System.err.println("WARNING: Aucun contrat disponible");
+						} else System.err.println("WARNING: Aucun utilisateur disponible");
 						
 					} else {
 						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
@@ -1987,9 +2014,9 @@ public class Client {
 		//USAGE : java Client [filename.ini]
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
-		String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
+		//String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
 		//String filename = args.length > 0 ? args[0] : "/home/admindg/Workspace/NetJukeBox/proto/client/client.ini";
-		//String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
+		String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
 		Preferences prefs = new IniFile(new File(filename));
 		
 		//On démarre le client
