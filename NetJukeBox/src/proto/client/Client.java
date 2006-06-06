@@ -420,6 +420,14 @@ public class Client {
 								cont = (Dictionary)vConts.get(i);
 								System.out.println("Contrat: "+cont);
 							}
+							System.out.println("---------------- Diffusions -----------------");
+							
+							Vector vDiffs = (Vector)d.get("audimats");
+							Dictionary audimat;
+							for (int i=0; i<vDiffs.size(); i++) {
+								audimat = (Dictionary)vDiffs.get(i);
+								System.out.println("Diffusion: "+audimat);
+							}
 							System.out.println("----------------------------------------------");
 							System.out.println();
 							System.err.println("INFO: Document affiché");
