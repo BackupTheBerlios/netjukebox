@@ -619,20 +619,20 @@ public Vector listerUtilisateur() {
 	logger.debug("Démarrage: getSchema");
 	Vector result=new Vector();
 	try {
-		String[] attrIDs = {"uid","ou","cn","sn","givenName","mail","pays"};
+		String[] attrIDs = {"uid","ou","sn","givenName","mail","st","userPassword"};
 		SearchControls ctls = new SearchControls();
 		ctls.setReturningAttributes(attrIDs); 
 		ctls.setSearchScope(SearchControls.SUBTREE_SCOPE );
 		String filter = "(uid=*)";
 		
 		NamingEnumeration answer = connect.search( "",filter,ctls);
-      
-          while (answer.hasMore()) {
-        	  result = printSearchEnumeration3(answer);
-          }
-        logger.debug("Arrêt: getSchema");
-       	return result;
-       	
+				
+		while (answer.hasMore()) {
+			result = printSearchEnumeration3(answer);
+			}
+		logger.debug("Arrêt: getSchema");
+		return result;
+	
 	} catch (Exception e) {
 		logger.error("getSchema: "+ e);
 		logger.debug("Arrêt: getSchema");
@@ -644,17 +644,14 @@ private Vector printSearchEnumeration3(NamingEnumeration answer) {
 	try {
 		while (answer.hasMore()) {
 			SearchResult sr = (SearchResult) answer.next();
-			vec.insertElementAt(sr.getAttributes(),i);
-			
+			vec.insertElementAt(sr.getAttributes(),i);			
 			i++;
-		}
+			}
 		return vec;
-    
-	} catch (NamingException e) {
-		logger.error("printSearchEnumeration: ", e);
-		return  null;
-	}
-}
+	}catch (Exception e){
+		logger.error("ERREUR: "+e);
+		return null;
+		}
 }
 
-
+}
