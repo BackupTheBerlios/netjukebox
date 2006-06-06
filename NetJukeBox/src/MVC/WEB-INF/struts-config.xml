@@ -143,10 +143,6 @@
             <form-property name="libelle" type="java.lang.String" />
         </form-bean>
 		
-		<form-bean name="rechercheRoleForm" type="form.rechercheRoleForm">
-			<form-property name="id" type="java.lang.String" />
-        </form-bean>
-		
 		<!--SUPPRESSION-->
 		<form-bean name="supprForm" type="form.supprForm">
             <form-property name="id" type="java.lang.String" />
@@ -214,10 +210,6 @@
 		<form-bean name="modifierPermForm" type="form.modifierPermForm">
 			<form-property name="id" type="java.lang.String" />
             <form-property name="libelle" type="java.lang.String" />
-        </form-bean>
-		
-		<form-bean name="modifierRoleForm" type="form.modifierRoleForm">
-			<form-property name="id" type="java.lang.String" />
         </form-bean>
 		
 		<!--INFOS-->
@@ -505,15 +497,6 @@
             <forward name="ok" path="/affichePerm.jsp" />
         </action>
 		
-		<action
-            path="/rechercheRole"
-            input="/rechercheRole.jsp"
-            name="rechercheRoleForm"
-            type="action.rechercheRoleAction">
-            <forward name="failed" path="/erreur.jsp" />
-            <forward name="ok" path="/afficheRole.jsp" />
-        </action>
-		
 		<!--INFOS-->
 		<action
             path="/infoCanal"
@@ -706,15 +689,6 @@
             <forward name="ok" path="/validemodifPerm.jsp" />
         </action>
 		
-		<action
-            path="/modifierRole"
-            input="/modifierRole.jsp"
-            name="infoForm"
-            type="action.modifierRoleAction">
-            <forward name="failed" path="/erreur.jsp" />
-            <forward name="ok" path="/validemodifRole.jsp" />
-        </action>
-		
 		<!--VALIDER MODIFICATION-->
 		<action
    		    path="/validemodifCanal"
@@ -766,15 +740,6 @@
             input="/validemodifPerm.jsp"
             name="modifierPermForm"
             type="action.validemodifPermAction">
-            <forward name="failed" path="/erreur.jsp" />
-            <forward name="ok" path="/creation.jsp" />
-        </action>
-		
-		<action
-            path="/validemodifRole"
-            input="/validemodifRole.jsp"
-            name="modifierRoleForm"
-            type="action.validemodifRoleAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
         </action>
@@ -861,6 +826,25 @@
             input="/ajouterdoccontrat.jsp"
             name="ajoutsuppressionForm"
             type="action.ajouterdoccontratAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--AJOUT SUPPRESSION PERM ROLE-->
+		<action
+            path="/ajouterpermrole"
+            input="/ajouterpermrole.jsp"
+            name="ajoutsuppressionForm"
+            type="action.ajouterpermroleAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<action
+            path="/retirerpermrole"
+            input="/retirerpermrole.jsp"
+            name="ajoutsuppressionForm"
+            type="action.retirerpermroleAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
         </action>

@@ -1,13 +1,11 @@
 package action;
 
-import java.util.Dictionary;
-import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.infoForm;
+import form.ajoutsuppressionForm;
 
-public class infoRoleAction extends Action {
+public class ajouterpermroleAction extends Action {
 
 	/**
 	 * Client XMLRPC
@@ -28,7 +26,6 @@ public class infoRoleAction extends Action {
 	 * @return ActionForward
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping,	ActionForm form,
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
@@ -37,25 +34,25 @@ public class infoRoleAction extends Action {
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
-		infoForm roleForm = (infoForm)form;
+		ajoutsuppressionForm ajoutForm = (ajoutsuppressionForm)form;
 
-		String id = roleForm.getId();
+		String idperm = ajoutForm.getId1();
+		String idrole = ajoutForm.getId2();
 
 		response.setContentType("text/html");
 		
-		Dictionary dRole = clientXML.infoRole(sessionLogin, id);
-		Vector vRole = new Vector();
+		boolean ajout = clientXML.ajouterPermissionRole(sessionLogin, idperm, idrole);
 		
-		if (dRole!=null) {
-			vRole = (Vector)dRole.get("permissions");
+		if (ajout) {
+			String result = "INFO: Permission ajoutée au role";
 			
-			session.setAttribute("Resultat" , vRole);
+			session.setAttribute("Resultat" , result);
 			return mapping.findForward("ok");
 		} else {
-			String erreur = "WARNING: Aucun role disponible";
+			String erreur = "ERREUR: Permission non ajoutée au role";
 			
 			session.setAttribute("Resultat" , erreur);
 			return mapping.findForward("failed");
-		}
+		}	
 	}
 }

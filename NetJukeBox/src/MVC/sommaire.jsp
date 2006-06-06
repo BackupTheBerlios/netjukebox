@@ -37,7 +37,6 @@
 	<a href="rechercheContrat.jsp" target="droite"><bean:message key='rechercheContrat'/></a><br />
 	<a href="rechercheContractant.jsp" target="droite"><bean:message key='rechercheContractant'/></a><br />
 	<a href="recherchePerm.jsp" target="droite"><bean:message key='recherchePerm'/></a><br />
-	<a href="rechercheRole.jsp" target="droite"><bean:message key='rechercheRole'/></a><br />
 	
 	<b>INFOS :</b><br>
 	<a href="infoDoc.jsp" target="droite"><bean:message key='infoDoc'/></a><br />
@@ -67,7 +66,6 @@
 	<a href="modifierContrat.jsp" target="droite"><bean:message key='modifierContrat'/></a><br />
 	<a href="modifierContractant.jsp" target="droite"><bean:message key='modifierContractant'/></a><br />
 	<a href="modifierPerm.jsp" target="droite"><bean:message key='modifierPerm'/></a><br />
-	<a href="modifierRole.jsp" target="droite"><bean:message key='modifierRole'/></a><br />
 
 	<b>PLANIFIER / DEPLANIFIER :</b><br>
 	<a href="planifprog.jsp" target="droite"><bean:message key='planifprog'/></a><br />
@@ -87,6 +85,10 @@
 	<b>AJOUT SUPPRESSION CONTRAT DOCUMENT :</b><br>
 	<a href="ajouterdoccontrat.jsp" target="droite"><bean:message key='ajoutdocumentcontrat'/></a><br />
 	<a href="retirerdoccontrat.jsp" target="droite"><bean:message key='retirerdocumentcontrat'/></a><br />
+	
+	<b>AJOUT SUPPRESSION PERMISSIONS ROLE :</b><br>
+	<a href="ajouterpermrole.jsp" target="droite"><bean:message key='ajoutpermissionrole'/></a><br />
+	<a href="retirerpermrole.jsp" target="droite"><bean:message key='retirerpermissionrole'/></a><br />
 	
 	<b>START STOP PLAYER :</b><br>
 	<a href="startplayer.jsp" target="droite"><bean:message key='startplayer'/></a><br />
