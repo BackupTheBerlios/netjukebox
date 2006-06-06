@@ -616,7 +616,7 @@ public boolean SupprimerGroupe(String groupe) {
  */
 
 public Vector listerUtilisateur() {
-	logger.debug("Démarrage: getSchema");
+	logger.debug("Démarrage: listerUtilisateur");
 	Vector result=new Vector();
 	try {
 		String[] attrIDs = {"uid","ou","sn","givenName","mail","st","userPassword"};
@@ -630,12 +630,12 @@ public Vector listerUtilisateur() {
 		while (answer.hasMore()) {
 			result = printSearchEnumeration3(answer);
 			}
-		logger.debug("Arrêt: getSchema");
+		logger.debug("Arrêt: listerUtilisateur");
 		return result;
 	
 	} catch (Exception e) {
-		logger.error("getSchema: "+ e);
-		logger.debug("Arrêt: getSchema");
+		logger.error("listerUtilisateur: "+ e);
+		logger.debug("Arrêt: listerUtilisateur");
 		return null;
 	}
 }
