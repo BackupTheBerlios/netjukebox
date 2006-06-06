@@ -329,14 +329,39 @@ public class Utilisateur {
 	/**
 	 * Lister les utilisateurs
 	 * @return Vector
+	 * @throws NamingException 
 	 */
-	public static Vector listerUtilisateur() {
+	public static Vector listerUtilisateur() throws NamingException {
 		Ldap ldap = Ldap.getInstance();
 		Vector liste = ldap.listerUtilisateur();
-		return liste;
-		
+		Vector vUtil = new Vector();
+		Dictionary d = null;
+		for(int i=0; i < liste.size(); i++)
+            if(liste.elementAt(i) != null){
+            	Attributes dico = (Attributes)liste.elementAt(i);
+            	Attribute uidAtt = (Attribute) dico.get("uid");
+    			String uid = (String)uidAtt.get();
+    			d.put("uid",uid);
+    			Attribute snAtt = (Attribute) dico.get("sn");
+    			String sn = (String)snAtt.get();
+    			d.put("sn",sn);
+    			Attribute givenNameAtt = (Attribute) dico.get("givenName");
+    			String givenName = (String)givenNameAtt.get();
+    			d.put("givenName",givenName);
+    			Attribute mailAtt = (Attribute) dico.get("mail");
+    			String mail = (String)mailAtt.get();
+    			d.put("mail",mail);
+    			Attribute stAtt = (Attribute) dico.get("st");
+    			String st = (String)stAtt.get();
+    			d.put("st",st);
+    			Attribute ouAtt = (Attribute) dico.get("ou");
+    			String ou = (String)ouAtt.get();
+    			d.put("ou",ou);
+    			vUtil.add(d);
+            }
+		return vUtil;
 	}
-
+		
 	/**
 	 * Modifier les informations de l'utilisateur
 	 * @throws NamingException 
