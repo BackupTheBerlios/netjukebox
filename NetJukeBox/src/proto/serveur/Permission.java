@@ -88,7 +88,7 @@ public class Permission {
 	 */
 	public boolean setLibelle(String libelle) {
 		
-		String requete = "UPDATE permission SET libelle = '" + libelle.replace("'", "''")  + "' WHERE id = '" + id + "';";
+		String requete = "UPDATE permission SET libelle = '" + libelle  + "' WHERE id = '" + id + "';";
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);

@@ -97,7 +97,7 @@ public class Role {
 	public boolean ajouterPermission(Permission perm) {
 		logger.debug("Démarrage: ajouterPermission");
 		//On ajoute la permission au rôle
-		String requete = "INSERT INTO attribuer (login, id_permission) VALUES ('" + id.replace("'", "''") + "', '" + perm.getId()+"');";
+		String requete = "INSERT INTO attribuer (login, id_permission) VALUES ('" + id + "', '" + perm.getId()+"');";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		
@@ -122,7 +122,7 @@ public class Role {
 		logger.debug("Démarrage: retirerPermission");
 		
 		// On retire la permission du rôle
-		String requete = "DELETE FROM attribuer WHERE login='"+id.replace("'", "''")+"' AND id_permission='"+idPerm+"';";
+		String requete = "DELETE FROM attribuer WHERE login='"+id+"' AND id_permission='"+idPerm+"';";
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
 		

@@ -55,7 +55,7 @@ public class PermissionFactory {
 		logger.debug("Démarrage: create");
 		
 		//On crée le contractant dans la base
-		String requete = "INSERT INTO permission (id, libelle) VALUES ('" + id + "', '"+ libelle.replace("'", "''") + "');"; 
+		String requete = "INSERT INTO permission (id, libelle) VALUES ('" + id + "', '"+ libelle+ "');"; 
 		
 		Jdbc base = Jdbc.getInstance();
 		int nbRows = base.executeUpdate(requete);
@@ -102,7 +102,7 @@ public class PermissionFactory {
 				Dictionary dico = (Dictionary) resultats.firstElement();
 				
 				//On mappe les champs
-				String libelle = ((String)dico.get("libelle")).replace("''", "'");
+				String libelle = (String)dico.get("libelle");
 				
 				System.out.println("-------- Permission ---------");
 				System.out.println("ID: "+id);
