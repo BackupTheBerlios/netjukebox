@@ -346,7 +346,7 @@ public class Systeme {
 	 * @throws AddressException 
 	 */
 	@SuppressWarnings("unchecked")
-	public String inscription(String login, String log, String pass, String role, String email, String nom, String prenom, String pays) throws NamingException, AddressException, MessagingException {
+	public String inscription(String login, String log, String pass, String email, String nom, String prenom, String pays) throws NamingException, AddressException, MessagingException {
 		
 		logger.info("Inscription de l'utilisateur "+log);
 
@@ -355,7 +355,7 @@ public class Systeme {
 		
 			//On vérifie que le login n'existe pas
 			if (!Utilisateur.verifierLogin(log)) {
-				
+				String role = "usager";
 				//On crée l'utilisateur
 				Utilisateur u = Utilisateur.create(log, pass, nom, prenom, email, pays, role);
 				
@@ -388,16 +388,16 @@ public class Systeme {
 	 * @param Login
 	 * @throws NamingException
 	 */
-	public String supprimerUtilisateur(String Login) throws NamingException {
+	public String supprimerUtilisateur(String Login, String log) throws NamingException {
 		
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(Login, "supprimerUtilisateur")) {
 		
-			logger.info("Suppression de l'utilisateur "+Login);
+			logger.info("Suppression de l'utilisateur "+ log);
 		
 			//Vérification de l'existance du login à supprimer et suppression 
-			if (Utilisateur.verifierLogin(Login)) {
-				Utilisateur.deleteByLogin(Login);
+			if (Utilisateur.verifierLogin(log)) {
+				Utilisateur.deleteByLogin(log);
 			
 				return Boolean.toString(true);
 			} else {
@@ -418,23 +418,31 @@ public class Systeme {
 	 * @throws NamingException
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherUtilisateur(String login) throws NamingException {
+	public Vector rechercherUtilisateur(String login, String log) throws NamingException {
 		logger.info("Recherche des attributs de l'utilisateur : " + login);
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "rechercherUtilisateur")) {
-				Utilisateur u = Utilisateur.getByLogin(login);
+				Utilisateur u = Utilisateur.getByLogin(log);
 			
 				//Vecteur d'attributs à retourner
 				Vector vUtilisateur = new Vector();
-
-				vUtilisateur.addElement(u.getLogin());
-				vUtilisateur.addElement(u.getPwd());
-				vUtilisateur.addElement(u.getNom());
-				vUtilisateur.addElement(u.getPrenom());
-				vUtilisateur.addElement(u.getMail());
-				vUtilisateur.addElement(u.getPays());
-				vUtilisateur.addElement(u.getRole());
+				Dictionary dico = new Hashtable();
+				
+				dico.put("login", u.getLogin());
+				vUtilisateur.addElement(dico);
+				dico.put("pwd", u.getPwd());
+				vUtilisateur.addElement(dico);
+				dico.put("nom", u.getNom());
+				vUtilisateur.addElement(dico);
+				dico.put("prenom", u.getPrenom());
+				vUtilisateur.addElement(dico);
+				dico.put("mail", u.getMail());
+				vUtilisateur.addElement(dico);
+				dico.put("pays", u.getPays());
+				vUtilisateur.addElement(dico);
+				dico.put("role", u.getRole().getId());
+				vUtilisateur.addElement(dico);
 				
 				return vUtilisateur;
 			} else {
@@ -448,9 +456,10 @@ public class Systeme {
 	 * Lister les utilisateur
 	 * @param String login
 	 * @return Vector
+	 * @throws NamingException 
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector listerUtilisateur(String login) {
+	public Vector listerUtilisateur(String login) throws NamingException {
 
 		logger.info("Liste des utilisateurs");
 

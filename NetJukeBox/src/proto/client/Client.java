@@ -948,12 +948,10 @@ public class Client {
 						String pass = lire();
 						System.out.print("email: ");
 						String email = lire();
-						System.out.print("role: ");
-						String role = lire();
 						System.out.print("pays: ");
 						String pays = lire();
 						
-						if (clientXML.inscription(login, log, pass, role, email, nom, prenom, pays)) {
+						if (clientXML.inscription(login, log, pass, email, nom, prenom, pays)) {
 							System.err.println("INFO: Utilisateur inscrit");
 						}
 						else System.err.println("WARNING: Inscription impossible");
@@ -982,25 +980,25 @@ public class Client {
 				// RECHERCHERUTILISATEUR
 				if  (ligne.equalsIgnoreCase("rechercherUtilisateur")) {
 					if (etatConnecte) {
-						Vector vUtilisateur = clientXML.rechercherUtilisateur(login);
+						System.out.print("login: ");
+						String log = lire();
+						Vector vUtilisateur = clientXML.rechercherUtilisateur(login, log);
 						if (vUtilisateur!=null && vUtilisateur.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary v;
-							for (int i=0; i<vUtilisateur.size(); i++){
-								System.out.println(vUtilisateur.get(i));
 								
-								v = (Dictionary)vUtilisateur.get(i);
+								v = (Dictionary)vUtilisateur.get(1);
 								System.out.println("----------------- Utilisateur -------------------");
-								System.out.println("Id: "+v.get("login"));
-								System.out.println("Titre: "+v.get("nom"));
-								System.out.println("Durée: "+v.get("prenom"));
-								System.out.println("Date: "+v.get("mail"));
-								System.out.println("Genre: "+v.get("pays"));
+								System.out.println("Login: "+v.get("login"));
+								System.out.println("Mot de passe: "+v.get("pwd"));
+								System.out.println("Nom: "+v.get("nom"));
+								System.out.println("Prenom: "+v.get("prenom"));
+								System.out.println("Mail: "+v.get("mail"));
+								System.out.println("Pays: "+v.get("pays"));
 								System.out.println("Role: "+v.get("role"));
 								System.out.println("----------------------------------------------");
 								System.out.println();
 								
-							}
 							System.err.println("INFO: Utilisateur recherché");
 						}
 						else System.err.println("WARNING: Aucune données disponible");
@@ -1013,9 +1011,10 @@ public class Client {
 				//MODIFIERUTILISATEUR
 				if  (ligne.equalsIgnoreCase("modifierUtilisateur")) {
 					if (etatConnecte) {
-											
+						System.out.print("login: ");
+						String log = lire();					
 						//On affiche ses infos
-						Vector vUtilisateur = clientXML.rechercherUtilisateur(login);
+						Vector vUtilisateur = clientXML.rechercherUtilisateur(login, log);
 						if (vUtilisateur!=null && vUtilisateur.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -1067,7 +1066,7 @@ public class Client {
 					if (etatConnecte) {
 						//On affiche ses infos
 						Vector vUtilisateurs = clientXML.listerUtilisateur(login);
-						
+
 						if (vUtilisateurs!=null && vUtilisateurs.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							
@@ -2015,8 +2014,9 @@ public class Client {
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
 		//String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
-		//String filename = args.length > 0 ? args[0] : "/home/admindg/Workspace/NetJukeBox/proto/client/client.ini";
-		String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
+		String filename = args.length > 0 ? args[0] : "/home/admindg/Workspace/NetJukeBox/proto/client/client.ini";
+		//String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
+
 		Preferences prefs = new IniFile(new File(filename));
 		
 		//On démarre le client
