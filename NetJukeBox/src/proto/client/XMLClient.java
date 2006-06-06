@@ -1176,7 +1176,7 @@ public class XMLClient {
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean inscription(String login, String log, String pass, String role,
+	public boolean inscription(String login, String log, String pass,
 			String email, String nom, String prenom, String pays) {
 		// Si l'utilisateur est connecté au seveur
 		//if (etatConnecte) {
@@ -1187,7 +1187,6 @@ public class XMLClient {
 				params.addElement(login);
 				params.addElement(log);
 				params.addElement(pass);
-				params.addElement(role);
 				params.addElement(email);
 				params.addElement(nom);
 				params.addElement(prenom);
@@ -1244,7 +1243,7 @@ public class XMLClient {
 	 * @return Vector
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector rechercherUtilisateur(String login) {
+	public Vector rechercherUtilisateur(String login, String log) {
 		// Si l'utilisateur est connecté au seveur
 		//if (etatConnecte) {
 			System.out.println("INFO: Recherche des attributs...");
@@ -1252,7 +1251,8 @@ public class XMLClient {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
-
+				params.addElement(log);
+				
 				// Adresse la requête et affiche les résultats
 				return (Vector) clientXML.execute("Systeme.rechercherUtilisateur", params);
 			} catch (Exception e) {
