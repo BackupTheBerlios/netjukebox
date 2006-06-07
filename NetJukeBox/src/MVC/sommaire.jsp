@@ -90,6 +90,10 @@
 	<a href="ajouterpermrole.jsp" target="droite"><bean:message key='ajoutpermissionrole'/></a><br />
 	<a href="retirerpermrole.jsp" target="droite"><bean:message key='retirerpermissionrole'/></a><br />
 	
+	<b>AJOUT SUPPRESSION PERMISSIONS UTILISATEUR :</b><br>
+	<a href="ajouterpermutil.jsp" target="droite"><bean:message key='ajoutpermissionutilisateur'/></a><br />
+	<a href="retirerpermutil.jsp" target="droite"><bean:message key='retirerpermissionutilisateur'/></a><br />
+	
 	<b>START STOP PLAYER :</b><br>
 	<a href="startplayer.jsp" target="droite"><bean:message key='startplayer'/></a><br />
 	<a href="stopplayer.jsp" target="droite"><bean:message key='stopplayer'/></a><br />
