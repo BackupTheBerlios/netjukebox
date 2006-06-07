@@ -155,7 +155,7 @@ public class Utilisateur {
 	}
 		
 	/**
-	 * Détruit les infos d'un canal contenues dans la base
+	 * Détruit les infos d'un utilisateur contenues dans la base
 	 * @param login
 	 * @return
 	 * @throws NamingException 
