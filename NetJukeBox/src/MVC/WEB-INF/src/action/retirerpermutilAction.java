@@ -1,12 +1,11 @@
 package action;
 
-import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.rechercheUtilisateurForm;
+import form.ajoutsuppressionForm;
 
-public class rechercheUtilisateurAction extends Action {
+public class retirerpermutilAction extends Action {
 
 	/**
 	 * Client XMLRPC
@@ -35,22 +34,25 @@ public class rechercheUtilisateurAction extends Action {
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
-		rechercheUtilisateurForm utilForm = (rechercheUtilisateurForm)form;
+		ajoutsuppressionForm ajoutForm = (ajoutsuppressionForm)form;
 
-		String login = utilForm.getLogin();
-		
+		String idperm = ajoutForm.getId1();
+		String login = ajoutForm.getId2();
+
 		response.setContentType("text/html");
 		
-		Vector vUtil = clientXML.rechercherUtilisateur(sessionLogin, login);
+		boolean retrait = clientXML.retirerPermissionUtilisateur(sessionLogin, idperm, login);
 		
-		if (vUtil!=null && vUtil.size()>0) {
-			session.setAttribute("Resultat" , vUtil);
+		if (retrait) {
+			String result = "INFO: Permission retirée à l'utilisateur";
+			
+			session.setAttribute("Resultat" , result);
 			return mapping.findForward("ok");
 		} else {
-			String erreur = "WARNING: Aucun Utilisateur disponible";
+			String erreur = "ERREUR: Permission non retiré à l'utilisateur";
 			
 			session.setAttribute("Resultat" , erreur);
 			return mapping.findForward("failed");
-		}
+		}	
 	}
 }
