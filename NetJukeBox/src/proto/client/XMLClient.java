@@ -1268,17 +1268,18 @@ public class XMLClient {
 
 	/**
 	 * Effectue les modifications des attributs de l'utilisateur
-	 * @param Login
-	 * @param newLogin
-	 * @param Nom
-	 * @param Prenom
-	 * @param Email
-	 * @param Pays
+	 * @param login
+	 * @param logUtil
+	 * @param newLogUtil
+	 * @param nom
+	 * @param prenom
+	 * @param email
+	 * @param pays
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifierUtilisateur(String login, String newlogin, String pwd, String Nom,
-			String Prenom, String Email, String Pays) {
+	public boolean modifierUtilisateur(String login, String logUtil, String newLogUtil, String pwd, String nom,
+			String prenom, String email, String pays) {
 		// Si l'utilisateur est connecté au seveur
 		//if (etatConnecte) {
 			System.out.println("INFO: Modification des attributs...");
@@ -1286,12 +1287,13 @@ public class XMLClient {
 				// Création de la requête
 				Vector params = new Vector();
 				params.addElement(login);
-				params.addElement(newlogin);
+				params.addElement(logUtil);
+				params.addElement(newLogUtil);
 				params.addElement(pwd);
-				params.addElement(Nom);
-				params.addElement(Prenom);
-				params.addElement(Email);
-				params.addElement(Pays);
+				params.addElement(nom);
+				params.addElement(prenom);
+				params.addElement(email);
+				params.addElement(pays);
 
 				// Adresse la requête et affiche les résultats
 				String result = (String) clientXML.execute("Systeme.modifierUtilisateur", params);

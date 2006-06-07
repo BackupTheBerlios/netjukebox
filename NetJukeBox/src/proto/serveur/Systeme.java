@@ -512,61 +512,62 @@ public class Systeme {
 
 	/**
 	 * Modification des attributs d'un utilisateur
-	 * @param Login
-	 * @param newLogin
+	 * @param login
+	 * @param logUtil
+	 * @param newLogUtil
 	 * @param nom
 	 * @param prenom
 	 * @param mail
 	 * @param pays
 	 * @throws NamingException
 	 */
-	 public String modifierUtilisateur(String login, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
+	 public String modifierUtilisateur(String login, String logUtil, String newLogUtil, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
 
 			//On vérifie que l'utilisateur a la permission
 			if (verifPermission(login, "modifierUtilisateur")) {
 			
-			//On récupère les attributs
-			Utilisateur u = Utilisateur.getByLogin(login);
-			String role = u.getRole().getId();
-			
-			//vérification du nouveau login complété
-			if (newlogin.length() == 0) {
-				newlogin = u.getLogin();
-			}
-			
-			//vérification du nouveau nom complété
-			if (nom.length() == 0) {
-				nom = u.getNom();
-			}
-			
-			//vérification du nouveau prénom complété
-			if (prenom.length() == 0 ) {
-				prenom = u.getPrenom();
-			}
-			
-			//vérification du nouveau mail complété
-			if (mail.length() == 0) {
-				mail = u.getMail();
-			}
-			
-			//vérification du nouveau pays complété
-			if (pays.length() == 0) {
-				pays = u.getPays();
-			}
-			
-			//vérification du nouveau password complété
-			if (pwd.length() == 0) {
-				pwd = u.getPwd();
-			}
-			
-			//On modifie les attributs
-			u.modifier(login, role, newlogin, pwd, nom, prenom, mail, pays);
-			logger.info("Utilisateur '"+login+"' modifié");
-			return Boolean.toString(true);
+				//On récupère les attributs
+				Utilisateur u = Utilisateur.getByLogin(logUtil);
+				String role = u.getRole().getId();
+				
+				//vérification du nouveau login complété
+				if (newLogUtil.length() == 0) {
+					newLogUtil = u.getLogin();
+				}
+				
+				//vérification du nouveau nom complété
+				if (nom.length() == 0) {
+					nom = u.getNom();
+				}
+				
+				//vérification du nouveau prénom complété
+				if (prenom.length() == 0 ) {
+					prenom = u.getPrenom();
+				}
+				
+				//vérification du nouveau mail complété
+				if (mail.length() == 0) {
+					mail = u.getMail();
+				}
+				
+				//vérification du nouveau pays complété
+				if (pays.length() == 0) {
+					pays = u.getPays();
+				}
+				
+				//vérification du nouveau password complété
+				if (pwd.length() == 0) {
+					pwd = u.getPwd();
+				}
+				
+				//On modifie les attributs
+				u.modifier(logUtil, role, newLogUtil, pwd, nom, prenom, mail, pays);
+				logger.info("Utilisateur '"+logUtil+"' modifié");
+				return Boolean.toString(true);
 		} else {
-		// Sinon, opération refusée
-		logger.info("Permission non accordée. Utilisateur non modifié");
-		return Boolean.toString(false);
+			// Sinon, opération refusée
+			logger.info("Permission non accordée. Utilisateur non modifié");
+			return Boolean.toString(false);
 		}
 	}
 	

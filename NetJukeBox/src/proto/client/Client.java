@@ -1012,9 +1012,9 @@ public class Client {
 				if  (ligne.equalsIgnoreCase("modifierUtilisateur")) {
 					if (etatConnecte) {
 						System.out.print("login: ");
-						String log = lire();					
+						String logUtil = lire();					
 						//On affiche ses infos
-						Vector vUtilisateur = clientXML.rechercherUtilisateur(login, log);
+						Vector vUtilisateur = clientXML.rechercherUtilisateur(login, logUtil);
 						if (vUtilisateur!=null && vUtilisateur.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
@@ -1026,7 +1026,7 @@ public class Client {
 								d = (Dictionary)vUtilisateur.get(1);
 								System.out.println("----------------- Utilisateur -------------------");
 								System.out.println("Login: "+d.get("login"));
-								System.out.println("Login: "+d.get("pwd"));
+								System.out.println("Pwd: "+d.get("pwd"));
 								System.out.println("Nom: "+d.get("nom"));
 								System.out.println("Prénom: "+d.get("prenom"));
 								System.out.println("Email: "+d.get("mail"));
@@ -1039,7 +1039,7 @@ public class Client {
 							//System.err.print("INFO: Attributs recherché");
 									
 							System.out.print("Nouveau Login: ");
-							String loginUtil = lire();
+							String newLogUtil = lire();
 							System.out.print("Nouveau mot de passe: ");
 							String pwd = lire();
 							System.out.print("Nouveau Nom: ");
@@ -1051,7 +1051,7 @@ public class Client {
 							System.out.print("Nouveau Pays: ");
 							String pays = lire();
 							
-							boolean modifie = clientXML.modifierUtilisateur(login, loginUtil, pwd, nom, prenom, mail, pays);
+							boolean modifie = clientXML.modifierUtilisateur(login, logUtil, newLogUtil, pwd, nom, prenom, mail, pays);
 							if (modifie) System.err.println("INFO: Attributs modifiés");
 							else System.err.println("ERREUR: Attributs non modifiés");
 						}
@@ -2014,8 +2014,8 @@ public class Client {
 		//USAGE : java Client [filename.ini]
 		
 		//Fichier d'initialisation par défaut (si pas de paramètres)
-		//String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
-		String filename = args.length > 0 ? args[0] : "/home/admindg/Workspace/NetJukeBox/proto/client/client.ini";
+		String filename = args.length > 0 ? args[0] : "src/proto/client/client.ini";
+		//String filename = args.length > 0 ? args[0] : "/home/admindg/Workspace/NetJukeBox/proto/client/client.ini";
 		//String filename = args.length > 0 ? args[0] : "C:/Documents and Settings/Marie Rubini/Mes documents/workspace/NetJukeBox/proto/client/client.ini ";
 
 		Preferences prefs = new IniFile(new File(filename));
