@@ -216,9 +216,9 @@
             <form-property name="libelle" type="java.lang.String" />
         </form-bean>
 		
-		<form-bean name="userForm" type="form.NewUserForm">
+		<form-bean name="modifierUtilisateurForm" type="form.modifierUtilisateurForm">
 			<form-property name="login" type="java.lang.String" />
-			<form-property name="pass" type="java.lang.String" />
+			<form-property name="pwd" type="java.lang.String" />
             <form-property name="nom" type="java.lang.String" />
             <form-property name="prenom" type="java.lang.String" />
 			<form-property name="mail" type="java.lang.String" />
@@ -712,10 +712,10 @@
         </action>
 		
 		<action
-            path="/modifierUtil"
+            path="/modifierUtilisateur"
             input="/modifierUtil.jsp"
             name="supprUtilForm"
-            type="action.modifierUtilAction">
+            type="action.modifierUtilisateurAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/validemodifUtil.jsp" />
         </action>
@@ -778,8 +778,8 @@
 		<action
    		    path="/validemodifUtil"
        		input="/validemodifUtil.jsp"
-			name="modifierUtilForm"
-       		type="action.validemodifUtilAction">
+			name="modifierUtilisateurForm"
+       		type="action.validemodifUtilisateurAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
         </action>
@@ -892,7 +892,7 @@
 		<!--AJOUT SUPPRESSION PERMISSION UTILISATEUR-->
 		<action
             path="/ajouterpermutil"
-            input="/ajouterpermutile.jsp"
+            input="/ajouterpermutil.jsp"
             name="ajoutsuppressionForm"
             type="action.ajouterpermutilAction">
             <forward name="failed" path="/erreur.jsp" />
@@ -904,6 +904,16 @@
             input="/retirerpermutil.jsp"
             name="ajoutsuppressionForm"
             type="action.retirerpermutilAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/creation.jsp" />
+        </action>
+		
+		<!--CHANGER ROLE UTILISATEUR-->
+		<action
+            path="/changerroleutil"
+            input="/changerroleutil.jsp"
+            name="ajoutsuppressionForm"
+            type="action.changerroleutilAction">
             <forward name="failed" path="/erreur.jsp" />
             <forward name="ok" path="/creation.jsp" />
         </action>

@@ -62,7 +62,7 @@
 	<a href="modifierDoc.jsp" target="droite"><bean:message key='modifierDoc'/></a><br />
 	<a href="modifierProg.jsp" target="droite"><bean:message key='modifierProg'/></a><br />
 	<a href="modifierCanal.jsp" target="droite"><bean:message key='modifierCanal'/></a><br />
-	<a href="modifierUtil.jsp" target="droite"><bean:message key='modifierUtil'/></a><br />
+	<a href="modifierUtil.jsp" target="droite"><bean:message key='modifierUtilisateur'/></a><br />
 	<a href="modifierContrat.jsp" target="droite"><bean:message key='modifierContrat'/></a><br />
 	<a href="modifierContractant.jsp" target="droite"><bean:message key='modifierContractant'/></a><br />
 	<a href="modifierPerm.jsp" target="droite"><bean:message key='modifierPerm'/></a><br />
@@ -93,6 +93,9 @@
 	<b>AJOUT SUPPRESSION PERMISSIONS UTILISATEUR :</b><br>
 	<a href="ajouterpermutil.jsp" target="droite"><bean:message key='ajoutpermissionutilisateur'/></a><br />
 	<a href="retirerpermutil.jsp" target="droite"><bean:message key='retirerpermissionutilisateur'/></a><br />
+	
+	<b>CHANGER ROLE D'UN UTILISATEUR :</b><br>
+	<a href="changerroleutil.jsp" target="droite"><bean:message key='changerroleutilisateur'/></a><br />
 	
 	<b>START STOP PLAYER :</b><br>
 	<a href="startplayer.jsp" target="droite"><bean:message key='startplayer'/></a><br />
