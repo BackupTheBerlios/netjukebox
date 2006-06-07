@@ -34,7 +34,7 @@
 		<thead>
 		
 		<tbody>
-		<logic:iterate id="utilisateur" name = "Resultat">
+		<logic:iterate id="utilisateur" name = "Resultat" length="1">
 			<tr>
 				<td><bean:write name = "utilisateur" property = "login" /></td>
 				<td><bean:write name = "utilisateur" property = "pwd" /></td>
