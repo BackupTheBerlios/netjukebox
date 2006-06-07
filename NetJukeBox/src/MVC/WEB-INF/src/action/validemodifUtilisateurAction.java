@@ -1,12 +1,11 @@
 package action;
 
-import java.util.Vector;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
-import form.supprUtilForm;
+import form.modifierUtilisateurForm;
 
-public class modifierUtilisateurAction extends Action {
+public class validemodifUtilisateurAction extends Action {
 
 	/**
 	 * Client XMLRPC
@@ -27,7 +26,6 @@ public class modifierUtilisateurAction extends Action {
 	 * @return ActionForward
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping,	ActionForm form,
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
@@ -35,24 +33,32 @@ public class modifierUtilisateurAction extends Action {
 		//clientXML = (XMLClient) session.getAttribute("client");
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
+		String logUtil = (String) session.getAttribute("logUtil");
 		
-		supprUtilForm utilForm = (supprUtilForm)form;
+		modifierUtilisateurForm utilForm = (modifierUtilisateurForm)form;
 
-		String login = utilForm.getLogin();
+		String newLogUtil = utilForm.getLogin();
+		String nom = utilForm.getNom();
+		String prenom = utilForm.getPrenom();
+		String mail = utilForm.getMail();
+		String pays = utilForm.getPays();
+		String pass = utilForm.getPass();
 
-		session.setAttribute("logUtil", login);
 		response.setContentType("text/html");
 		
-		Vector vUtil = clientXML.rechercherUtilisateur(sessionLogin, login);
+		boolean modifie = clientXML.modifierUtilisateur(sessionLogin, logUtil, newLogUtil, pass, nom, prenom, mail, pays);
 		
-		if (vUtil!=null && vUtil.size()>0) {		
-			session.setAttribute("Resultat" , vUtil);
+		if (modifie) {
+			String result = "INFO: Utilisateur modifié";
+			
+			session.removeAttribute("logUtil");
+			session.setAttribute("Resultat" , result);
 			return mapping.findForward("ok");
 		} else {
-			String erreur = "WARNING: Aucun utilisateur disponible";
+			String erreur = "ERREUR: Utilisateur non modifié";
 			
 			session.setAttribute("Resultat" , erreur);
 			return mapping.findForward("failed");
-		}
+		}	
 	}
 }
