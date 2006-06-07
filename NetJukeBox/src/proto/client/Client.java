@@ -1018,14 +1018,15 @@ public class Client {
 						if (vUtilisateur!=null && vUtilisateur.size()>0) {
 							//Parcours du vecteur, affichage des infos
 							Dictionary d;
-							for (int i=0; i<vUtilisateur.size(); i++){
+							//for (int i=0; i<vUtilisateur.size(); i++){
 								
-								System.out.println(vUtilisateur.get(i));
+								System.out.println(vUtilisateur.get(1));
 								
 								
-								d = (Dictionary)vUtilisateur.get(i);
+								d = (Dictionary)vUtilisateur.get(1);
 								System.out.println("----------------- Utilisateur -------------------");
 								System.out.println("Login: "+d.get("login"));
+								System.out.println("Login: "+d.get("pwd"));
 								System.out.println("Nom: "+d.get("nom"));
 								System.out.println("Prénom: "+d.get("prenom"));
 								System.out.println("Email: "+d.get("mail"));
@@ -1034,7 +1035,7 @@ public class Client {
 								System.out.println();
 								
 								
-							}		
+							//}		
 							//System.err.print("INFO: Attributs recherché");
 									
 							System.out.print("Nouveau Login: ");
