@@ -1147,6 +1147,23 @@ public class Client {
 					}
 				}
 				
+				//CHANGERROLEUTILISATEUR
+				if  (ligne.equalsIgnoreCase("changerRoleUtilisateur")) {
+					if (etatConnecte) {
+						System.out.print("ID de l'utilisateur source: ");
+						String idUtilisateur = lire();
+						System.out.print("ID du nouveau role : ");
+						String idRole = lire();
+						boolean change = clientXML.changerRoleUtilisateur(login, idRole, idUtilisateur);
+						if (change) System.err.println("INFO: Role de l'utilisateur changé");
+						else System.err.println("ERREUR: Role de l'utilisateur non changé");
+					}
+					else {
+						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+					}
+				}
+				
+				
 //### CONTRAT ###
 				
 				// CREERCONTRAT
@@ -1939,6 +1956,7 @@ public class Client {
 					System.out.println(" listerUtilisateur : lister les utilisateurs");
 					System.out.println(" ajouterPermissionUtilisateur : ajouter une permission à un utilisateur");
 					System.out.println(" retirerPermissionUtilisateur : retirer une permission d'un utilisateur");
+					System.out.println(" changerRoleUtilisateur : changer le role d'un utilisateur");
 					
 					System.out.println(" creerContractant : créer un contractant");
 					System.out.println(" modifierContractant : modifier un contractant");

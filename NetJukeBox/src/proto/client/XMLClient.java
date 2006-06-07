@@ -1445,6 +1445,42 @@ public class XMLClient {
 			return false;
 		}*/
 	}
+	
+	/**
+	 * Change le role d'un utilisateur
+	 * @param String idPermission
+	 * @param String logUtil
+	 * @return boolean
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean changerRoleUtilisateur(String login, String idRole, String idUtilisateur) {
+
+		// Si l'utilisateur est connecté au seveur
+		//if (etatConnecte) {
+			System.err.println("INFO: Change le role d'un utilisateur...");
+			try {
+				// Création de la requête
+				Vector params = new Vector();
+				params.addElement(login);
+				params.addElement(idRole);
+				params.addElement(idUtilisateur);
+
+				// Adresse la requête et affiche les résultats
+				String result = (String) clientXML.execute("Systeme.changerRole", params);
+
+				return Boolean.parseBoolean(result);
+
+			} catch (Exception e) {
+				System.err.println("ERREUR : " + e);
+				return false;
+			}
+
+			/*// Sinon, non connecté
+		} else {
+			System.err.println("WARNING: Client non connecté au serveur !");
+			return false;
+		}*/
+	}
 
 // CONTRAT
 //------------------------------------------------------------
