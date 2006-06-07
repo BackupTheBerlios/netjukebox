@@ -608,7 +608,7 @@ public class Systeme {
 		if (verifPermission(login, "ajouterPermissionUtilisateur")) {
 			
 			//On vérifie que l'utilisateur et la permission existent
-			if (utilisateurs.containsKey(logUtil) && PermissionFactory.containsId(permission)) {
+			if (Utilisateur.verifierLogin(logUtil) && PermissionFactory.containsId(permission)) {
 				//On récupère l'utilisateur
 				Utilisateur u = Utilisateur.getByLogin(logUtil);
 				
@@ -649,7 +649,7 @@ public class Systeme {
 		if (verifPermission(login, "retirerPermissionUtilisateur")) {
 			
 			//On vérifie que l'utilisateur et la permission existent
-			if (utilisateurs.containsKey(logUtil) && PermissionFactory.containsId(permission)) {
+			if (Utilisateur.verifierLogin(logUtil) && PermissionFactory.containsId(permission)) {
 			
 				//On récupère l'utilisateur
 				Utilisateur u = Utilisateur.getByLogin(logUtil);
