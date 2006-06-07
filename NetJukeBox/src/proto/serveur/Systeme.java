@@ -390,10 +390,10 @@ public class Systeme {
 	 * @param Login
 	 * @throws NamingException
 	 */
-	public String supprimerUtilisateur(String Login, String log) throws NamingException {
+	public String supprimerUtilisateur(String login, String log) throws NamingException {
 		
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(Login, "supprimerUtilisateur")) {
+		if (verifPermission(login, "supprimerUtilisateur")) {
 		
 			logger.info("Suppression de l'utilisateur "+ log);
 		
@@ -616,14 +616,17 @@ public class Systeme {
 				Permission p = PermissionFactory.getById(permission);
 
 				//On attribue la permission
-				u.ajouterPermission(p);
-				
-				logger.info("Permission ajoutée à l'utilisateur '"+login+"'");
-				return Boolean.toString(true);
+				if (u.ajouterPermission(p)) { 
+					logger.info("Permission ajoutée à l'utilisateur '"+login+"'");
+					return Boolean.toString(true);
+				} else {
+					logger.info("Permission non ajoutée à l'utilisateur '"+login+"'");
+					return Boolean.toString(false);
+				}
 			}
 			else {
 				//Sinon, opération refusée
-				logger.info("Permission non accordée. Permission non ajoutée");
+				logger.info("Permission ou utilisateur introuvable. Permission non ajoutée");
 				return Boolean.toString(false);
 			}
 		} else {
@@ -652,13 +655,16 @@ public class Systeme {
 				Utilisateur u = Utilisateur.getByLogin(logUtil);
 	
 				//On retire la permission
-				u.retirerPermission(permission);
-				
-				logger.info("Permission retirée à l'utilisateur '"+login+"'");
-				return Boolean.toString(true);
+				if (u.retirerPermission(permission)) {
+					logger.info("Permission retirée à l'utilisateur '"+login+"'");
+					return Boolean.toString(true);
+				} else {
+					logger.info("Permission non retirée à l'utilisateur '"+login+"'");
+					return Boolean.toString(false);
+				}
 			} else {
 				// Sinon, opération refusée
-				logger.info("Permission non accordée. Permission non retirée");
+				logger.info("Permission ou utilisateur introuvable. Permission non retirée");
 				return Boolean.toString(false);
 			} 
 		}else {

@@ -303,7 +303,16 @@ public class Utilisateur {
 		
 		//On supprime ses infos de l'annuaire
 		logger.debug("Arrêt: supprimer");
-		return Utilisateur.deleteByLogin(this.login);
+		if (Utilisateur.deleteByLogin(this.login)) {
+			
+			//On supprime les associations Utilisateur/permission
+			Enumeration idPerms = permissions.keys();
+			while (idPerms.hasMoreElements()) {
+				retirerPermission((String)idPerms.nextElement());
+			}
+			return true;
+		}
+		return false;
 	}	
 		
 		
@@ -397,8 +406,25 @@ public class Utilisateur {
 	 * @return boolean
 	 */
 	public boolean retirerPermission(String idPerm) {
-		permissions.remove(idPerm);
-		return true;
+		logger.debug("Démarrage: retirerPermission");
+		
+		// On retire la permission du rôle
+		String requete = "DELETE FROM attribuer WHERE login='"+login+"' AND id_permission='"+idPerm+"';";
+		System.err.println(requete);
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si la suppression s'est bien déroulée
+		if (nbRows>0) {
+			
+			//On met à jour le vecteur d'association
+			permissions.remove(idPerm);
+			logger.debug("Arrêt: retirerPermission");			
+			return true;
+		}
+		//Sinon
+		logger.debug("Arrêt: retirerPermission");
+		return false;
 	}
 	
 	/**
@@ -407,8 +433,22 @@ public class Utilisateur {
 	 * @return boolean
 	 */
 	public boolean ajouterPermission(Permission perm) {
-		permissions.put(perm.getId(), perm);
-		return true;
+		logger.debug("Démarrage: ajouterPermission");
+		//On ajoute la permission au rôle
+		String requete = "INSERT INTO attribuer (login, id_permission) VALUES ('" + login + "', '" + perm.getId()+"');";
+		Jdbc base = Jdbc.getInstance();
+		int nbRows = base.executeUpdate(requete);
+		
+		//Si l'insertion s'est bien déroulée
+		if (nbRows>0) {
+			
+			//On met à jour le vecteurs d'association
+			permissions.put(perm.getId(), perm);
+			logger.debug("Arrêt: ajouterPermission");
+			return true;
+		}
+		logger.debug("Arrêt: ajouterPermission");
+		return false;
 	}
 
 	
