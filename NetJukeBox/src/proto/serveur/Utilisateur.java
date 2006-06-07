@@ -61,7 +61,7 @@ public class Utilisateur {
 	/**
 	 * Permissions
 	 */
-	private Hashtable permissions;
+	private Hashtable permissions  = new Hashtable();;
 	
 	/**
 	 * Etat
@@ -285,6 +285,7 @@ public class Utilisateur {
 			this.mail=mail;
 			this.pays=pays;
 			this.role=RoleFactory.getById(role);
+			setPermissions();
 		}
 	
 // METHODES DYNAMIQUES
@@ -529,15 +530,33 @@ public class Utilisateur {
 	
 //	#### SETTERS ####	
 
+//### SETTERS ###
+	
 	/**
-	 * Attribuer une permission à l'utilisateur
-	 * @param Id_Perm
-	 * @param Lib_Perm
-	 * @return boolean
+	 * Définit les permssions pour le rôle
 	 */
-	public boolean setPermission(int Id_Perm, String Lib_Perm) {
-		// your code here
-		return false;
+	private void setPermissions() {
+		logger.debug("Démarrage: setPermissions");
+		
+		//On crée un vecteur pour contenir les objets permissions instanciés
+		Hashtable perms = new Hashtable();
+		
+		//On va chercher dans la base la liste des id de tous les programmes
+		String requete = "SELECT id_permission FROM attribuer WHERE login = '"+login+"';";
+		Jdbc base = Jdbc.getInstance();
+		Vector resultats = base.executeQuery(requete);
+		
+		logger.info("Utilisateur.setPermissions() : "+resultats.size()+" permission(s) trouvée(s)");
+			
+		// Pour chaque permission, on instancie un objet que l'on stocke dans le vecteur
+		for (int j = 0; j < resultats.size(); j++) {
+			Dictionary dico = (Dictionary) resultats.elementAt(j);
+			String idPerm = (String)dico.get("id_permission");
+			perms.put(idPerm, PermissionFactory.getById(idPerm));
+		}
+		
+		this.permissions=perms;
+		logger.debug("Arrêt: setPermissions");
 	}
 	
 	/**

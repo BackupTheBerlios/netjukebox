@@ -617,10 +617,10 @@ public class Systeme {
 
 				//On attribue la permission
 				if (u.ajouterPermission(p)) { 
-					logger.info("Permission ajoutée à l'utilisateur '"+login+"'");
+					logger.info("Permission ajoutée à l'utilisateur '"+logUtil+"'");
 					return Boolean.toString(true);
 				} else {
-					logger.info("Permission non ajoutée à l'utilisateur '"+login+"'");
+					logger.info("Permission non ajoutée à l'utilisateur '"+logUtil+"'");
 					return Boolean.toString(false);
 				}
 			}
@@ -656,10 +656,10 @@ public class Systeme {
 	
 				//On retire la permission
 				if (u.retirerPermission(permission)) {
-					logger.info("Permission retirée à l'utilisateur '"+login+"'");
+					logger.info("Permission retirée à l'utilisateur '"+logUtil+"'");
 					return Boolean.toString(true);
 				} else {
-					logger.info("Permission non retirée à l'utilisateur '"+login+"'");
+					logger.info("Permission non retirée à l'utilisateur '"+logUtil+"'");
 					return Boolean.toString(false);
 				}
 			} else {
