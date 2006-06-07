@@ -31,7 +31,7 @@ public class modifierCanalForm extends ActionForm {
 			ae.add(id, new ActionError("error.id"));
 		}
 		if (nom.length() == 0) {
-			ae.add(id, new ActionError("error.id"));
+			ae.add(id, new ActionError("error.nom"));
 		}
 		if (utilMax.length() == 0) {
 			ae.add(id, new ActionError("error.nbmaxutil"));
