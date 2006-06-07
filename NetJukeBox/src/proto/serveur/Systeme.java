@@ -580,15 +580,20 @@ public class Systeme {
 	public String changerRole(String login, String role) throws NamingException {
 		
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "changerRole")) {
+		if (verifPermission(login, "changerRoleUtilisateur")) {
 			
 			//On récupère l'utilisateur
 			Utilisateur u = Utilisateur.getByLogin(login);
 
 			//On change le rôle
-			u.setRole(role);
-			logger.info("Rôle de l'utilisateur '"+login+"' changé");
-			return Boolean.toString(true);
+			if (u.setRole(role)) {
+				logger.info("Rôle de l'utilisateur '"+login+"' changé");
+				return Boolean.toString(true);
+			}
+			else {
+				logger.info("Rôle de l'utilisateur '"+login+"' non changé");
+				return Boolean.toString(false);
+			}
 		} else {
 		// Sinon, opération refusée
 		logger.info("Permission non accordée. Role non modifié");

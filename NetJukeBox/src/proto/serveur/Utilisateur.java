@@ -565,13 +565,16 @@ public class Utilisateur {
 	 * @return boolean
 	 */
 	@SuppressWarnings("static-access")
-	public void setRole(String nouveauRole) {
+	public boolean setRole(String nouveauRole) {
 		logger.debug("Démarrage: changerRole");
 		
 		Ldap ldap = Ldap.getInstance();
-		ldap.changerRole(login, role.getId(), nouveauRole);
-		this.role = RoleFactory.getById(nouveauRole);
-		
+		if (ldap.changerRole(login, role.getId(), nouveauRole)) {
+			this.role = RoleFactory.getById(nouveauRole);
+			logger.debug("Arrêt: changerRole");
+			return true;
+		}
 		logger.debug("Arrêt: changerRole");
+		return false;
 	}
 }
