@@ -465,11 +465,9 @@ public class Systeme {
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerUtilisateur")) {
-		
-			//On crée le vecteur
-			Vector vUtilisateurs = Utilisateur.listerUtilisateur();
+			Vector vUtilisateur = Utilisateur.listerUtilisateur();						
+			return vUtilisateur;
 			
-			return vUtilisateurs;
 		} else {
 			// Sinon, opération refusée
 			logger.info("Permission non accordée. Utilisateurs non listés");
