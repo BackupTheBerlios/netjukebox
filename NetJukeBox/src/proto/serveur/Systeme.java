@@ -20,6 +20,8 @@ import javax.media.MediaLocator;
 import javax.media.Player;
 import javax.media.Time;
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpc;
@@ -465,9 +467,42 @@ public class Systeme {
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerUtilisateur")) {
-			Vector vUtilisateur = Utilisateur.listerUtilisateur();						
-			return vUtilisateur;
+			Vector vUtil = Utilisateur.listerUtilisateur();		
 			
+			
+			//Vecteur d'attributs à retourner
+			Vector liste = new Vector();
+	 		Dictionary d = new Hashtable();
+	 		
+	 		for(int i=0; i < liste.size(); i++)
+	            if(liste.elementAt(i) != null){
+	            	Attributes dico = (Attributes)liste.elementAt(i);
+	             	Attribute uidAtt = (Attribute) dico.get("uid");
+	     			String uid = (String)uidAtt.get();
+	     			d.put("uid",uid);
+	     			vUtil.addElement(d);
+	     			Attribute snAtt = (Attribute) dico.get("sn");
+	     			String sn = (String)snAtt.get();
+	     			d.put("sn",sn);
+	     			vUtil.addElement(d);
+	     			Attribute givenNameAtt = (Attribute) dico.get("givenName");
+	     			String givenName = (String)givenNameAtt.get();
+	     			d.put("givenName",givenName);
+	     			vUtil.addElement(d);
+	     			Attribute mailAtt = (Attribute) dico.get("mail");
+	     			String mail = (String)mailAtt.get();
+	     			d.put("mail",mail);
+	     			vUtil.addElement(d);
+	     			Attribute stAtt = (Attribute) dico.get("st");
+	     			String st = (String)stAtt.get();
+	     			d.put("st",st);
+	     			vUtil.addElement(d);
+	     			Attribute ouAtt = (Attribute) dico.get("ou");
+	     			String ou = (String)ouAtt.get();
+	     			d.put("ou",ou);
+	     			vUtil.addElement(d);
+	             }
+			return vUtil;
 		} else {
 			// Sinon, opération refusée
 			logger.info("Permission non accordée. Utilisateurs non listés");
