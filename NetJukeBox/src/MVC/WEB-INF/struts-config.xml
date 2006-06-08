@@ -653,7 +653,7 @@
             name="listeForm"
             type="action.listeUtilAction">
             <forward name="failed" path="/erreur.jsp" />
-            <forward name="ok" path="/afficheUtilListe.jsp" />
+            <forward name="ok" path="/afficheUtilisateurListe.jsp" />
         </action>
 		
 		<!--MODIFICATION-->
