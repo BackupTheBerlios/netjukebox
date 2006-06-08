@@ -283,31 +283,26 @@ public boolean executeSupprimer(String login) throws NamingException {
 			//if (!newnom.equalsIgnoreCase(nomactuel))
 		    mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("sn", newnom));
-		    System.err.println(newnom);
 		    
 		    // Remplace la valeur de l'attribut MAIL avec la nouvelle valeur
 		    //if (!newmail.equalsIgnoreCase(mailactuel))
 		    mods[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("mail", newmail));
-		    System.err.println(newmail);
 		    
 		    // Remplace la valeur de l'attribut GIVENNAME avec la nouvelle valeur
 		    //if (!newprenom.equalsIgnoreCase(prenomactuel))
 		    mods[2] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("givenName", newprenom));
-		    System.err.println(newprenom);
 		    
 		    // Remplace la valeur de l'attribut ST avec la nouvelle valeur
 		    //if (!newpays.equalsIgnoreCase(paysactuel))
 		    mods[3] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("st", newpays));
-		    System.err.println(newpays);
 		    
 		    // Remplace la valeur de l'attribut ST avec la nouvelle valeur
 		    //if (!newpwd.equalsIgnoreCase(pwdactuel))
 		    mods[4] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 			new BasicAttribute("userPassword", newpwd));
-		    System.err.println(newpwd);
 		    
 		    String newcn = newnom + " " + newprenom;
 		    // Remplace la valeur de l'attribut CN avec la nouvelle valeur
@@ -323,8 +318,8 @@ public boolean executeSupprimer(String login) throws NamingException {
 				} else { newcn=(nomactuel+ " " + prenomactuel);
 				}
 			}*/
-		    mods[5] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("cn", newcn));
-		    System.err.println(newcn);
+		    mods[5] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+		    		new BasicAttribute("cn", newcn));
 		    
 		    // Modifie les attributs de l'objet
 		    connect.modifyAttributes(requete, mods);
@@ -404,9 +399,16 @@ public boolean executeSupprimer(String login) throws NamingException {
 	 */
 	public boolean changerRole(String login, String ancienrole, String nouveaurole){
 		logger.debug("Démarrage: changerRole");
+		
 		String ancien = "uid=" + login + ", ou=" + ancienrole;
 		String nouveau = "uid=" + login + ", ou=" + nouveaurole;
+		String requete = "uid=" + login + ",ou=" + ancienrole;
+		ModificationItem[] mods = new ModificationItem[1];
+		
 		try {
+			mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+			new BasicAttribute("ou", nouveaurole));
+			connect.modifyAttributes(requete, mods);
 			connect.rename(ancien, nouveau);
 			//System.out.println(connect.lookup(nouveau));
 			logger.debug("Arrêt: changerRole");

@@ -388,11 +388,13 @@ public class Utilisateur {
 	 * Modifier les informations de l'utilisateur
 	 * @throws NamingException 
 	 */
+	@SuppressWarnings("static-access")
 	public boolean modifier(String login, String role, String newlogin, String pwd, String nom, String prenom, String mail, String pays) throws NamingException {
 		logger.debug("Démarrage: modifierInfos");
 		
 		Ldap ldap = Ldap.getInstance();
 		ldap.ModifieAttributs(login, role, newlogin, pwd, nom, prenom, mail, pays);
+		
 		this.login = login;
 		this.pwd = pwd;
 		this.nom=nom;
