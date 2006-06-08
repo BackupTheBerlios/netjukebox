@@ -1330,7 +1330,7 @@ public class XMLClient {
 				return (Vector) clientXML.execute("Systeme.listerUtilisateur", params);
 
 			} catch (Exception e) {
-				System.err.println("ERREUR : " + e);
+				System.err.println("=======ERREUR : " + e);
 				return null;
 			}
 

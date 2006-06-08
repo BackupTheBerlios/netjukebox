@@ -12,7 +12,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 import java.util.prefs.Preferences;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.media.Manager;
@@ -20,9 +19,6 @@ import javax.media.MediaLocator;
 import javax.media.Player;
 import javax.media.Time;
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -94,11 +90,13 @@ public class Systeme {
 	/**
 	 * Timer
 	 */
+	@SuppressWarnings("unused")
 	private Timer timer;
 	
 	/**
 	 * Threads de diffusion
 	 */
+	@SuppressWarnings("unused")
 	private Hashtable tasks;
 	
 // CONSTRUCTEUR
@@ -235,8 +233,8 @@ public class Systeme {
 			String portldap = prefs.node("ldap").get("port", null);
 			String baseNameldap = prefs.node("ldap").get("base", null);
 			String authldap = prefs.node("ldap").get("auth", null);
-			String login = prefs.node("ldap").get("login", null);
-			String pwdldap = prefs.node("ldap").get("pwd", null);
+			@SuppressWarnings("unused") String login = prefs.node("ldap").get("login", null);
+			@SuppressWarnings("unused") String pwdldap = prefs.node("ldap").get("pwd", null);
 							
 			String urlldap = typeldap + "://" + ipldap + ":" + portldap + "/" + baseNameldap;
 				
@@ -258,7 +256,7 @@ public class Systeme {
 				utilisateurs.put(loginldap, util);
 				
 				//On planifie sa tâche PING
-				PingTask task = new PingTask(loginldap, ipClient, portXML, this);
+				@SuppressWarnings("unused") PingTask task = new PingTask(loginldap, ipClient, portXML, this);
 				//timer.scheduleAtFixedRate(task, 1000, 60000);
 				
 				logger.info("Utilisateur "+loginldap+" connecté");
@@ -467,41 +465,8 @@ public class Systeme {
 
 		//On vérifie que l'utilisateur a la permission
 		if (verifPermission(login, "listerUtilisateur")) {
-			Vector vUtil = Utilisateur.listerUtilisateur();		
 			
-			
-			//Vecteur d'attributs à retourner
-			Vector liste = new Vector();
-	 		Dictionary d = new Hashtable();
-	 		
-	 		for(int i=0; i < liste.size(); i++)
-	            if(liste.elementAt(i) != null){
-	            	Attributes dico = (Attributes)liste.elementAt(i);
-	             	Attribute uidAtt = (Attribute) dico.get("uid");
-	     			String uid = (String)uidAtt.get();
-	     			d.put("uid",uid);
-	     			vUtil.addElement(d);
-	     			Attribute snAtt = (Attribute) dico.get("sn");
-	     			String sn = (String)snAtt.get();
-	     			d.put("sn",sn);
-	     			vUtil.addElement(d);
-	     			Attribute givenNameAtt = (Attribute) dico.get("givenName");
-	     			String givenName = (String)givenNameAtt.get();
-	     			d.put("givenName",givenName);
-	     			vUtil.addElement(d);
-	     			Attribute mailAtt = (Attribute) dico.get("mail");
-	     			String mail = (String)mailAtt.get();
-	     			d.put("mail",mail);
-	     			vUtil.addElement(d);
-	     			Attribute stAtt = (Attribute) dico.get("st");
-	     			String st = (String)stAtt.get();
-	     			d.put("st",st);
-	     			vUtil.addElement(d);
-	     			Attribute ouAtt = (Attribute) dico.get("ou");
-	     			String ou = (String)ouAtt.get();
-	     			d.put("ou",ou);
-	     			vUtil.addElement(d);
-	             }
+			Vector vUtil = Utilisateur.listerUtilisateur();
 			return vUtil;
 		} else {
 			// Sinon, opération refusée
@@ -3058,7 +3023,7 @@ class PingTask extends TimerTask {
 			Vector params = new Vector();
 
 			// Adresse la requête et affiche les résultats
-			String result = (String) clientXML.execute("TestXML.testConnectXML", params);		
+			@SuppressWarnings("unused") String result = (String) clientXML.execute("TestXML.testConnectXML", params);		
 		
 		} catch (Exception e) {
 			logger.info("ERREUR: ", e);
