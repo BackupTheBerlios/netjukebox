@@ -152,7 +152,7 @@ public class RTPServer implements ControllerListener {
 	public void programmer(Vector medias) {
 		
 		//Si on a encore des médias à diffuser
-		if (cDiffuse && medias.size()>0 && mediaEnCours<medias.size()) {
+		if (cDiffuse && !cDiffusePub && medias.size()>0 && mediaEnCours<medias.size()) {
 			
 			//On ajoute les nouveaux médias à la liste actuelle
 			this.medias.addAll(medias);
