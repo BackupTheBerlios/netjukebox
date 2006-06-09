@@ -14,6 +14,7 @@ import javax.media.MediaLocator;
 import javax.media.Processor;
 import javax.media.RealizeCompleteEvent;
 import javax.media.control.TrackControl;
+import javax.media.format.AudioFormat;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.DataSource;
 import javax.media.protocol.PushBufferDataSource;
@@ -233,7 +234,7 @@ public class RTPServer implements ControllerListener {
 				}
 			}
 			setTrackFormat(p);
-			p.setContentDescriptor(new ContentDescriptor(ContentDescriptor.RAW/*_RTP*/));
+			p.setContentDescriptor(new ContentDescriptor(ContentDescriptor.RAW_RTP));
 			p.realize();
 			while (!pRealized) {
 				try {
@@ -331,20 +332,26 @@ public class RTPServer implements ControllerListener {
 		boolean atLeastOneTrack = false;
 		// Program the tracks.
 		for (int i = 0; i < tracks.length; i++) {
-			Format format = tracks[i].getFormat();
+			AudioFormat format = (AudioFormat)tracks[i].getFormat();
 			System.out.println("File Format: "+format);
+			
 			if (tracks[i].isEnabled()) {
 				supported = tracks[i].getSupportedFormats();
-				for (int n = 0; n < supported.length; n++)
-					System.out.println("Supported format: " + supported[n]);
+				
+				int indiceFormat = 0;
+				for (int n = 0; n < supported.length; n++) {
+					AudioFormat f = (AudioFormat)supported[n];
+					System.out.println("Supported format: " + f);
+					
+					if (indiceFormat==0 && f.getSampleRate()==format.getSampleRate()) indiceFormat = n;
+				}
 				// We've set the output content to the RAW_RTP.
 				// So all the supported formats should work with RTP.
 				// We'll just pick the first one.
 				if (supported.length > 0) {
-					chosen = supported[0];
+					chosen = supported[indiceFormat];
 					tracks[i].setFormat(chosen);
-					System.err
-							.println("Track " + i + " is set to transmit as:");
+					System.err.println("Track " + i + " is set to transmit as:");
 					System.err.println("  " + chosen);
 					atLeastOneTrack = true;
 				} else

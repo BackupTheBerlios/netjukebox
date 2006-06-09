@@ -1,13 +1,14 @@
 package proto.serveur;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
 import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 /**
  * Programme de diffusion
@@ -44,7 +45,7 @@ public class Programme {
 	/**
 	 * Liste des documents associés au programme
 	 */
-	private Hashtable documents = new Hashtable();
+	private TreeMap documents = new TreeMap();
 	
 	/**
 	 * Durée du programme
@@ -197,9 +198,9 @@ public class Programme {
 		//Si la suppression s'est bien déroulée
 		if (nbRows>0) {
 			
-			Enumeration calages = documents.keys();
-			while (calages.hasMoreElements()) {
-				long calage = (Long)calages.nextElement();
+			Iterator calages = documents.keySet().iterator();
+			while (calages.hasNext()) {
+				long calage = (Long)calages.next();
 				Document doc = (Document)documents.get(calage);
 				if (doc.getId().equals(id)) {
 					documents.remove(calage);
@@ -225,11 +226,13 @@ public class Programme {
 	public void ajouterProgramme(Programme prog) {
 		logger.debug("Démarrage: ajouterProgramme");
 		//On récupère la liste des docs du programme à ajouter
-		Enumeration listeDocs = prog.getDocuments().elements();
+		TreeMap docs = prog.getDocuments();
+		Iterator listeDocs = docs.keySet().iterator();
+		//Enumeration listeDocs = prog.getDocuments().elements();
 		
 		//Pour chaque doc, on l'ajoute au programme courant
-		while (listeDocs.hasMoreElements()) {
-			ajouterDocument((Document)listeDocs.nextElement());
+		while (listeDocs.hasNext()) {
+			ajouterDocument((Document)docs.get(listeDocs.next()));
 		}
 		logger.debug("Arrêt: ajouterProgramme");
 	}
@@ -241,7 +244,7 @@ public class Programme {
 	 * Retourne la liste des documents associés au programme
 	 * @return Hashtable
 	 */
-	public /*pure*/ Hashtable listerDocuments() {
+	public /*pure*/ TreeMap listerDocuments() {
 		return documents;
 	}
 	
@@ -264,9 +267,9 @@ public class Programme {
 		Dictionary dicoDoc;
 		Document doc;
 		
-		Enumeration horaires = documents.keys();
-		while (horaires.hasMoreElements()) {
-			long horaire = (Long)horaires.nextElement();
+		Iterator horaires = documents.keySet().iterator();
+		while (horaires.hasNext()) {
+			long horaire = (Long)horaires.next();
 			doc = (Document)documents.get(horaire);
 			dicoDoc = new Hashtable();
 			dicoDoc.put("calage", Long.toString(horaire));
@@ -289,7 +292,7 @@ public class Programme {
 		logger.info("Programme.getDocumentsProgrammes()");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
-		Hashtable docs = new Hashtable();
+		TreeMap docs = new TreeMap();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
 		String requete = "SELECT id_doc, calage FROM composer WHERE id_prog = '"+id+"';";
@@ -338,7 +341,7 @@ public class Programme {
 	 * Retourne les documents associés au programme
 	 * @return Vector of Document
 	 */
-	public /*pure*/ Hashtable getDocuments() {
+	public /*pure*/ TreeMap getDocuments() {
 		return documents;
 	}
 

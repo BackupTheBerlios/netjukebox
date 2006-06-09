@@ -1,13 +1,15 @@
 package proto.serveur;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -79,7 +81,9 @@ public class Canal {
 	/**
 	 * Liste de programmes à diffuser
 	 */
-	private Hashtable programmes;
+	//private Hashtable programmes;
+	private TreeMap programmes;
+	
 	
 	/**
 	 * Timer
@@ -161,12 +165,12 @@ public class Canal {
 			boolean trouveProgSuivant = false;
 			Programme progPrecedent=null, progSuivant=null, prog;
 			long horairePrecedent=0, horaireSuivant=0;
-			Enumeration horaires = programmes.keys();
+			Iterator horaires = programmes.keySet().iterator();
 			
-			while (horaires.hasMoreElements() && !trouveProgSuivant) {
+			while (horaires.hasNext() && !trouveProgSuivant) {
 				
 				//On récupère l'horaire
-				long horaireProg = (Long)horaires.nextElement();
+				long horaireProg = (Long)horaires.next();
 				
 				//On récupère le programme
 				prog = (Programme)programmes.get(horaireProg);
@@ -256,6 +260,12 @@ public class Canal {
 				
 				//On met à jour le vecteurs d'association
 				programmes.put(horaire.getTimeInMillis(), p);
+				
+				//On planifie la tâche de diffusion
+			    DiffusionTask task = new DiffusionTask(p, this);
+			    timer.schedule(task, horaire.getTime());
+			    tasks.put(horaire.getTime(), task);
+			    
 				logger.debug("Arrêt: planifierProgramme");
 				return true;
 			}
@@ -315,7 +325,8 @@ public class Canal {
 		logger.debug("Démarrage: setProgrammesPlanifies");
 		
 		//On crée un vecteur pour contenir les objets documents instanciés
-		Hashtable progs = new Hashtable();
+		//Hashtable progs = new Hashtable();
+		TreeMap progs = new TreeMap();
 		
 		//On va chercher dans la base la liste des id de tous les programmes
 		String requete = "SELECT id_prog, calage FROM diffuser WHERE id_canal = '"+this.id+"';";
@@ -376,9 +387,9 @@ public class Canal {
 		Dictionary dicoProg;
 		Programme prog;
 		
-		Enumeration horaires = programmes.keys();
-		while (horaires.hasMoreElements()) {
-			long horaire = (Long)horaires.nextElement();
+		Iterator horaires = programmes.keySet().iterator();
+		while (horaires.hasNext()) {
+			long horaire = (Long)horaires.next();
 			prog = (Programme)programmes.get(horaire);
 			dicoProg = new Hashtable();
 			dicoProg.put("calage", Long.toString(horaire));
@@ -436,11 +447,11 @@ public class Canal {
 			this.RTP.stop();
 			
 			//On programme les diffusions
-			Enumeration calages = programmes.keys();
+			Iterator calages = programmes.keySet().iterator();
 			GregorianCalendar horaire = new GregorianCalendar();
-			
-			while (calages.hasMoreElements()) {
-				Long calage = (Long)calages.nextElement();
+
+			while (calages.hasNext()) {
+				Long calage = (Long)calages.next();
 				Programme p = (Programme)programmes.get(calage);
 				horaire.setTimeInMillis(calage);
 			    DiffusionTask task = new DiffusionTask(p, this);
@@ -522,10 +533,12 @@ public class Canal {
 		logger.info("Le programme " +  p.getTitre() + " est en cours de diffusion");
 		
 		Vector medias = new Vector();
-		Enumeration docs = p.getDocuments().elements();
+		TreeMap documents = p.getDocuments();
+		Iterator calages = documents.keySet().iterator();
 		
-		for(int i = 0; i < p.getDocuments().size(); i++) {
-			medias.addElement(docs.nextElement());
+		
+		while (calages.hasNext()) {
+			medias.addElement(documents.get(calages.next()));
 		}
 		
 		if (RTP!=null) {
