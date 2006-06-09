@@ -152,7 +152,7 @@ public class RTPServer implements ControllerListener {
 	public void programmer(Vector medias) {
 		
 		//Si on a encore des médias à diffuser
-		if (cDiffuse && !cDiffusePub && medias.size()>0 && mediaEnCours<medias.size()) {
+		if (cDiffuse && /*!cDiffusePub &&*/ medias.size()>0 && mediaEnCours<medias.size()) {
 			
 			//On ajoute les nouveaux médias à la liste actuelle
 			this.medias.addAll(medias);
@@ -178,9 +178,9 @@ public class RTPServer implements ControllerListener {
 	 */
 	public void stop() {
 		System.out.println("Diffusion stoppée");
-		cDiffuse=false;
 		if (OutputSink != null) OutputSink.close();
 		//if (OutputStream != null) OutputStream.close();
+		cDiffuse=false;
 	}
 	
 	/**
@@ -383,10 +383,10 @@ public class RTPServer implements ControllerListener {
 				//OutputStream = null;
 				
 				//Si on diffuse autre chose que la pub
-				if (!cDiffusePub && medias.size()>0 && mediaEnCours<medias.size()) {
+				if (!cDiffusePub && medias.size()>0 && (mediaEnCours-1)<medias.size()) {
 					
 					//On signale la fin de diffusion au document
-					Document d = (Document)medias.elementAt(mediaEnCours);
+					Document d = (Document)medias.elementAt(mediaEnCours-1);
 					d.stopDiffusion(canal.getId(), canal.getAudimat());
 				}
 				
