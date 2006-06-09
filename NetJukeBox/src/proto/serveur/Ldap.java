@@ -81,12 +81,12 @@ public class Ldap{
 	/**
 	 * Connection courante à l'annuaire
 	 */
-	private static InitialDirContext connectanonyme = null;
+	private static InitialDirContext connect = null;
 	
 	/**
 	 * Connection via login & mot de passe à l'annuaire
 	 */
-	public DirContext connect = null;
+//public DirContext connect = null;
 	
 //	 CONSTRUCTEUR	
 //	********************************************
@@ -139,12 +139,15 @@ public boolean openLdap() {
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
 		env.put(DirContext.PROVIDER_URL, url);	
+		env.put(DirContext.SECURITY_AUTHENTICATION, auth);
+		env.put(DirContext.SECURITY_PRINCIPAL, login);
+		env.put(DirContext.SECURITY_CREDENTIALS, pwd);
 		
-	    if (connect == null) {
+	    //if (connect == null) {
 	    	try {
 	    		//Connexion à l'annuaire
-	    		connectanonyme = new InitialDirContext(env);
-	    		Dictionary resultats = getLogin(login);
+	    		connect = new InitialDirContext(env);
+	    		/**Dictionary resultats = getLogin(login);
 				logger.info("login :"+ login);
 				logger.info(resultats);
 				    		
@@ -167,8 +170,8 @@ public boolean openLdap() {
 	    		
 	    		connectanonyme = new InitialDirContext(env2);
 	    		connect = connectanonyme;
-	    		
-	    		logger.info("Vous avez été connecté à la base " + env2);								
+	    		*/
+	    		logger.info("Vous avez été connecté à la base " + env);								
 				logger.debug("Arrêt: openLdap");				
 	    		return true;
 	    			
@@ -177,9 +180,6 @@ public boolean openLdap() {
 				logger.debug("Arrêt: openLdap");
 				return false;
 	    	}
-	    }
-		logger.debug("Arrêt: openLdap");
-		return false;
 }
 	
 	/**
@@ -439,11 +439,12 @@ public boolean executeSupprimer(String login) throws NamingException {
 			
 			NamingEnumeration answer = null;
 			
-			if (connect==null){
-			answer = connectanonyme.search("", filter, ctls);
-			}
-			else {answer = connect.search("", filter, ctls);
-			}
+			//if (connect==null){
+			//answer = connectanonyme.search("", filter, ctls);
+			//}
+			//else {
+			answer = connect.search("", filter, ctls);
+			//}
 						
 			
 			//Print the answer
@@ -489,9 +490,10 @@ public boolean executeSupprimer(String login) throws NamingException {
 		String requete = "uid=" + login + ",ou=" + role;
 		try {
 			Attributes answer = null;
-			if (connect==null)
-			answer = connectanonyme.getAttributes(requete);
-			else answer = connect.getAttributes(requete);
+			//if (connect==null)
+			//answer = connectanonyme.getAttributes(requete);
+			//else 
+			answer = connect.getAttributes(requete);
 			Dictionary ligne = printAttrs(answer);
 			return ligne;
 		} catch (Exception e) {
