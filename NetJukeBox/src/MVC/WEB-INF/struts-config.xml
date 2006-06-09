@@ -583,6 +583,15 @@
             <forward name="ok" path="/afficheRole.jsp" />
         </action>
 		
+		<action
+            path="/infoUtil"
+            input="/infoUtil.jsp"
+            name="supprUtilForm"
+            type="action.infoUtilisateurAction">
+            <forward name="failed" path="/erreur.jsp" />
+            <forward name="ok" path="/afficheUtilisateurInfo.jsp" />
+        </action>
+		
 		<!--LISTE-->
 		<action
             path="/listeCanal"
