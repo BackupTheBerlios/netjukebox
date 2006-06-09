@@ -1,14 +1,12 @@
 package action;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import org.ini4j.IniFile;
 import plugin.XMLClient;
-import form.NewCanalForm;
+import form.pwdPerduForm;
 
 public class pwdPerduAction extends Action {
 
@@ -16,11 +14,6 @@ public class pwdPerduAction extends Action {
 	 * Chemin du fichier d'initialisation
 	 */
 	private String filename = "/home/admindg/Workspace/MVC/WEB-INF/src/plugin/client.ini";
-	
-	/**
-	 * Client XMLRPC
-	 */
-	private XMLClient newClient = null;
 	
 	/**
 	 * Connection
@@ -48,14 +41,23 @@ public class pwdPerduAction extends Action {
 		//clientXML = (XMLClient) session.getAttribute("client");
 		clientXML = XMLClient.getInstance();
 		
-		NewCanalForm canalForm = (NewCanalForm)form;
+		pwdPerduForm utilForm = (pwdPerduForm)form;
 
-		String login = canalForm.getNom();
+		String login = utilForm.getLogin();
 		
 		response.setContentType("text/html");
 		
-		clientXML = initializeXML();
-		boolean envoi = ((XMLClient) clientXML).recherchepwd(login);
+		sessionLogin = "anonymous";
+		String pwd = "anonymous";
+		
+		Preferences prefs = new IniFile(new File(filename));
+		String port = prefs.node("serveur").get("port", null);
+		String ip = prefs.node("serveur").get("ip", null);
+		
+		clientXML = XMLClient.getInstance(ip, port);
+		((XMLClient) clientXML).connexion(sessionLogin, pwd);
+		
+		boolean envoi = ((XMLClient) clientXML).recherchepwd(sessionLogin, login);
 		
 		if (envoi) {			
 			return mapping.findForward("ok");
@@ -65,45 +67,5 @@ public class pwdPerduAction extends Action {
 			session.setAttribute("Resultat" , erreur);			
 			return mapping.findForward("failed");
 		}	
-	}
-	
-	/**
-	 * Initialisation du client XMLRPC
-	 * @return Object
-	 */
-	private Object initializeXML() {
-		
-		//Si le client XML n'est pas déjà initialisé
-		if (newClient == null) {
-
-			try {
-				Preferences prefs = new IniFile(new File(filename));
-				String port = prefs.node("serveur").get("port", null);
-				String ip = prefs.node("serveur").get("ip", null);
-				
-				//On initialise le client
-				newClient = new XMLClient(ip, port);
-			
-				try {
-					//On essaye de se connecter au serveur XML
-					if (newClient.testConnectXML(InetAddress.getLocalHost().getHostAddress())) {
-						System.err.println("INFO: Serveur XML contacté avec succès !");
-						return newClient;
-					}
-					else System.err.println("WARNING: Serveur XML injoignable !");
-					return false;
-				} catch (Exception e) {
-					System.err.println("ERREUR: "+e);
-					return false;
-				}
-			} catch (BackingStoreException e1) {
-				e1.printStackTrace();
-				return false;
-			}
-		//Sinon, déjà initialisé
-		} else {
-			System.err.println("WARNING: Client XML déjà initialisé !");
-			return false;
-		}
 	}
 }

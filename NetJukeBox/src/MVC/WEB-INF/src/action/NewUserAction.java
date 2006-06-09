@@ -1,7 +1,12 @@
 package action;
 
+import java.io.File;
+import java.util.prefs.Preferences;
+
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
+import org.ini4j.IniFile;
+
 import form.NewUserForm;
 import plugin.XMLClient;
 
@@ -16,6 +21,11 @@ public class NewUserAction extends Action {
 	 * Login de l'utilisateur sur la session
 	 */
 	private String sessionLogin;
+	
+	/**
+	 * Chemin du fichier d'initialisation
+	 */
+	private String filename = "/home/admindg/Workspace/MVC/WEB-INF/src/plugin/client.ini";
 	
 	/** 
 	 * Method execute
@@ -33,6 +43,18 @@ public class NewUserAction extends Action {
 		//clientXML = (XMLClient) session.getAttribute("client");
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
+		
+		if (sessionLogin==null){
+			sessionLogin = "anonymous";
+			String pwd = "anonymous";
+			
+			Preferences prefs = new IniFile(new File(filename));
+			String port = prefs.node("serveur").get("port", null);
+			String ip = prefs.node("serveur").get("ip", null);
+			
+			clientXML = XMLClient.getInstance(ip, port);
+			((XMLClient) clientXML).connexion(sessionLogin, pwd);
+		}
 		
 		NewUserForm userForm = (NewUserForm)form;
 		

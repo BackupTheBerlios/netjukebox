@@ -70,6 +70,10 @@ public class LoginAction extends Action {
 			//session.setAttribute("client", clientXML);
 			session.setAttribute("login", login);
 			//Redirection vers le sommaire
+			
+			String ipclient = request.getRemoteAddr();
+			System.err.println(ipclient);
+			
 			return mapping.findForward("ok");    
 		} else {
 			return mapping.findForward("failed");
