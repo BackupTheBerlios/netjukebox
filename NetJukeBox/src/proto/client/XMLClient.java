@@ -1330,7 +1330,7 @@ public class XMLClient {
 				return (Vector) clientXML.execute("Systeme.listerUtilisateur", params);
 
 			} catch (Exception e) {
-				System.err.println("=======ERREUR : " + e);
+				System.err.println("ERREUR : " + e);
 				return null;
 			}
 
@@ -1340,7 +1340,29 @@ public class XMLClient {
 			return null;
 		}*/
 	}
-	
+	/**
+	 * Information d'un Utilisateur du système
+	 * @param login
+	 * @param idlogin
+	 * @return Vector
+	 */
+	@SuppressWarnings("unchecked")
+	public Vector infoUtilisateur(String login, String idlogin ) {
+		System.out.println("INFO: infos d'un utilisateur...");
+		try {
+			// Création de la requête
+			Vector params = new Vector();
+			params.addElement(login);
+			params.addElement(idlogin);
+
+			// Adresse la requête et affiche les résultats
+			return (Vector) clientXML.execute("Systeme.infoUtilisateur", params);
+
+		} catch (Exception e) {
+			System.err.println("ERREUR : " + e);
+			return null;
+		}
+	}
 	
 	/**
 	 * Recherche du mot de passe de l'utilisateur

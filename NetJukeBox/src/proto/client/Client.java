@@ -1099,6 +1099,62 @@ public class Client {
 					}
 				}
 				
+				//INFOS UTILISATEUR
+				if  (ligne.equalsIgnoreCase("infoUtilisateur")) {
+					if (etatConnecte) {
+						System.out.print("login: ");
+						String idlogin = lire();
+						
+						//On affiche ses infos
+						Vector vUtilisateur = clientXML.infoUtilisateur(login, idlogin);
+							
+							if (vUtilisateur!=null && vUtilisateur.size()>0) {
+								//Parcours du vecteur, affichage des infos
+								Dictionary v;
+									
+									v = (Dictionary)vUtilisateur.get(1);
+									System.out.println("----------------- Utilisateur -------------------");
+									System.out.println("Login: "+v.get("login"));
+									System.out.println("Mot de passe: "+v.get("pwd"));
+									System.out.println("Nom: "+v.get("nom"));
+									System.out.println("Prenom: "+v.get("prenom"));
+									System.out.println("Mail: "+v.get("mail"));
+									System.out.println("Pays: "+v.get("pays"));
+									System.out.println("Role: "+v.get("role"));
+									System.out.println("----------------------------------------------");
+									System.out.println();
+									
+								System.out.println("INFO: Infos Permissions de l'Utilisateur :");
+								System.out.println();
+								
+								//Récupération des permissions exceptionnelles de l'utilisateur
+								Vector v1 = (Vector) v.get("permutil");
+								for(int i = 0; i < v1.size(); i++){
+									Dictionary d = (Dictionary) v1.get(i);
+									System.out.println(d.get("id") + " : " + d.get("libelle"));
+								}
+								System.out.println();
+								System.out.println("INFO: Permissions exptionnelles de l'Utilisateur");
+								System.out.println("----------------------------------------------");
+								System.out.println();
+								
+								//Récupération des permissions de l'utilisateur liées à son rôle 
+								Vector v2 = (Vector) v.get("permrole");
+								for(int i = 0; i < v2.size(); i++){
+									Dictionary d = (Dictionary) v2.get(i);
+									System.out.println(d.get("id") + " : " + d.get("libelle"));
+								}
+								
+								System.out.println();
+								System.out.println("INFO: Permissions de l'Utilisateur liées au role");
+								System.out.println("----------------------------------------------");
+								
+							} else System.err.println("WARNING: Aucune données disponible");
+						} else {
+							System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+						}
+				}
+				
 				// AJOUTERPERMISSIONUTILISATEUR
 				if  (ligne.equalsIgnoreCase("ajouterPermissionUtilisateur")) {
 					if (etatConnecte) {
@@ -1941,6 +1997,7 @@ public class Client {
 					System.out.println(" ajouterPermissionUtilisateur : ajouter une permission à un utilisateur");
 					System.out.println(" retirerPermissionUtilisateur : retirer une permission d'un utilisateur");
 					System.out.println(" changerRoleUtilisateur : changer le role d'un utilisateur");
+					System.out.println(" infoUtilisateur : afficher les informations sur un utilisateur");
 					
 					System.out.println(" creerContractant : créer un contractant");
 					System.out.println(" modifierContractant : modifier un contractant");

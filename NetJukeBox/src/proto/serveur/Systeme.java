@@ -474,7 +474,62 @@ public class Systeme {
 			return null;
 		}
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Vector infoUtilisateur(String login, String idlogin) throws NamingException {
+		//On vérifie que l'utilisateur a la permission
+		if (verifPermission(login, "infoUtilisateur")) {
+				Utilisateur u = Utilisateur.getByLogin(idlogin);
+			
+				//Vecteur d'attributs à retourner
+				Vector vUtilisateur = new Vector();
+				Dictionary dico = new Hashtable();
+				
+				//Ajout des infos de l'utilisateur
+				dico.put("login", u.getLogin());
+				vUtilisateur.addElement(dico);
+				dico.put("pwd", u.getPwd());
+				vUtilisateur.addElement(dico);
+				dico.put("nom", u.getNom());
+				vUtilisateur.addElement(dico);
+				dico.put("prenom", u.getPrenom());
+				vUtilisateur.addElement(dico);
+				dico.put("mail", u.getMail());
+				vUtilisateur.addElement(dico);
+				dico.put("pays", u.getPays());
+				vUtilisateur.addElement(dico);
+				dico.put("role", u.getRole().getId());
+				vUtilisateur.addElement(dico);
 
+				//Ajout des permissions exceptionnelles de l'utilisateur
+				 Enumeration perms = u.getPermissions().elements();
+				 if (perms!=null){
+					 Vector v = new Vector();
+					 while (perms.hasMoreElements()) {
+						 Permission perm = (Permission) perms.nextElement();
+						 Dictionary d = perm.getAttributesDictionary();
+						 v.addElement(d);
+					 }
+					 	dico.put("permutil", v);
+					 	vUtilisateur.addElement(dico);
+				 }
+				
+				 //Ajout des permissions de l'utilisateur liées à son rôle
+				Dictionary d2 = (Dictionary) u.getRole().getAttributesDictionary();
+				Vector v = (Vector) d2.get("permissions");
+				dico.put("permrole", v);
+				vUtilisateur.addElement(dico);
+				
+			return vUtilisateur;		
+				
+			} else {
+				// Sinon, opération refusée
+				logger.info("Permission non accordée. Recherche non effectuées");
+				return null;
+			}
+	}
+	
 	/**
 	 * Modification des attributs d'un utilisateur
 	 * @param login
