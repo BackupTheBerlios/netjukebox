@@ -351,7 +351,7 @@ public class Systeme {
 		logger.info("Inscription de l'utilisateur "+log);
 
 		//On vérifie que l'utilisateur a la permission
-		if (verifPermission(login, "inscriptionUtilisateur")) {
+		if (login.equals("anonymous") || verifPermission(login, "inscriptionUtilisateur")) {
 		
 			//On vérifie que le login n'existe pas
 			if (!Utilisateur.verifierLogin(log)) {

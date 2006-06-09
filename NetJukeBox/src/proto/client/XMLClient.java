@@ -1377,7 +1377,7 @@ public class XMLClient {
 			try {
 				// Création de la requête
 				Vector params = new Vector();
-				params.addElement(login);
+				//params.addElement(login);
 				params.addElement(log);
 
 				// Adresse la requête et affiche les résultats

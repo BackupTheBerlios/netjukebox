@@ -934,27 +934,53 @@ public class Client {
 				
 				// INSCRIPTION
 				if  (ligne.equalsIgnoreCase("inscrireUtilisateur")) {
-					if (etatConnecte) {
-						System.out.print("prenom: ");
-						String prenom = lire();
-						System.out.print("nom: ");
-						String nom = lire();
-						System.out.print("login: ");
-						String log = lire();
-						System.out.print("password: ");
-						String pass = lire();
-						System.out.print("email: ");
-						String email = lire();
-						System.out.print("pays: ");
-						String pays = lire();
-						
-						if (clientXML.inscription(login, log, pass, email, nom, prenom, pays)) {
-							System.err.println("INFO: Utilisateur inscrit");
-						}
-						else System.err.println("WARNING: Inscription impossible");
+					System.out.print("prenom: ");
+					String prenom = lire();
+					System.out.print("nom: ");
+					String nom = lire();
+					System.out.print("login: ");
+					String log = lire();
+					System.out.print("password: ");
+					String pass = lire();
+					System.out.print("email: ");
+					String email = lire();
+					System.out.print("pays: ");
+					String pays = lire();
+
+					if (!etatConnecte) {
+						login = "anonymous";
+						String pwd = "anonymous";
+						clientXML.connexion(login, pwd);
 					}
-					else {
-						System.err.print("WARNING: Vous n'êtes pas connecté au serveur !");
+
+					if (clientXML.inscription(login, log, pass, email, nom, prenom, pays)) {
+						System.err.println("INFO: Utilisateur inscrit");
+						
+						if (login.equalsIgnoreCase("anonymous")) {
+							clientXML.deconnexion(login);
+						}
+						
+					} else {
+						System.err.println("WARNING: Inscription impossible");
+					}
+				}
+				
+				//RECHERCHERMOTDEPASSE
+				if  (ligne.equalsIgnoreCase("rechercherPassword")) {
+					System.out.print("login: ");
+					String log = lire();
+				
+					login = "anonymous";
+					String pwd = "anonymous";
+					clientXML.connexion(login, pwd);
+					
+					if (clientXML.recherchepwd(login, log)) {
+						System.err.println("INFO: Mot de passe envoyé");
+						
+						clientXML.deconnexion(login);
+						
+					} else {
+						System.err.println("WARNING: Erreur");
 					}
 				}
 				
@@ -1998,6 +2024,7 @@ public class Client {
 					System.out.println(" retirerPermissionUtilisateur : retirer une permission d'un utilisateur");
 					System.out.println(" changerRoleUtilisateur : changer le role d'un utilisateur");
 					System.out.println(" infoUtilisateur : afficher les informations sur un utilisateur");
+					System.out.println(" rechercherPassword : rechercher mot de passe");
 					
 					System.out.println(" creerContractant : créer un contractant");
 					System.out.println(" modifierContractant : modifier un contractant");
