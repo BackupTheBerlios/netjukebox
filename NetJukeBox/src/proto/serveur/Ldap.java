@@ -86,7 +86,7 @@ public class Ldap{
 	/**
 	 * Connection via login & mot de passe à l'annuaire
 	 */
-//public DirContext connect = null;
+	//public DirContext connect = null;
 	
 //	 CONSTRUCTEUR	
 //	********************************************
@@ -135,7 +135,7 @@ public class Ldap{
 public boolean openLdap() {
 		logger.debug("Démarrage: openLdap");
 			
-		String role = null;
+		//String role = null;
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(DirContext.INITIAL_CONTEXT_FACTORY,driver);
 		env.put(DirContext.PROVIDER_URL, url);	
