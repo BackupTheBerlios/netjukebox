@@ -30,24 +30,12 @@ public class deconnectAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		//clientXML = (XMLClient) session.getAttribute("client");
-		clientXML = XMLClient.getInstance();
-		sessionLogin = (String) session.getAttribute("login");
-		
+				
 		@SuppressWarnings("unused") deconnectForm deconnectForm = (deconnectForm)form;
 
 		response.setContentType("text/html");
 		
-		boolean etatConnecte = !clientXML.deconnexion(sessionLogin);
-		
-		if (!etatConnecte) {
-			session.invalidate();
-			return mapping.findForward("ok");
-		} else {
-			String erreur = "ERREUR: Utilisateur toujours connecté";
-			
-			session.setAttribute("Resultat" , erreur);
-			return mapping.findForward("failed");
-		}	
+		session.invalidate();
+		return mapping.findForward("ok");
 	}
 }

@@ -52,5 +52,13 @@
         <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>  
     </taglib>
 
+	<session-config>
+		<session-timeout>4</session-timeout>
+	</session-config>
+	
+	<listener>
+    	<listener-class>MyHttpSessionListener</listener-class>
+	</listener>
+	
 </web-app>
 

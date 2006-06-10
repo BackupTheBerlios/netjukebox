@@ -61,62 +61,21 @@ public class LoginAction extends Action {
 		
 		clientXML = XMLClient.getInstance(ip, port);
 		etatConnecte = ((XMLClient) clientXML).connexion(login, password);
-		
+		HttpSession session = request.getSession(true);
 		System.out.println(etatConnecte);
 		
 		if (etatConnecte) {
 			//Création d'une session de connexion
-			HttpSession session = request.getSession(true);
-			//session.setAttribute("client", clientXML);
 			session.setAttribute("login", login);
-			//Redirection vers le sommaire
 			
+			//Redirection vers le sommaire
 			String ipclient = request.getRemoteAddr();
 			System.err.println(ipclient);
 			
 			return mapping.findForward("ok");    
 		} else {
+			session.invalidate();
 			return mapping.findForward("failed");
 		}		
 	}
-	
-	/**
-	 * Initialisation du client XMLRPC
-	 * @return Object
-	 *//**
-	private Object initializeXML() {
-		
-		//Si le client XML n'est pas déjà initialisé
-		if (newClient == null) {
-
-			try {
-				Preferences prefs = new IniFile(new File(filename));
-				String port = prefs.node("serveur").get("port", null);
-				String ip = prefs.node("serveur").get("ip", null);
-				
-				//On initialise le client
-				newClient = new XMLClient(ip, port);
-			
-				try {
-					//On essaye de se connecter au serveur XML
-					if (newClient.testConnectXML(InetAddress.getLocalHost().getHostAddress())) {
-						System.err.println("INFO: Serveur XML contacté avec succès !");
-						return newClient;
-					}
-					else System.err.println("WARNING: Serveur XML injoignable !");
-					return false;
-				} catch (Exception e) {
-					System.err.println("ERREUR: "+e);
-					return false;
-				}
-			} catch (BackingStoreException e1) {
-				e1.printStackTrace();
-				return false;
-			}
-		//Sinon, déjà initialisé
-		} else {
-			System.err.println("WARNING: Client XML déjà initialisé !");
-			return false;
-		}
-	}*/
 }
