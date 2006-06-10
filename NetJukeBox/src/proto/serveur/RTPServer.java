@@ -343,7 +343,9 @@ public class RTPServer implements ControllerListener {
 					AudioFormat f = (AudioFormat)supported[n];
 					System.out.println("Supported format: " + f);
 					
-					if (indiceFormat==0 && f.getSampleRate()==format.getSampleRate()) indiceFormat = n;
+					//-- PATCH MEILLEUR FORMAT POSSIBLE --
+					//if (indiceFormat==0 && f.getSampleRate()==format.getSampleRate()) indiceFormat = n;
+					//-------------- PATCH ---------------
 				}
 				// We've set the output content to the RAW_RTP.
 				// So all the supported formats should work with RTP.
