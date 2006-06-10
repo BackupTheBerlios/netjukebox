@@ -1,5 +1,6 @@
 package action;
 
+import java.util.StringTokenizer;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import plugin.XMLClient;
@@ -31,7 +32,6 @@ public class startplayerAction extends Action {
 		HttpServletRequest request,	HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		//clientXML = (XMLClient) session.getAttribute("client");
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
 		
@@ -43,13 +43,23 @@ public class startplayerAction extends Action {
 		
 		String urlPlayer = clientXML.ecouterCanal(sessionLogin, id);
 		
-		if (urlPlayer != null) {
-			//RTPClient2 player = RTPClient2.getInstance();
-			//player.start(urlPlayer);
-			
+		if (urlPlayer != null) {			
 			String result = "INFO: Ecoute du canal lancée";
+
+			String ip = null;
+			String port = null;
+			StringTokenizer st = new StringTokenizer(urlPlayer);
 			
+			ip = st.nextToken("/");
+			
+			while (st.hasMoreTokens()) {
+				port = st.nextToken("/");
+			}
+			
+			session.setAttribute("audiosession" , ip);
+			session.setAttribute("audioport" , port);
 			session.setAttribute("Resultat" , result);
+			
 			return mapping.findForward("ok");
 		} else {
 			String erreur = "ERREUR: Ecoute du canal non lancée";

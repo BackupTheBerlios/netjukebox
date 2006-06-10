@@ -1,6 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ page language="Java" import="java.util.*" %>
 
 <html>
 	<head>
@@ -17,8 +16,8 @@
 
 		<jsp:params>	
       <jsp:param name="audio" value="On" />
-      <jsp:param name="audiosession" value="192.168.0.255" />
-      <jsp:param name="audioport" value="58502" />
+      <jsp:param name="audiosession" value="ip" />
+      <jsp:param name="audioport" value="port" />
    </jsp:params>	
 		
 		
