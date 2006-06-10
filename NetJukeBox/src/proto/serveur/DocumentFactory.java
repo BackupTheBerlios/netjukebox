@@ -329,4 +329,16 @@ public class DocumentFactory {
 		return false;
 	}
 	
+	/**
+	 * Réindexe la collection d'instances basée sur les titres
+	 * @param oldTitre
+	 * @param newTitre
+	 */
+	public static void updateByTitre(String oldTitre, String newTitre) {
+		logger.debug("Démarrage: updateByTitre");
+		Document d = (Document)instancesByTitre.get(oldTitre);
+		instancesByTitre.remove(oldTitre);
+		instancesByTitre.put(newTitre, d);
+		logger.debug("Arrêt: updateByTitre");
+	}
 }

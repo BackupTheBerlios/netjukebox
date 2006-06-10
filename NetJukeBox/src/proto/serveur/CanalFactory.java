@@ -253,4 +253,16 @@ public class CanalFactory {
 		return false;
 	}
 	
+	/**
+	 * Réindexe la collection d'instances basée sur les noms
+	 * @param oldNom
+	 * @param newNom
+	 */
+	public static void updateByNom(String oldNom, String newNom) {
+		logger.debug("Démarrage: updateByNom");
+		Canal c = (Canal)instancesByNom.get(oldNom);
+		instancesByNom.remove(oldNom);
+		instancesByNom.put(newNom, c);
+		logger.debug("Arrêt: updateByNom");
+	}
 }

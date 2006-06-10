@@ -189,6 +189,7 @@ public class Contractant {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			ContractantFactory.updateByNom(this.nom, nom);
 			this.nom = nom;
 			this.adresse = adresse;
 			this.codePostal = codePostal;
@@ -421,6 +422,7 @@ public class Contractant {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			ContractantFactory.updateByNom(this.nom, nom);
 			this.nom = nom;
 		}
 		logger.debug("Arrêt: setNom");

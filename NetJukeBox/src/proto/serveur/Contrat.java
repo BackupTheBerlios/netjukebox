@@ -209,6 +209,7 @@ public class Contrat {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			ContratFactory.updateByTitre(this.titre, titre);
 			this.titre = titre;
 			this.dateSignature = dateSignature;
 			this.dateExpiration = dateExpiration;
@@ -460,6 +461,7 @@ public class Contrat {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attribut de l'objet
 		if (nbRows>0) {
+			ContratFactory.updateByTitre(this.titre, titre);
 			this.titre = titre;
 		}
 		logger.debug("Arrêt: setTitre");

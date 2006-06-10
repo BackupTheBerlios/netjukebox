@@ -323,4 +323,17 @@ public class ContratFactory {
 		logger.debug("Arrêt: deleteById");
 		return false;
 	}
+	
+	/**
+	 * Réindexe la collection d'instances basée sur les titres
+	 * @param oldTitre
+	 * @param newTitre
+	 */
+	public static void updateByTitre(String oldTitre, String newTitre) {
+		logger.debug("Démarrage: updateByTitre");
+		Contrat c = (Contrat)instancesByTitre.get(oldTitre);
+		instancesByTitre.remove(oldTitre);
+		instancesByTitre.put(newTitre, c);
+		logger.debug("Arrêt: updateByTitre");
+	}
 }

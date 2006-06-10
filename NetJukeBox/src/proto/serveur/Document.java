@@ -266,6 +266,7 @@ public class Document {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			DocumentFactory.updateByTitre(this.titre, titre);
 			this.titre = titre;
 			this.dateParution = date;
 			this.source = source;
@@ -846,6 +847,7 @@ public class Document {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			DocumentFactory.updateByTitre(this.titre, titre);
 			this.titre = titre;
 		}
 		logger.debug("Arrêt: setTitre");

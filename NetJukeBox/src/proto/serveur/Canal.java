@@ -362,6 +362,7 @@ public class Canal {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			CanalFactory.updateByNom(this.nom, nom);
 			this.nom = nom;
 			this.utilMax = utilMax;
 		}
@@ -595,6 +596,7 @@ public class Canal {
 		
 		//Si la mise à jour s'est bien déroulée, on synchronise l'attibut de l'objet
 		if (nbRows>0) {
+			CanalFactory.updateByNom(this.nom, nom);
 			this.nom = nom;
 		}
 		logger.debug("Arrêt: setNom");
