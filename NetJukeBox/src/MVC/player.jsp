@@ -14,10 +14,10 @@
 	<jsp:plugin type="applet" code="RTPPlayerApplet.class"
 			codebase="/MVC" archive="jmf.jar, sound.jar" >
 
-		<jsp:params>	
-      <jsp:param name="audio" value="On" />
-      <jsp:param name="audiosession" value="ip" />
-      <jsp:param name="audioport" value="port" />
+	<jsp:params>	
+		<jsp:param name="audio" value="On" />
+		<jsp:param name="audiosession" value='<%=session.getAttribute("audiosession")%>' />   
+		<jsp:param name="audioport" value='<%=session.getAttribute("audioport")%>' />
    </jsp:params>	
 		
 		
