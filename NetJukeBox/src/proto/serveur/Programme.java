@@ -426,15 +426,10 @@ public class Programme {
 		logger.debug("Arrêt: setThematique");
 		return nbRows>0;
 	}
-	
-	
-	
-	
-	
 
 	// Sauvegarde du vecteur de document si cela n'a pas déjà été fait
-	public void archiver() {
-		/*int i;
+	/*public void archiver() {
+		int i;
 		String donnee;
 		if (etat_archive == "false") {
 			etat_archive = "true";
@@ -451,58 +446,7 @@ public class Programme {
 					+ fichier_archive);
 		} else {
 			System.out.println("Erreur : le programme est deja archive");
-		}*/
-	}
-
-	/**
-	 *INUTILE ?????
-	 *public void VerouillerDocuments(String Id_Doc) {
-	 *System.out.println("Document verrouillé : " + Id_Doc);
-	 *}
-	 *public void DeverouillerDocuments(String Id_Doc) {
-	 *System.out.println("Document déverrouillé : " + Id_Doc);
-	 *}
-	 */
-	
-	// A quoi ça sert ???
-	///// ==> public Diffusion dIFFUSION; ==> A DECOMMENTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-	public /*pure*/ boolean enDiffusion() {
-		return false;
-	}
-
-	public void DiffuserProgramme(String Id_Prog) {
-		// your code here
-	}
-
-	public void Ajout(String Id) {
-		// your code here
-	}
-
-	public void RetraitProgramme(String Id_Prog) {
-		// your code here
-	}
-
-	public void Planifier(java.util.Date Jour, int Heure, String IdeCanal) {
-		// your code here
-	}
-
-	public boolean SetDiffusion() {
-		// your code here
-		return false;
-	}
-
-	public void ArreterDiffusionProgramme(String Id_Prog) {
-		// your code here
-	}
-
-	public void RelancerDiffusionProgramme(String Id_Prog) {
-		// your code here
-	}
-
-	public boolean retraitDoc(String Id) {
-		// your code here
-		return false;
-	}
+		}
+	}*/
 
 }

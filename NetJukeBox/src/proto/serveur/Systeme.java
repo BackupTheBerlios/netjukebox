@@ -698,11 +698,6 @@ public class Systeme {
 		}
 			
 	}
-	 
-	public boolean emailValide(String Email) {
-		// your code here
-		return false;
-	}
 
 	// DOCUMENT
 	//*******************************************************
@@ -1062,20 +1057,6 @@ public class Systeme {
 		return null;
 	}
 
-	public void ajouterDocument() {
-		// your code here
-	}
-
-	public boolean documentExistant() {
-		// your code here
-		return false;
-	}
-
-	public void selectionnerDocument(String Id_Doc) {
-		// your code here
-	}
-
-	
 	// PROGRAMME
 	//*******************************************************
 
@@ -1383,22 +1364,6 @@ public class Systeme {
 		return null;
 	}
 
-	public void ConfirmerSupprimerProgramme(Boolean SuppressionProgramme) {
-		// your code here
-	}
-
-	public void SaisirInfosProgramme(String Id_Prog, String Titre) {
-		// your code here
-	}
-
-	public void AjouterProgrammeArchive(String Id_Prog) {
-		// your code here
-	}
-	
-	public void VerifierinfosProgramme(String Id_Prog, String Titre,
-			String Thematique) {
-		// your code here
-	}
 	
 	// CANAL
 	//*******************************************************
@@ -1892,120 +1857,6 @@ public class Systeme {
 		return null;
 	}
 	
-
-	public void ValiderCreationCanal() {
-		// your code here
-	}
-
-	public void PlannifierUnProgramme() {
-		// your code here
-	}
-
-	public void ConfirmerSupprimerCanal(boolean SuppressionCanal) {
-		// your code here
-	}
-
-	public void AnnulerSupprimerProgramme(boolean Suppression) {
-		// your code here
-	}
-
-	public void ConfirmerCreationCanal(boolean Confirmation) {
-		// your code here
-	}
-
-	public void AnnulerSupprimerCanal(boolean Supprimer) {
-		// your code here
-	}
-
-	public void VerifierInfosCanal(String Id_Canal, String NomCanal,
-			int Flux_Max) {
-		// your code here
-	}
-
-	public void ValiderAjout(boolean Validation) {
-		// your code here
-	}
-
-	public void ValiderModification(boolean Validation) {
-		// your code here
-	}
-
-	public void RetirerDocument(String Id_Doc) {
-		// your code here
-	}
-
-	public void RetirerProgramme(String Id_Prog) {
-		// your code here
-	}
-
-	public void AjoutDocument() {
-		// your code here
-	}
-
-	public void AjouterProgramme() {
-		// your code here
-	}
-
-	public void insertion(String choix) {
-		// your code here
-	}
-
-	public void ValiderCreerProgramme() {
-		// your code here
-	}
-
-	public void AjoutProgramme(String Id_Prog) {
-		// your code here
-	}
-
-	public void SupprimerUnProgramme() {
-		// your code here
-	}
-
-	public void RetraitCanal() {
-		// your code here
-	}
-
-	public void ChoixModification(String Choix) {
-		// your code here
-	}
-
-	public void VerifierDuree(int Duree) {
-		// your code here
-	}
-
-	public void Retirer(String Id) {
-		// your code here
-	}
-
-	public void SupprimerUnCanal() {
-		// your code here
-	}
-
-	public void retraitProgramme() {
-		// your code here
-	}
-
-	public boolean Modifier() {
-		// your code here
-		return false;
-	}
-
-	public void PlanifierSurCanal(String Id_Canal) {
-		// your code here
-	}
-
-	public void VerifierJourHeure(java.util.Date Jour, int Heure) {
-		// your code here
-	}
-
-	public void ArretDiffusion(boolean Choix) {
-		// your code here
-	}
-
-	public void AjouterDocumentProgramme() {
-		// your code here
-	}
 	
 // CONTRAT
 //*******************************************************

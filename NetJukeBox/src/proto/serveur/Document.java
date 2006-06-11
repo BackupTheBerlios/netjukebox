@@ -143,17 +143,7 @@ public class Document {
 // METHODES DYNAMIQUES
 //*********************************************
 	
-	/**
-	 * Attribue un nom au fichier
-	 * @param fichier
-	 */
-	public void nommerFichier(String fichier) {
-		// your code here
-	}
-
-	public void selectionner() {
-		// your code here
-	}
+	
 	
 	/**
 	 * Ajoute le contrat qui insère le document dans sa liste

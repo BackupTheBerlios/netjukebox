@@ -53,17 +53,6 @@ public class Canal {
 	private String etat;
 
 	/**
-	 * #DEFINITION#
-	 */
-	private Diffusion diffusion;
-
-	/**
-	 * Historisation
-	 */
-	private JournalCanal journal;
-	
-	
-	/**
 	 * Auditeurs du canal
 	 */
 	private Vector auditeurs;
@@ -139,14 +128,6 @@ public class Canal {
 	 */
 	public Vector getAuditeurs() {
 		return auditeurs;
-	}
-	
-	/**
-	 * Relance la diffusion d'un canal
-	 * @param idCanal
-	 */
-	public void relanceDiffusionCanal(String idCanal) {
-		// your code here
 	}
 	
 	/**
