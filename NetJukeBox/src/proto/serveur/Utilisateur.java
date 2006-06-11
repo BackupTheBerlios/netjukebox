@@ -67,6 +67,12 @@ public class Utilisateur {
 	 * Etat
 	 */
 	private String etat = "DECONNECTE";
+	
+	
+	/**
+	 * IP
+	 */
+	private String ip = "";
 
 // METHODES STATIQUES
 //*************************************************
@@ -476,8 +482,16 @@ public class Utilisateur {
 	public /*@ pure @*/ boolean verifPermission(String idPerm) {
 		return (role.getPermissions().containsKey(idPerm) || permissions.containsKey(idPerm));
 	}
+	
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
 //#### GETTERS ####	
+	
+	public String getIp() {
+		return ip;
+	}
 	
 	/**
 	 * Retourne les permissions attribuées à l'utilisateur

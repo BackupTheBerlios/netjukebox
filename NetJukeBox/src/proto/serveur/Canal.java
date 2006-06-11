@@ -55,7 +55,7 @@ public class Canal {
 	/**
 	 * Auditeurs du canal
 	 */
-	private Vector auditeurs;
+	private Hashtable auditeurs = new Hashtable();
 	
 	/**
 	 * Audimat du canal sur le média courant
@@ -94,7 +94,7 @@ public class Canal {
 	 * @param fluxMax
 	 */
 	public Canal(String id, String nom, int utilMax) {
-		this.auditeurs = new Vector();
+		//this.auditeurs = new Vector();
 		this.id = id;
 		this.nom = nom;
 		this.utilMax = utilMax;
@@ -126,7 +126,7 @@ public class Canal {
 	/**
 	 * Retourne la liste des auditeurs courants
 	 */
-	public Vector getAuditeurs() {
+	public Hashtable getAuditeurs() {
 		return auditeurs;
 	}
 	
@@ -546,7 +546,8 @@ public class Canal {
 	 */
 	public void deconnecterAuditeur(String idAuditeur) {
 		logger.debug("Démarrage: deconnecterAuditeur");
-		if (auditeurs.contains(idAuditeur)) auditeurs.removeElement(idAuditeur);
+		if (RTP!=null) RTP.deconnecterAuditeur(idAuditeur);
+		if (auditeurs.contains(idAuditeur)) auditeurs.remove(idAuditeur);
 		logger.debug("Arrêt: deconnecterAuditeur");
 	}
 	
@@ -554,10 +555,11 @@ public class Canal {
 	 * Connecter un auditeur au canal
 	 * @param idAuditeur
 	 */
-	public void connecterAuditeur(String idAuditeur) {
+	public void connecterAuditeur(String idAuditeur, String ipAuditeur) {
 		logger.debug("Démarrage: connecterAuditeur");
-		if (!auditeurs.contains(idAuditeur)) {
-			auditeurs.addElement(idAuditeur);
+		if (!auditeurs.containsKey(idAuditeur)) {
+			auditeurs.put(idAuditeur, ipAuditeur);
+			if (RTP!=null) RTP.connecterAuditeur(idAuditeur, ipAuditeur);
 			audimat++;
 		}
 		logger.debug("Arrêt: connecterAuditeur");

@@ -252,6 +252,8 @@ public class Systeme {
 				//On connecte l'utilisateur
 				util.connecter();
 				
+				util.setIp(ipClient);
+				
 				//On l'ajoute à la liste des utilisateurs connectés au système
 				utilisateurs.put(loginldap, util);
 				
@@ -1563,7 +1565,7 @@ public class Systeme {
 	 * @param String idCanal
 	 * @return String
 	 */
-	public String ecouterCanal(String login, String idCanal) {
+	public String ecouterCanal(String login, String idCanal) throws NamingException{
 		logger.info("Ecoute du canal "+idCanal);
 		
 		//	On vérifie que l'utilisateur a la permission
@@ -1584,8 +1586,12 @@ public class Systeme {
 				
 				//S'il y a encore de la place sur le canal
 				if (c.getAuditeurs().size() < c.getUtilMax()) {
+					
+					//On récupère l'IP de l'utilisateur
+					Utilisateur u = (Utilisateur)utilisateurs.get(login);
+							
 					//On le connecte au canal sélectionné
-					c.connecterAuditeur(login);
+					c.connecterAuditeur(login, u.getIp());
 					
 					logger.info("Construction de l'url du canal "+idCanal);
 					String url = c.getUrlStreaming();

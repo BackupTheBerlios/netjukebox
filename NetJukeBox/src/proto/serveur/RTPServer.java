@@ -1,6 +1,8 @@
 package proto.serveur;
 
 import java.net.InetAddress;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.media.ConfigureCompleteEvent;
@@ -98,6 +100,26 @@ public class RTPServer implements ControllerListener {
 	 * Canal associé
 	 */
 	private Canal canal;
+	
+	/**
+	 * Processor RTP
+	 */
+	private Processor processor;
+	
+	/**
+	 * RTPManager
+	 */
+	private RTPManager rtpMgr= null;
+	
+	/**
+	 * Auditeurs
+	 */
+	private Hashtable auditeurs = new Hashtable();
+	
+	/**
+	 * OutputSinks
+	 */
+	private Hashtable outputSinks = new Hashtable();
 
 // CONSTRUCTEURS
 //***************************************************	
@@ -117,6 +139,7 @@ public class RTPServer implements ControllerListener {
 		this.publicite = publicite;
 		this.medias = new Vector();
 		this.canal = canal;
+		this.auditeurs = canal.getAuditeurs();
 		
 		// Creation du MediaLocator pour l'Adresse de destination
 		OutputLocator = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
@@ -152,7 +175,7 @@ public class RTPServer implements ControllerListener {
 	public void programmer(Vector medias) {
 		
 		//Si on a encore des médias à diffuser
-		if (cDiffuse && /*!cDiffusePub &&*/ medias.size()>0 && mediaEnCours<medias.size()) {
+		if (cDiffuse /*&& !cDiffusePub*/ && medias.size()>0 && mediaEnCours<medias.size()) {
 			
 			//On ajoute les nouveaux médias à la liste actuelle
 			this.medias.addAll(medias);
@@ -178,8 +201,25 @@ public class RTPServer implements ControllerListener {
 	 */
 	public void stop() {
 		System.out.println("Diffusion stoppée");
+		
 		if (OutputSink != null) OutputSink.close();
+		Enumeration logins = outputSinks.keys();
+		while (logins.hasMoreElements()) {
+			String login = (String)logins.nextElement();
+			((DataSink)outputSinks.get(login)).close();
+			outputSinks.remove(login);
+		}
+		
 		//if (OutputStream != null) OutputStream.close();
+		
+		if (processor!=null) {
+			processor.stop();
+			processor.close();
+			processor = null;
+			pRealized = false;
+			pConfigured = false;
+		}
+		
 		cDiffuse=false;
 	}
 	
@@ -222,10 +262,9 @@ public class RTPServer implements ControllerListener {
 				src = new MediaLocator(filename);
 			}
 			
-			Processor p;
-			p = Manager.createProcessor(src);
-			p.addControllerListener(this);
-			p.configure();
+			processor = Manager.createProcessor(src);
+			processor.addControllerListener(this);
+			processor.configure();
 			while (!pConfigured) {
 				try {
 					Thread.currentThread().sleep(100L);
@@ -233,9 +272,9 @@ public class RTPServer implements ControllerListener {
 					System.out.println("erreur : " + e);
 				}
 			}
-			setTrackFormat(p);
-			p.setContentDescriptor(new ContentDescriptor(ContentDescriptor.RAW_RTP));
-			p.realize();
+			setTrackFormat();
+			processor.setContentDescriptor(new ContentDescriptor(ContentDescriptor.RAW_RTP));
+			processor.realize();
 			while (!pRealized) {
 				try {
 					Thread.currentThread().sleep(100L);
@@ -243,8 +282,8 @@ public class RTPServer implements ControllerListener {
 					System.out.println("erreur : " + e);
 				}
 			}
-			transmitSink(p);
-			//transmitManager(p);
+			transmitSink();
+			//transmitManager();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -255,12 +294,13 @@ public class RTPServer implements ControllerListener {
 	 * Transmet un flux audio avec un DataSink
 	 * @param p
 	 */
-	private void transmitSink(Processor p) {
+	private void transmitSink() {
 		System.out.println("Transmission");
-		p.start();
+		processor.start();
 		try {
+			
 			// Creation du DataSink
-			OutputSink = Manager.createDataSink(p.getDataOutput(), OutputLocator);
+			OutputSink = Manager.createDataSink(processor.getDataOutput(), OutputLocator);
 
 			//Ajout d'un Listener
 			//OutputSink.addDataSinkListener(this);
@@ -271,6 +311,16 @@ public class RTPServer implements ControllerListener {
 			// Demarrage du DataSink
 			OutputSink.start();
 			
+			
+			Enumeration logins = auditeurs.keys();
+			while (logins.hasMoreElements()) {
+				String login = (String)logins.nextElement();
+				MediaLocator ml = new MediaLocator("rtp://"+(String)auditeurs.get(login)+":"+port+"/audio/"+piste);
+				DataSink ds = Manager.createDataSink(processor.getDataOutput(), ml);
+				ds.open();
+				ds.start();
+				outputSinks.put(login, ds);
+			}
 
 			System.out.println("Started");
 		}
@@ -284,28 +334,86 @@ public class RTPServer implements ControllerListener {
 	 * Transmet un flux audio avec un RTPManager
 	 * @param p
 	 */
-	private void transmitManager(Processor p) {
+	private void transmitManager() {
 		try {
-
-			DataSource output = p.getDataOutput();
+			processor.start();
+			DataSource output = processor.getDataOutput();
 			
 			PushBufferDataSource pbds = (PushBufferDataSource) output;
-			RTPManager rtpMgr = RTPManager.newInstance();
-
-			SessionAddress canal = new SessionAddress(InetAddress.getLocalHost(), port);
-			SessionAddress destAddr = new SessionAddress(InetAddress.getByName(ip), port);
 			
-			rtpMgr.initialize(canal);
-			rtpMgr.addTarget(destAddr);
-			
-			System.err.println("Created RTP session: " + ip + " " + port);
+			if (rtpMgr==null) {
+				rtpMgr = RTPManager.newInstance();
+	
+				SessionAddress canal = new SessionAddress(InetAddress.getByName(ip), port);
+				rtpMgr.initialize(canal);
+				
+				if (auditeurs.size()>0) {
+					Enumeration ipAuditeurs = auditeurs.elements();
+					while (ipAuditeurs.hasMoreElements()) {
+						SessionAddress destAddr = new SessionAddress(InetAddress.getByName((String)ipAuditeurs.nextElement()), port);
+						rtpMgr.addTarget(destAddr);
+					}
+				} else {
+					SessionAddress destAddr = new SessionAddress(InetAddress.getByName(ip), port-1);
+					rtpMgr.addTarget(destAddr);
+				}
+				
+				SessionAddress destAddr = new SessionAddress(InetAddress.getByName("83.156.77.248"), port);
+				rtpMgr.addTarget(destAddr);
+				
+				System.err.println("Created RTP session: " + ip + " " + port);
+			}			
 			
 			OutputStream = rtpMgr.createSendStream(output, 0);		
 			OutputStream.start();
-			p.start();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void connecterAuditeur(String login, String ip) {
+		auditeurs.put(login, ip);
+		if (cDiffuse) {
+			try {
+				MediaLocator ml = new MediaLocator("rtp://"+ip+":"+port+"/audio/"+piste);
+				DataSink ds = Manager.createDataSink(processor.getDataOutput(), ml);
+				ds.open();
+				ds.start();
+				outputSinks.put(login, ds);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			/*//VERSION RTPMANAGER 
+			try {
+				SessionAddress destAddr = new SessionAddress(InetAddress.getByName(ip), port);
+				rtpMgr.addTarget(destAddr);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}*/
+		}
+	}
+	
+	public void deconnecterAuditeur(String login) {
+		if (auditeurs.containsKey(login)) {
+			if (cDiffuse) {
+				DataSink ds = (DataSink)outputSinks.get(login);
+				ds.close();
+				outputSinks.remove(login);
+				
+				
+				/*//VERSION RTPMANAGER 
+				try {
+					SessionAddress destAddr = new SessionAddress(InetAddress.getByName((String)auditeurs.get(login)), port);
+					rtpMgr.removeTarget(destAddr, "CONNEXION CLOSED");
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}*/
+			}
+			auditeurs.remove(login);
 		}
 	}
 
@@ -313,9 +421,9 @@ public class RTPServer implements ControllerListener {
 	 * Sélection du format des pistes du média
 	 * @param p
 	 */
-	private void setTrackFormat(Processor p) {
+	private void setTrackFormat() {
 		// Get the tracks from the processor
-		TrackControl[] tracks = p.getTrackControls();
+		TrackControl[] tracks = processor.getTrackControls();
 		// Do we have atleast one track?
 		if (tracks == null || tracks.length < 1) {
 			System.out.println("Couldn't find tracks in processor");
@@ -326,7 +434,7 @@ public class RTPServer implements ControllerListener {
 		// This will limit the supported formats reported from
 		// Track.getSupportedFormats to only valid RTP formats.
 		ContentDescriptor cd = new ContentDescriptor(ContentDescriptor.RAW_RTP);
-		p.setContentDescriptor(cd);
+		processor.setContentDescriptor(cd);
 		Format supported[];
 		Format chosen;
 		boolean atLeastOneTrack = false;
@@ -379,6 +487,12 @@ public class RTPServer implements ControllerListener {
 				//On ferme le flux (version outputSink)
 				OutputSink.close();
 				OutputSink = null;
+				Enumeration logins = outputSinks.keys();
+				while (logins.hasMoreElements()) {
+					String login = (String)logins.nextElement();
+					((DataSink)outputSinks.get(login)).close();
+					outputSinks.remove(login);
+				}
 				
 				//On ferme le flux (version outputStream)
 				//OutputStream.close();
