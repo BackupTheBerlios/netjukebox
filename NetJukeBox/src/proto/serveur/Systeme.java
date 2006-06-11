@@ -753,7 +753,7 @@ public class Systeme {
 						String fichierInit = d.getFichier();
 						//Commande permettant la conversion
 						//String commande = mplayer + " -dumpaudio -dumpfile " + fichierResult + " " + fichierInit;
-						String commande = mplayer + " -msglevel all=-1 " + fichierInit+ " -af resample=22050:0:0 -ao pcm:file=" +fichierResult;
+						String commande = mplayer + " -really-quiet " + fichierInit+ " -af resample=22050:0:0 -ao pcm:file=" +fichierResult;
 						//mplayer -vo null "/home/philippe/sinnerman.mp3" -ao pcm:file="/home/philippe/sinnerman.wav"
 						logger.info(commande);
 						//Execution de la conversion
