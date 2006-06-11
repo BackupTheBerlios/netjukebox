@@ -1,9 +1,11 @@
 package action;
 
 import java.io.*;
+import java.util.prefs.Preferences;
 import javax.servlet.http.*;
 import org.apache.struts.action.*;
 import org.apache.struts.upload.*;
+import org.ini4j.IniFile;
 import plugin.XMLClient;
 import form.NewDocForm;
 
@@ -16,9 +18,9 @@ public class NewDocAction extends Action {
 	private XMLClient clientXML = null;
 	
 	/**
-	 * Chemin pour déposer le fichier audio
+	 * Chemin du fichier d'initialisation
 	 */
-	private String chemin = "/home/admindg/Audio/";
+	private String filename = "/home/netjukebox/Workspace/MVC/WEB-INF/src/plugin/client.ini";
 	
 	/**
 	 * Booléen validant le dépôt du fichier
@@ -49,6 +51,9 @@ public class NewDocAction extends Action {
 		//clientXML = (XMLClient) session.getAttribute("client");
 		clientXML = XMLClient.getInstance();
 		sessionLogin = (String) session.getAttribute("login");
+		
+		Preferences prefs = new IniFile(new File(filename));
+		String chemin = prefs.node("serveur").get("depot", null);
 		
 		FormFile fichier = docForm.getFichier();
         String fileName = fichier.getFileName();
